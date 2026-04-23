@@ -401,7 +401,7 @@ ul { list-style: none; }
   margin-bottom: -1px;
   transition: background var(--wf-dur);
 }
-.service-card:hover { background: var(--wf-surface); }
+.service-card:hover { background: var(--wf-surface); transform: translateY(-1px); border-color: var(--wf-border-strong); }
 .service-card-title {
   font-size: 20px;
   font-weight: 600;
@@ -688,6 +688,7 @@ ul { list-style: none; }
   font-family: var(--font-sans);
 }
 .footer-input::placeholder { color: var(--wf-fg-faint); }
+.footer-input:hover { border-color: var(--wf-border-strong); }
 .footer-input:focus { outline: none; border-color: var(--wf-brand); }
 .footer-disclaimer {
   font-size: 11px;

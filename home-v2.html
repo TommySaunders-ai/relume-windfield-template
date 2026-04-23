@@ -211,7 +211,7 @@ ul { list-style: none; }
   text-align: center; background: var(--wf-surface); border: 1px solid var(--wf-border);
   border-radius: var(--wf-r-lg); overflow: hidden; transition: all var(--wf-dur);
 }
-.customer-card:hover { border-color: var(--wf-border-strong); }
+.customer-card:hover { border-color: var(--wf-border-strong); transform: translateY(-1px); }
 .customer-card-img {
   aspect-ratio: 16/9; background: var(--wf-bg-sunken);
   display: flex; align-items: center; justify-content: center;
@@ -237,7 +237,7 @@ ul { list-style: none; }
   border-radius: var(--wf-r-lg); padding: 28px;
   display: flex; flex-direction: column; transition: all var(--wf-dur);
 }
-.testimonial-card:hover { border-color: var(--wf-border-strong); }
+.testimonial-card:hover { border-color: var(--wf-border-strong); transform: translateY(-1px); }
 .stars { display: flex; gap: 4px; margin-bottom: 16px; }
 .star { color: var(--wf-brand); }
 .star svg { width: 18px; height: 18px; fill: currentColor; }
@@ -378,6 +378,7 @@ ul { list-style: none; }
   font-family: var(--font-sans);
 }
 .footer-input::placeholder { color: var(--wf-fg-faint); }
+.footer-input:hover { border-color: var(--wf-border-strong); }
 .footer-input:focus { outline: none; border-color: var(--wf-brand); }
 .footer-disclaimer {
   font-size: 11px; color: var(--wf-fg-faint); line-height: 1.5;
