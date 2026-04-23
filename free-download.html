@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Download — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Windfield IO Design Tokens ── */
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-r-sm: 6px;
+  --wf-r-md: 8px;
+  --wf-r-lg: 12px;
+  --wf-r-pill: 9999px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+
+/* ── Utilities ── */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.container-sm { max-width: 768px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 80px 0; }
+.text-center { text-align: center; }
+.kicker {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-brand);
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+}
+.heading-xl {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--wf-fg);
+}
+.heading-lg {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--wf-fg);
+}
+.heading-md {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--wf-fg);
+}
+.heading-sm {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--wf-fg);
+}
+.body-text {
+  font-size: 16px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+}
+.body-sm {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.5;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn-lg { height: 52px; padding: 0 32px; font-size: 16px; }
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-sm { height: 36px; padding: 0 16px; font-size: 13px; }
+.btn-primary {
+  background: var(--wf-brand);
+  color: var(--wf-brand-fg);
+}
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-outline {
+  background: transparent;
+  color: var(--wf-fg);
+  border-color: var(--wf-border-strong);
+}
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+.btn-ghost {
+  background: transparent;
+  color: var(--wf-fg-muted);
+  padding: 0;
+  height: auto;
+}
+.btn-ghost:hover { color: var(--wf-fg); }
+
+/* ── NAVBAR ── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--wf-bg);
+  border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wf-fg);
+  letter-spacing: -0.02em;
+}
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex: 1;
+}
+.navbar-link {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link.active { color: var(--wf-fg); }
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mobile-toggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; color: var(--wf-fg); }
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ── HERO 2-COLUMN ── */
+.hero-download {
+  padding: 100px 0 80px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--wf-bg) 0%, #0a120d 50%, var(--wf-bg) 100%);
+}
+.hero-download::before {
+  content: '';
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(29,185,84,0.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-download .container { position: relative; z-index: 1; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.hero-left .heading-xl { margin-bottom: 20px; }
+.hero-description {
+  font-size: 18px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+.hero-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.hero-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 16px;
+  color: var(--wf-fg-muted);
+  line-height: 1.5;
+}
+.hero-bullet svg {
+  width: 20px;
+  height: 20px;
+  color: var(--wf-brand);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── FORM CARD ── */
+.form-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 32px;
+}
+.form-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-bottom: 24px;
+  color: var(--wf-fg);
+}
+.form-group {
+  margin-bottom: 16px;
+}
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--wf-fg-muted);
+  margin-bottom: 6px;
+}
+.form-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  background: var(--wf-bg);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-md);
+  font-size: 14px;
+  color: var(--wf-fg);
+  font-family: var(--font-sans);
+  transition: border-color var(--wf-dur) var(--wf-ease);
+}
+.form-input::placeholder { color: var(--wf-fg-faint); }
+.form-input:hover { border-color: var(--wf-border-strong); }
+.form-input:focus { outline: none; border-color: var(--wf-brand); }
+.form-card .btn-primary {
+  width: 100%;
+  margin-top: 8px;
+}
+.form-privacy {
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+  margin-top: 16px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── WHAT'S INSIDE ── */
+.whats-inside {
+  padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.whats-inside-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.whats-inside-header .heading-md { margin-bottom: 12px; }
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.chapter-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 32px;
+  transition: all var(--wf-dur) var(--wf-ease);
+}
+.chapter-card:hover {
+  border-color: var(--wf-brand-border);
+  transform: translateY(-1px);
+}
+.chapter-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--wf-r-md);
+  background: var(--wf-brand-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--wf-brand);
+  font-family: var(--font-mono);
+}
+.chapter-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.chapter-card p {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+}
+
+/* ── SOCIAL PROOF / LOGO BAR ── */
+.logo-bar {
+  padding: 64px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.logo-bar-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.logo-bar-header p {
+  font-size: 14px;
+  color: var(--wf-fg-subtle);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.logo-item {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wf-fg-faint);
+  letter-spacing: -0.01em;
+  transition: color var(--wf-dur);
+}
+.logo-item:hover { color: var(--wf-fg-subtle); }
+
+/* ── PREVIEW SECTION ── */
+.preview-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.preview-image {
+  aspect-ratio: 3 / 4;
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.preview-image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--wf-fg-faint);
+}
+.preview-image-placeholder svg { width: 48px; height: 48px; }
+.preview-image-placeholder span { font-size: 14px; }
+.preview-right .heading-lg { margin-bottom: 16px; }
+.preview-right .body-text { margin-bottom: 28px; }
+.preview-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.preview-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--wf-fg-muted);
+  line-height: 1.5;
+}
+.preview-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--wf-brand);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+/* ── TESTIMONIAL ── */
+.testimonial-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.testimonial-centered {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+.testimonial-stars {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.testimonial-stars svg { width: 20px; height: 20px; color: var(--wf-brand); }
+.testimonial-quote {
+  font-size: 20px;
+  font-style: italic;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+.testimonial-author-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.testimonial-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--wf-surface-active);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wf-fg-subtle);
+  flex-shrink: 0;
+}
+.testimonial-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--wf-fg);
+}
+.testimonial-role {
+  font-size: 13px;
+  color: var(--wf-fg-subtle);
+}
+
+/* ── FAQ ACCORDION ── */
+.faq-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.faq-section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.faq-section-header .heading-md { margin-bottom: 12px; }
+.faq-list {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.faq-item {
+  border-bottom: 1px solid var(--wf-border);
+}
+.faq-item:first-child {
+  border-top: 1px solid var(--wf-border);
+}
+.faq-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--wf-fg);
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--wf-dur);
+}
+.faq-trigger:hover { color: var(--wf-brand); }
+.faq-trigger svg {
+  width: 20px;
+  height: 20px;
+  color: var(--wf-fg-subtle);
+  flex-shrink: 0;
+  transition: transform 200ms var(--wf-ease);
+}
+.faq-item.open .faq-trigger svg {
+  transform: rotate(45deg);
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 300ms var(--wf-ease);
+}
+.faq-answer-inner {
+  padding: 0 0 20px;
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.7;
+}
+
+/* ── FINAL CTA ── */
+.final-cta {
+  padding: 80px 0;
+  background: var(--wf-brand-muted);
+  border-top: 1px solid var(--wf-brand-border);
+  border-bottom: 1px solid var(--wf-brand-border);
+}
+.final-cta-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  text-align: center;
+}
+.final-cta .heading-md { margin-bottom: 12px; }
+.final-cta .body-text { margin-bottom: 32px; }
+.final-cta-form {
+  display: flex;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.final-cta-input {
+  flex: 1;
+  height: 52px;
+  padding: 0 20px;
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-md);
+  font-size: 15px;
+  color: var(--wf-fg);
+  font-family: var(--font-sans);
+  transition: border-color var(--wf-dur) var(--wf-ease);
+}
+.final-cta-input::placeholder { color: var(--wf-fg-faint); }
+.final-cta-input:hover { border-color: var(--wf-border-strong); }
+.final-cta-input:focus { outline: none; border-color: var(--wf-brand); }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--wf-border);
+  padding: 56px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+}
+.footer-brand .navbar-logo { margin-bottom: 16px; }
+.footer-bio {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.footer-socials {
+  display: flex;
+  gap: 12px;
+}
+.footer-social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--wf-r-md);
+  border: 1px solid var(--wf-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--wf-dur);
+  color: var(--wf-fg-subtle);
+}
+.footer-social-link:hover {
+  border-color: var(--wf-brand-border);
+  color: var(--wf-brand);
+}
+.footer-social-link svg { width: 16px; height: 16px; }
+.footer-col-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 16px;
+}
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-link {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid var(--wf-border);
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+.footer-legal a {
+  color: var(--wf-fg-subtle);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--wf-dur);
+}
+.footer-legal a:hover { color: var(--wf-fg); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .chapter-grid { grid-template-columns: 1fr 1fr; }
+  .chapter-grid .chapter-card:last-child { grid-column: span 2; }
+  .preview-grid { grid-template-columns: 1fr; gap: 40px; }
+  .preview-image { max-width: 400px; margin: 0 auto; }
+  .logo-row { gap: 32px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .section { padding: 56px 0; }
+  .heading-xl { font-size: 36px; }
+  .heading-lg { font-size: 32px; }
+  .heading-md { font-size: 26px; }
+  .navbar-links { display: none; }
+  .mobile-toggle { display: flex; }
+  .hero-download { padding: 64px 0 56px; }
+  .hero-description { font-size: 16px; }
+  .form-card { padding: 24px; }
+  .chapter-grid { grid-template-columns: 1fr; }
+  .chapter-grid .chapter-card:last-child { grid-column: span 1; }
+  .whats-inside,
+  .logo-bar,
+  .preview-section,
+  .testimonial-section,
+  .faq-section,
+  .final-cta { padding: 56px 0; }
+  .preview-image { max-width: 100%; }
+  .testimonial-quote { font-size: 17px; }
+  .logo-row { gap: 24px; }
+  .logo-item { font-size: 15px; }
+  .final-cta-form { flex-direction: column; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="navbar-inner container">
+    <a href="index.html" class="navbar-logo">Windfield</a>
+    <div class="navbar-links">
+      <a href="index.html" class="navbar-link">Home</a>
+      <a href="about.html" class="navbar-link">About</a>
+      <a href="portfolio.html" class="navbar-link">Portfolio</a>
+      <a href="product.html" class="navbar-link">Product</a>
+      <a href="pricing.html" class="navbar-link">Pricing</a>
+      <a href="blog-home.html" class="navbar-link">Blog</a>
+      <a href="free-download.html" class="navbar-link active">Free Download</a>
+      <a href="contact-us.html" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="contact-us.html" class="btn btn-sm btn-primary">Get Started</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO (2-COLUMN) ═══════════════ -->
+<section class="hero-download">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <p class="kicker">Free Resource</p>
+        <h1 class="heading-xl">Download your free guide to property intelligence</h1>
+        <p class="hero-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>
+        <div class="hero-bullets">
+          <div class="hero-bullet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Learn proven frameworks for data-driven property analysis and market positioning</span>
+          </div>
+          <div class="hero-bullet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Discover AI-powered strategies used by top-performing real estate professionals</span>
+          </div>
+          <div class="hero-bullet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Get actionable templates and checklists you can implement immediately</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="form-card">
+          <h2 class="form-card-title">Get instant access</h2>
+          <form onsubmit="event.preventDefault();">
+            <div class="form-group">
+              <label class="form-label" for="heroName">Name</label>
+              <input type="text" id="heroName" class="form-input" placeholder="Your full name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="heroEmail">Email</label>
+              <input type="email" id="heroEmail" class="form-input" placeholder="you@company.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="heroCompany">Company</label>
+              <input type="text" id="heroCompany" class="form-input" placeholder="Your company name">
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary">Download now</button>
+            <p class="form-privacy">By downloading, you agree to our Privacy Policy. We will never share your information.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ WHAT'S INSIDE ═══════════════ -->
+<section class="whats-inside">
+  <div class="container">
+    <div class="whats-inside-header">
+      <p class="kicker">Contents</p>
+      <h2 class="heading-md">What's inside</h2>
+      <p class="body-text">A comprehensive breakdown of everything covered in the guide.</p>
+    </div>
+    <div class="chapter-grid">
+
+      <div class="chapter-card">
+        <div class="chapter-badge">01</div>
+        <h3>Market Analysis Fundamentals</h3>
+        <p>Learn the core principles of real estate market analysis, including key metrics, data sources, and frameworks used by industry leaders to identify opportunities before the competition.</p>
+      </div>
+
+      <div class="chapter-card">
+        <div class="chapter-badge">02</div>
+        <h3>AI-Powered Intelligence</h3>
+        <p>Discover how artificial intelligence is transforming property intelligence, from automated valuation models to predictive market analytics that surface hidden insights at scale.</p>
+      </div>
+
+      <div class="chapter-card">
+        <div class="chapter-badge">03</div>
+        <h3>Implementation Playbook</h3>
+        <p>A step-by-step guide to implementing data-driven strategies in your organization, complete with templates, checklists, and real-world case studies from top-performing teams.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SOCIAL PROOF / LOGO BAR ═══════════════ -->
+<section class="logo-bar">
+  <div class="container">
+    <div class="logo-bar-header">
+      <p>Trusted by 10,000+ professionals</p>
+    </div>
+    <div class="logo-row">
+      <span class="logo-item">Webflow</span>
+      <span class="logo-item">Relume</span>
+      <span class="logo-item">Webflow</span>
+      <span class="logo-item">Relume</span>
+      <span class="logo-item">Webflow</span>
+      <span class="logo-item">Relume</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PREVIEW SECTION ═══════════════ -->
+<section class="preview-section">
+  <div class="container">
+    <div class="preview-grid">
+      <div class="preview-image">
+        <div class="preview-image-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="18" rx="2"/>
+            <path d="M2 15l5-5c.6-.6 1.4-.6 2 0l5 5"/>
+            <path d="M14 13l2-2c.6-.6 1.4-.6 2 0l4 4"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+          </svg>
+          <span>Guide Cover Preview</span>
+        </div>
+      </div>
+      <div class="preview-right">
+        <p class="kicker">Sneak Peek</p>
+        <h2 class="heading-lg">A sneak peek inside</h2>
+        <p class="body-text">This guide distills years of industry experience into a practical resource you can start using today. From foundational concepts to advanced AI-powered strategies, every chapter is designed for immediate impact.</p>
+        <div class="preview-bullets">
+          <div class="preview-bullet">
+            <span class="preview-dot"></span>
+            <span>20+ pages of actionable frameworks and strategies</span>
+          </div>
+          <div class="preview-bullet">
+            <span class="preview-dot"></span>
+            <span>Real-world case studies from top-performing teams</span>
+          </div>
+          <div class="preview-bullet">
+            <span class="preview-dot"></span>
+            <span>Downloadable templates and implementation checklists</span>
+          </div>
+          <div class="preview-bullet">
+            <span class="preview-dot"></span>
+            <span>Exclusive data insights not available anywhere else</span>
+          </div>
+        </div>
+        <a href="#hero-form" class="btn btn-lg btn-primary">Download free</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIAL ═══════════════ -->
+<section class="testimonial-section">
+  <div class="container">
+    <div class="testimonial-centered">
+      <div class="testimonial-stars">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <p class="testimonial-quote">"This guide completely changed how our team approaches market analysis. The AI-powered frameworks alone saved us 15+ hours per week. It's the single best free resource I've found in the property intelligence space."</p>
+      <div class="testimonial-author-centered">
+        <div class="testimonial-avatar">SC</div>
+        <div style="text-align: left;">
+          <div class="testimonial-name">Sarah Chen</div>
+          <div class="testimonial-role">VP of Operations, Meridian Group</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ACCORDION ═══════════════ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="faq-section-header">
+      <p class="kicker">FAQ</p>
+      <h2 class="heading-md">Frequently Asked Questions</h2>
+      <p class="body-text">Everything you need to know about the free guide.</p>
+    </div>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Is this guide really free?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Yes, 100% free. We created this guide to help professionals get started with data-driven property intelligence. There are no hidden fees, upsells, or paywalls. Just enter your email and the guide is yours instantly.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          What format is the guide in?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">The guide is delivered as a high-quality PDF that you can read on any device. It is optimized for both screen reading and printing, so you can reference it however works best for your workflow.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Will I receive marketing emails after downloading?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">We may send you occasional updates about new resources and platform features, but you can unsubscribe at any time with a single click. We respect your inbox and never send more than one email per week.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Who is this guide designed for?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">This guide is designed for real estate professionals, property managers, analysts, and anyone looking to leverage data and AI for smarter property decisions. Whether you are just getting started or are a seasoned professional, you will find actionable insights.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Can I share this guide with my team?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Absolutely. We encourage you to share the guide with colleagues and team members. We just ask that each person downloads their own copy so we can send them updates when new editions are released.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FINAL CTA ═══════════════ -->
+<section class="final-cta">
+  <div class="container">
+    <div class="final-cta-inner">
+      <h2 class="heading-md">Ready to get started?</h2>
+      <p class="body-text">Download the free guide and start making smarter property decisions today.</p>
+      <form class="final-cta-form" onsubmit="event.preventDefault();">
+        <input type="email" class="final-cta-input" placeholder="Enter your email address" required>
+        <button type="submit" class="btn btn-lg btn-primary">Get your free copy</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="navbar-logo">Windfield</a>
+        <p class="footer-bio">AI-powered property intelligence and operational tools built for modern real estate professionals. Data-driven strategies for smarter decisions.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social-link" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" class="footer-social-link" aria-label="X">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+          </a>
+          <a href="#" class="footer-social-link" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Platform</div>
+        <div class="footer-links">
+          <a href="product.html" class="footer-link">Features</a>
+          <a href="pricing.html" class="footer-link">Pricing</a>
+          <a href="#" class="footer-link">Integrations</a>
+          <a href="#" class="footer-link">Changelog</a>
+          <a href="#" class="footer-link">Documentation</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Tools</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Market Intelligence</a>
+          <a href="#" class="footer-link">Property Analytics</a>
+          <a href="#" class="footer-link">AI Automation</a>
+          <a href="#" class="footer-link">Brand Builder</a>
+          <a href="#" class="footer-link">CRM</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="about.html" class="footer-link">About</a>
+          <a href="blog-home.html" class="footer-link">Blog</a>
+          <a href="contact-us.html" class="footer-link">Contact</a>
+          <a href="#" class="footer-link">Careers</a>
+          <a href="#" class="footer-link">Partners</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>2026 Windfield. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── FAQ Accordion ── */
+function toggleFaq(trigger) {
+  var item = trigger.parentElement;
+  var answer = item.querySelector('.faq-answer');
+  var isOpen = item.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.faq-item').forEach(function(el) {
+    el.classList.remove('open');
+    el.querySelector('.faq-answer').style.maxHeight = null;
+  });
+
+  // Open clicked if it was closed
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+</script>
+
+</body>
+</html>

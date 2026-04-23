@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-violet:#7c3aed;--wf-violet-muted:rgba(124,58,237,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}img{max-width:100%;display:block}
+
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.section{padding:80px 0}
+.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.heading-xl{font-size:48px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:var(--wf-fg)}
+.heading-lg{font-size:40px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:var(--wf-fg)}
+.heading-md{font-size:32px;font-weight:700;letter-spacing:-0.015em;line-height:1.2;color:var(--wf-fg)}
+.heading-sm{font-size:20px;font-weight:600;letter-spacing:-0.01em;line-height:1.3;color:var(--wf-fg)}
+.body-text{font-size:16px;color:var(--wf-fg-muted);line-height:1.6}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}.link-arrow:hover{gap:10px}.link-arrow svg{width:16px;height:16px}
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}
+.navbar-link:hover{color:var(--wf-fg)}.navbar-link.active{color:var(--wf-fg)}.navbar-link svg{width:12px;height:12px}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}.mobile-toggle svg{width:24px;height:24px}
+
+/* Hero */
+.svc-hero{padding:64px 0 80px;text-align:center}
+.svc-hero .heading-xl{max-width:720px;margin:0 auto 16px}
+.svc-hero .body-text{max-width:560px;margin:0 auto 32px}
+.svc-hero-btns{display:flex;gap:12px;justify-content:center}
+
+/* Services Overview */
+.svc-overview{padding:0 0 80px}
+.svc-overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.svc-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;transition:all var(--wf-dur)}
+.svc-card:hover{border-color:var(--wf-border-strong);transform:translateY(-2px)}
+.svc-card-icon{width:48px;height:48px;border-radius:var(--wf-r-lg);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--wf-brand)}
+.svc-card-icon svg{width:24px;height:24px}
+.svc-card-title{font-size:20px;font-weight:600;color:var(--wf-fg);margin-bottom:10px;letter-spacing:-0.01em}
+.svc-card-desc{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:20px}
+.svc-card-features{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.svc-card-feat{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--wf-fg-muted)}
+.svc-dot{width:6px;height:6px;border-radius:50%;background:var(--wf-brand);flex-shrink:0}
+
+/* How We Work */
+.how{padding:80px 0;border-top:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border)}
+.how-header{text-align:center;margin-bottom:56px}
+.how-header .body-text{margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.how-step{text-align:center;position:relative;padding:0 16px}
+.how-num{width:48px;height:48px;border-radius:50%;background:var(--wf-brand);color:var(--wf-brand-fg);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:2}
+.how-step-title{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.how-step-text{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+.how-step::after{content:"";position:absolute;top:24px;left:calc(50% + 32px);width:calc(100% - 64px);height:2px;background:var(--wf-border-strong);z-index:1}
+.how-step:last-child::after{display:none}
+
+/* Detailed Services */
+.detail{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.detail-grid.reversed{direction:rtl}.detail-grid.reversed > *{direction:ltr}
+.detail-text .kicker{margin-bottom:12px}
+.detail-text .heading-md{margin-bottom:16px}
+.detail-text .body-text{margin-bottom:24px}
+.detail-bullets{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
+.detail-bullet{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+.detail-bullet .svc-dot{margin-top:7px}
+.detail-img .ph{aspect-ratio:4/3;width:100%}
+
+/* Pricing Preview */
+.pricing-preview{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.pricing-preview-header{text-align:center;margin-bottom:48px}
+.pricing-preview-header .body-text{margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pricing-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;display:flex;flex-direction:column;transition:border-color var(--wf-dur);position:relative}
+.pricing-card:hover{border-color:var(--wf-border-strong);transform:translateY(-1px)}
+.pricing-card.highlighted{border-color:var(--wf-brand)}
+.pricing-badge{position:absolute;top:16px;right:16px;background:var(--wf-brand);color:var(--wf-brand-fg);font-size:12px;font-weight:600;padding:4px 12px;border-radius:999px}
+.pricing-plan{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.pricing-price{font-size:48px;font-weight:700;letter-spacing:-0.03em;color:var(--wf-fg);line-height:1;margin-bottom:4px}
+.pricing-price span{font-size:18px;font-weight:500;color:var(--wf-fg-muted)}
+.pricing-desc{font-size:14px;color:var(--wf-fg-muted);margin-bottom:20px}
+.pricing-divider{height:1px;background:var(--wf-border);margin-bottom:20px}
+.pricing-features{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;flex:1}
+.pricing-feat{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--wf-fg-muted)}
+.pricing-check{width:18px;height:18px;flex-shrink:0;color:var(--wf-brand)}
+.pricing-check svg{width:18px;height:18px}
+.pricing-cta{width:100%;height:44px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;border:none;border-radius:var(--wf-r-md);cursor:pointer;transition:background var(--wf-dur)}
+.pricing-cta.primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.pricing-cta.primary:hover{background:var(--wf-brand-hover)}
+.pricing-cta.outline{background:transparent;color:var(--wf-fg);border:1px solid var(--wf-border-strong)}.pricing-cta.outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface-hover)}
+
+/* Testimonial */
+.testimonial{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.testimonial-inner{text-align:center;max-width:720px;margin:0 auto}
+.testimonial-stars{display:flex;gap:4px;justify-content:center;margin-bottom:24px;color:var(--wf-brand)}
+.testimonial-stars svg{width:20px;height:20px}
+.testimonial-quote{font-size:24px;font-weight:500;color:var(--wf-fg);line-height:1.5;letter-spacing:-0.01em;margin-bottom:24px}
+.testimonial-author{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.testimonial-role{font-size:13px;color:var(--wf-fg-subtle);margin-top:2px}
+
+/* Case Studies */
+.cases{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.cases-header{margin-bottom:48px}
+.cases-header .body-text{margin-top:16px;max-width:560px}
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.case-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;transition:all var(--wf-dur);cursor:pointer}
+.case-card:hover{border-color:var(--wf-border-strong);transform:translateY(-2px)}
+.case-card-img{aspect-ratio:16/9;background:var(--wf-bg-sunken);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--wf-border)}
+.case-card-img svg{width:36px;height:36px;color:var(--wf-fg-faint)}
+.case-body{padding:24px}
+.case-client{font-size:12px;font-weight:600;color:var(--wf-brand);margin-bottom:8px}
+.case-stat{font-size:32px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:8px;line-height:1}
+.case-desc{font-size:14px;color:var(--wf-fg-muted);line-height:1.5;margin-bottom:16px}
+
+/* CTA */
+.cta{padding:80px 0}
+.cta-inner{text-align:center}
+.cta-inner .heading-lg{margin-bottom:16px}
+.cta-inner .body-text{max-width:560px;margin:0 auto 32px}
+.cta-btns{display:flex;gap:12px;justify-content:center}
+
+/* Footer */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-subscribe-text{font-size:13px;color:var(--wf-fg-muted);margin-bottom:12px}
+.footer-form{display:flex;gap:8px;margin-bottom:12px}
+.footer-input{flex:1;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-input::placeholder{color:var(--wf-fg-faint)}.footer-input:hover{border-color:var(--wf-border-strong)}.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disclaimer{font-size:11px;color:var(--wf-fg-faint);line-height:1.5}.footer-disclaimer a{text-decoration:underline;text-underline-offset:2px}
+.footer-col-title{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:8px}.footer-link:hover{color:var(--wf-fg)}.footer-link svg{width:16px;height:16px;flex-shrink:0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
+
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .svc-overview-grid,.pricing-grid,.cases-grid{grid-template-columns:1fr}
+  .how-steps{grid-template-columns:repeat(2,1fr);gap:40px}
+  .how-step::after{display:none}
+  .detail-grid,.detail-grid.reversed{grid-template-columns:1fr;direction:ltr}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}.section{padding:56px 0}
+  .heading-xl{font-size:36px}.heading-lg{font-size:32px}.heading-md{font-size:26px}
+  .navbar-links{display:none}.mobile-toggle{display:flex}
+  .svc-hero-btns,.cta-btns{flex-direction:column;align-items:center}
+  .how-steps{grid-template-columns:1fr}
+  .pricing-price{font-size:36px}
+  .testimonial-quote{font-size:20px}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="home-v1.html" class="navbar-link">Home v1</a>
+      <a href="home-v2.html" class="navbar-link">Home v2</a>
+      <a href="index.html" class="navbar-link">Home v3</a>
+      <a href="about.html" class="navbar-link">About</a>
+      <a href="services.html" class="navbar-link active">Services</a>
+      <a href="pricing.html" class="navbar-link">Pricing</a>
+      <a href="contact.html" class="navbar-link">Contact</a>
+      <a href="blog-home.html" class="navbar-link">Blog Home</a>
+      <a href="docs.html" class="navbar-link">Docs</a>
+      <a href="product.html" class="navbar-link">Product</a>
+      <a href="portfolio.html" class="navbar-link">Portfolio</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-outline">Log in</a>
+      <a href="#" class="btn btn-sm btn-primary">Get started</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="svc-hero">
+  <div class="container">
+    <p class="kicker">What We Do</p>
+    <h1 class="heading-xl">Services built to grow your business</h1>
+    <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+    <div class="svc-hero-btns">
+      <a href="#" class="btn btn-md btn-primary">Get started</a>
+      <a href="#" class="btn btn-md btn-outline">Learn more</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES OVERVIEW -->
+<section class="svc-overview">
+  <div class="container">
+    <div class="svc-overview-grid">
+      <!-- Card 1 -->
+      <div class="svc-card">
+        <div class="svc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+        <h3 class="svc-card-title">Strategy & Consulting</h3>
+        <p class="svc-card-desc">We help you define your vision, align your team, and create a roadmap that drives measurable results.</p>
+        <div class="svc-card-features">
+          <div class="svc-card-feat"><span class="svc-dot"></span> Market research & analysis</div>
+          <div class="svc-card-feat"><span class="svc-dot"></span> Business model design</div>
+          <div class="svc-card-feat"><span class="svc-dot"></span> Growth strategy roadmap</div>
+          <div class="svc-card-feat"><span class="svc-dot"></span> Competitive positioning</div>
+        </div>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- Card 2 -->
+      <div class="svc-card">
+        <div class="svc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></div>
+        <h3 class="svc-card-title">Design & Development</h3>
+        <p class="svc-card-desc">From wireframes to production code, we build beautiful, performant digital experiences.</p>
+        <div class="svc-card-features">
+          <div class="svc-card-feat"><span class="svc-dot"></span> UI/UX design systems</div>
+          <div class="svc-card-feat"><span class="svc-dot"></span> Web & mobile development</div>
+          <div class="svc-card-feat"><span class="svc-dot"></span> API & integrations</div>
+          <div class="svc-card-feat"><span class="svc-dot"></span> Performance optimization</div>
+        </div>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- Card 3 -->
+      <div class="svc-card">
+        <div class="svc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <h3 class="svc-card-title">Marketing & Growth</h3>
+        <p class="svc-card-desc">Data-driven campaigns that acquire, engage, and retain your ideal customers at scale.</p>
+        <div class="svc-card-features">
+          <div class="svc-card-feat"><span class="svc-dot"></span> SEO & content marketing</div>
+          <div class="svc-card-feat"><span class="svc-dot"></span> Paid acquisition & PPC</div>
+          <div class="svc-card-feat"><span class="svc-dot"></span> Email & automation</div>
+          <div class="svc-card-feat"><span class="svc-dot"></span> Analytics & reporting</div>
+        </div>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW WE WORK -->
+<section class="how">
+  <div class="container">
+    <div class="how-header">
+      <h2 class="heading-lg">How we work</h2>
+      <p class="body-text">Our proven four-step process ensures every engagement delivers clear outcomes and measurable value.</p>
+    </div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-num">01</div>
+        <h3 class="how-step-title">Discovery</h3>
+        <p class="how-step-text">We dig into your business, your market, and your goals to understand exactly where you are and where you want to go.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">02</div>
+        <h3 class="how-step-title">Strategy</h3>
+        <p class="how-step-text">We build a clear, actionable plan with defined milestones, KPIs, and deliverables aligned to your objectives.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">03</div>
+        <h3 class="how-step-title">Execution</h3>
+        <p class="how-step-text">Our team gets to work, shipping iteratively with weekly check-ins so you always know where things stand.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-num">04</div>
+        <h3 class="how-step-title">Delivery</h3>
+        <p class="how-step-text">We hand off polished deliverables, documentation, and a roadmap for what comes next to keep momentum going.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILED SERVICE 1: Strategy & Consulting -->
+<section class="detail">
+  <div class="container">
+    <div class="detail-grid">
+      <div class="detail-text">
+        <p class="kicker">Service One</p>
+        <h2 class="heading-md">Strategy & Consulting</h2>
+        <p class="body-text">We partner with founders and leadership teams to clarify vision, validate assumptions, and build go-to-market strategies that actually work. No fluff, no frameworks for the sake of frameworks.</p>
+        <div class="detail-bullets">
+          <div class="detail-bullet"><span class="svc-dot"></span> Deep-dive workshops to align stakeholders on goals and priorities</div>
+          <div class="detail-bullet"><span class="svc-dot"></span> Competitive landscape analysis and market opportunity sizing</div>
+          <div class="detail-bullet"><span class="svc-dot"></span> 90-day execution roadmap with clear owners and milestones</div>
+        </div>
+        <a href="#" class="btn btn-md btn-primary">Book a consultation</a>
+      </div>
+      <div class="detail-img">
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILED SERVICE 2: Design & Development (reversed) -->
+<section class="detail">
+  <div class="container">
+    <div class="detail-grid reversed">
+      <div class="detail-img">
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      </div>
+      <div class="detail-text">
+        <p class="kicker">Service Two</p>
+        <h2 class="heading-md">Design & Development</h2>
+        <p class="body-text">We design and build digital products that look great, perform fast, and scale with your business. From design systems to production deployments, we handle the full stack.</p>
+        <div class="detail-bullets">
+          <div class="detail-bullet"><span class="svc-dot"></span> Component-driven design systems that ensure brand consistency</div>
+          <div class="detail-bullet"><span class="svc-dot"></span> Responsive, accessible builds with modern frameworks</div>
+          <div class="detail-bullet"><span class="svc-dot"></span> CI/CD pipelines and infrastructure setup for reliable deploys</div>
+        </div>
+        <a href="#" class="btn btn-md btn-outline">See our work</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILED SERVICE 3: Marketing & Growth -->
+<section class="detail">
+  <div class="container">
+    <div class="detail-grid">
+      <div class="detail-text">
+        <p class="kicker">Service Three</p>
+        <h2 class="heading-md">Marketing & Growth</h2>
+        <p class="body-text">We build and run growth engines that drive qualified traffic, convert leads, and increase customer lifetime value through data-backed campaigns and content strategies.</p>
+        <div class="detail-bullets">
+          <div class="detail-bullet"><span class="svc-dot"></span> Full-funnel campaign strategy from awareness to conversion</div>
+          <div class="detail-bullet"><span class="svc-dot"></span> Content marketing and SEO that compounds over time</div>
+          <div class="detail-bullet"><span class="svc-dot"></span> Marketing automation and lifecycle email sequences</div>
+        </div>
+        <a href="#" class="btn btn-md btn-primary">Get started</a>
+      </div>
+      <div class="detail-img">
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING PREVIEW -->
+<section class="pricing-preview">
+  <div class="container">
+    <div class="pricing-preview-header">
+      <h2 class="heading-lg">Simple, transparent pricing</h2>
+      <p class="body-text">Choose the plan that fits your needs. No hidden fees, no surprises.</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Basic -->
+      <div class="pricing-card">
+        <div class="pricing-plan">Basic</div>
+        <div class="pricing-price">$19<span>/mo</span></div>
+        <p class="pricing-desc">Perfect for individuals and small projects getting started.</p>
+        <div class="pricing-divider"></div>
+        <div class="pricing-features">
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Up to 5 projects</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Basic analytics</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Email support</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> 1 team member</div>
+        </div>
+        <button class="pricing-cta outline">Get started</button>
+      </div>
+      <!-- Professional (highlighted) -->
+      <div class="pricing-card highlighted">
+        <span class="pricing-badge">Most Popular</span>
+        <div class="pricing-plan">Professional</div>
+        <div class="pricing-price">$49<span>/mo</span></div>
+        <p class="pricing-desc">For growing teams that need more power and collaboration.</p>
+        <div class="pricing-divider"></div>
+        <div class="pricing-features">
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Unlimited projects</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Advanced analytics</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Priority support</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Up to 10 team members</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Custom integrations</div>
+        </div>
+        <button class="pricing-cta primary">Get started</button>
+      </div>
+      <!-- Enterprise -->
+      <div class="pricing-card">
+        <div class="pricing-plan">Enterprise</div>
+        <div class="pricing-price">$99<span>/mo</span></div>
+        <p class="pricing-desc">For organizations that need scale, security, and dedicated support.</p>
+        <div class="pricing-divider"></div>
+        <div class="pricing-features">
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Everything in Professional</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Unlimited team members</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Dedicated account manager</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> SLA & uptime guarantee</div>
+          <div class="pricing-feat"><span class="pricing-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span> Custom contracts</div>
+        </div>
+        <button class="pricing-cta outline">Contact sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="container">
+    <div class="testimonial-inner">
+      <div class="testimonial-stars">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <blockquote class="testimonial-quote">"Their team transformed our business. The strategy was sharp, the execution was flawless, and the results exceeded every target we set. I can't recommend them enough."</blockquote>
+      <div class="testimonial-author">Sarah Chen</div>
+      <div class="testimonial-role">CEO, Horizon Labs</div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES PREVIEW -->
+<section class="cases">
+  <div class="container">
+    <div class="cases-header">
+      <h2 class="heading-lg">Results that speak</h2>
+      <p class="body-text">See how we've helped companies like yours achieve meaningful, measurable growth.</p>
+    </div>
+    <div class="cases-grid">
+      <!-- Case 1 -->
+      <a href="#" class="case-card">
+        <div class="case-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="case-body">
+          <div class="case-client">Acme Corp</div>
+          <div class="case-stat">+300% growth</div>
+          <p class="case-desc">Tripled organic traffic in 6 months with a full-funnel content and SEO strategy.</p>
+          <span class="link-arrow">Read case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+      <!-- Case 2 -->
+      <a href="#" class="case-card">
+        <div class="case-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="case-body">
+          <div class="case-client">Nebula Finance</div>
+          <div class="case-stat">2.5x revenue</div>
+          <p class="case-desc">Redesigned the core product experience, increasing conversions by 140%.</p>
+          <span class="link-arrow">Read case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+      <!-- Case 3 -->
+      <a href="#" class="case-card">
+        <div class="case-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="case-body">
+          <div class="case-client">Vertex Health</div>
+          <div class="case-stat">50k new users</div>
+          <p class="case-desc">Launched a go-to-market campaign that acquired 50,000 users in the first quarter.</p>
+          <span class="link-arrow">Read case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <h2 class="heading-lg">Ready to get started?</h2>
+      <p class="body-text">Let's talk about how we can help you reach your goals. Schedule a free consultation or explore our pricing plans.</p>
+      <div class="cta-btns">
+        <a href="#" class="btn btn-md btn-primary">Schedule a call</a>
+        <a href="pricing.html" class="btn btn-md btn-outline">View pricing</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="navbar-logo" style="margin-bottom:16px">Logo</div>
+        <p class="footer-subscribe-text">Join our newsletter to stay up to date on features and releases.</p>
+        <form class="footer-form" onsubmit="return false;"><input type="email" class="footer-input" placeholder="Enter your email"><button type="submit" class="btn btn-sm btn-outline">Subscribe</button></form>
+        <p class="footer-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p>
+      </div>
+      <div><div class="footer-col-title">Column One</div><div class="footer-links"><a href="#" class="footer-link">Link One</a><a href="#" class="footer-link">Link Two</a><a href="#" class="footer-link">Link Three</a><a href="#" class="footer-link">Link Four</a><a href="#" class="footer-link">Link Five</a></div></div>
+      <div><div class="footer-col-title">Column Two</div><div class="footer-links"><a href="#" class="footer-link">Link Six</a><a href="#" class="footer-link">Link Seven</a><a href="#" class="footer-link">Link Eight</a><a href="#" class="footer-link">Link Nine</a><a href="#" class="footer-link">Link Ten</a></div></div>
+      <div><div class="footer-col-title">Follow Us</div><div class="footer-links">
+        <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> Facebook</a>
+        <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg> Instagram</a>
+        <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> X</a>
+        <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+        <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg> Youtube</a>
+      </div></div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2023 Relume. All rights reserved.</span>
+      <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookies Settings</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

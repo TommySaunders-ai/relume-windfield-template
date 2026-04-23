@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Product — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-r-xl:16px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}.btn-sm{height:36px;padding:0 16px;font-size:13px}.btn-lg{height:52px;padding:0 32px;font-size:16px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.btn-full{width:100%;justify-content:center}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}.navbar-link:hover{color:var(--wf-fg)}.navbar-link.active{color:var(--wf-fg)}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}.mobile-toggle svg{width:24px;height:24px}
+
+/* Hero */
+.hero{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.hero h1{font-size:48px;font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px;color:var(--wf-fg)}
+.hero-desc{font-size:16px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:20px}
+.hero-rating{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:13px;color:var(--wf-fg-muted)}
+.stars-sm{display:flex;gap:2px}.stars-sm svg{width:16px;height:16px;fill:var(--wf-brand)}.stars-sm .half{fill:var(--wf-fg-faint)}
+.hero-price{display:flex;align-items:baseline;gap:12px;margin-bottom:24px}
+.hero-price .current{font-size:40px;font-weight:700;letter-spacing:-0.03em;color:var(--wf-fg)}
+.hero-price .original{font-size:20px;color:var(--wf-fg-faint);text-decoration:line-through}
+.includes-label{font-size:14px;font-weight:600;color:var(--wf-fg);margin-bottom:12px}
+.includes-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-bottom:28px}
+.includes-item{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--wf-fg-muted)}
+.includes-item svg{width:16px;height:16px;color:var(--wf-brand);flex-shrink:0}
+.hero-btns{display:flex;gap:12px;margin-bottom:16px}
+.hero-guarantee{font-size:13px;color:var(--wf-fg-subtle)}
+.video-ph{aspect-ratio:16/9;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);display:flex;align-items:center;justify-content:center;position:relative}
+.play-btn{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;color:white;cursor:pointer;transition:all var(--wf-dur)}.play-btn:hover{background:rgba(255,255,255,0.2);transform:scale(1.05)}.play-btn svg{width:28px;height:28px;margin-left:4px}
+
+/* What You Get */
+.modules-section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.modules-header{text-align:center;margin-bottom:48px}
+.modules-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.modules-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto}
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.module-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:32px;transition:border-color var(--wf-dur)}.module-card:hover{border-color:var(--wf-border-strong)}
+.module-num{width:48px;height:48px;border-radius:var(--wf-r-md);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--wf-brand);margin-bottom:20px}
+.module-card h3{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.module-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:16px}
+.module-meta{font-size:13px;color:var(--wf-fg-subtle);display:flex;align-items:center;gap:6px}
+.module-meta svg{width:14px;height:14px}
+
+/* Curriculum */
+.curriculum{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.curriculum-header{margin-bottom:48px}
+.curriculum-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg)}
+.cur-item{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);margin-bottom:12px;overflow:hidden}
+.cur-q{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;cursor:pointer;transition:color var(--wf-dur)}.cur-q:hover{color:var(--wf-brand)}
+.cur-q-left{display:flex;align-items:center;gap:16px}
+.cur-num{font-size:13px;font-weight:700;color:var(--wf-brand);min-width:32px}
+.cur-title{font-size:15px;font-weight:600;color:var(--wf-fg)}
+.cur-meta{font-size:13px;color:var(--wf-fg-subtle);margin-left:auto;white-space:nowrap;padding-right:16px}
+.cur-x{flex-shrink:0;color:var(--wf-fg-subtle)}.cur-x svg{width:18px;height:18px;transition:transform var(--wf-dur)}
+.cur-a{padding:0 24px 20px;border-top:1px solid var(--wf-border-subtle)}
+.cur-lesson{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px;color:var(--wf-fg-muted)}
+.cur-lesson svg{width:16px;height:16px;color:var(--wf-brand);flex-shrink:0}
+
+/* Instructor */
+.instructor{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.instructor-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:start}
+.instructor-avatar{aspect-ratio:1/1;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);display:flex;align-items:center;justify-content:center}
+.instructor-avatar svg{width:64px;height:64px;color:var(--wf-fg-faint)}
+.instructor-info h2{font-size:32px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:4px}
+.instructor-role{font-size:15px;color:var(--wf-fg-subtle);margin-bottom:16px}
+.instructor-bio{font-size:15px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:24px}
+.cred-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.cred-list li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--wf-fg-muted)}
+.cred-dot{width:6px;height:6px;border-radius:50%;background:var(--wf-brand);flex-shrink:0}
+.social-links{display:flex;gap:12px}
+.social-link{width:40px;height:40px;border-radius:50%;border:1px solid var(--wf-border-strong);display:flex;align-items:center;justify-content:center;color:var(--wf-fg-muted);transition:all var(--wf-dur)}.social-link:hover{border-color:var(--wf-fg-subtle);color:var(--wf-fg)}.social-link svg{width:18px;height:18px}
+
+/* Testimonials */
+.testi-section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.testi-header{text-align:center;margin-bottom:48px}
+.testi-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.testi-header p{font-size:15px;color:var(--wf-fg-muted)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.testi-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:28px}
+.testi-stars{display:flex;gap:3px;margin-bottom:16px}.testi-stars svg{width:16px;height:16px;fill:var(--wf-brand)}
+.testi-quote{font-size:14px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:20px;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-avatar{width:40px;height:40px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center}.testi-avatar svg{width:20px;height:20px;color:var(--wf-fg-faint)}
+.testi-name{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.testi-role{font-size:12px;color:var(--wf-fg-subtle)}
+
+/* Comparison */
+.comparison{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.comparison h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:40px;text-align:center}
+.comp-table{width:100%;max-width:720px;margin:0 auto;border-collapse:separate;border-spacing:0}
+.comp-table th{font-size:14px;font-weight:600;padding:16px 24px;text-align:left;border-bottom:2px solid var(--wf-border-strong)}
+.comp-table th:first-child{color:var(--wf-fg-muted)}.comp-table th:nth-child(2){color:var(--wf-fg-subtle)}.comp-table th:nth-child(3){color:var(--wf-brand)}
+.comp-table td{padding:16px 24px;font-size:14px;color:var(--wf-fg-muted);border-bottom:1px solid var(--wf-border)}
+.comp-table td:first-child{font-weight:500;color:var(--wf-fg)}
+.comp-check{color:var(--wf-brand)}.comp-x{color:var(--wf-fg-faint)}
+.comp-table td svg{width:18px;height:18px}
+
+/* Final CTA */
+.final-cta{padding:80px 0;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border)}
+.final-cta-inner{text-align:center;max-width:600px;margin:0 auto}
+.final-cta h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:8px}
+.final-cta .final-price{font-size:48px;font-weight:800;letter-spacing:-0.03em;color:var(--wf-brand);margin-bottom:12px}
+.final-cta p{font-size:16px;color:var(--wf-fg-muted);margin-bottom:28px;line-height:1.65}
+.final-cta .guarantee{font-size:13px;color:var(--wf-fg-subtle);margin-top:16px}
+
+/* FAQ */
+.faq-section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.faq-header{margin-bottom:48px}
+.faq-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.faq-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px}
+.faq-item{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);margin-bottom:12px;overflow:hidden}
+.faq-q{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;font-size:15px;font-weight:600;color:var(--wf-fg);cursor:pointer;transition:color var(--wf-dur)}.faq-q:hover{color:var(--wf-brand)}
+.faq-x{flex-shrink:0;color:var(--wf-fg-subtle)}.faq-x svg{width:18px;height:18px}
+.faq-a{padding:0 24px 20px;font-size:14px;color:var(--wf-fg-muted);line-height:1.65}
+.still-q{margin-top:48px}
+.still-q h3{font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}
+.still-q p{font-size:15px;color:var(--wf-fg-muted);margin-bottom:20px}
+
+/* Footer */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-sub-text{font-size:13px;color:var(--wf-fg-muted);margin-bottom:12px}
+.footer-form{display:flex;gap:8px;margin-bottom:12px}
+.footer-input{flex:1;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}.footer-input::placeholder{color:var(--wf-fg-faint)}.footer-input:hover{border-color:var(--wf-border-strong)}.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disc{font-size:11px;color:var(--wf-fg-faint);line-height:1.5}.footer-disc a{text-decoration:underline;text-underline-offset:2px}
+.ft{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.fl{display:flex;flex-direction:column;gap:10px}.fl a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:8px}.fl a:hover{color:var(--wf-fg)}.fl a svg{width:16px;height:16px;flex-shrink:0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
+
+/* Responsive */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .hero-grid,.instructor-grid{grid-template-columns:1fr;gap:40px}
+  .modules-grid,.testi-grid{grid-template-columns:1fr 1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .hero h1,.final-cta h2{font-size:32px}
+  .modules-header h2,.curriculum-header h2,.testi-header h2,.comparison h2,.faq-header h2{font-size:28px}
+  .hero-price .current,.final-cta .final-price{font-size:32px}
+  .navbar-links{display:none}.mobile-toggle{display:flex}
+  .modules-grid,.testi-grid{grid-template-columns:1fr}
+  .includes-grid{grid-template-columns:1fr}
+  .hero-btns{flex-direction:column}
+  .hero-btns .btn{width:100%;justify-content:center}
+  .comp-table th,.comp-table td{padding:12px 16px;font-size:13px}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar"><div class="container navbar-inner">
+  <a href="index.html" class="navbar-logo">Logo</a>
+  <div class="navbar-links">
+    <a href="home-v1.html" class="navbar-link">Home v1</a>
+    <a href="about.html" class="navbar-link">About</a>
+    <a href="pricing.html" class="navbar-link">Pricing</a>
+    <a href="product.html" class="navbar-link">Product</a>
+    <a href="portfolio.html" class="navbar-link">Portfolio</a>
+    <a href="digital-product.html" class="navbar-link active">Digital Product</a>
+    <a href="contact.html" class="navbar-link">Contact</a>
+    <a href="blog-home.html" class="navbar-link">Blog Home</a>
+    <a href="docs.html" class="navbar-link">Docs</a>
+  </div>
+  <div class="navbar-actions"><a href="#" class="btn btn-sm btn-outline">Log in</a><a href="#" class="btn btn-sm btn-primary">Get started</a></div>
+  <button class="mobile-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</div></nav>
+
+<!-- HERO -->
+<section class="hero"><div class="container">
+  <div class="hero-grid">
+    <!-- Left Column -->
+    <div>
+      <p class="kicker">Digital Product</p>
+      <h1>Digital product name</h1>
+      <p class="hero-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+
+      <div class="hero-rating">
+        <div class="stars-sm">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" class="half"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" class="half"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        (3.5 stars) &middot; 10 reviews
+      </div>
+
+      <div class="hero-price">
+        <span class="current">$55</span>
+        <span class="original">$99</span>
+      </div>
+
+      <div class="includes-label">Includes:</div>
+      <div class="includes-grid">
+        <div class="includes-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Lifetime access</div>
+        <div class="includes-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Downloadable resources</div>
+        <div class="includes-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 20+ video lessons</div>
+        <div class="includes-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Community access</div>
+        <div class="includes-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Certificate of completion</div>
+        <div class="includes-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Bonus templates</div>
+        <div class="includes-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Mobile friendly</div>
+        <div class="includes-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Free updates</div>
+      </div>
+
+      <div class="hero-btns">
+        <a href="#" class="btn btn-md btn-primary">Add To Cart</a>
+        <a href="#" class="btn btn-md btn-outline">Buy Now</a>
+      </div>
+      <p class="hero-guarantee">30-Day Money-Back Guarantee</p>
+    </div>
+
+    <!-- Right Column: Video -->
+    <div class="video-ph">
+      <button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+    </div>
+  </div>
+</div></section>
+
+<!-- WHAT YOU GET -->
+<section class="modules-section"><div class="container">
+  <div class="modules-header">
+    <h2>Everything included</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+  </div>
+  <div class="modules-grid">
+    <div class="module-card">
+      <div class="module-num">01</div>
+      <h3>Foundation &amp; Setup</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+      <div class="module-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> 8 lessons &middot; 2.5 hours</div>
+    </div>
+    <div class="module-card">
+      <div class="module-num">02</div>
+      <h3>Core Strategies</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+      <div class="module-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> 12 lessons &middot; 4 hours</div>
+    </div>
+    <div class="module-card">
+      <div class="module-num">03</div>
+      <h3>Advanced Techniques</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+      <div class="module-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> 6 lessons &middot; 3 hours</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- CURRICULUM -->
+<section class="curriculum"><div class="container">
+  <div class="curriculum-header"><h2>Full Curriculum</h2></div>
+
+  <div class="cur-item">
+    <div class="cur-q" onclick="this.parentElement.classList.toggle('open')">
+      <div class="cur-q-left"><span class="cur-num">01</span><span class="cur-title">Getting Started</span></div>
+      <span class="cur-meta">4 lessons &middot; 45 min</span>
+      <span class="cur-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+    </div>
+    <div class="cur-a">
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Welcome &amp; course overview</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Setting up your environment</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Understanding the fundamentals</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Your first project</div>
+    </div>
+  </div>
+
+  <div class="cur-item">
+    <div class="cur-q" onclick="this.parentElement.classList.toggle('open')">
+      <div class="cur-q-left"><span class="cur-num">02</span><span class="cur-title">Core Concepts</span></div>
+      <span class="cur-meta">3 lessons &middot; 1 hr</span>
+      <span class="cur-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+    </div>
+    <div class="cur-a">
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Building blocks explained</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Patterns and best practices</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Hands-on exercises</div>
+    </div>
+  </div>
+
+  <div class="cur-item">
+    <div class="cur-q" onclick="this.parentElement.classList.toggle('open')">
+      <div class="cur-q-left"><span class="cur-num">03</span><span class="cur-title">Intermediate Workflows</span></div>
+      <span class="cur-meta">4 lessons &middot; 1.5 hrs</span>
+      <span class="cur-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+    </div>
+    <div class="cur-a">
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Workflow automation</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Integrations deep dive</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Real-world case study</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Mid-course project</div>
+    </div>
+  </div>
+
+  <div class="cur-item">
+    <div class="cur-q" onclick="this.parentElement.classList.toggle('open')">
+      <div class="cur-q-left"><span class="cur-num">04</span><span class="cur-title">Advanced Strategies</span></div>
+      <span class="cur-meta">3 lessons &middot; 1.5 hrs</span>
+      <span class="cur-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+    </div>
+    <div class="cur-a">
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Scaling your approach</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Advanced optimization</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Performance metrics</div>
+    </div>
+  </div>
+
+  <div class="cur-item">
+    <div class="cur-q" onclick="this.parentElement.classList.toggle('open')">
+      <div class="cur-q-left"><span class="cur-num">05</span><span class="cur-title">Templates &amp; Tools</span></div>
+      <span class="cur-meta">4 lessons &middot; 2 hrs</span>
+      <span class="cur-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+    </div>
+    <div class="cur-a">
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Template library walkthrough</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Customizing templates</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Tool stack overview</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Building your own toolkit</div>
+    </div>
+  </div>
+
+  <div class="cur-item">
+    <div class="cur-q" onclick="this.parentElement.classList.toggle('open')">
+      <div class="cur-q-left"><span class="cur-num">06</span><span class="cur-title">Launch &amp; Beyond</span></div>
+      <span class="cur-meta">3 lessons &middot; 1 hr</span>
+      <span class="cur-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+    </div>
+    <div class="cur-a">
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Pre-launch checklist</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Launch day strategy</div>
+      <div class="cur-lesson"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Post-launch growth</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- INSTRUCTOR -->
+<section class="instructor"><div class="container">
+  <div class="instructor-grid">
+    <div class="instructor-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+    <div class="instructor-info">
+      <p class="kicker">Your instructor</p>
+      <h2>Instructor Name</h2>
+      <p class="instructor-role">Senior Product Designer &amp; Educator</p>
+      <p class="instructor-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet.</p>
+      <ul class="cred-list">
+        <li><span class="cred-dot"></span> 10+ years of industry experience</li>
+        <li><span class="cred-dot"></span> Previously at Google, Stripe, and Figma</li>
+        <li><span class="cred-dot"></span> Taught 50,000+ students worldwide</li>
+        <li><span class="cred-dot"></span> Featured speaker at Config and WebSummit</li>
+      </ul>
+      <div class="social-links">
+        <a href="#" class="social-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
+        <a href="#" class="social-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#" class="social-link"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></a>
+        <a href="#" class="social-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg)"/></svg></a>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- SOCIAL PROOF -->
+<section class="testi-section"><div class="container">
+  <div class="testi-header">
+    <h2>What students say</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <p class="testi-quote">"This course completely changed how I approach my work. The templates alone saved me dozens of hours. Highly recommend to anyone looking to level up."</p>
+      <div class="testi-author"><div class="testi-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="testi-name">Sarah Johnson</div><div class="testi-role">Product Designer, Acme Inc</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <p class="testi-quote">"Clear, actionable, and well-structured. I went from zero to launching my own product in just three weeks after completing this course."</p>
+      <div class="testi-author"><div class="testi-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="testi-name">Mike Chen</div><div class="testi-role">Founder, StartupCo</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <p class="testi-quote">"The instructor's real-world experience really shows. Every lesson is practical and immediately applicable. Worth every penny."</p>
+      <div class="testi-author"><div class="testi-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="testi-name">Emily Rodriguez</div><div class="testi-role">Marketing Lead, TechFlow</div></div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- COMPARISON TABLE -->
+<section class="comparison"><div class="container">
+  <h2>Why choose this?</h2>
+  <table class="comp-table">
+    <thead>
+      <tr><th>Feature</th><th>Free</th><th>This Product</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Video lessons</td>
+        <td><svg class="comp-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></td>
+        <td><svg class="comp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></td>
+      </tr>
+      <tr>
+        <td>Downloadable templates</td>
+        <td><svg class="comp-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></td>
+        <td><svg class="comp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></td>
+      </tr>
+      <tr>
+        <td>Community access</td>
+        <td><svg class="comp-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></td>
+        <td><svg class="comp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></td>
+      </tr>
+      <tr>
+        <td>Certificate of completion</td>
+        <td><svg class="comp-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></td>
+        <td><svg class="comp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></td>
+      </tr>
+      <tr>
+        <td>Lifetime updates</td>
+        <td><svg class="comp-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></td>
+        <td><svg class="comp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></td>
+      </tr>
+    </tbody>
+  </table>
+</div></section>
+
+<!-- FINAL CTA -->
+<section class="final-cta"><div class="container">
+  <div class="final-cta-inner">
+    <h2>Start learning today</h2>
+    <div class="final-price">$55</div>
+    <p>Get instant access to all modules, templates, and resources. Start building real projects from day one.</p>
+    <a href="#" class="btn btn-lg btn-primary">Get instant access</a>
+    <p class="guarantee">30-Day Money-Back Guarantee &middot; Instant digital delivery</p>
+  </div>
+</div></section>
+
+<!-- FAQ -->
+<div class="container"><div class="faq-section">
+  <div class="faq-header"><h2>Frequently asked questions</h2><p>Everything you need to know before purchasing.</p></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>How long do I have access to the course?</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="faq-a">You get lifetime access. Once you purchase, you can revisit the material at any time, including all future updates we add to the course.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>Is there a money-back guarantee?</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="faq-a">Yes, we offer a full 30-day money-back guarantee. If the course doesn't meet your expectations, contact us within 30 days for a complete refund.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>What skill level is this for?</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="faq-a">This course is designed for beginners to intermediate learners. We start with the fundamentals and progressively build to advanced techniques, so you can learn at your own pace.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>Can I download the resources?</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="faq-a">Absolutely. All templates, worksheets, and bonus materials are available for download. You can use them in your own projects immediately.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')"><span>Do you offer team or bulk pricing?</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="faq-a">Yes, we offer discounted pricing for teams of 5 or more. Contact us at hello@example.com for a custom quote tailored to your team's needs.</div></div>
+  <div class="still-q"><h3>Still have questions?</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p><a href="#" class="btn btn-md btn-outline">Contact</a></div>
+</div></div>
+
+<!-- FOOTER -->
+<footer class="footer"><div class="container">
+  <div class="footer-top">
+    <div><div class="navbar-logo" style="margin-bottom:16px">Logo</div><p class="footer-sub-text">Join our newsletter to stay up to date on features and releases.</p><form class="footer-form" onsubmit="return false;"><input type="email" class="footer-input" placeholder="Enter your email"><button type="submit" class="btn btn-sm btn-outline">Subscribe</button></form><p class="footer-disc">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p></div>
+    <div><div class="ft">Column One</div><div class="fl"><a href="#">Link One</a><a href="#">Link Two</a><a href="#">Link Three</a><a href="#">Link Four</a><a href="#">Link Five</a></div></div>
+    <div><div class="ft">Column Two</div><div class="fl"><a href="#">Link Six</a><a href="#">Link Seven</a><a href="#">Link Eight</a><a href="#">Link Nine</a><a href="#">Link Ten</a></div></div>
+    <div><div class="ft">Follow Us</div><div class="fl">
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> Facebook</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg> Instagram</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> X</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg> Youtube</a>
+    </div></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2023 Relume. All rights reserved.</span><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookies Settings</a></div></div>
+</div></footer>
+
+<style>
+/* Accordion toggle logic */
+.cur-item .cur-a{display:none}
+.cur-item.open .cur-a{display:block}
+.cur-item.open .cur-x svg{transform:rotate(180deg)}
+.faq-item .faq-a{display:none}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-x svg{transform:rotate(180deg)}
+</style>
+
+</body>
+</html>

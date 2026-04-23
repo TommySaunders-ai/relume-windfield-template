@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>123 Main Street — Property Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,textarea{font-family:var(--font-sans)}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.btn-full{width:100%;justify-content:center}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}.link-arrow:hover{gap:10px}.link-arrow svg{width:16px;height:16px}
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+.ic{width:48px;height:48px;color:var(--wf-fg-faint)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}.navbar-link:hover{color:var(--wf-fg)}.navbar-link.active{color:var(--wf-fg)}.navbar-link svg{width:12px;height:12px}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}.mobile-toggle svg{width:24px;height:24px}
+
+/* Breadcrumb */
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-subtle);padding:20px 0}
+.breadcrumb a{transition:color var(--wf-dur)}.breadcrumb a:hover{color:var(--wf-brand)}
+.breadcrumb svg{width:12px;height:12px;flex-shrink:0}
+.breadcrumb strong{color:var(--wf-fg);font-weight:500}
+
+/* Property Gallery */
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:48px}
+.gallery-main{grid-column:1/3;grid-row:1/3}.gallery-main .ph{aspect-ratio:auto;height:100%;min-height:400px}
+.gallery-sm .ph{aspect-ratio:1/1}
+.gallery-sm:last-child{position:relative}
+.show-all{position:absolute;bottom:12px;right:12px;font-size:12px;font-weight:600;padding:6px 14px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);color:var(--wf-fg);cursor:pointer;transition:all var(--wf-dur)}.show-all:hover{background:var(--wf-surface-hover)}
+
+/* Property Info + Inquiry 2-col */
+.property-bottom{display:grid;grid-template-columns:1fr 420px;gap:48px;padding-bottom:64px;align-items:start}
+
+/* Property Info */
+.property-info h1{font-size:36px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;margin-bottom:8px}
+.property-address{font-size:15px;color:var(--wf-fg-muted);margin-bottom:16px}
+.property-badge{display:inline-flex;align-items:center;height:28px;padding:0 12px;font-size:12px;font-weight:600;background:var(--wf-brand-muted);color:var(--wf-brand);border-radius:var(--wf-r-sm);margin-bottom:24px}
+.key-stats{display:flex;gap:32px;margin-bottom:24px}
+.key-stat-label{font-size:12px;font-weight:500;color:var(--wf-fg-subtle);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
+.key-stat-value{font-size:20px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.01em}
+.property-desc{font-size:15px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:24px}
+.property-tabs{display:flex;gap:24px;border-bottom:1px solid var(--wf-border);margin-bottom:20px}
+.property-tab{padding:10px 0;font-size:14px;font-weight:500;color:var(--wf-fg-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all var(--wf-dur)}
+.property-tab.active{color:var(--wf-fg);border-bottom-color:var(--wf-brand)}
+.property-tab:hover{color:var(--wf-fg)}
+.tab-content{font-size:14px;color:var(--wf-fg-muted);line-height:1.65}
+
+/* Inquiry Panel */
+.inquiry{position:sticky;top:88px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px}
+.inquiry h3{font-size:20px;font-weight:700;color:var(--wf-fg);margin-bottom:16px}
+.inquiry-price{font-size:32px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:4px}
+.inquiry-price span{font-size:15px;font-weight:400;color:var(--wf-fg-muted)}
+.inquiry-lease{font-size:13px;color:var(--wf-fg-subtle);margin-bottom:24px}
+.inquiry-field{margin-bottom:14px}
+.inquiry-field label{display:block;font-size:13px;font-weight:500;color:var(--wf-fg);margin-bottom:6px}
+.inquiry-input{width:100%;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg)}.inquiry-input::placeholder{color:var(--wf-fg-faint)}.inquiry-input:hover{border-color:var(--wf-border-strong)}.inquiry-input:focus{outline:none;border-color:var(--wf-brand)}
+.inquiry-textarea{width:100%;height:80px;padding:10px 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);resize:vertical}.inquiry-textarea::placeholder{color:var(--wf-fg-faint)}.inquiry-textarea:hover{border-color:var(--wf-border-strong)}.inquiry-textarea:focus{outline:none;border-color:var(--wf-brand)}
+.inquiry-btn-primary{width:100%;height:48px;display:flex;align-items:center;justify-content:center;background:var(--wf-brand);color:var(--wf-brand-fg);font-weight:600;font-size:15px;border:none;border-radius:var(--wf-r-md);cursor:pointer;transition:background var(--wf-dur);margin-bottom:10px}.inquiry-btn-primary:hover{background:var(--wf-brand-hover)}
+.inquiry-btn-outline{width:100%;height:48px;display:flex;align-items:center;justify-content:center;background:transparent;color:var(--wf-fg);font-weight:600;font-size:15px;border:1px solid var(--wf-border-strong);border-radius:var(--wf-r-md);cursor:pointer;transition:all var(--wf-dur);margin-bottom:20px}.inquiry-btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface-hover)}
+.agent-info{display:flex;align-items:center;gap:12px;padding-top:20px;border-top:1px solid var(--wf-border)}
+.agent-avatar{width:44px;height:44px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}.agent-avatar svg{width:22px;height:22px;color:var(--wf-fg-faint)}
+.agent-name{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.agent-title{font-size:12px;color:var(--wf-fg-subtle)}
+
+/* Property Details Section */
+.details-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.details-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:start}
+.details-title{font-size:32px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:0}
+.spec-table{margin-top:0}
+.spec-row{display:flex;justify-content:space-between;padding:14px 0;border-top:1px solid var(--wf-border);font-size:14px}
+.spec-row:last-child{border-bottom:1px solid var(--wf-border)}
+.spec-label{font-weight:600;color:var(--wf-fg)}
+.spec-value{color:var(--wf-fg-muted)}
+
+/* Features Section */
+.features-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.features-section h2{font-size:32px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:32px}
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.feature-item{display:flex;align-items:center;gap:12px;padding:16px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg)}
+.feature-check{width:24px;height:24px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--wf-brand)}.feature-check svg{width:14px;height:14px}
+.feature-label{font-size:14px;font-weight:500;color:var(--wf-fg)}
+
+/* Location Section */
+.location-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.location-section h2{font-size:32px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:12px}
+.location-desc{font-size:15px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:32px;max-width:720px}
+.map-placeholder{width:100%;aspect-ratio:16/7;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;margin-bottom:40px}
+.map-placeholder span{font-size:18px;font-weight:600;color:var(--wf-fg-faint)}
+.poi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.poi-category h4{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.poi-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--wf-border-subtle);font-size:13px}
+.poi-item:last-child{border-bottom:1px solid var(--wf-border-subtle)}
+.poi-name{color:var(--wf-fg-muted)}
+.poi-distance{color:var(--wf-fg-subtle)}
+
+/* Similar Properties */
+.similar-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.similar-section h2{font-size:32px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:32px}
+.similar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.prop-card{cursor:pointer;transition:transform var(--wf-dur)}.prop-card:hover{transform:translateY(-2px)}
+.prop-card-img{aspect-ratio:16/9;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;margin-bottom:12px;transition:border-color var(--wf-dur)}.prop-card:hover .prop-card-img{border-color:var(--wf-border-strong)}
+.prop-card-img svg{width:36px;height:36px;color:var(--wf-fg-faint)}
+.prop-name{font-size:15px;font-weight:600;color:var(--wf-fg);margin-bottom:2px}
+.prop-address{font-size:13px;color:var(--wf-fg-subtle);margin-bottom:6px}
+.prop-meta{font-size:13px;color:var(--wf-fg-muted);margin-bottom:8px}
+
+/* CTA */
+.cta{padding:80px 0;text-align:center}
+.cta h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:16px;max-width:640px;margin-left:auto;margin-right:auto}
+.cta p{font-size:16px;color:var(--wf-fg-muted);margin-bottom:28px;max-width:520px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:12px;justify-content:center}
+
+/* Footer */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-sub-text{font-size:13px;color:var(--wf-fg-muted);margin-bottom:12px}
+.footer-form{display:flex;gap:8px;margin-bottom:12px}
+.footer-input{flex:1;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}.footer-input::placeholder{color:var(--wf-fg-faint)}.footer-input:hover{border-color:var(--wf-border-strong)}.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disc{font-size:11px;color:var(--wf-fg-faint);line-height:1.5}.footer-disc a{text-decoration:underline;text-underline-offset:2px}
+.ft{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.fl{display:flex;flex-direction:column;gap:10px}.fl a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:8px}.fl a:hover{color:var(--wf-fg)}.fl a svg{width:16px;height:16px;flex-shrink:0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
+
+/* Responsive */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .property-bottom,.details-grid{grid-template-columns:1fr;gap:32px}
+  .inquiry{position:static}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .poi-grid{grid-template-columns:1fr 1fr}
+  .similar-grid{grid-template-columns:1fr 1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr}
+  .gallery-main{grid-column:1/3;grid-row:auto}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .property-info h1,.details-title,.features-section h2,.location-section h2,.similar-section h2,.cta h2{font-size:28px}
+  .navbar-links{display:none}.mobile-toggle{display:flex}
+  .gallery-grid{grid-template-columns:1fr}.gallery-main{grid-column:auto}
+  .key-stats{flex-direction:column;gap:16px}
+  .features-grid{grid-template-columns:1fr}
+  .poi-grid{grid-template-columns:1fr}
+  .similar-grid{grid-template-columns:1fr}
+  .cta-btns{flex-direction:column;align-items:center}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar"><div class="container navbar-inner">
+  <a href="index.html" class="navbar-logo">Logo</a>
+  <div class="navbar-links">
+    <a href="home-v1.html" class="navbar-link">Home</a>
+    <a href="about.html" class="navbar-link">About</a>
+    <a href="property.html" class="navbar-link active">Properties</a>
+    <a href="pricing.html" class="navbar-link">Pricing</a>
+    <a href="contact.html" class="navbar-link">Contact</a>
+  </div>
+  <div class="navbar-actions"><a href="#" class="btn btn-sm btn-outline">Log in</a><a href="#" class="btn btn-sm btn-primary">Get started</a></div>
+  <button class="mobile-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</div></nav>
+
+<!-- BREADCRUMB -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="#">Properties</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    <a href="#">Office</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    <strong>123 Main Street</strong>
+  </div>
+
+  <!-- PROPERTY GALLERY -->
+  <div class="gallery-grid">
+    <div class="gallery-main"><div class="ph"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+    <div class="gallery-sm"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+    <div class="gallery-sm"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+    <div class="gallery-sm"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+    <div class="gallery-sm" style="position:relative"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><button class="show-all">Show All Photos</button></div>
+  </div>
+
+  <!-- PROPERTY INFO + INQUIRY -->
+  <div class="property-bottom">
+    <div class="property-info">
+      <h1>123 Main Street, Suite 400</h1>
+      <p class="property-address">Downtown Financial District, San Francisco, CA 94105</p>
+      <div class="property-badge">Class A Office</div>
+      <div class="key-stats">
+        <div>
+          <div class="key-stat-label">Size</div>
+          <div class="key-stat-value">12,500 SF</div>
+        </div>
+        <div>
+          <div class="key-stat-label">Price</div>
+          <div class="key-stat-value">$45/SF/YR</div>
+        </div>
+        <div>
+          <div class="key-stat-label">Availability</div>
+          <div class="key-stat-value">Available Now</div>
+        </div>
+      </div>
+      <p class="property-desc">This premier Class A office space offers a rare opportunity in San Francisco's thriving Financial District. Featuring floor-to-ceiling windows with panoramic city views, modern finishes throughout, and direct access to the building's full suite of amenities. The open floor plan can accommodate a variety of configurations to meet your team's needs.</p>
+
+      <div class="property-tabs">
+        <div class="property-tab active">Overview</div>
+        <div class="property-tab">Specifications</div>
+        <div class="property-tab">Location</div>
+      </div>
+      <div class="tab-content">This trophy asset is situated in a LEED Gold certified building completed in 2019, offering best-in-class infrastructure including redundant power, high-speed fiber connectivity, and 14-foot ceilings. The space is delivered in warm shell condition with premium finishes available. Building amenities include a state-of-the-art fitness center, rooftop terrace with bay views, ground-floor cafe, and 24/7 concierge security. Convenient to BART, Muni, and ferry terminals, the location provides unmatched accessibility for employees and clients alike.</div>
+    </div>
+
+    <!-- Inquiry Panel -->
+    <div class="inquiry">
+      <h3>Schedule a Tour</h3>
+      <div class="inquiry-price">$45.00 <span>/ SF / Year</span></div>
+      <p class="inquiry-lease">Lease Type: Full Service Gross</p>
+
+      <div class="inquiry-field">
+        <label>Name</label>
+        <input type="text" class="inquiry-input" placeholder="Your full name">
+      </div>
+      <div class="inquiry-field">
+        <label>Email</label>
+        <input type="email" class="inquiry-input" placeholder="you@company.com">
+      </div>
+      <div class="inquiry-field">
+        <label>Phone</label>
+        <input type="tel" class="inquiry-input" placeholder="(555) 000-0000">
+      </div>
+      <div class="inquiry-field">
+        <label>Message</label>
+        <textarea class="inquiry-textarea" placeholder="I'm interested in scheduling a tour..."></textarea>
+      </div>
+
+      <button class="inquiry-btn-primary">Request Information</button>
+      <button class="inquiry-btn-outline">Call Agent: (555) 123-4567</button>
+
+      <div class="agent-info">
+        <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div>
+          <div class="agent-name">Sarah Mitchell</div>
+          <div class="agent-title">Senior Broker, Windfield Properties</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROPERTY DETAILS -->
+<div class="container"><div class="details-section">
+  <div class="details-grid">
+    <h2 class="details-title">Property Details</h2>
+    <div class="spec-table">
+      <div class="spec-row"><span class="spec-label">Building Size</span><span class="spec-value">125,000 SF</span></div>
+      <div class="spec-row"><span class="spec-label">Floor Plate</span><span class="spec-value">12,500 SF</span></div>
+      <div class="spec-row"><span class="spec-label">Year Built</span><span class="spec-value">2019</span></div>
+      <div class="spec-row"><span class="spec-label">Floors</span><span class="spec-value">10</span></div>
+      <div class="spec-row"><span class="spec-label">Parking</span><span class="spec-value">3.5 per 1,000 SF</span></div>
+      <div class="spec-row"><span class="spec-label">LEED Certification</span><span class="spec-value">Gold</span></div>
+      <div class="spec-row"><span class="spec-label">Ceiling Height</span><span class="spec-value">14 ft</span></div>
+      <div class="spec-row"><span class="spec-label">Power</span><span class="spec-value">8 watts/SF</span></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- FEATURES -->
+<div class="container"><div class="features-section">
+  <h2>Building Features &amp; Amenities</h2>
+  <div class="features-grid">
+    <div class="feature-item"><div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><span class="feature-label">24/7 Security</span></div>
+    <div class="feature-item"><div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><span class="feature-label">Fitness Center</span></div>
+    <div class="feature-item"><div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><span class="feature-label">Conference Facility</span></div>
+    <div class="feature-item"><div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><span class="feature-label">Rooftop Terrace</span></div>
+    <div class="feature-item"><div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><span class="feature-label">EV Charging</span></div>
+    <div class="feature-item"><div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><span class="feature-label">Bike Storage</span></div>
+    <div class="feature-item"><div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><span class="feature-label">On-site Cafe</span></div>
+    <div class="feature-item"><div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div><span class="feature-label">High-speed Fiber</span></div>
+  </div>
+</div></div>
+
+<!-- LOCATION -->
+<div class="container"><div class="location-section">
+  <h2>Location &amp; Neighborhood</h2>
+  <p class="location-desc">Situated in the heart of San Francisco's Financial District, this property offers unparalleled access to the city's top dining, hospitality, and transit options. The neighborhood is home to major financial institutions, tech companies, and professional services firms, creating a vibrant business ecosystem.</p>
+
+  <div class="map-placeholder"><span>Map</span></div>
+
+  <div class="poi-grid">
+    <div class="poi-category">
+      <h4>Transit</h4>
+      <div class="poi-item"><span class="poi-name">Montgomery BART Station</span><span class="poi-distance">0.1 mi</span></div>
+      <div class="poi-item"><span class="poi-name">Embarcadero BART Station</span><span class="poi-distance">0.3 mi</span></div>
+      <div class="poi-item"><span class="poi-name">Ferry Building Terminal</span><span class="poi-distance">0.4 mi</span></div>
+    </div>
+    <div class="poi-category">
+      <h4>Dining</h4>
+      <div class="poi-item"><span class="poi-name">Boulettes Larder</span><span class="poi-distance">0.3 mi</span></div>
+      <div class="poi-item"><span class="poi-name">Perbacco</span><span class="poi-distance">0.2 mi</span></div>
+      <div class="poi-item"><span class="poi-name">Wayfare Tavern</span><span class="poi-distance">0.1 mi</span></div>
+    </div>
+    <div class="poi-category">
+      <h4>Hotels</h4>
+      <div class="poi-item"><span class="poi-name">Omni San Francisco</span><span class="poi-distance">0.2 mi</span></div>
+      <div class="poi-item"><span class="poi-name">Palace Hotel</span><span class="poi-distance">0.3 mi</span></div>
+      <div class="poi-item"><span class="poi-name">Hyatt Regency</span><span class="poi-distance">0.4 mi</span></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- SIMILAR PROPERTIES -->
+<div class="container"><div class="similar-section">
+  <h2>Similar properties nearby</h2>
+  <div class="similar-grid">
+    <a href="#" class="prop-card">
+      <div class="prop-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="prop-name">One Market Plaza</div>
+      <div class="prop-address">1 Market St, San Francisco, CA</div>
+      <div class="prop-meta">15,000 SF &middot; $52/SF/YR</div>
+      <span class="link-arrow">View property <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+    </a>
+    <a href="#" class="prop-card">
+      <div class="prop-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="prop-name">555 California Street</div>
+      <div class="prop-address">555 California St, San Francisco, CA</div>
+      <div class="prop-meta">10,200 SF &middot; $48/SF/YR</div>
+      <span class="link-arrow">View property <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+    </a>
+    <a href="#" class="prop-card">
+      <div class="prop-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="prop-name">Embarcadero Center Tower 4</div>
+      <div class="prop-address">4 Embarcadero Center, San Francisco, CA</div>
+      <div class="prop-meta">8,750 SF &middot; $42/SF/YR</div>
+      <span class="link-arrow">View property <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+    </a>
+  </div>
+</div></div>
+
+<!-- CTA -->
+<div class="container"><div class="cta" style="border-top:1px solid var(--wf-border)">
+  <h2>Interested in this property?</h2>
+  <p>Get in touch with our team to schedule a private tour or request additional information about leasing opportunities at 123 Main Street.</p>
+  <div class="cta-btns"><a href="#" class="btn btn-md btn-primary">Schedule a Tour</a><a href="#" class="btn btn-md btn-outline">Contact Agent</a></div>
+</div></div>
+
+<!-- FOOTER -->
+<footer class="footer"><div class="container">
+  <div class="footer-top">
+    <div><div class="navbar-logo" style="margin-bottom:16px">Logo</div><p class="footer-sub-text">Join our newsletter to stay up to date on features and releases.</p><form class="footer-form" onsubmit="return false;"><input type="email" class="footer-input" placeholder="Enter your email"><button type="submit" class="btn btn-sm btn-outline">Subscribe</button></form><p class="footer-disc">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p></div>
+    <div><div class="ft">Column One</div><div class="fl"><a href="#">Link One</a><a href="#">Link Two</a><a href="#">Link Three</a><a href="#">Link Four</a><a href="#">Link Five</a></div></div>
+    <div><div class="ft">Column Two</div><div class="fl"><a href="#">Link Six</a><a href="#">Link Seven</a><a href="#">Link Eight</a><a href="#">Link Nine</a><a href="#">Link Ten</a></div></div>
+    <div><div class="ft">Follow Us</div><div class="fl">
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> Facebook</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg> Instagram</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> X</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg> Youtube</a>
+    </div></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2024 Windfield. All rights reserved.</span><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookies Settings</a></div></div>
+</div></footer>
+
+</body>
+</html>
