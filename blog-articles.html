@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog &amp; Articles — Windfield Real Estate</title>
+<meta name="description" content="Insights on real estate technology, market intelligence, AI-powered property management, and building systems that deliver results.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════
+   WINDFIELD IO — BLOG / ARTICLES HOME
+   Design System: Windfield IO MCP Dark Theme
+   Structure: Editorial blog homepage (10 sections)
+════════════════════════════════════════════════════════ */
+:root {
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF;
+  --wf-teal: #08BDBA;
+  --wf-green: #42BE65;
+  --wf-red: #E85D4A;
+  --wf-purple: #BE95FF;
+  --wf-orange: #FF832B;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --nav-h: 64px;
+  --ease: cubic-bezier(0.2,0.8,0.2,1);
+  --fast: 160ms;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { background: var(--wf-bg); color: var(--wf-fg); font-family: var(--font-sans); overflow-x: hidden; line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+ul { list-style: none; }
+::selection { background: var(--wf-brand-muted); color: var(--wf-brand); }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--wf-border-strong); }
+
+/* ════════════════════════════════
+   NAVBAR
+════════════════════════════════ */
+.navbar {
+  position: sticky; top: 0; z-index: 500;
+  height: var(--nav-h);
+  background: rgba(9,9,11,0.97);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 40px;
+  height: 100%; display: flex; align-items: center; gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.navbar-logo-mark {
+  width: 32px; height: 32px; background: var(--wf-brand); border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: var(--wf-brand-fg);
+}
+.navbar-links {
+  display: flex; align-items: center; gap: 28px; flex: 1;
+}
+.navbar-link {
+  font-size: 14px; color: var(--wf-fg-muted);
+  transition: color var(--fast) var(--ease);
+  white-space: nowrap;
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link.active { color: var(--wf-brand); }
+.navbar-actions {
+  display: flex; align-items: center; gap: 12px; margin-left: auto;
+}
+.navbar-search {
+  padding: 8px 14px; border: 1px solid var(--wf-border); border-radius: var(--radius-md);
+  background: transparent; font-family: var(--font-mono); font-size: 12px;
+  color: var(--wf-fg-muted); width: 200px; transition: all var(--fast) var(--ease);
+}
+.navbar-search:focus { border-color: var(--wf-border-strong); color: var(--wf-fg); outline: none; }
+.navbar-search::placeholder { color: var(--wf-fg-faint); }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px; background: var(--wf-brand); border: none; border-radius: var(--radius-md);
+  font-size: 13px; font-weight: 600; color: var(--wf-brand-fg);
+  transition: background var(--fast) var(--ease); cursor: pointer; white-space: nowrap;
+}
+.btn-primary:hover { background: var(--wf-brand-hover); }
+
+/* ── Topic Filter Bar ── */
+.topic-bar {
+  border-bottom: 1px solid var(--wf-border); background: var(--wf-bg-elevated);
+  position: sticky; top: var(--nav-h); z-index: 400;
+}
+.topic-bar-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 40px;
+  display: flex; align-items: center; gap: 0; overflow-x: auto;
+}
+.topic-bar-inner::-webkit-scrollbar { height: 0; }
+.topic-btn {
+  padding: 14px 18px; font-family: var(--font-mono); font-size: 11px;
+  font-weight: 500; color: var(--wf-fg-subtle); letter-spacing: 0.04em;
+  background: transparent; border: none; border-bottom: 2px solid transparent;
+  white-space: nowrap; cursor: pointer; transition: all var(--fast) var(--ease);
+}
+.topic-btn:hover { color: var(--wf-fg); background: rgba(250,250,250,0.03); }
+.topic-btn.active { color: var(--wf-brand); border-bottom-color: var(--wf-brand); }
+
+/* ════════════════════════════════
+   LAYOUT
+════════════════════════════════ */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 64px 0; border-bottom: 1px solid var(--wf-border); }
+.section-last { padding: 64px 0; }
+.sec-head {
+  display: flex; align-items: baseline; gap: 16px; margin-bottom: 32px;
+}
+.sec-label {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+  color: var(--wf-brand); font-weight: 600;
+}
+.sec-title {
+  font-size: 24px; font-weight: 700; color: var(--wf-fg); letter-spacing: -0.02em;
+}
+.sec-title em { font-style: normal; color: var(--wf-brand); }
+.sec-rule { flex: 1; height: 1px; background: var(--wf-border); }
+.see-all {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em;
+  color: var(--wf-fg-faint); padding: 6px 14px; border: 1px solid var(--wf-border);
+  border-radius: var(--radius-md); cursor: pointer; transition: all var(--fast);
+}
+.see-all:hover { color: var(--wf-brand); border-color: var(--wf-brand-border); background: var(--wf-brand-muted); }
+
+/* ════════════════════════════════
+   HERO
+════════════════════════════════ */
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 380px; min-height: 480px;
+}
+.hero-main {
+  position: relative; overflow: hidden; background: var(--wf-surface);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  border-right: 1px solid var(--wf-border); border-bottom: 1px solid var(--wf-border);
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #060e08 0%, #0a1a0e 40%, #070f09 100%);
+}
+.hero-bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(29,185,84,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,185,84,0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 80% at 70% 40%, black 30%, transparent 80%);
+}
+.hero-bg-orb {
+  position: absolute; top: -100px; right: 80px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(29,185,84,0.08) 0%, rgba(69,137,255,0.03) 40%, transparent 70%);
+  border-radius: 50%;
+}
+.hero-bg-text {
+  position: absolute; top: 50%; right: 60px; transform: translateY(-50%);
+  font-size: 120px; font-weight: 300; font-style: italic;
+  color: rgba(29,185,84,0.05); line-height: 1; pointer-events: none; white-space: nowrap;
+}
+.hero-content {
+  position: relative; z-index: 2; padding: 48px;
+}
+.hero-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+  color: var(--wf-brand); margin-bottom: 16px; font-weight: 600;
+}
+.hero-kicker::before { content: ''; width: 20px; height: 2px; background: var(--wf-brand); border-radius: 1px; }
+.hero-h1 {
+  font-size: clamp(28px, 3.5vw, 44px); font-weight: 700;
+  line-height: 1.1; letter-spacing: -0.025em;
+  color: var(--wf-fg); margin-bottom: 16px; max-width: 640px;
+}
+.hero-h1 em { font-style: normal; color: var(--wf-brand); }
+.hero-desc {
+  font-size: 15px; font-weight: 400; color: var(--wf-fg-subtle);
+  line-height: 1.7; max-width: 520px; margin-bottom: 24px;
+}
+.hero-meta {
+  display: flex; align-items: center; gap: 16px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--wf-fg-faint); letter-spacing: 0.02em;
+}
+.hero-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--wf-border-strong); }
+.hero-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 24px; }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px; border: 1px solid var(--wf-border-strong); border-radius: var(--radius-md);
+  font-size: 13px; font-weight: 500; color: var(--wf-fg-muted);
+  transition: all var(--fast); cursor: pointer;
+}
+.btn-outline:hover { border-color: var(--wf-brand); color: var(--wf-brand); background: var(--wf-brand-muted); }
+
+/* Hero sidebar stack */
+.hero-stack {
+  display: flex; flex-direction: column; border-bottom: 1px solid var(--wf-border);
+}
+.hero-card {
+  background: var(--wf-surface); flex: 1; padding: 24px 28px;
+  display: flex; flex-direction: column; cursor: pointer;
+  transition: background var(--fast); border-bottom: 1px solid var(--wf-border);
+  border-left: 2px solid transparent;
+}
+.hero-card:last-child { border-bottom: none; }
+.hero-card:hover { background: var(--wf-surface-hover); border-left-color: var(--wf-brand); }
+.hero-card:hover .hc-title { color: var(--wf-brand); }
+.hc-cat { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--wf-fg-faint); margin-bottom: 8px; }
+.hc-title { font-size: 14px; font-weight: 500; color: var(--wf-fg-muted); line-height: 1.4; flex: 1; transition: color var(--fast); }
+.hc-meta { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); margin-top: 10px; }
+
+/* Hero bottom strip */
+.hero-strip { border-bottom: 1px solid var(--wf-border); background: var(--wf-bg-elevated); }
+.hero-strip-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0;
+  display: grid; grid-template-columns: repeat(5, 1fr);
+}
+.hero-strip-item {
+  padding: 16px 24px; cursor: pointer; transition: background var(--fast);
+  border-right: 1px solid var(--wf-border); border-bottom: 2px solid transparent;
+}
+.hero-strip-item:last-child { border-right: none; }
+.hero-strip-item:hover { background: var(--wf-surface); border-bottom-color: var(--wf-brand); }
+.hsi-cat { font-family: var(--font-mono); font-size: 9px; color: var(--wf-fg-faint); letter-spacing: 0.06em; margin-bottom: 4px; }
+.hsi-title { font-size: 12px; font-weight: 500; color: var(--wf-fg-muted); line-height: 1.4; }
+.hero-strip-item:hover .hsi-title { color: var(--wf-fg); }
+
+/* ════════════════════════════════
+   IMAGE PLACEHOLDERS
+════════════════════════════════ */
+.img-ph {
+  width: 100%; aspect-ratio: 16/9;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; flex-shrink: 0;
+}
+.img-ph-sm { aspect-ratio: 4/3; }
+.img-ph-sq { aspect-ratio: 1; }
+.ip-label {
+  font-size: 28px; font-weight: 300; font-style: italic;
+  color: rgba(255,255,255,0.06); pointer-events: none; z-index: 1; position: relative;
+}
+.ph-green { background: linear-gradient(135deg, #060e08 0%, #081208 50%, #050a06 100%); }
+.ph-green .ip-label { color: rgba(29,185,84,0.10); }
+.ph-blue { background: linear-gradient(135deg, #060e1e 0%, #0a1428 50%, #050a18 100%); }
+.ph-blue .ip-label { color: rgba(69,137,255,0.10); }
+.ph-teal { background: linear-gradient(135deg, #030f0f 0%, #071414 50%, #040c0c 100%); }
+.ph-teal .ip-label { color: rgba(8,189,186,0.10); }
+.ph-red { background: linear-gradient(135deg, #1a0805 0%, #200a07 50%, #100504 100%); }
+.ph-red .ip-label { color: rgba(232,93,74,0.10); }
+.ph-purple { background: linear-gradient(135deg, #10080e 0%, #160c14 50%, #0c0609 100%); }
+.ph-purple .ip-label { color: rgba(190,149,255,0.10); }
+.ph-dark { background: linear-gradient(135deg, #101012 0%, #161618 50%, #0c0c0e 100%); }
+.ph-dark .ip-label { color: rgba(250,250,250,0.04); }
+.ph-orange { background: linear-gradient(135deg, #180c03 0%, #1e1004 50%, #120903 100%); }
+.ph-orange .ip-label { color: rgba(255,131,43,0.10); }
+.img-ph::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.img-ph-badge {
+  position: absolute; bottom: 8px; left: 8px; z-index: 2;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em;
+  padding: 3px 8px; background: rgba(9,9,11,0.7); border: 1px solid var(--wf-border);
+  border-radius: var(--radius-sm); color: var(--wf-fg-faint);
+}
+
+/* ════════════════════════════════
+   CARDS
+════════════════════════════════ */
+/* Standard card */
+.card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--radius-lg);
+  display: flex; flex-direction: column; cursor: pointer;
+  transition: border-color var(--fast), background var(--fast), transform var(--fast);
+  overflow: hidden;
+}
+.card:hover { border-color: var(--wf-border-strong); background: var(--wf-surface-hover); transform: translateY(-1px); }
+.card:hover .card-title { color: var(--wf-brand); }
+.card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+.card-cat { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; margin-bottom: 8px; }
+.card-title { font-size: 16px; font-weight: 600; line-height: 1.35; color: var(--wf-fg-muted); flex: 1; transition: color var(--fast); margin-bottom: 10px; }
+.card-excerpt { font-size: 13px; color: var(--wf-fg-faint); line-height: 1.6; margin-bottom: 12px; }
+.card-meta { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); display: flex; gap: 12px; margin-top: auto; }
+
+/* Horizontal card */
+.card-h {
+  background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--radius-lg);
+  display: grid; grid-template-columns: 160px 1fr;
+  cursor: pointer; transition: border-color var(--fast), background var(--fast); overflow: hidden;
+}
+.card-h:hover { border-color: var(--wf-border-strong); background: var(--wf-surface-hover); }
+.card-h:hover .card-title { color: var(--wf-brand); }
+.card-h .img-ph { aspect-ratio: unset; height: 100%; min-height: 120px; }
+.card-h .card-body { padding: 16px 18px; }
+.card-h .card-title { font-size: 13px; }
+
+/* Feature card (overlay) */
+.card-feature {
+  position: relative; overflow: hidden; cursor: pointer; border-radius: var(--radius-lg);
+  min-height: 360px; display: flex; flex-direction: column; justify-content: flex-end;
+  border: 1px solid var(--wf-border); transition: border-color var(--fast);
+}
+.card-feature:hover { border-color: var(--wf-border-strong); }
+.card-feature .img-ph { position: absolute; inset: 0; aspect-ratio: unset; height: 100%; border-radius: 0; }
+.card-feature-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(9,9,11,0.96) 0%, rgba(9,9,11,0.6) 50%, rgba(9,9,11,0.15) 100%);
+}
+.card-feature-body { position: relative; z-index: 2; padding: 28px; }
+.card-feature-title { font-size: 20px; font-weight: 600; line-height: 1.25; color: var(--wf-fg); margin-bottom: 8px; transition: color var(--fast); }
+.card-feature:hover .card-feature-title { color: var(--wf-brand); }
+.card-feature-desc { font-size: 13px; color: var(--wf-fg-subtle); line-height: 1.6; }
+.card-feature-meta { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); margin-top: 10px; display: flex; gap: 12px; }
+
+/* Big horizontal feature */
+.card-big {
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--radius-lg);
+  cursor: pointer; overflow: hidden; transition: border-color var(--fast);
+}
+.card-big:hover { border-color: var(--wf-border-strong); }
+.card-big:hover .big-title { color: var(--wf-brand); }
+.card-big .img-ph { aspect-ratio: unset; height: 100%; min-height: 280px; }
+.big-body { padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; }
+.big-cat { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; margin-bottom: 14px; }
+.big-title { font-size: clamp(22px, 2.5vw, 32px); font-weight: 700; line-height: 1.15; color: var(--wf-fg); margin-bottom: 12px; transition: color var(--fast); letter-spacing: -0.02em; }
+.big-title em { font-style: normal; color: var(--wf-brand); }
+.big-desc { font-size: 14px; color: var(--wf-fg-subtle); line-height: 1.65; margin-bottom: 20px; }
+.big-meta { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); }
+.read-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--wf-brand); letter-spacing: 0.02em; border-bottom: 1px solid var(--wf-brand-border); padding-bottom: 2px; }
+
+/* ════════════════════════════════
+   GRIDS
+════════════════════════════════ */
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+.grid-stack { display: flex; flex-direction: column; gap: 12px; }
+
+/* ════════════════════════════════
+   CATEGORY BADGES
+════════════════════════════════ */
+.cat { display: inline-block; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; padding: 3px 10px; border: 1px solid; border-radius: var(--radius-sm); }
+.cat-green { color: var(--wf-brand); border-color: var(--wf-brand-border-strong); background: var(--wf-brand-muted); }
+.cat-blue { color: var(--wf-blue); border-color: rgba(69,137,255,0.3); background: rgba(69,137,255,0.08); }
+.cat-teal { color: var(--wf-teal); border-color: rgba(8,189,186,0.3); background: rgba(8,189,186,0.08); }
+.cat-red { color: var(--wf-red); border-color: rgba(232,93,74,0.3); background: rgba(232,93,74,0.08); }
+.cat-purple { color: var(--wf-purple); border-color: rgba(190,149,255,0.3); background: rgba(190,149,255,0.08); }
+.cat-orange { color: var(--wf-orange); border-color: rgba(255,131,43,0.3); background: rgba(255,131,43,0.08); }
+
+/* ════════════════════════════════
+   CALLOUT BAND
+════════════════════════════════ */
+.callout-band {
+  background: var(--wf-brand-muted); border-top: 1px solid var(--wf-brand-border);
+  border-bottom: 1px solid var(--wf-brand-border); padding: 40px 0;
+}
+.cb-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+.cb-label { font-family: var(--font-mono); font-size: 11px; color: var(--wf-brand); letter-spacing: 0.06em; margin-bottom: 8px; font-weight: 600; }
+.cb-title { font-size: 28px; font-weight: 700; color: var(--wf-fg); letter-spacing: -0.02em; }
+.cb-title em { font-style: normal; color: var(--wf-brand); }
+.cb-desc { font-size: 14px; color: var(--wf-fg-subtle); line-height: 1.65; margin-top: 8px; max-width: 560px; }
+
+/* ════════════════════════════════
+   VIDEO SECTION
+════════════════════════════════ */
+.video-grid { display: grid; grid-template-columns: 1fr 320px; gap: 16px; }
+.video-main { background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--radius-lg); overflow: hidden; }
+.video-thumb {
+  position: relative; overflow: hidden; cursor: pointer;
+  background: var(--wf-surface-active); aspect-ratio: 16/9;
+}
+.video-thumb::before {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background: rgba(9,9,11,0.35); transition: background 200ms;
+}
+.video-thumb:hover::before { background: rgba(9,9,11,0.2); }
+.video-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 2;
+  width: 56px; height: 56px; border: 2px solid var(--wf-brand); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--wf-brand); background: rgba(9,9,11,0.6);
+  transition: all 200ms;
+}
+.video-thumb:hover .video-play { background: var(--wf-brand); color: var(--wf-brand-fg); transform: translate(-50%,-50%) scale(1.1); }
+.video-tag { position: absolute; top: 12px; left: 12px; z-index: 2; }
+.video-info { padding: 24px; }
+.video-title { font-size: 18px; font-weight: 600; color: var(--wf-fg); line-height: 1.3; margin-bottom: 8px; }
+.video-desc { font-size: 13px; color: var(--wf-fg-subtle); line-height: 1.6; margin-bottom: 12px; }
+.video-meta { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); }
+.video-list { display: flex; flex-direction: column; gap: 12px; }
+.video-item {
+  background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--radius-lg);
+  display: grid; grid-template-columns: 120px 1fr;
+  cursor: pointer; transition: all var(--fast); overflow: hidden;
+}
+.video-item:hover { background: var(--wf-surface-hover); border-color: var(--wf-border-strong); }
+.video-item:hover .vi-title { color: var(--wf-brand); }
+.vi-thumb { position: relative; overflow: hidden; }
+.vi-thumb .img-ph { height: 100%; min-height: 80px; aspect-ratio: unset; }
+.vi-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 28px; height: 28px; border: 1px solid var(--wf-brand-border-strong); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 9px; color: var(--wf-brand); z-index: 2;
+}
+.vi-body { padding: 12px 14px; }
+.vi-cat { font-family: var(--font-mono); font-size: 9px; color: var(--wf-fg-faint); letter-spacing: 0.06em; margin-bottom: 5px; }
+.vi-title { font-size: 12px; font-weight: 500; color: var(--wf-fg-muted); line-height: 1.35; transition: color var(--fast); }
+.vi-meta { font-family: var(--font-mono); font-size: 9px; color: var(--wf-fg-faint); margin-top: 6px; }
+
+/* ════════════════════════════════
+   GUIDE CARDS
+════════════════════════════════ */
+.guide-card {
+  background: var(--wf-surface); padding: 28px 24px; cursor: pointer;
+  border: 1px solid var(--wf-border); border-radius: var(--radius-lg);
+  transition: all var(--fast); position: relative; overflow: hidden;
+}
+.guide-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: transparent; transition: background var(--fast);
+}
+.guide-card:hover::after { background: var(--wf-brand); }
+.guide-card:hover { background: var(--wf-surface-hover); border-color: var(--wf-border-strong); transform: translateY(-1px); }
+.guide-card:hover .gc-title { color: var(--wf-brand); }
+.gc-icon { font-size: 28px; margin-bottom: 16px; width: 44px; height: 44px; background: var(--wf-brand-muted); border: 1px solid var(--wf-brand-border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; }
+.gc-icon svg { width: 20px; height: 20px; color: var(--wf-brand); }
+.gc-title { font-size: 16px; font-weight: 600; color: var(--wf-fg); line-height: 1.35; margin-bottom: 8px; transition: color var(--fast); }
+.gc-desc { font-size: 13px; color: var(--wf-fg-faint); line-height: 1.65; }
+.gc-count { font-family: var(--font-mono); font-size: 11px; color: var(--wf-brand); margin-top: 16px; font-weight: 500; }
+
+/* ════════════════════════════════
+   NEWSLETTER
+════════════════════════════════ */
+.newsletter { background: var(--wf-surface); border-top: 1px solid var(--wf-border); border-bottom: 1px solid var(--wf-border); padding: 80px 0; }
+.nl-inner { max-width: 640px; margin: 0 auto; text-align: center; padding: 0 40px; }
+.nl-kicker { font-family: var(--font-mono); font-size: 12px; color: var(--wf-brand); letter-spacing: 0.06em; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 600; }
+.nl-kicker::before, .nl-kicker::after { content: ''; width: 24px; height: 2px; background: var(--wf-brand); border-radius: 1px; }
+.nl-title { font-size: 32px; font-weight: 700; color: var(--wf-fg); line-height: 1.15; margin-bottom: 12px; letter-spacing: -0.02em; }
+.nl-title em { font-style: normal; color: var(--wf-brand); }
+.nl-desc { font-size: 15px; color: var(--wf-fg-subtle); line-height: 1.7; margin-bottom: 28px; }
+.nl-form { display: flex; gap: 0; max-width: 440px; margin: 0 auto; border: 1px solid var(--wf-border-strong); border-radius: var(--radius-md); overflow: hidden; }
+.nl-input {
+  flex: 1; padding: 12px 16px; background: var(--wf-surface-active); border: none; outline: none;
+  font-family: var(--font-mono); font-size: 13px; color: var(--wf-fg); letter-spacing: 0.02em;
+}
+.nl-input::placeholder { color: var(--wf-fg-faint); }
+.nl-submit {
+  padding: 12px 24px; background: var(--wf-brand); border: none; cursor: pointer;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--wf-brand-fg);
+  transition: background var(--fast); white-space: nowrap;
+}
+.nl-submit:hover { background: var(--wf-brand-hover); }
+.nl-note { font-family: var(--font-mono); font-size: 11px; color: var(--wf-fg-faint); margin-top: 14px; }
+
+/* ════════════════════════════════
+   PODCAST
+════════════════════════════════ */
+.pod-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--radius-lg);
+  overflow: hidden; cursor: pointer; transition: border-color var(--fast);
+}
+.pod-card:hover { border-color: var(--wf-border-strong); }
+.pod-header { padding: 20px; border-bottom: 1px solid var(--wf-border); display: flex; align-items: center; gap: 14px; }
+.pod-icon {
+  width: 44px; height: 44px; background: var(--wf-brand-muted); border: 1px solid var(--wf-brand-border);
+  border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.pod-icon svg { width: 20px; height: 20px; color: var(--wf-brand); }
+.pod-series { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); letter-spacing: 0.06em; margin-bottom: 4px; }
+.pod-title { font-size: 14px; font-weight: 500; color: var(--wf-fg-muted); transition: color var(--fast); }
+.pod-card:hover .pod-title { color: var(--wf-brand); }
+.pod-ep { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--wf-border); transition: background var(--fast); cursor: pointer; }
+.pod-ep:last-child { border-bottom: none; }
+.pod-ep:hover { background: var(--wf-surface-hover); }
+.pod-ep-num { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); width: 36px; flex-shrink: 0; }
+.pod-ep-title { font-size: 13px; color: var(--wf-fg-muted); flex: 1; line-height: 1.4; }
+.pod-ep:hover .pod-ep-title { color: var(--wf-fg); }
+.pod-ep-dur { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); }
+.pod-ep-play { width: 24px; height: 24px; border: 1px solid var(--wf-border-strong); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: var(--wf-fg-faint); transition: all var(--fast); }
+.pod-ep:hover .pod-ep-play { border-color: var(--wf-brand); color: var(--wf-brand); background: var(--wf-brand-muted); }
+
+/* ════════════════════════════════
+   STATS BAND
+════════════════════════════════ */
+.stats-band { background: var(--wf-bg-elevated); border-top: 1px solid var(--wf-border); border-bottom: 1px solid var(--wf-border); padding: 48px 0; }
+.stats-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: repeat(5,1fr); gap: 16px; }
+.stat-item { text-align: center; padding: 20px; background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--radius-lg); }
+.stat-val { font-size: 36px; font-weight: 700; color: var(--wf-brand); line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.stat-lbl { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); letter-spacing: 0.06em; margin-top: 8px; }
+.stat-sub { font-size: 12px; color: var(--wf-fg-subtle); margin-top: 4px; }
+
+/* ════════════════════════════════
+   TOOLS STRIP
+════════════════════════════════ */
+.tools-strip { background: var(--wf-surface); border-bottom: 1px solid var(--wf-border); padding: 48px 0; }
+.ts-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.ts-card {
+  background: var(--wf-bg); padding: 24px; cursor: pointer; border: 1px solid var(--wf-border);
+  border-radius: var(--radius-lg); transition: all var(--fast); position: relative; overflow: hidden;
+}
+.ts-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background var(--fast); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.ts-card:hover { background: var(--wf-surface-hover); border-color: var(--wf-border-strong); transform: translateY(-1px); }
+.ts-card:hover .ts-title { color: var(--wf-brand); }
+.ts-card.green::before { background: var(--wf-brand); }
+.ts-card.blue::before { background: var(--wf-blue); }
+.ts-card.teal::before { background: var(--wf-teal); }
+.ts-card.red::before { background: var(--wf-red); }
+.ts-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--wf-fg-faint); margin-bottom: 10px; }
+.ts-title { font-size: 16px; font-weight: 600; color: var(--wf-fg); line-height: 1.35; margin-bottom: 8px; transition: color var(--fast); }
+.ts-desc { font-size: 13px; color: var(--wf-fg-faint); line-height: 1.6; margin-bottom: 14px; }
+.ts-link { font-family: var(--font-mono); font-size: 11px; color: var(--wf-brand); letter-spacing: 0.02em; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; }
+
+/* ════════════════════════════════
+   WEBINAR CARDS
+════════════════════════════════ */
+.webinar-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--radius-lg);
+  overflow: hidden; cursor: pointer; display: flex; gap: 0; transition: border-color var(--fast);
+}
+.webinar-card:hover { border-color: var(--wf-border-strong); }
+.webinar-card:hover .wb-title { color: var(--wf-brand); }
+.wb-date-col { width: 80px; flex-shrink: 0; background: var(--wf-brand-muted); border-right: 1px solid var(--wf-brand-border); padding: 20px 10px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+.wb-month { font-family: var(--font-mono); font-size: 10px; color: var(--wf-brand); letter-spacing: 0.06em; }
+.wb-day { font-size: 32px; font-weight: 700; color: var(--wf-brand); line-height: 1; }
+.wb-year { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); }
+.wb-body { padding: 20px; flex: 1; }
+.wb-cat { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); letter-spacing: 0.06em; margin-bottom: 7px; }
+.wb-title { font-size: 14px; font-weight: 600; color: var(--wf-fg-muted); line-height: 1.4; margin-bottom: 8px; transition: color var(--fast); }
+.wb-desc { font-size: 13px; color: var(--wf-fg-faint); line-height: 1.55; margin-bottom: 10px; }
+.wb-reg { font-family: var(--font-mono); font-size: 11px; color: var(--wf-brand); font-weight: 500; }
+.wb-time { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); }
+
+/* ════════════════════════════════
+   BYLINE
+════════════════════════════════ */
+.byline { display: flex; align-items: center; gap: 10px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--wf-border); }
+.byline-avatar { width: 28px; height: 28px; background: var(--wf-brand-muted); border: 1px solid var(--wf-brand-border); border-radius: var(--radius-sm); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--wf-brand); font-style: italic; }
+.byline-name { font-size: 12px; font-weight: 600; color: var(--wf-fg-muted); }
+.byline-role { font-family: var(--font-mono); font-size: 10px; color: var(--wf-fg-faint); }
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+.footer { background: var(--wf-bg-elevated); border-top: 1px solid var(--wf-border); padding: 64px 0 40px; }
+.footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.footer-top { display: grid; grid-template-columns: 280px 1fr; gap: 80px; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--wf-border); }
+.footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.footer-mark { width: 32px; height: 32px; background: var(--wf-brand); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--wf-brand-fg); }
+.footer-name { font-size: 18px; font-weight: 700; color: var(--wf-fg); letter-spacing: -0.02em; }
+.footer-name em { font-style: normal; color: var(--wf-brand); }
+.footer-bio { font-size: 13px; color: var(--wf-fg-subtle); line-height: 1.7; margin-bottom: 20px; }
+.footer-socials { display: flex; gap: 8px; }
+.footer-social { width: 32px; height: 32px; border: 1px solid var(--wf-border-strong); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; transition: all var(--fast); }
+.footer-social:hover { border-color: var(--wf-brand); background: var(--wf-brand-muted); }
+.footer-social svg { width: 16px; height: 16px; color: var(--wf-fg-faint); }
+.footer-social:hover svg { color: var(--wf-brand); }
+.footer-links { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; }
+.footer-col-title { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--wf-brand); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--wf-brand-border); font-weight: 600; }
+.footer-link { display: block; font-size: 13px; color: var(--wf-fg-subtle); padding: 4px 0; transition: color var(--fast); }
+.footer-link:hover { color: var(--wf-fg); }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; }
+.footer-copy { font-family: var(--font-mono); font-size: 11px; color: var(--wf-fg-faint); }
+.footer-chips { display: flex; gap: 8px; }
+.footer-chip { font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; border: 1px solid var(--wf-border); border-radius: var(--radius-sm); color: var(--wf-fg-faint); }
+.footer-chip.live { color: var(--wf-green); border-color: rgba(66,190,101,0.25); background: rgba(66,190,101,0.06); }
+
+/* ── Responsive ── */
+@media(max-width:1024px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-stack { display: none; }
+  .hero-strip-inner { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2,1fr); }
+  .stats-inner { grid-template-columns: repeat(3,1fr); }
+  .ts-grid { grid-template-columns: repeat(2,1fr); }
+  .video-grid { grid-template-columns: 1fr; }
+  .card-big { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; gap: 40px; }
+  .footer-links { grid-template-columns: repeat(2,1fr); }
+  .cb-inner { grid-template-columns: 1fr; text-align: center; }
+}
+@media(max-width:768px) {
+  .container { padding: 0 20px; }
+  .navbar-inner { padding: 0 20px; }
+  .navbar-links { display: none; }
+  .navbar-search { display: none; }
+  .topic-bar-inner { padding: 0 20px; }
+  .hero-content { padding: 32px 20px; }
+  .hero-strip-inner { grid-template-columns: 1fr 1fr; overflow-x: auto; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .grid-4 { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2,1fr); padding: 0 20px; }
+  .ts-grid { grid-template-columns: 1fr; }
+  .footer-links { grid-template-columns: 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  .footer-chips { flex-wrap: wrap; justify-content: center; }
+  .section { padding: 48px 0; }
+  .sec-head { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════
+     NAVBAR
+════════════════════════ -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo">
+      <div class="navbar-logo-mark">W</div>
+      Windfield
+    </a>
+    <div class="navbar-links">
+      <a href="index.html" class="navbar-link">Home</a>
+      <a href="about.html" class="navbar-link">About</a>
+      <a href="portfolio.html" class="navbar-link">Portfolio</a>
+      <a href="product.html" class="navbar-link">Product</a>
+      <a href="pricing.html" class="navbar-link">Pricing</a>
+      <a href="blog-articles.html" class="navbar-link active">Blog</a>
+    </div>
+    <div class="navbar-actions">
+      <input class="navbar-search" placeholder="Search articles..." type="text">
+      <a href="index.html#contact" class="btn-primary">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Topic Filter Bar ── -->
+<div class="topic-bar">
+  <div class="topic-bar-inner">
+    <button class="topic-btn active" onclick="filterTopic(this,'all')">All</button>
+    <button class="topic-btn" onclick="filterTopic(this,'market')">Market Intelligence</button>
+    <button class="topic-btn" onclick="filterTopic(this,'ai')">AI &amp; Automation</button>
+    <button class="topic-btn" onclick="filterTopic(this,'property')">Property Management</button>
+    <button class="topic-btn" onclick="filterTopic(this,'brand')">Brand Strategy</button>
+    <button class="topic-btn" onclick="filterTopic(this,'tech')">PropTech</button>
+    <button class="topic-btn" onclick="filterTopic(this,'agents')">Agent Tools</button>
+    <button class="topic-btn" onclick="filterTopic(this,'data')">Data &amp; Analytics</button>
+    <button class="topic-btn" onclick="filterTopic(this,'guides')">Guides</button>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     HERO
+════════════════════════ -->
+<div class="hero-grid">
+  <!-- Main feature -->
+  <div class="hero-main">
+    <div class="hero-bg">
+      <div class="hero-bg-grid"></div>
+      <div class="hero-bg-orb"></div>
+      <div class="hero-bg-text">Insights</div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-kicker">Feature -- Market Intelligence</div>
+      <h1 class="hero-h1">The Tools Are Not the <em>Strategy</em> — And Teams Keep Getting This Wrong</h1>
+      <p class="hero-desc">Every team has access to the same AI tools. The ones winning aren't using better software — they're running cleaner thinking. Here's what that actually looks like in practice.</p>
+      <div class="hero-meta">
+        <span>Windfield Research</span>
+        <div class="hero-meta-dot"></div>
+        <span>March 2026</span>
+        <div class="hero-meta-dot"></div>
+        <span>11 min read</span>
+      </div>
+      <div class="hero-actions">
+        <a href="nr-blog-article.html" class="btn-primary">Read Article</a>
+        <a href="product.html" class="btn-outline">Explore Platform</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right stack -->
+  <div class="hero-stack">
+    <a href="nr-blog-article.html" class="hero-card">
+      <div class="hc-cat">AI &amp; Automation</div>
+      <div class="hc-title">Claude as a Creative Director: Six Months of Real Workflows</div>
+      <div class="hc-meta">Feb 2026 -- 9 min</div>
+    </a>
+    <a href="nr-blog-article.html" class="hero-card">
+      <div class="hc-cat">Property Management</div>
+      <div class="hc-title">How Windfield Delivers $50K-Quality Market Reports for Under $8K</div>
+      <div class="hc-meta">Feb 2026 -- 7 min</div>
+    </a>
+    <a href="nr-blog-article.html" class="hero-card">
+      <div class="hc-cat">Brand Strategy</div>
+      <div class="hc-title">The Brand Voice Audit: 12 Questions Every Team Should Answer</div>
+      <div class="hc-meta">Jan 2026 -- 6 min</div>
+    </a>
+    <a href="nr-blog-article.html" class="hero-card">
+      <div class="hc-cat">Data &amp; Analytics</div>
+      <div class="hc-title">My Exact Notion + Claude Content System (Full Walkthrough)</div>
+      <div class="hc-meta">Jan 2026 -- 12 min</div>
+    </a>
+  </div>
+</div>
+
+<!-- Hero strip -->
+<div class="hero-strip">
+  <div class="hero-strip-inner">
+    <a href="nr-blog-article.html" class="hero-strip-item">
+      <div class="hsi-cat">Latest</div>
+      <div class="hsi-title">Positioning When Everyone Has the Same AI</div>
+    </a>
+    <a href="nr-blog-article.html" class="hero-strip-item">
+      <div class="hsi-cat">Guide</div>
+      <div class="hsi-title">LinkedIn in 30 Min/Week: The Windfield System</div>
+    </a>
+    <a href="nr-blog-article.html" class="hero-strip-item">
+      <div class="hsi-cat">PropTech</div>
+      <div class="hsi-title">Pre-Launch Checklist for Property Campaigns Under $10K</div>
+    </a>
+    <a href="nr-blog-article.html" class="hero-strip-item">
+      <div class="hsi-cat">Culture</div>
+      <div class="hsi-title">Why We Build Where the Competition Isn't Watching</div>
+    </a>
+    <a href="nr-blog-article.html" class="hero-strip-item">
+      <div class="hsi-cat">AI Tools</div>
+      <div class="hsi-title">The 12 Prompts We Run Every Week Without Fail</div>
+    </a>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 01 — MARKET INTELLIGENCE
+════════════════════════ -->
+<div class="section" id="section-market">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">01</span>
+      <h2 class="sec-title">Latest in <em>Market Intelligence</em></h2>
+      <div class="sec-rule"></div>
+      <a href="#" class="see-all">See All</a>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="img-ph ph-green">
+          <span class="ip-label">MI</span>
+          <div class="img-ph-badge">Market Intelligence</div>
+        </div>
+        <div class="card-body">
+          <div class="card-cat cat-green">Market Intelligence</div>
+          <div class="card-title">What "Directing" Actually Means When You're a Team of One</div>
+          <p class="card-excerpt">The discipline of market intelligence is about having a position. Here's how to build that muscle before you ever scale a team.</p>
+          <div class="card-meta"><span>WF</span><span>Mar 2026</span><span>8 min</span></div>
+          <div class="byline">
+            <div class="byline-avatar">W</div>
+            <div><div class="byline-name">Windfield Research</div><div class="byline-role">Market Intelligence</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="img-ph ph-dark">
+          <span class="ip-label">Sys</span>
+          <div class="img-ph-badge">Systems</div>
+        </div>
+        <div class="card-body">
+          <div class="card-cat cat-green">Market Intelligence</div>
+          <div class="card-title">The Feedback System That Makes Analysis Faster (Not Just Fewer Revisions)</div>
+          <p class="card-excerpt">Most revision loops are a communication problem. This framework fixes it before the first report is opened.</p>
+          <div class="card-meta"><span>WF</span><span>Feb 2026</span><span>6 min</span></div>
+          <div class="byline">
+            <div class="byline-avatar">W</div>
+            <div><div class="byline-name">Windfield Research</div><div class="byline-role">Market Intelligence</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="img-ph ph-blue">
+          <span class="ip-label">Br</span>
+          <div class="img-ph-badge">Brand Direction</div>
+        </div>
+        <div class="card-body">
+          <div class="card-cat cat-green">Market Intelligence</div>
+          <div class="card-title">How to Brief a Team When You Don't Have a Brief (Yet)</div>
+          <p class="card-excerpt">The market brief template we've refined over 9 years — and the three questions it always starts with.</p>
+          <div class="card-meta"><span>WF</span><span>Feb 2026</span><span>5 min</span></div>
+          <div class="byline">
+            <div class="byline-avatar">W</div>
+            <div><div class="byline-name">Windfield Research</div><div class="byline-role">Market Intelligence</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     BIG FEATURE ARTICLE
+════════════════════════ -->
+<div style="border-bottom:1px solid var(--wf-border)">
+  <div class="container" style="padding-top:48px;padding-bottom:48px">
+    <a href="nr-blog-article.html" class="card-big">
+      <div class="img-ph ph-blue">
+        <span class="ip-label">AI</span>
+      </div>
+      <div class="big-body">
+        <div class="big-cat cat-blue">AI &amp; Automation</div>
+        <h2 class="big-title">AI Reshapes <em>Real Estate Intelligence</em> for Independent Teams — and Windfield Is Already Running on the New Stack</h2>
+        <p class="big-desc">The tools that once required entire departments are now available to a team with the right systems. Here's exactly what the Windfield production stack looks like in 2026.</p>
+        <div class="big-meta">Windfield Research -- March 2026 -- 14 min read</div>
+        <span class="read-link">Read the deep dive</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 02 — AI TOOLS
+════════════════════════ -->
+<div class="section" id="section-ai">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">02</span>
+      <h2 class="sec-title">AI <em>Tools for Teams</em></h2>
+      <div class="sec-rule"></div>
+      <a href="product.html" class="see-all">Explore Platform</a>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:16px">
+      <a href="nr-blog-article.html" class="card-feature">
+        <div class="img-ph ph-teal">
+          <span class="ip-label">IO</span>
+        </div>
+        <div class="card-feature-overlay"></div>
+        <div class="card-feature-body">
+          <div style="margin-bottom:10px"><span class="cat cat-teal">AI Tools</span></div>
+          <div class="card-feature-title">Building an MCP Operating System: The Six Tools That Run Our Entire Platform</div>
+          <div class="card-feature-desc">Property Intelligence, Market Scanner, Brand Compass, Ideation Suite, Content Studio, and the glue that holds them together.</div>
+          <div class="card-feature-meta"><span>WF</span><span>Mar 2026</span><span>16 min</span></div>
+        </div>
+      </a>
+      <div class="grid-stack">
+        <a href="nr-blog-article.html" class="card-h">
+          <div class="vi-thumb"><div class="img-ph ph-purple" style="height:100%;min-height:110px;aspect-ratio:unset"><span class="ip-label" style="font-size:18px">Pr</span></div></div>
+          <div class="card-body">
+            <div class="card-cat cat-purple">Prompts</div>
+            <div class="card-title" style="font-size:13px">The 12 Prompts We Use Every Week Without Fail</div>
+            <div class="card-meta"><span>Feb 2026</span><span>7 min</span></div>
+          </div>
+        </a>
+        <a href="nr-blog-article.html" class="card-h">
+          <div class="vi-thumb"><div class="img-ph ph-orange" style="height:100%;min-height:110px;aspect-ratio:unset"><span class="ip-label" style="font-size:18px">No</span></div></div>
+          <div class="card-body">
+            <div class="card-cat cat-orange">Notion</div>
+            <div class="card-title" style="font-size:13px">Using Notion as Your Content Command Center (Full Setup)</div>
+            <div class="card-meta"><span>Jan 2026</span><span>10 min</span></div>
+          </div>
+        </a>
+        <a href="nr-blog-article.html" class="card-h">
+          <div class="vi-thumb"><div class="img-ph ph-green" style="height:100%;min-height:110px;aspect-ratio:unset"><span class="ip-label" style="font-size:18px">Sb</span></div></div>
+          <div class="card-body">
+            <div class="card-cat cat-green">Supabase</div>
+            <div class="card-title" style="font-size:13px">Wiring Your Dashboard to Supabase in 45 Minutes</div>
+            <div class="card-meta"><span>Jan 2026</span><span>8 min</span></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     STATS BAND
+════════════════════════ -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-val">9+</div>
+      <div class="stat-lbl">Years in Real Estate</div>
+      <div class="stat-sub">Market intelligence</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">2.1K</div>
+      <div class="stat-lbl">Platform Users</div>
+      <div class="stat-sub">Growing weekly</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">40+</div>
+      <div class="stat-lbl">Property Clients</div>
+      <div class="stat-sub">Windfield portfolio</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">12</div>
+      <div class="stat-lbl">AI Workflows</div>
+      <div class="stat-sub">Live in MCP system</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">MCP</div>
+      <div class="stat-lbl">Powered by</div>
+      <div class="stat-sub">Agent-first platform</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 03 — VIDEO
+════════════════════════ -->
+<div class="section" id="section-video">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">03</span>
+      <h2 class="sec-title">Video <em>&amp; Walkthroughs</em></h2>
+      <div class="sec-rule"></div>
+      <a href="#" class="see-all">Windfield Platform</a>
+    </div>
+    <div class="video-grid">
+      <div class="video-main">
+        <div class="video-thumb">
+          <div class="img-ph ph-red" style="height:100%;aspect-ratio:16/9;min-height:340px">
+            <span class="ip-label">Platform</span>
+          </div>
+          <div class="video-play">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+          <div class="video-tag"><span class="cat cat-red">Windfield Platform Reel</span></div>
+        </div>
+        <div class="video-info">
+          <div class="video-title">Windfield 2026 Platform Reel — Intelligent Real Estate</div>
+          <p class="video-desc">Two minutes of property intelligence, market analysis, and identity work from the most data-driven real estate platform. 40+ clients, one consistent standard.</p>
+          <div class="video-meta">Windfield -- 2026 -- 2:14</div>
+        </div>
+      </div>
+      <div class="video-list">
+        <a href="nr-blog-article.html" class="video-item">
+          <div class="vi-thumb">
+            <div class="img-ph ph-green" style="height:100%;min-height:96px;aspect-ratio:unset"><span class="ip-label" style="font-size:16px">BF</span></div>
+            <div class="vi-play">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </div>
+          </div>
+          <div class="vi-body">
+            <div class="vi-cat">Platform Demo</div>
+            <div class="vi-title">How We Built a Full Property Campaign in One Day</div>
+            <div class="vi-meta">12:34 -- Mar 2026</div>
+          </div>
+        </a>
+        <a href="nr-blog-article.html" class="video-item">
+          <div class="vi-thumb">
+            <div class="img-ph ph-teal" style="height:100%;min-height:96px;aspect-ratio:unset"><span class="ip-label" style="font-size:16px">AI</span></div>
+            <div class="vi-play">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </div>
+          </div>
+          <div class="vi-body">
+            <div class="vi-cat">AI + Analysis</div>
+            <div class="vi-title">Using AI to Write Market Reports That Don't Sound Like AI</div>
+            <div class="vi-meta">8:51 -- Feb 2026</div>
+          </div>
+        </a>
+        <a href="nr-blog-article.html" class="video-item">
+          <div class="vi-thumb">
+            <div class="img-ph ph-blue" style="height:100%;min-height:96px;aspect-ratio:unset"><span class="ip-label" style="font-size:16px">Da</span></div>
+            <div class="vi-play">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </div>
+          </div>
+          <div class="vi-body">
+            <div class="vi-cat">Data &amp; Setup</div>
+            <div class="vi-title">The $4K Data Stack That Performs Like $40K</div>
+            <div class="vi-meta">15:22 -- Jan 2026</div>
+          </div>
+        </a>
+        <a href="nr-blog-article.html" class="video-item">
+          <div class="vi-thumb">
+            <div class="img-ph ph-purple" style="height:100%;min-height:96px;aspect-ratio:unset"><span class="ip-label" style="font-size:16px">Wf</span></div>
+            <div class="vi-play">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </div>
+          </div>
+          <div class="vi-body">
+            <div class="vi-cat">Workflow</div>
+            <div class="vi-title">Our Workflow: From Data Intake to Delivery in 48 Hours</div>
+            <div class="vi-meta">11:08 -- Dec 2025</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     CALLOUT BAND
+════════════════════════ -->
+<div class="callout-band">
+  <div class="cb-inner">
+    <div>
+      <div class="cb-label">MCP Operating System</div>
+      <div class="cb-title">All of Windfield's AI workflows, <em>live in one place</em></div>
+      <p class="cb-desc">Property Intelligence, Market Scanner, Brand Compass, Ideation Suite, Content Studio. Six tools wired to Claude — the full MCP Operating System for Windfield Real Estate.</p>
+    </div>
+    <a href="product.html" class="btn-primary">Explore Platform</a>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 04 — BRAND STRATEGY
+════════════════════════ -->
+<div class="section" id="section-brand">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">04</span>
+      <h2 class="sec-title">Brand <em>Strategy</em></h2>
+      <div class="sec-rule"></div>
+      <a href="#" class="see-all">Brand Page</a>
+    </div>
+    <div class="grid-4">
+      <a href="nr-blog-article.html" class="card">
+        <div class="img-ph ph-purple" style="aspect-ratio:3/2"><span class="ip-label">Pos</span></div>
+        <div class="card-body">
+          <div class="card-cat cat-purple">Positioning</div>
+          <div class="card-title">How to Own a Niche Without Narrowing Your Market</div>
+          <div class="card-meta"><span>WF</span><span>Feb 2026</span><span>7 min</span></div>
+        </div>
+      </a>
+      <a href="nr-blog-article.html" class="card">
+        <div class="img-ph ph-green" style="aspect-ratio:3/2"><span class="ip-label">Vo</span></div>
+        <div class="card-body">
+          <div class="card-cat cat-green">Brand Voice</div>
+          <div class="card-title">The 12-Attribute Brand Voice Framework We Use for Every Client</div>
+          <div class="card-meta"><span>WF</span><span>Jan 2026</span><span>9 min</span></div>
+        </div>
+      </a>
+      <a href="nr-blog-article.html" class="card">
+        <div class="img-ph ph-orange" style="aspect-ratio:3/2"><span class="ip-label">Li</span></div>
+        <div class="card-body">
+          <div class="card-cat cat-orange">LinkedIn</div>
+          <div class="card-title">LinkedIn in 30 Minutes Per Week: The Full System</div>
+          <div class="card-meta"><span>WF</span><span>Jan 2026</span><span>11 min</span></div>
+        </div>
+      </a>
+      <a href="nr-blog-article.html" class="card">
+        <div class="img-ph ph-teal" style="aspect-ratio:3/2"><span class="ip-label">Au</span></div>
+        <div class="card-body">
+          <div class="card-cat cat-teal">AI Audit</div>
+          <div class="card-title">Running a Full Brand Audit with Claude in 20 Minutes</div>
+          <div class="card-meta"><span>WF</span><span>Dec 2025</span><span>6 min</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 05 — TOP GUIDES
+════════════════════════ -->
+<div class="section" style="background:var(--wf-bg-elevated)">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">05</span>
+      <h2 class="sec-title">Top <em>Guides</em> for Teams</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="grid-4">
+      <a href="nr-blog-article.html" class="guide-card">
+        <div class="gc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="gc-title">The Complete Property Intelligence Starter Kit</div>
+        <p class="gc-desc">Data, analysis, reporting, strategy — the four systems every property team needs before anything else.</p>
+        <div class="gc-count">8 chapters -- Free</div>
+      </a>
+      <a href="nr-blog-article.html" class="guide-card">
+        <div class="gc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="gc-title">AI Production for Non-Technical Teams</div>
+        <p class="gc-desc">No code, no enterprise budget. The exact stack to run quality intelligence at scale with Claude.</p>
+        <div class="gc-count">6 chapters -- Free</div>
+      </a>
+      <a href="nr-blog-article.html" class="guide-card">
+        <div class="gc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        </div>
+        <div class="gc-title">Market Reports on a Startup Budget</div>
+        <p class="gc-desc">Research, analysis, delivery. The Windfield process for delivering institutional-quality reports under $10K.</p>
+        <div class="gc-count">5 chapters -- Free</div>
+      </a>
+      <a href="nr-blog-article.html" class="guide-card">
+        <div class="gc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="gc-title">Building a PropTech Business Outside a Major Market</div>
+        <p class="gc-desc">Why secondary markets work. The advantages of building where the competition isn't watching.</p>
+        <div class="gc-count">4 chapters -- Free</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 06 — PODCAST
+════════════════════════ -->
+<div class="section">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">06</span>
+      <h2 class="sec-title">Podcast / <em>Audio</em></h2>
+      <div class="sec-rule"></div>
+      <a href="#" class="see-all">All Episodes</a>
+    </div>
+    <div class="grid-2">
+      <div class="pod-card">
+        <div class="pod-header">
+          <div class="pod-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+          <div>
+            <div class="pod-series">The PropTech Podcast</div>
+            <div class="pod-title">Making Data Move — Conversations on real estate, AI, and building platforms</div>
+          </div>
+        </div>
+        <ul>
+          <li class="pod-ep">
+            <span class="pod-ep-num">EP 12</span>
+            <span class="pod-ep-title">How AI Is Changing the Analyst's Role (Not Replacing It)</span>
+            <span class="pod-ep-dur">48 min</span>
+            <span class="pod-ep-play">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </span>
+          </li>
+          <li class="pod-ep">
+            <span class="pod-ep-num">EP 11</span>
+            <span class="pod-ep-title">The Production Stack: What We Actually Use at Windfield</span>
+            <span class="pod-ep-dur">41 min</span>
+            <span class="pod-ep-play">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </span>
+          </li>
+          <li class="pod-ep">
+            <span class="pod-ep-num">EP 10</span>
+            <span class="pod-ep-title">Client Relationships: Why We Fire One Client Per Quarter</span>
+            <span class="pod-ep-dur">36 min</span>
+            <span class="pod-ep-play">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </span>
+          </li>
+          <li class="pod-ep">
+            <span class="pod-ep-num">EP 09</span>
+            <span class="pod-ep-title">From Freelance to Platform: The Three-Year Windfield Story</span>
+            <span class="pod-ep-dur">52 min</span>
+            <span class="pod-ep-play">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="pod-card">
+        <div class="pod-header">
+          <div class="pod-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div>
+            <div class="pod-series">Guest Appearances</div>
+            <div class="pod-title">Windfield on other shows — AI in real estate, platform building, PropTech</div>
+          </div>
+        </div>
+        <ul>
+          <li class="pod-ep">
+            <span class="pod-ep-num">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </span>
+            <span class="pod-ep-title">PropTech Builders — "Why the Coasts Don't Have a Monopoly on Good Data"</span>
+            <span class="pod-ep-dur">55 min</span>
+            <span class="pod-ep-play">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </span>
+          </li>
+          <li class="pod-ep">
+            <span class="pod-ep-num">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </span>
+            <span class="pod-ep-title">AI for Non-Technical Teams — "The Practical Stack We Actually Use"</span>
+            <span class="pod-ep-dur">44 min</span>
+            <span class="pod-ep-play">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </span>
+          </li>
+          <li class="pod-ep">
+            <span class="pod-ep-num">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </span>
+            <span class="pod-ep-title">Content Machine Podcast — "LinkedIn Strategy for PropTech Professionals"</span>
+            <span class="pod-ep-dur">39 min</span>
+            <span class="pod-ep-play">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </span>
+          </li>
+          <li class="pod-ep">
+            <span class="pod-ep-num">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </span>
+            <span class="pod-ep-title">Platform Talk — "Windfield: Building a Real Estate Intelligence Platform in 2025"</span>
+            <span class="pod-ep-dur">47 min</span>
+            <span class="pod-ep-play">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 07 — TOOLS & RESOURCES
+════════════════════════ -->
+<div class="tools-strip">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">07</span>
+      <h2 class="sec-title">Windfield <em>Tools</em> &amp; Resources</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="ts-grid">
+      <a href="product.html" class="ts-card green">
+        <div class="ts-label">Full System</div>
+        <div class="ts-title">MCP Operating System</div>
+        <p class="ts-desc">Six AI tools wired together — Property Intelligence, Market Scanner, Brand Compass, Ideation Suite, Content Studio. One dashboard.</p>
+        <span class="ts-link">Explore Platform</span>
+      </a>
+      <a href="product.html" class="ts-card blue">
+        <div class="ts-label">Design Tool</div>
+        <div class="ts-title">Design Studio</div>
+        <p class="ts-desc">6 design presets, live CSS variable preview, font/color/spacing controls, and one-click export. Build your brand system in minutes.</p>
+        <span class="ts-link">Open Studio</span>
+      </a>
+      <a href="product.html" class="ts-card teal">
+        <div class="ts-label">Intelligence</div>
+        <div class="ts-title">Property Intelligence</div>
+        <p class="ts-desc">Market data import, Claude AI analysis, published reports. Three-step wizard with AI insights and full customization.</p>
+        <span class="ts-link">Try Intelligence</span>
+      </a>
+      <a href="portfolio.html" class="ts-card red">
+        <div class="ts-label">Live Example</div>
+        <div class="ts-title">Windfield Portfolio</div>
+        <p class="ts-desc">The live Windfield portfolio — dark theme, analytics panel, experience timeline, AI insights. Full production implementation.</p>
+        <span class="ts-link">View Portfolio</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 08 — PROPTECH & CULTURE
+════════════════════════ -->
+<div class="section" id="section-proptech">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">08</span>
+      <h2 class="sec-title">PropTech <em>&amp; Culture</em></h2>
+      <div class="sec-rule"></div>
+      <a href="#" class="see-all">See All</a>
+    </div>
+    <div class="grid-3">
+      <a href="nr-blog-article.html" class="card-feature" style="min-height:300px">
+        <div class="img-ph ph-orange"><span class="ip-label">PT</span></div>
+        <div class="card-feature-overlay"></div>
+        <div class="card-feature-body">
+          <div style="margin-bottom:8px"><span class="cat cat-orange">PropTech</span></div>
+          <div class="card-feature-title">Why We Turned Down Silicon Valley Twice to Build Where It Matters</div>
+          <div class="card-feature-meta"><span>WF</span><span>Dec 2025</span><span>10 min</span></div>
+        </div>
+      </a>
+      <a href="nr-blog-article.html" class="card-feature" style="min-height:300px">
+        <div class="img-ph ph-green"><span class="ip-label">Fo</span></div>
+        <div class="card-feature-overlay"></div>
+        <div class="card-feature-body">
+          <div style="margin-bottom:8px"><span class="cat cat-green">Founder Life</span></div>
+          <div class="card-feature-title">The Unglamorous First Two Years of Running a PropTech Platform</div>
+          <div class="card-feature-meta"><span>WF</span><span>Nov 2025</span><span>12 min</span></div>
+        </div>
+      </a>
+      <a href="nr-blog-article.html" class="card-feature" style="min-height:300px">
+        <div class="img-ph ph-blue"><span class="ip-label">Ec</span></div>
+        <div class="card-feature-overlay"></div>
+        <div class="card-feature-body">
+          <div style="margin-bottom:8px"><span class="cat cat-blue">Real Estate Tech</span></div>
+          <div class="card-feature-title">How the PropTech Scene Actually Works — And Who's Building It</div>
+          <div class="card-feature-meta"><span>WF</span><span>Oct 2025</span><span>8 min</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 09 — WEBINARS
+════════════════════════ -->
+<div class="section" style="background:var(--wf-bg-elevated)">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">09</span>
+      <h2 class="sec-title">Workshops <em>&amp; Live Sessions</em></h2>
+      <div class="sec-rule"></div>
+      <a href="#" class="see-all">Register</a>
+    </div>
+    <div class="grid-2">
+      <div class="webinar-card">
+        <div class="wb-date-col">
+          <div class="wb-month">Apr</div>
+          <div class="wb-day">08</div>
+          <div class="wb-year">2026</div>
+        </div>
+        <div class="wb-body">
+          <div style="margin-bottom:8px"><span class="cat cat-green">Live Workshop -- Brand Strategy</span></div>
+          <div class="wb-title">Build Your Brand Voice in 90 Minutes: The Windfield Framework</div>
+          <p class="wb-desc">Live walkthrough of the 12-attribute brand voice system — including the Claude AI prompts that do the heavy lifting.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="wb-reg">Register Free</div>
+            <div class="wb-time">2:00 PM CT -- Zoom</div>
+          </div>
+        </div>
+      </div>
+      <div class="webinar-card">
+        <div class="wb-date-col">
+          <div class="wb-month">Apr</div>
+          <div class="wb-day">22</div>
+          <div class="wb-year">2026</div>
+        </div>
+        <div class="wb-body">
+          <div style="margin-bottom:8px"><span class="cat cat-teal">Live Demo -- AI Tools</span></div>
+          <div class="wb-title">MCP Operating System: Full Walkthrough + Q&amp;A</div>
+          <p class="wb-desc">A live demo of all six MCP tools — how they're wired together, what Claude can and can't do, and how to adapt them to your platform.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="wb-reg">Register Free</div>
+            <div class="wb-time">1:00 PM CT -- Zoom</div>
+          </div>
+        </div>
+      </div>
+      <div class="webinar-card">
+        <div class="wb-date-col">
+          <div class="wb-month">May</div>
+          <div class="wb-day">06</div>
+          <div class="wb-year">2026</div>
+        </div>
+        <div class="wb-body">
+          <div style="margin-bottom:8px"><span class="cat cat-red">Workshop -- Property Analysis</span></div>
+          <div class="wb-title">Property Analysis Fundamentals: Research, Analyze, Deliver Under $10K</div>
+          <p class="wb-desc">Windfield's full analysis playbook — from data intake to final delivery. Includes templates and tool configs.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="wb-reg">Register Free</div>
+            <div class="wb-time">3:00 PM CT -- Zoom</div>
+          </div>
+        </div>
+      </div>
+      <div class="webinar-card">
+        <div class="wb-date-col">
+          <div class="wb-month">May</div>
+          <div class="wb-day">20</div>
+          <div class="wb-year">2026</div>
+        </div>
+        <div class="wb-body">
+          <div style="margin-bottom:8px"><span class="cat cat-purple">Deep Dive -- LinkedIn</span></div>
+          <div class="wb-title">The 30-Minute LinkedIn System: From 0 to 2K Followers</div>
+          <p class="wb-desc">The exact content pillars, hook formulas, and scheduling system behind Windfield's LinkedIn growth — no paid ads, no gimmicks.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="wb-reg">Register Free</div>
+            <div class="wb-time">12:00 PM CT -- Zoom</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     NEWSLETTER
+════════════════════════ -->
+<div class="newsletter">
+  <div class="nl-inner">
+    <div class="nl-kicker">The Windfield Letter</div>
+    <h2 class="nl-title">Insights on real estate, <em>AI, and building</em></h2>
+    <p class="nl-desc">Every two weeks: one framework, one workflow, one thing worth your attention from the world of real estate intelligence and AI tools. Written by the Windfield team.</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="your@email.com">
+      <button class="nl-submit">Subscribe</button>
+    </div>
+    <div class="nl-note">No ads -- No sponsors -- Unsubscribe anytime -- ~850 word read</div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 10 — MORE ARTICLES
+════════════════════════ -->
+<div class="section-last">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">10</span>
+      <h2 class="sec-title">More <em>from Windfield</em></h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="grid-4">
+      <a href="nr-blog-article.html" class="card">
+        <div class="img-ph ph-blue" style="aspect-ratio:4/3"><span class="ip-label">Pr</span></div>
+        <div class="card-body">
+          <div class="card-cat cat-blue">Process</div>
+          <div class="card-title">The Analysis Review: How to Give Feedback That Actually Helps</div>
+          <div class="card-meta"><span>WF</span><span>Oct 2025</span><span>5 min</span></div>
+        </div>
+      </a>
+      <a href="nr-blog-article.html" class="card">
+        <div class="img-ph ph-teal" style="aspect-ratio:4/3"><span class="ip-label">Co</span></div>
+        <div class="card-body">
+          <div class="card-cat cat-teal">Content</div>
+          <div class="card-title">Repurposing One Report Into 12 Pieces of Content Without Losing the Point</div>
+          <div class="card-meta"><span>WF</span><span>Sep 2025</span><span>7 min</span></div>
+        </div>
+      </a>
+      <a href="nr-blog-article.html" class="card">
+        <div class="img-ph ph-purple" style="aspect-ratio:4/3"><span class="ip-label">De</span></div>
+        <div class="card-body">
+          <div class="card-cat cat-purple">Design</div>
+          <div class="card-title">CSS Design Tokens: The 15-Minute Brand System for Teams Who Aren't Designers</div>
+          <div class="card-meta"><span>WF</span><span>Sep 2025</span><span>6 min</span></div>
+        </div>
+      </a>
+      <a href="nr-blog-article.html" class="card">
+        <div class="img-ph ph-red" style="aspect-ratio:4/3"><span class="ip-label">Cl</span></div>
+        <div class="card-body">
+          <div class="card-cat cat-red">Clients</div>
+          <div class="card-title">How We Qualify a Client in the First 15 Minutes (and What We Listen For)</div>
+          <div class="card-meta"><span>WF</span><span>Aug 2025</span><span>8 min</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     FOOTER
+════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-mark">W</div>
+          <div class="footer-name">Windfield <em>Real Estate</em></div>
+        </div>
+        <p class="footer-bio">Intelligent real estate platform powered by AI agents and MCP infrastructure. Market intelligence, property management, and brand strategy — built for teams that move fast.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" class="footer-social">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>
+          </a>
+          <a href="#" class="footer-social">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          </a>
+          <a href="#" class="footer-social">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div>
+          <div class="footer-col-title">Platform</div>
+          <a href="portfolio.html" class="footer-link">Portfolio</a>
+          <a href="product.html" class="footer-link">Product</a>
+          <a href="about.html" class="footer-link">About</a>
+          <a href="pricing.html" class="footer-link">Pricing</a>
+          <a href="index.html" class="footer-link">Home</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Tools</div>
+          <a href="product.html" class="footer-link">MCP Operating System</a>
+          <a href="product.html" class="footer-link">Design Studio</a>
+          <a href="product.html" class="footer-link">Property Intelligence</a>
+          <a href="product.html" class="footer-link">Market Scanner</a>
+          <a href="product.html" class="footer-link">Dashboard</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Articles</div>
+          <a href="#section-market" class="footer-link">Market Intelligence</a>
+          <a href="#section-ai" class="footer-link">AI Tools</a>
+          <a href="#section-video" class="footer-link">Video &amp; Walkthroughs</a>
+          <a href="#section-brand" class="footer-link">Brand Strategy</a>
+          <a href="#section-proptech" class="footer-link">PropTech</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Connect</div>
+          <a href="#newsletter" class="footer-link">Newsletter Sign-up</a>
+          <a href="index.html#contact" class="footer-link">Contact Us</a>
+          <a href="#" class="footer-link">LinkedIn</a>
+          <a href="#" class="footer-link">GitHub</a>
+          <a href="#" class="footer-link">windfield.io</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">2026 Windfield Real Estate -- Intelligent Operations -- All rights reserved</div>
+      <div class="footer-chips">
+        <span class="footer-chip live">All Systems Live</span>
+        <span class="footer-chip">Claude Opus 4.6</span>
+        <span class="footer-chip">MCP v2</span>
+        <span class="footer-chip">Design Studio</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Topic filter
+function filterTopic(btn, topic) {
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── Scroll reveal
+const reveal = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.section, .hero-grid, .hero-strip, .callout-band, .stats-band, .tools-strip, .newsletter, .section-last').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(12px)';
+  el.style.transition = 'opacity 0.6s cubic-bezier(0.2,0.8,0.2,1), transform 0.6s cubic-bezier(0.2,0.8,0.2,1)';
+  reveal.observe(el);
+});
+
+// Force initial visible
+setTimeout(() => {
+  document.querySelectorAll('.hero-grid, .hero-strip, .topic-bar').forEach(el => {
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  });
+}, 100);
+</script>
+</body>
+</html>
