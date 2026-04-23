@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Page — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}img{max-width:100%;display:block}
+
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.section{padding:80px 0}
+.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+.ph-icon{width:48px;height:48px;color:var(--wf-fg-faint)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-right{display:flex;align-items:center;gap:12px}
+.menu-btn{display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;background:var(--wf-brand);color:var(--wf-brand-fg);font-size:13px;font-weight:600;border-radius:var(--wf-r-md);transition:background var(--wf-dur)}
+.menu-btn:hover{background:var(--wf-brand-hover)}
+.hamburger{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--wf-border);border-radius:var(--wf-r-md);color:var(--wf-fg-muted);transition:all var(--wf-dur)}
+.hamburger:hover{border-color:var(--wf-border-strong);color:var(--wf-fg)}
+.hamburger svg{width:18px;height:18px}
+
+/* Hidden nav links for template navigation */
+.nav-links{display:flex;align-items:center;gap:16px;margin-right:auto;margin-left:32px}
+.nav-link{font-size:13px;color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
+.nav-link:hover{color:var(--wf-fg)}
+.nav-link.active{color:var(--wf-fg)}
+
+/* Hero image */
+.project-hero{aspect-ratio:16/7;width:100%;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:0;display:flex;align-items:center;justify-content:center}
+.project-hero svg{width:64px;height:64px;color:var(--wf-fg-faint)}
+
+/* Project info */
+.project-info{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding:48px 0 64px;align-items:start}
+.project-title{font-size:44px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:var(--wf-fg);margin-bottom:16px}
+.project-desc{font-size:16px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:20px}
+.project-tags{display:flex;gap:8px;flex-wrap:wrap}
+.project-tag{font-size:12px;font-weight:600;padding:4px 12px;border-radius:var(--wf-r-sm);background:var(--wf-brand-muted);color:var(--wf-brand)}
+.project-meta{display:grid;grid-template-columns:1fr 1fr;gap:20px 40px;padding-top:8px}
+.meta-label{font-size:12px;font-weight:600;color:var(--wf-fg-subtle);letter-spacing:0.02em;margin-bottom:2px}
+.meta-value{font-size:14px;color:var(--wf-fg)}
+.meta-value a{color:var(--wf-brand);text-decoration:underline;text-underline-offset:2px}
+
+/* Content sections */
+.content-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.content-grid.reversed .content-text{order:2}
+.content-grid.reversed .content-media{order:1}
+.content-title{font-size:36px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:var(--wf-fg);margin-bottom:20px}
+.content-body p{font-size:15px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:16px}
+.content-media .ph{aspect-ratio:4/3}
+
+/* Full-width image */
+.full-img{border-top:1px solid var(--wf-border);padding:64px 0}
+.full-img .ph{aspect-ratio:16/7;width:100%}
+
+/* Text-only section */
+.text-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.text-section .content-title{margin-bottom:20px}
+.text-section .content-body{max-width:640px}
+.text-section .content-body p{font-size:15px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:16px}
+
+/* Image gallery */
+.gallery{padding:0 0 64px}
+.gallery-main{margin-bottom:16px}
+.gallery-main .ph{aspect-ratio:16/9}
+.gallery-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.gallery-row .ph{aspect-ratio:16/9}
+
+/* Testimonial */
+.testimonial{padding:80px 0;border-top:1px solid var(--wf-border);text-align:center;background:var(--wf-bg-elevated)}
+.testi-logo{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:24px;color:var(--wf-fg-muted);font-size:16px;font-weight:600}
+.testi-logo svg{width:20px;height:20px}
+.testi-quote{font-size:18px;color:var(--wf-fg);line-height:1.65;max-width:720px;margin:0 auto 28px;font-style:italic}
+.testi-avatar{width:48px;height:48px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.testi-avatar svg{width:24px;height:24px;color:var(--wf-fg-faint)}
+.testi-name{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.testi-role{font-size:13px;color:var(--wf-fg-subtle)}
+
+/* Next project */
+.next-project{padding:80px 0;border-top:1px solid var(--wf-border)}
+.next-header{text-align:center;margin-bottom:40px}
+.next-header .kicker{margin-bottom:8px}
+.next-header h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:var(--wf-fg);margin-bottom:12px}
+.next-header p{font-size:16px;color:var(--wf-fg-muted)}
+.next-img{margin-bottom:24px}
+.next-img .ph{aspect-ratio:16/9;width:100%}
+.next-info{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:40px}
+.next-info-title{font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}
+.next-info-desc{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+.next-info-tags{display:flex;gap:8px;margin-top:12px}
+.view-all-wrap{text-align:center}
+
+/* Footer */
+.footer{border-top:1px solid var(--wf-border);padding:40px 0 0;background:var(--wf-bg)}
+.footer-top{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;padding-bottom:24px;border-bottom:1px solid var(--wf-border)}
+.footer-subscribe-label{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.footer-form{display:flex;gap:8px}
+.footer-input{height:40px;padding:0 12px;width:240px;background:var(--wf-bg-elevated);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-input::placeholder{color:var(--wf-fg-faint)}.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disclaimer{font-size:11px;color:var(--wf-fg-faint);margin-top:6px;line-height:1.5}
+.footer-disclaimer a{text-decoration:underline;text-underline-offset:2px}
+.footer-mid{display:flex;align-items:center;gap:24px;padding:16px 0;border-bottom:1px solid var(--wf-border)}
+.footer-mid-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.footer-mid-link:hover{color:var(--wf-fg)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:16px 0;font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg)}
+
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .project-info,.content-grid,.next-info{grid-template-columns:1fr;gap:32px}
+  .content-grid.reversed .content-text{order:1}.content-grid.reversed .content-media{order:2}
+  .gallery-row{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}.project-title{font-size:32px}.content-title{font-size:28px}
+  .nav-links{display:none}.project-meta{grid-template-columns:1fr}
+  .footer-top{flex-direction:column}.footer-input{width:100%}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Logo</a>
+    <div class="nav-links">
+      <a href="home-v1.html" class="nav-link">Home v1</a>
+      <a href="home-v2.html" class="nav-link">Home v2</a>
+      <a href="index.html" class="nav-link">Home v3</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="blog-post.html" class="nav-link">Blog Post</a>
+      <a href="portfolio.html" class="nav-link active">Portfolio</a>
+    </div>
+    <div class="navbar-right">
+      <button class="menu-btn">Menu</button>
+      <button class="hamburger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO IMAGE -->
+<div class="project-hero">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+</div>
+
+<!-- PROJECT INFO -->
+<div class="container">
+  <div class="project-info">
+    <div>
+      <h1 class="project-title">Project name here</h1>
+      <p class="project-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+      <div class="project-tags">
+        <span class="project-tag">Tag one</span>
+        <span class="project-tag">Tag two</span>
+        <span class="project-tag">Tag three</span>
+      </div>
+    </div>
+    <div class="project-meta">
+      <div>
+        <div class="meta-label">Client</div>
+        <div class="meta-value">Full name</div>
+      </div>
+      <div>
+        <div class="meta-label">Date</div>
+        <div class="meta-value">June 2021</div>
+      </div>
+      <div>
+        <div class="meta-label">Role</div>
+        <div class="meta-value">Role name</div>
+      </div>
+      <div>
+        <div class="meta-label">Website</div>
+        <div class="meta-value"><a href="#">www.relume.io</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THE OPPORTUNITY -->
+<div class="container">
+  <div class="content-section">
+    <div class="content-grid">
+      <div class="content-text">
+        <h2 class="content-title">The opportunity</h2>
+        <div class="content-body">
+          <p>Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies. Duis est sit sed leo nisl, blandit elit sagittis. Quisque tristique consequat quam sed. Nisl at scelerisque amet nulla purus habitasse.</p>
+          <p>Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas condimentum mi massa. In tincidunt pharetra consectetur sed duis facilisis metus. Etiam egestas in nec sed et. Quis lobortis at sit dictum eget nibl tortor commodo cursus.</p>
+          <p>Odio felis sagittis, morbi feugiat tortor vitae feugiat fusce aliquet. Nam elementum urna nisi aliquet erat dolor enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut id eget consectetur dictum. Donec posuere gravida enim posuere cursus diam.</p>
+        </div>
+      </div>
+      <div class="content-media">
+        <div class="ph" style="aspect-ratio:4/3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT WE DID -->
+<div class="container">
+  <div class="content-section">
+    <div class="content-grid reversed">
+      <div class="content-text">
+        <h2 class="content-title">What we did</h2>
+        <div class="content-body">
+          <p>Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies. Duis est sit sed leo nisl, blandit elit sagittis. Quisque tristique consequat quam sed. Nisl at scelerisque amet nulla purus habitasse.</p>
+          <p>Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas condimentum mi massa. In tincidunt pharetra consectetur sed duis facilisis metus. Etiam egestas in nec sed et. Quis lobortis at sit dictum eget nibl tortor commodo cursus.</p>
+          <p>Odio felis sagittis, morbi feugiat tortor vitae feugiat fusce aliquet. Nam elementum urna nisi aliquet erat dolor enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut id eget consectetur dictum. Condimentum lorem posuere gravida enim posuere cursus diam.</p>
+        </div>
+      </div>
+      <div class="content-media">
+        <div class="ph" style="aspect-ratio:4/3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FULL-WIDTH IMAGE -->
+<div class="container full-img">
+  <div class="ph" style="aspect-ratio:16/7;width:100%">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+  </div>
+</div>
+
+<!-- THE OUTCOME -->
+<div class="container">
+  <div class="text-section">
+    <h2 class="content-title">The outcome</h2>
+    <div class="content-body">
+      <p>Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies. Duis est sit sed leo nisl, blandit elit sagittis. Quisque tristique consequat quam sed. Nisl at scelerisque amet nulla purus habitasse.</p>
+      <p>Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas condimentum mi massa. In tincidunt pharetra consectetur sed duis facilisis metus. Etiam egestas in nec sed et. Quis lobortis at sit dictum eget nibl tortor commodo cursus.</p>
+      <p>Odio felis sagittis, morbi feugiat tortor vitae feugiat fusce aliquet. Nam elementum urna nisi aliquet erat dolor enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut id eget consectetur dictum. Condimentum lorem posuere gravida enim posuere cursus diam.</p>
+    </div>
+  </div>
+</div>
+
+<!-- IMAGE GALLERY -->
+<div class="container gallery">
+  <div class="gallery-main">
+    <div class="ph" style="aspect-ratio:16/9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+  </div>
+  <div class="gallery-row">
+    <div class="ph" style="aspect-ratio:16/9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    <div class="ph" style="aspect-ratio:16/9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+  </div>
+</div>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="container">
+    <div class="testi-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg>
+      Webflow
+    </div>
+    <p class="testi-quote">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat."</p>
+    <div class="testi-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="testi-name">Name Surname</div>
+    <div class="testi-role">Position, Company name</div>
+  </div>
+</section>
+
+<!-- NEXT PROJECT -->
+<section class="next-project">
+  <div class="container">
+    <div class="next-header">
+      <p class="kicker">Portfolio</p>
+      <h2>Next Project</h2>
+      <p style="font-size:16px;color:var(--wf-fg-muted);margin-top:12px">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+    <div class="next-img">
+      <div class="ph" style="aspect-ratio:16/9;width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    </div>
+    <div class="next-info">
+      <div>
+        <h3 class="next-info-title">Project name here</h3>
+        <div class="next-info-tags">
+          <span class="project-tag">Tag one</span>
+          <span class="project-tag">Tag two</span>
+          <span class="project-tag">Tag three</span>
+        </div>
+      </div>
+      <div>
+        <p class="next-info-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+      </div>
+    </div>
+    <div class="view-all-wrap"><a href="#" class="btn btn-md btn-outline">View all</a></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="navbar-logo">Logo</div>
+      <div>
+        <div class="footer-subscribe-label">Subscribe</div>
+        <div class="footer-form">
+          <input type="email" class="footer-input" placeholder="Enter your email">
+          <button class="btn btn-sm btn-outline">Subscribe</button>
+        </div>
+        <p class="footer-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a>.</p>
+      </div>
+    </div>
+    <div class="footer-mid">
+      <a href="#" class="footer-mid-link">Link One</a>
+      <a href="#" class="footer-mid-link">Link Two</a>
+      <a href="#" class="footer-mid-link">Link Three</a>
+      <a href="#" class="footer-mid-link">Link Four</a>
+      <a href="#" class="footer-mid-link">Link Five</a>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookies Settings</a>
+      </div>
+      <span>&copy; 2023 Relume. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
