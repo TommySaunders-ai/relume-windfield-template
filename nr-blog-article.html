@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude as a Creative Director: Six Months of Real Workflows — Nathaniel Rockett</title>
+<meta name="description" content="I gave Claude the same brief I'd give a junior creative director. Six months later, here's what worked, what failed, and what changed how I run Motion Co.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Windfield IO Design Tokens */
+  --wf-brand:#1db954; --wf-brand-hover:#17a34a; --wf-brand-fg:#05150a;
+  --wf-brand-muted:rgba(29,185,84,0.10);
+  --wf-brand-border:rgba(29,185,84,0.20);
+  --wf-brand-border-strong:rgba(29,185,84,0.35);
+  --wf-bg:#09090b; --wf-bg-elevated:#111113; --wf-bg-sunken:#050507;
+  --wf-surface:#141417; --wf-surface-hover:#1a1a1e;
+  --wf-fg:#fafafa; --wf-fg-muted:#a1a1aa; --wf-fg-subtle:#71717a; --wf-fg-faint:#52525b;
+  --wf-border:#27272a; --wf-border-strong:#3f3f46; --wf-border-subtle:#1e1e22;
+
+  /* Accent palette */
+  --wf-blue:#4589FF; --wf-teal:#08BDBA; --wf-green:#42BE65; --wf-red:#E85D4A;
+  --wf-purple:#BE95FF; --wf-orange:#FF832B;
+
+  /* Typography */
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+
+  /* Layout */
+  --nav-h:52px;
+  --ease:cubic-bezier(0.2,0.8,0.2,1);
+  --fast:160ms;
+  --radius-sm:6px; --radius-md:8px; --radius-lg:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--sans);overflow-x:hidden}
+a{text-decoration:none;color:inherit}img{display:block;max-width:100%}
+::selection{background:var(--wf-brand-muted);color:var(--wf-brand)}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--wf-border-strong)}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:500;height:var(--nav-h);background:rgba(9,9,11,0.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border)}
+.nav-inner{max-width:1440px;margin:0 auto;padding:0 40px;height:100%;display:flex;align-items:center}
+.nav-logo{display:flex;align-items:center;gap:9px;flex-shrink:0;margin-right:40px}
+.nav-mark{width:28px;height:28px;background:var(--wf-brand);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-size:10px;font-weight:800;color:var(--wf-brand-fg)}
+.nav-wordmark{font-family:var(--sans);font-size:14px;font-weight:300;color:var(--wf-fg);letter-spacing:0.05em}
+.nav-wordmark em{font-style:italic;color:var(--wf-brand)}
+.nav-sep{width:1px;height:20px;background:var(--wf-border);margin:0 20px}
+.nav-label{font-family:var(--mono);font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--wf-fg-faint);margin-right:32px}
+.nav-links{display:flex;flex:1}
+.nav-link{display:flex;align-items:center;height:var(--nav-h);padding:0 14px;font-family:var(--sans);font-size:12px;font-weight:500;color:var(--wf-fg-subtle);border-bottom:2px solid transparent;white-space:nowrap;transition:all var(--fast) var(--ease)}
+.nav-link:hover{color:var(--wf-fg);background:rgba(250,250,250,0.04)}
+.nav-link.active{color:var(--wf-brand);border-bottom-color:var(--wf-brand)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.nav-search{padding:6px 12px;border:1px solid var(--wf-border);border-radius:var(--radius-sm);background:transparent;font-family:var(--mono);font-size:9px;color:var(--wf-fg-muted);width:180px;transition:all var(--fast) var(--ease)}
+.nav-search:focus{border-color:var(--wf-border-strong);color:var(--wf-fg-subtle);outline:none}
+.nav-search::placeholder{color:var(--wf-fg-faint)}
+.nav-cta{padding:8px 18px;background:var(--wf-brand);border:none;border-radius:var(--radius-sm);font-family:var(--sans);font-size:11px;font-weight:600;color:var(--wf-brand-fg);transition:background var(--fast) var(--ease);cursor:pointer}
+.nav-cta:hover{background:var(--wf-brand-hover)}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{border-bottom:1px solid var(--wf-border);background:var(--wf-bg-elevated)}
+.bc-inner{max-width:1440px;margin:0 auto;padding:10px 40px;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:8.5px;color:var(--wf-fg-faint);letter-spacing:0.08em}
+.bc-link{color:var(--wf-fg-muted);transition:color var(--fast) var(--ease)}.bc-link:hover{color:var(--wf-brand)}
+.bc-sep{color:var(--wf-border-strong)}.bc-current{color:var(--wf-brand)}
+
+/* ── ARTICLE HERO ── */
+.art-hero{border-bottom:1px solid var(--wf-border)}
+.hero-img-full{width:100%;min-height:460px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.hif-bg{position:absolute;inset:0}
+.ph-blue{background:linear-gradient(145deg,#060c1f 0%,#0a1428 40%,#060e20 100%)}
+.ph-gold,.ph-green{background:linear-gradient(145deg,#021a08 0%,#03260c 40%,#011a06 100%)}
+.ph-teal{background:linear-gradient(145deg,#020c0c 0%,#051212 40%,#030a0a 100%)}
+.ph-red{background:linear-gradient(145deg,#150605 0%,#1e0907 40%,#0e0504 100%)}
+.ph-purple{background:linear-gradient(145deg,#0c0610 0%,#130a18 40%,#090410 100%)}
+.ph-orange{background:linear-gradient(145deg,#130803 0%,#1c0e04 40%,#0f0603 100%)}
+.ph-dark{background:linear-gradient(145deg,#0d0d0d,#141414)}
+.ph-ghost{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--sans);font-size:120px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.05);pointer-events:none;white-space:nowrap}
+.ph-grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.012) 1px,transparent 1px);background-size:32px 32px}
+.hif-orb{position:absolute;top:-80px;right:80px;width:500px;height:500px;background:radial-gradient(circle,rgba(29,185,84,0.10) 0%,transparent 65%);border-radius:50%;pointer-events:none}
+.hif-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(9,9,11,0.97) 0%,rgba(9,9,11,0.55) 50%,rgba(9,9,11,0.15) 100%)}
+.hif-content{position:relative;z-index:3;max-width:1440px;margin:0 auto;padding:0 40px 40px;width:100%}
+.art-cat-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.art-cat-tag{font-family:var(--mono);font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;padding:3px 10px;border:1px solid;display:inline-block;border-radius:var(--radius-sm)}
+.act-blue{color:var(--wf-blue);border-color:rgba(69,137,255,0.35);background:rgba(69,137,255,0.1)}
+.act-gold{color:var(--wf-brand);border-color:var(--wf-brand-border-strong);background:var(--wf-brand-muted)}
+.hif-h1{font-family:var(--sans);font-size:clamp(28px,4vw,56px);font-weight:300;line-height:1.1;color:var(--wf-fg);margin-bottom:14px;max-width:800px}
+.hif-h1 em{font-style:italic;color:var(--wf-brand)}
+.hif-lead{font-family:var(--sans);font-size:17px;font-weight:300;font-style:italic;color:var(--wf-fg-subtle);line-height:1.7;max-width:620px;margin-bottom:24px}
+.hif-meta-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hm-author{display:flex;align-items:center;gap:10px}
+.hm-avatar{width:32px;height:32px;background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-size:13px;color:var(--wf-brand);font-style:italic}
+.hm-name{font-family:var(--sans);font-size:11px;font-weight:600;color:var(--wf-fg)}
+.hm-role{font-family:var(--mono);font-size:7.5px;color:var(--wf-fg-faint);letter-spacing:0.06em}
+.hm-sep{width:1px;height:24px;background:var(--wf-border-strong)}
+.hm-tag{font-family:var(--mono);font-size:8px;color:var(--wf-fg-muted);letter-spacing:0.06em}
+.hm-share{display:flex;gap:5px;margin-left:auto}
+.hm-share-btn{width:26px;height:26px;border:1px solid var(--wf-border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;color:var(--wf-fg-faint);cursor:pointer;transition:all var(--fast) var(--ease)}
+.hm-share-btn:hover{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+
+/* ── CONTENT LAYOUT ── */
+.content-wrap{max-width:1440px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:200px 1fr 260px;gap:0}
+
+/* ── LEFT TOC ── */
+.toc{position:sticky;top:calc(var(--nav-h)+20px);padding:36px 24px 36px 0;border-right:1px solid var(--wf-border);align-self:start}
+.toc-label{font-family:var(--mono);font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border)}
+.toc-list{list-style:none;display:flex;flex-direction:column}
+.toc-item{border-left:2px solid transparent;transition:all var(--fast) var(--ease)}
+.toc-link{display:block;font-family:var(--sans);font-size:11px;color:var(--wf-fg-muted);line-height:1.4;padding:5px 0 5px 12px;transition:color var(--fast) var(--ease)}
+.toc-item:hover,.toc-item.active{border-left-color:var(--wf-brand)}
+.toc-item:hover .toc-link,.toc-item.active .toc-link{color:var(--wf-brand)}
+.toc-progress{margin-top:20px;padding-top:14px;border-top:1px solid var(--wf-border)}
+.toc-prog-label{font-family:var(--mono);font-size:7.5px;color:var(--wf-fg-faint);letter-spacing:0.1em;margin-bottom:6px;display:flex;justify-content:space-between}
+.toc-prog-bar{height:2px;background:var(--wf-border);border-radius:1px}
+.toc-prog-fill{height:100%;background:var(--wf-brand);width:0%;transition:width 0.3s var(--ease);border-radius:1px}
+
+/* ── ARTICLE BODY ── */
+.article{padding:48px 56px;border-right:1px solid var(--wf-border)}
+.art-intro{font-family:var(--sans);font-size:18px;font-weight:300;font-style:italic;line-height:1.8;color:var(--wf-fg-subtle);border-left:3px solid var(--wf-brand);padding-left:24px;margin-bottom:36px}
+.art-h2{font-family:var(--sans);font-size:clamp(22px,2.5vw,34px);font-weight:300;line-height:1.15;color:var(--wf-fg);margin:52px 0 18px;border-top:1px solid var(--wf-border);padding-top:12px}
+.art-h2:first-of-type{margin-top:0;border-top:none;padding-top:0}
+.art-h2 em{font-style:italic;color:var(--wf-brand)}
+.art-h3{font-family:var(--sans);font-size:21px;font-weight:500;color:var(--wf-fg);line-height:1.2;margin:32px 0 12px}
+.art-h3 em{font-style:italic;color:var(--wf-brand)}
+.art-p{font-family:var(--sans);font-size:16px;font-weight:400;line-height:1.82;color:rgba(250,250,250,0.8);margin-bottom:22px}
+.art-p a{color:var(--wf-brand);border-bottom:1px solid rgba(29,185,84,0.3);transition:border-color var(--fast) var(--ease)}
+.art-p a:hover{border-bottom-color:var(--wf-brand)}
+.art-p strong{font-weight:600;color:var(--wf-fg)}
+.art-p em{font-style:italic;color:var(--wf-fg-subtle)}
+.art-ul,.art-ol{margin:14px 0 22px 20px}
+.art-li{font-family:var(--sans);font-size:15px;font-weight:400;line-height:1.78;color:rgba(250,250,250,0.8);margin-bottom:6px;padding-left:8px}
+.art-li::marker{color:var(--wf-brand)}
+.art-ol .art-li{padding-left:4px}
+.art-ol .art-li::marker{color:var(--wf-brand);font-family:var(--mono);font-size:12px}
+
+/* ── PULLQUOTE ── */
+.pullquote{border-top:1px solid var(--wf-brand);border-bottom:1px solid var(--wf-brand);padding:28px 0;margin:40px 0}
+.pq-text{font-family:var(--sans);font-size:clamp(18px,2vw,26px);font-weight:300;font-style:italic;color:var(--wf-fg);line-height:1.4;text-align:center}
+.pq-text em{color:var(--wf-brand)}
+.pq-attr{font-family:var(--mono);font-size:8px;color:var(--wf-fg-faint);letter-spacing:0.1em;text-transform:uppercase;text-align:center;margin-top:10px}
+
+/* ── CALLOUT ── */
+.callout{background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border);border-radius:var(--radius-md);padding:22px 26px;margin:28px 0;position:relative}
+.callout::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--wf-brand);border-radius:var(--radius-sm) 0 0 var(--radius-sm)}
+.cl-label{font-family:var(--mono);font-size:7.5px;color:var(--wf-brand);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px}
+.cl-text{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--wf-fg);line-height:1.65}
+.cl-text em{font-style:italic;color:var(--wf-brand)}
+
+.callout-blue{background:rgba(69,137,255,0.08);border-color:rgba(69,137,255,0.2)}
+.callout-blue::before{background:var(--wf-blue)}
+.callout-blue .cl-label{color:var(--wf-blue)}
+
+.callout-teal{background:rgba(8,189,186,0.08);border-color:rgba(8,189,186,0.2)}
+.callout-teal::before{background:var(--wf-teal)}
+.callout-teal .cl-label{color:var(--wf-teal)}
+
+/* ── INLINE FIGURE ── */
+.art-figure{margin:28px 0;border:1px solid var(--wf-border);border-radius:var(--radius-md);overflow:hidden}
+.art-fig-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--wf-surface);border-bottom:1px solid var(--wf-border)}
+.art-fig-dots{display:flex;gap:4px}
+.art-fig-dot{width:8px;height:8px;border-radius:50%}
+.afd-1{background:rgba(232,93,74,0.3)}.afd-2{background:rgba(29,185,84,0.3)}.afd-3{background:rgba(66,190,101,0.3)}
+.art-fig-title{font-family:var(--mono);font-size:7.5px;color:var(--wf-fg-faint);letter-spacing:0.1em}
+.art-fig-body{position:relative;overflow:hidden}
+.art-fig-ph{width:100%;min-height:200px;display:flex;align-items:center;justify-content:center;position:relative}
+.fig-label{font-family:var(--sans);font-size:48px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.06);z-index:1}
+.art-fig-caption{padding:10px 14px;border-top:1px solid var(--wf-border);font-family:var(--mono);font-size:8px;color:var(--wf-fg-faint);letter-spacing:0.06em}
+.art-fig-link{display:inline-block;margin-top:4px;font-family:var(--mono);font-size:7.5px;color:var(--wf-brand);letter-spacing:0.1em;text-transform:uppercase}
+
+/* ── NUMBERED INSIGHT ── */
+.insight-list{display:flex;flex-direction:column;gap:1px;background:var(--wf-border);border:1px solid var(--wf-border);border-radius:var(--radius-md);margin:24px 0;overflow:hidden}
+.insight{background:var(--wf-surface);display:grid;grid-template-columns:52px 1fr;transition:background var(--fast) var(--ease)}
+.insight:hover{background:var(--wf-surface-hover)}
+.insight:hover .ins-title{color:var(--wf-brand)}
+.ins-num{background:var(--wf-brand-muted);display:flex;align-items:flex-start;justify-content:center;padding-top:16px;font-family:var(--sans);font-size:22px;font-weight:300;color:var(--wf-brand);border-right:1px solid var(--wf-border)}
+.ins-body{padding:16px 18px}
+.ins-title{font-family:var(--sans);font-size:12px;font-weight:600;color:var(--wf-fg);margin-bottom:6px;transition:color var(--fast) var(--ease);letter-spacing:0.02em}
+.ins-text{font-family:var(--sans);font-size:14px;font-weight:400;color:var(--wf-fg-subtle);line-height:1.65}
+
+/* ── SCORE / RESULT CARD ── */
+.score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--wf-border);border:1px solid var(--wf-border);border-radius:var(--radius-md);margin:24px 0;overflow:hidden}
+.score-card{background:var(--wf-surface);padding:18px 20px}
+.sc-label{font-family:var(--mono);font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:8px}
+.sc-val{font-family:var(--sans);font-size:28px;font-weight:300;color:var(--wf-fg);margin-bottom:5px;line-height:1}
+.sc-val.pos{color:var(--wf-green)}.sc-val.neg{color:var(--wf-red)}.sc-val.gold{color:var(--wf-brand)}
+.sc-note{font-size:11px;color:var(--wf-fg-muted);line-height:1.55}
+
+/* ── CODE BLOCK ── */
+.code-block{background:var(--wf-bg-sunken);border:1px solid var(--wf-border);border-radius:var(--radius-md);margin:20px 0;overflow:hidden}
+.cb-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--wf-border);background:var(--wf-surface)}
+.cb-lang{font-family:var(--mono);font-size:7.5px;color:var(--wf-fg-faint);letter-spacing:0.1em;text-transform:uppercase}
+.cb-copy{font-family:var(--mono);font-size:7.5px;color:var(--wf-fg-faint);cursor:pointer;padding:2px 8px;border:1px solid var(--wf-border);border-radius:var(--radius-sm);transition:all var(--fast) var(--ease);background:none}
+.cb-copy:hover{color:var(--wf-brand);border-color:var(--wf-brand-border)}
+.cb-body{padding:16px;overflow-x:auto}
+.cb-body pre{font-family:var(--mono);font-size:12px;color:var(--wf-fg-subtle);line-height:1.65;white-space:pre-wrap}
+.kw{color:var(--wf-purple)}.str{color:var(--wf-green)}.cm{color:var(--wf-fg-faint)}.fn{color:var(--wf-blue)}.num{color:var(--wf-orange)}
+
+/* ── AUTHOR BLOCK ── */
+.author-block{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--radius-md);padding:22px;margin:48px 0 24px;display:flex;gap:18px}
+.ab-avatar{width:52px;height:52px;background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-size:20px;color:var(--wf-brand);font-style:italic;flex-shrink:0}
+.ab-name{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--wf-fg);margin-bottom:2px}
+.ab-role{font-family:var(--mono);font-size:7.5px;color:var(--wf-brand);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px}
+.ab-bio{font-family:var(--sans);font-size:14px;font-weight:400;color:var(--wf-fg-subtle);line-height:1.65;margin-bottom:10px}
+.ab-links{display:flex;gap:6px}
+.ab-link{display:flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--wf-border);border-radius:var(--radius-sm);font-family:var(--mono);font-size:7.5px;color:var(--wf-fg-muted);transition:all var(--fast) var(--ease);letter-spacing:0.06em}
+.ab-link:hover{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+
+/* ── SHARE BAR ── */
+.share-bar{display:flex;align-items:center;gap:8px;padding:14px 0;border-top:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border)}
+.sb-label{font-family:var(--mono);font-size:7.5px;color:var(--wf-fg-faint);letter-spacing:0.12em;text-transform:uppercase}
+.sb-btn{padding:6px 14px;border:1px solid var(--wf-border);border-radius:var(--radius-sm);font-family:var(--mono);font-size:8.5px;color:var(--wf-fg-muted);cursor:pointer;transition:all var(--fast) var(--ease);letter-spacing:0.06em}
+.sb-btn:hover{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+
+/* ── RIGHT SIDEBAR ── */
+.right-sidebar{padding:32px 0 32px 28px;position:sticky;top:calc(var(--nav-h)+20px);align-self:start}
+.rs-label{font-family:var(--mono);font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--wf-border)}
+.rs-cta{display:block;background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border);border-radius:var(--radius-md);padding:18px;margin-bottom:22px}
+.rs-cta-title{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--wf-fg);margin-bottom:6px}
+.rs-cta-title em{font-style:italic;color:var(--wf-brand)}
+.rs-cta-desc{font-size:10px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:12px}
+.rs-cta-btn{display:block;text-align:center;padding:9px;background:var(--wf-brand);border-radius:var(--radius-sm);font-family:var(--sans);font-size:10px;font-weight:600;color:var(--wf-brand-fg);transition:background var(--fast) var(--ease)}
+.rs-cta-btn:hover{background:var(--wf-brand-hover)}
+.rs-rel-item{display:block;border-bottom:1px solid var(--wf-border);padding:11px 0;transition:all var(--fast) var(--ease)}
+.rs-rel-item:last-child{border-bottom:none}
+.rs-rel-item:hover .rri-title{color:var(--wf-brand)}
+.rri-cat{font-family:var(--mono);font-size:7px;color:var(--wf-fg-faint);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px}
+.rri-title{font-family:var(--sans);font-size:13px;font-weight:400;color:var(--wf-fg-subtle);line-height:1.4;transition:color var(--fast) var(--ease)}
+.rri-meta{font-family:var(--mono);font-size:7px;color:var(--wf-fg-faint);margin-top:3px}
+.rs-newsletter{border:1px solid var(--wf-border);border-radius:var(--radius-md);padding:16px;margin-top:22px}
+.rsnl-label{font-family:var(--mono);font-size:7px;color:var(--wf-brand);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px}
+.rsnl-title{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--wf-fg);margin-bottom:6px}
+.rsnl-title em{font-style:italic;color:var(--wf-brand)}
+.rsnl-input{width:100%;padding:9px 12px;background:var(--wf-surface-hover);border:1px solid var(--wf-border-strong);border-radius:var(--radius-sm);outline:none;font-family:var(--mono);font-size:9px;color:var(--wf-fg);margin-bottom:6px}
+.rsnl-input::placeholder{color:var(--wf-fg-faint)}
+.rsnl-btn{width:100%;padding:9px;background:var(--wf-brand);border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:var(--sans);font-size:10px;font-weight:600;color:var(--wf-brand-fg);transition:background var(--fast) var(--ease)}
+.rsnl-btn:hover{background:var(--wf-brand-hover)}
+
+/* ── RELATED ARTICLES ── */
+.related{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:56px 0}
+.wrap{max-width:1440px;margin:0 auto;padding:0 40px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:24px}
+.sec-label{font-family:var(--mono);font-size:8.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--wf-brand)}
+.sec-title{font-family:var(--sans);font-size:24px;font-weight:300;color:var(--wf-fg)}
+.sec-title em{font-style:italic;color:var(--wf-brand)}
+.sec-rule{flex:1;height:1px;background:var(--wf-border)}
+.see-all{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--wf-fg-faint);padding:5px 12px;border:1px solid var(--wf-border);border-radius:var(--radius-sm);transition:all var(--fast) var(--ease)}
+.see-all:hover{color:var(--wf-brand);border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.rel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--wf-border);border:1px solid var(--wf-border);border-radius:var(--radius-lg);overflow:hidden}
+.rel-card{background:var(--wf-surface);transition:background var(--fast) var(--ease);overflow:hidden}
+.rel-card:hover{background:var(--wf-surface-hover)}
+.rel-card:hover .relc-title{color:var(--wf-brand)}
+.relc-img{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden}
+.relc-body{padding:16px 18px}
+.relc-cat{font-family:var(--mono);font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;padding:2px 8px;border:1px solid;display:inline-block;margin-bottom:8px;border-radius:var(--radius-sm)}
+.relc-title{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--wf-fg-subtle);line-height:1.35;margin-bottom:6px;transition:color var(--fast) var(--ease)}
+.relc-meta{font-family:var(--mono);font-size:7.5px;color:var(--wf-fg-faint)}
+
+/* ── WHATS NEXT ── */
+.whats-next{background:var(--wf-surface);border-top:1px solid var(--wf-border);padding:56px 0}
+.wn-inner{max-width:1440px;margin:0 auto;padding:0 40px}
+.wn-label{font-family:var(--mono);font-size:8px;color:var(--wf-brand);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.wn-label::before{content:'';width:20px;height:1px;background:var(--wf-brand)}
+.wn-title{font-family:var(--sans);font-size:32px;font-weight:300;color:var(--wf-fg);margin-bottom:8px;line-height:1.15}
+.wn-title em{font-style:italic;color:var(--wf-brand)}
+.wn-desc{font-family:var(--sans);font-size:15px;font-weight:300;font-style:italic;color:var(--wf-fg-subtle);line-height:1.7;max-width:560px;margin-bottom:24px}
+.wn-btns{display:flex;gap:0;flex-wrap:wrap}
+.wn-btn{padding:13px 28px;background:var(--wf-brand);border:none;border-radius:var(--radius-sm);font-family:var(--sans);font-size:12px;font-weight:600;color:var(--wf-brand-fg);transition:background var(--fast) var(--ease);margin-right:1px;cursor:pointer}
+.wn-btn:hover{background:var(--wf-brand-hover)}
+.wn-btn-ghost{padding:13px 28px;border:1px solid var(--wf-border-strong);border-radius:var(--radius-sm);font-family:var(--sans);font-size:12px;font-weight:500;color:var(--wf-fg-subtle);transition:all var(--fast) var(--ease)}
+.wn-btn-ghost:hover{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+
+/* ── FOOTER ── */
+.footer{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:48px 0 32px}
+.footer-inner{max-width:1440px;margin:0 auto;padding:0 40px}
+.footer-top{display:grid;grid-template-columns:280px 1fr;gap:80px;margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid var(--wf-border)}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.footer-mark{width:32px;height:32px;background:var(--wf-brand);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-size:12px;font-weight:800;color:var(--wf-brand-fg)}
+.footer-name{font-family:var(--sans);font-size:17px;font-weight:300;color:var(--wf-fg)}
+.footer-name em{font-style:italic;color:var(--wf-brand)}
+.footer-bio{font-size:11px;color:var(--wf-fg-muted);line-height:1.7;margin-bottom:20px}
+.footer-socials{display:flex;gap:8px}
+.footer-social{width:30px;height:30px;border:1px solid var(--wf-border-strong);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:var(--wf-fg-faint);transition:all var(--fast) var(--ease)}
+.footer-social:hover{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+.footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:40px}
+.footer-col-title{font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(29,185,84,0.15)}
+.footer-link{display:block;font-size:11px;color:var(--wf-fg-muted);padding:3px 0;transition:color var(--fast) var(--ease)}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between}
+.footer-copy{font-family:var(--mono);font-size:8px;color:var(--wf-fg-faint)}
+.footer-chips{display:flex;gap:6px}
+.footer-chip{font-family:var(--mono);font-size:7px;padding:3px 8px;border:1px solid var(--wf-border);border-radius:var(--radius-sm);color:var(--wf-fg-faint)}
+.footer-chip.live{color:var(--wf-green);border-color:rgba(66,190,101,0.25);background:rgba(66,190,101,0.06)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.anim{opacity:0;animation:fadeUp 0.6s var(--ease) forwards}
+.d1{animation-delay:0.05s}.d2{animation-delay:0.15s}.d3{animation-delay:0.25s}
+
+/* ── RESPONSIVE: 1024px ── */
+@media(max-width:1024px){
+  .content-wrap{grid-template-columns:160px 1fr}
+  .right-sidebar{display:none}
+  .article{border-right:none}
+  .rel-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-top{grid-template-columns:1fr}
+  .footer-links{grid-template-columns:repeat(2,1fr)}
+}
+/* ── RESPONSIVE: 768px ── */
+@media(max-width:768px){
+  .content-wrap{grid-template-columns:1fr}
+  .toc{display:none}
+  .article{padding:32px 24px;border-right:none}
+  .hero-img-full{min-height:320px}
+  .nav-links{display:none}
+  .wrap,.bc-inner,.hif-content,.nav-inner,.footer-inner,.wn-inner,.content-wrap{padding-left:20px;padding-right:20px}
+  .rel-grid{grid-template-columns:1fr}
+  .footer-links{grid-template-columns:1fr}
+  .score-grid{grid-template-columns:1fr}
+  .hif-meta-row{flex-direction:column;align-items:flex-start;gap:10px}
+  .hm-sep{display:none}
+  .hm-share{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="nr-blog-home.html" class="nav-logo">
+      <div class="nav-mark">NR</div>
+      <span class="nav-wordmark">Nathaniel <em>Rockett</em></span>
+    </a>
+    <div class="nav-sep"></div>
+    <span class="nav-label">Ideas</span>
+    <div class="nav-links">
+      <a href="nr-blog-home.html" class="nav-link">All Topics</a>
+      <a href="#" class="nav-link">Creative Ops</a>
+      <a href="nr-blog-category.html" class="nav-link active">AI Tools</a>
+      <a href="#" class="nav-link">Video & Production</a>
+      <a href="#" class="nav-link">Founder Life</a>
+    </div>
+    <div class="nav-right">
+      <input class="nav-search" placeholder="Search ideas..." type="text">
+      <a href="https://intelligentoperations.ai/cx-io/nathaniel-rockett-portfolio.html" target="_blank" class="nav-cta">View Portfolio</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── BREADCRUMB ── -->
+<div class="breadcrumb">
+  <div class="bc-inner">
+    <a href="nr-blog-home.html" class="bc-link">Ideas</a>
+    <span class="bc-sep">/</span>
+    <a href="nr-blog-category.html" class="bc-link">AI & Creative Production</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-current">Claude as a Creative Director</span>
+  </div>
+</div>
+
+<!-- ── HERO ── -->
+<div class="art-hero">
+  <div class="hero-img-full">
+    <div class="hif-bg ph-blue">
+      <div class="ph-ghost">Claude CD</div>
+      <div class="ph-grid-overlay"></div>
+      <div class="hif-orb"></div>
+    </div>
+    <div class="hif-overlay"></div>
+    <div class="hif-content">
+      <div class="art-cat-row anim d1">
+        <span class="art-cat-tag act-blue">AI Tools</span>
+        <span class="art-cat-tag act-gold">Workflow</span>
+      </div>
+      <h1 class="hif-h1 anim d2">Claude as a Creative Director:<br><em>Six Months of Real Workflows</em></h1>
+      <p class="hif-lead anim d3">I gave Claude the same brief I'd give a junior creative director. Six months later — here's what worked, what didn't, and what permanently changed how I run Motion Co.</p>
+      <div class="hif-meta-row anim d3">
+        <div class="hm-author">
+          <div class="hm-avatar">Nr</div>
+          <div>
+            <div class="hm-name">Nathaniel Rockett</div>
+            <div class="hm-role">Creative Director · Motion Co. · Kansas City</div>
+          </div>
+        </div>
+        <div class="hm-sep"></div>
+        <span class="hm-tag">March 6, 2026</span>
+        <div class="hm-sep"></div>
+        <span class="hm-tag">14 min read</span>
+        <div class="hm-sep"></div>
+        <span class="hm-tag">AI Tools · Workflow</span>
+        <div class="hm-share">
+          <a href="https://linkedin.com" target="_blank" class="hm-share-btn">in</a>
+          <span class="hm-share-btn">tw</span>
+          <span class="hm-share-btn">&#8599;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN CONTENT ── -->
+<div style="border-bottom:1px solid var(--wf-border)">
+  <div class="content-wrap">
+
+    <!-- LEFT TOC -->
+    <nav class="toc">
+      <div class="toc-label">Contents</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#brief" class="toc-link">The Brief I Gave Claude</a></li>
+        <li class="toc-item"><a href="#six-months" class="toc-link">Six Months In</a></li>
+        <li class="toc-item"><a href="#what-worked" class="toc-link">What Actually Worked</a></li>
+        <li class="toc-item"><a href="#what-failed" class="toc-link">What Failed</a></li>
+        <li class="toc-item"><a href="#how-to-adopt" class="toc-link">How Orgs Can Adopt This</a></li>
+        <li class="toc-item"><a href="#paradigms" class="toc-link">Evolving Paradigms</a></li>
+        <li class="toc-item"><a href="#types" class="toc-link">Types of AI Agents</a></li>
+        <li class="toc-item"><a href="#comparison" class="toc-link">Before vs After</a></li>
+        <li class="toc-item"><a href="#the-system" class="toc-link">The System Prompt</a></li>
+        <li class="toc-item"><a href="#tools" class="toc-link">Tools & Editors</a></li>
+        <li class="toc-item"><a href="#team" class="toc-link">Team & Scaling</a></li>
+        <li class="toc-item"><a href="#deploy" class="toc-link">Deploy Options</a></li>
+        <li class="toc-item"><a href="#whats-next" class="toc-link">What's Next</a></li>
+      </ul>
+      <div class="toc-progress">
+        <div class="toc-prog-label"><span>Progress</span><span id="prog-pct">0%</span></div>
+        <div class="toc-prog-bar"><div class="toc-prog-fill" id="prog-fill"></div></div>
+      </div>
+    </nav>
+
+    <!-- ARTICLE -->
+    <article class="article">
+
+      <p class="art-intro" id="brief">In June 2025, I wrote a 600-word system prompt and sent Claude Sonnet 4.6 the same brief I would have handed a new junior creative director. I wasn't testing AI — I was testing whether my own thinking was clear enough to articulate.</p>
+
+      <p class="art-p">The answer, it turned out, was both yes and no. Claude revealed the gaps in my own systems as much as it filled them. Six months later, here's an honest account of what changed, what stayed the same, and what I genuinely couldn't have anticipated.</p>
+
+      <h2 class="art-h2" id="brief">The Brief I <em>Gave Claude</em></h2>
+      <p class="art-p">The brief was structured exactly like the briefs I write for human creatives: a client overview, a creative challenge, three reference directions, constraints (budget, timeline, output format), and a clear definition of what "done" looks like.</p>
+      <p class="art-p">What surprised me was what happened next. A junior CD would take the brief, go away, and come back with questions — the questions they ask reveal how well they understood the brief. Claude's first response was essentially a set of clarifying questions formatted as assumptions: "I'm assuming X, Y, and Z. If any of these are wrong, let me know before I proceed."</p>
+      <p class="art-p">That response format — <strong>stated assumptions instead of open questions</strong> — turned out to be more useful than the open-question format I was used to. It showed the AI's reasoning before it acted, which meant I could course-correct before any work was done, not after.</p>
+
+      <div class="callout callout-blue">
+        <div class="cl-label">Key Insight</div>
+        <div class="cl-text">Claude's "stated assumptions" format — presenting its interpretation before proceeding — is often more useful than open-ended questions. It shows you where it might go wrong before it does.</div>
+      </div>
+
+      <h2 class="art-h2" id="six-months">Six Months <em>In: What We Actually Did</em></h2>
+      <p class="art-p">Over the following six months, I used Claude in a formal "creative director" capacity across four categories of work:</p>
+      <ul class="art-ul">
+        <li class="art-li"><strong>Brand audits</strong> — Analyzing client briefs and existing brand materials against a 12-attribute framework, identifying gaps, and producing positioning recommendations.</li>
+        <li class="art-li"><strong>Content direction</strong> — Developing editorial calendars, LinkedIn content strategies, and article outlines across NR's four content pillars.</li>
+        <li class="art-li"><strong>Creative briefs</strong> — Drafting client-facing briefs for Motion Co. projects based on intake calls (I provide the transcript; Claude drafts the brief).</li>
+        <li class="art-li"><strong>Voice and copy review</strong> — Running drafts through a brand voice scoring system with written feedback, not just a score.</li>
+      </ul>
+
+      <div class="art-figure">
+        <div class="art-fig-header">
+          <div class="art-fig-dots"><div class="art-fig-dot afd-1"></div><div class="art-fig-dot afd-2"></div><div class="art-fig-dot afd-3"></div></div>
+          <div class="art-fig-title">IO Content Studio — Claude in Brand Voice Mode</div>
+        </div>
+        <div class="art-fig-body">
+          <div class="art-fig-ph ph-blue" style="min-height:220px;position:relative">
+            <div class="ph-ghost" style="font-size:40px">Content Studio</div>
+            <div class="ph-grid-overlay"></div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2">
+              <a href="https://intelligentoperations.ai/io-operating-system-nathaniel-rockets.html" target="_blank" style="font-family:var(--mono);font-size:8.5px;color:var(--wf-blue);letter-spacing:0.14em;text-transform:uppercase;border:1px solid rgba(69,137,255,0.4);padding:8px 18px;background:rgba(69,137,255,0.08);border-radius:var(--radius-sm)">Open Content Studio &#8599;</a>
+            </div>
+          </div>
+        </div>
+        <div class="art-fig-caption">Figure 1: The IO Content Studio — Claude running in NR brand voice mode, reviewing a LinkedIn draft against the 12-attribute brand voice framework.
+          <br><a href="https://intelligentoperations.ai/io-operating-system-nathaniel-rockets.html" target="_blank" class="art-fig-link">Try it live &#8599;</a>
+        </div>
+      </div>
+
+      <h2 class="art-h2" id="what-worked">What Actually <em>Worked</em></h2>
+      <p class="art-p">Let me be direct: a lot of this worked remarkably well. More than I expected going in. The things that worked weren't the glamorous use cases people imagine — it wasn't Claude generating brilliant original creative from nothing. It was Claude doing the disciplined, systematic work that I always knew was important but didn't have enough time to do consistently.</p>
+
+      <div class="insight-list">
+        <div class="insight">
+          <div class="ins-num">01</div>
+          <div class="ins-body">
+            <div class="ins-title">Brand Voice Consistency at Scale</div>
+            <div class="ins-text">Claude maintains tone consistency across long documents better than I do at 11pm after a full shoot day. The key was a 400-word system prompt with specific examples of NR's voice — what it sounds like, and equally important, what it doesn't.</div>
+          </div>
+        </div>
+        <div class="insight">
+          <div class="ins-num">02</div>
+          <div class="ins-body">
+            <div class="ins-title">Intake &#8594; Brief in Under 10 Minutes</div>
+            <div class="ins-text">Client intake call transcript (usually 30–40 minutes) to a full creative brief in under 10 minutes. The brief quality is consistently good — better than the briefs I used to write in 45 minutes after a call because I was tired and rushed.</div>
+          </div>
+        </div>
+        <div class="insight">
+          <div class="ins-num">03</div>
+          <div class="ins-body">
+            <div class="ins-title">Positioning Under Pressure</div>
+            <div class="ins-text">When a client asks "how are you different from other production companies?" in real time, I now have a 12-attribute competitive positioning map I can reference. Claude built it in 20 minutes from my brand voice doc and three competitor websites.</div>
+          </div>
+        </div>
+        <div class="insight">
+          <div class="ins-num">04</div>
+          <div class="ins-body">
+            <div class="ins-title">Content Repurposing Without Losing the Point</div>
+            <div class="ins-text">One of my most common problems: a great long-form observation that I never turn into LinkedIn content. Claude's repurposing engine — extracting three angles, each with a different hook type — captures the idea before it fades.</div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="art-h2" id="what-failed">What <em>Failed</em> (Or Required More Work Than Expected)</h2>
+      <p class="art-p">The failures were instructive. They mostly came from one source: I hadn't given Claude enough context about what I was trying to achieve, or I'd given it the wrong kind of context.</p>
+
+      <div class="callout">
+        <div class="cl-label">Honest Failure</div>
+        <div class="cl-text">The first three weeks of AI-generated LinkedIn posts all sounded the same. Not generic — they sounded like a competent version of me, but not the one I actually want to project. The fix wasn't a better prompt. It was <em>reading my own best posts and annotating what made them work</em> — then building that into the system prompt.</div>
+      </div>
+
+      <p class="art-p">The second area of failure was anything that required judgment about what <em>wasn't</em> said. Claude is excellent at analyzing and extending what exists in context. It's much weaker at identifying when something important is missing entirely. Brand strategy work, especially for clients with established-but-problematic positioning, still requires a human director who can see what the brand isn't saying.</p>
+      <p class="art-p">Third: real creative inspiration. The moments in a pitch where you introduce an idea that nobody asked for and it changes the direction of the whole project — Claude doesn't generate those. What it does is give me more capacity to think about those moments by handling the systematic work that would otherwise fill my schedule.</p>
+
+      <div class="pullquote">
+        <div class="pq-text">Claude gives me more capacity to think by handling the systematic work. The creative <em>inspiration</em> is still mine to bring.</div>
+        <div class="pq-attr">— Nathaniel Rockett, 2026</div>
+      </div>
+
+      <h2 class="art-h2" id="how-to-adopt">How Creative Studios <em>Can Adopt This</em></h2>
+      <p class="art-p">I've now talked to a dozen creative directors and founders who are building similar systems. The ones that are working share three structural qualities. The ones that aren't working are missing one or more of these.</p>
+
+      <h3 class="art-h3">1. A Written <em>Brand Voice Document</em></h3>
+      <p class="art-p">Not a brand guidelines PDF with logos and colors — a written description of how your brand thinks and talks. This is the single most important input for a creative AI system. Without it, you're asking Claude to guess your voice on every task. With it, Claude can maintain your voice across 100 outputs without drift.</p>
+
+      <h3 class="art-h3">2. A <em>Connected Data Layer</em></h3>
+      <p class="art-p">Brand voice doc in Notion, structured data in Supabase, and a connection between them and the AI tools. The moment you're copy-pasting context between tools, you've lost the efficiency. The goal is for Claude to already know who you are when you open any tool in the system.</p>
+
+      <div class="art-figure">
+        <div class="art-fig-header">
+          <div class="art-fig-dots"><div class="art-fig-dot afd-1"></div><div class="art-fig-dot afd-2"></div><div class="art-fig-dot afd-3"></div></div>
+          <div class="art-fig-title">Notion Knowledge Base — NR Brand Voice Document</div>
+        </div>
+        <div class="art-fig-body">
+          <div class="art-fig-ph ph-teal" style="min-height:180px;position:relative">
+            <div class="ph-ghost" style="font-size:36px">Notion KB</div>
+            <div class="ph-grid-overlay"></div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;flex-direction:column;gap:12px;padding:20px">
+              <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+                <span style="font-family:var(--mono);font-size:8px;padding:4px 12px;border:1px solid rgba(8,189,186,0.3);color:var(--wf-teal);background:rgba(8,189,186,0.08);border-radius:var(--radius-sm)">Brand Voice Guide · 2,400 words</span>
+                <span style="font-family:var(--mono);font-size:8px;padding:4px 12px;border:1px solid rgba(8,189,186,0.3);color:var(--wf-teal);background:rgba(8,189,186,0.08);border-radius:var(--radius-sm)">Production Playbook · 3,100 words</span>
+                <span style="font-family:var(--mono);font-size:8px;padding:4px 12px;border:1px solid rgba(8,189,186,0.3);color:var(--wf-teal);background:rgba(8,189,186,0.08);border-radius:var(--radius-sm)">Ideal Client Profile · 1,800 words</span>
+                <span style="font-family:var(--mono);font-size:8px;padding:4px 12px;border:1px solid rgba(8,189,186,0.3);color:var(--wf-teal);background:rgba(8,189,186,0.08);border-radius:var(--radius-sm)">LinkedIn Strategy · 2,200 words</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="art-fig-caption">Figure 2: The NR Notion Knowledge Base — four core documents that feed every IO tool. Claude reads these via Notion MCP before generating any output.
+          <br><a href="nr-blog-pillar.html" class="art-fig-link">Read the IO System guide &#8594;</a>
+        </div>
+      </div>
+
+      <h3 class="art-h3">3. A Defined <em>Review Process</em></h3>
+      <p class="art-p">Claude generates drafts. You review and approve. The review process matters more than most people think — not because Claude's outputs are bad, but because the discipline of reviewing outputs against your own standards is what improves your system prompts over time. Bad outputs should feed back into better prompts.</p>
+
+      <h2 class="art-h2" id="paradigms">The Evolving <em>Paradigms</em></h2>
+      <p class="art-p">Six months of daily use has clarified how the relationship between a creative director and AI tools actually works in practice. There are three modes, and which one you're in determines what you should expect from the system.</p>
+
+      <div class="score-grid">
+        <div class="score-card">
+          <div class="sc-label">Mode 01 · Augmentation</div>
+          <div class="sc-val gold">80%</div>
+          <div class="sc-note">Most of my Claude usage. AI accelerates work I would have done anyway — drafting, structuring, formatting, reformatting. High reliability, predictable quality.</div>
+        </div>
+        <div class="score-card">
+          <div class="sc-label">Mode 02 · Delegation</div>
+          <div class="sc-val pos">15%</div>
+          <div class="sc-note">Tasks I've defined well enough to hand off entirely. Brand audits, intake-to-brief, content repurposing. Requires strong system prompts and periodic calibration.</div>
+        </div>
+        <div class="score-card">
+          <div class="sc-label">Mode 03 · Collaboration</div>
+          <div class="sc-val" style="color:var(--wf-purple)">5%</div>
+          <div class="sc-note">Real creative dialogue. Multi-turn conversations where I'm genuinely discovering something through the exchange. Rare but high-value. Requires intentionality.</div>
+        </div>
+        <div class="score-card">
+          <div class="sc-label">Overall Time Savings</div>
+          <div class="sc-val pos">~40%</div>
+          <div class="sc-note">Net reduction in time spent on non-creative work. Some of this went back into the system (building tools, writing prompts). Most went into client work.</div>
+        </div>
+      </div>
+
+      <h2 class="art-h2" id="types">Types of <em>AI Creative Agents</em></h2>
+      <p class="art-p">One thing I've learned from building six IO tools is that "AI" is not a monolith. Different types of AI tasks require different architectural approaches. Understanding the taxonomy helps you build better systems.</p>
+      <ul class="art-ul">
+        <li class="art-li"><strong>Document agents</strong> — Read, analyze, and transform existing documents. High reliability. The NR Brand Compass is this type.</li>
+        <li class="art-li"><strong>Generation agents</strong> — Create new content from structured inputs (briefs, voice guides, topic inputs). Reliability depends on prompt quality. Content Studio is this type.</li>
+        <li class="art-li"><strong>Synthesis agents</strong> — Pull together multiple inputs to produce a unified output (e.g., combining LinkedIn data + voice guide &#8594; bio). More complex, higher ceiling, more failure modes. Portfolio Builder is this type.</li>
+        <li class="art-li"><strong>Review agents</strong> — Evaluate outputs against defined criteria and provide structured feedback. Surprisingly reliable. Brand voice scoring is this type.</li>
+      </ul>
+
+      <h2 class="art-h2" id="comparison">Before vs After: <em>The Numbers</em></h2>
+      <p class="art-p">I tracked time-on-task for six representative workflows before and after implementing the IO system. Here's what the data showed:</p>
+
+      <table style="width:100%;border-collapse:collapse;margin:20px 0;border:1px solid var(--wf-border);border-radius:var(--radius-md);overflow:hidden">
+        <thead>
+          <tr style="background:var(--wf-surface)">
+            <th style="font-family:var(--sans);font-size:10px;font-weight:600;color:var(--wf-fg);padding:12px 16px;text-align:left;border-bottom:1px solid var(--wf-border);letter-spacing:0.04em">Task</th>
+            <th style="font-family:var(--sans);font-size:10px;font-weight:600;color:var(--wf-fg);padding:12px 16px;text-align:left;border-bottom:1px solid var(--wf-border)">Before IO</th>
+            <th style="font-family:var(--sans);font-size:10px;font-weight:600;color:var(--wf-green);padding:12px 16px;text-align:left;border-bottom:1px solid var(--wf-border)">After IO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--wf-border)">
+            <td style="font-family:var(--sans);font-size:14px;font-weight:500;color:var(--wf-fg);padding:11px 16px">Brand Audit (full)</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-fg-subtle);padding:11px 16px">3–5 days</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-green);padding:11px 16px">20 minutes</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--wf-border)">
+            <td style="font-family:var(--sans);font-size:14px;font-weight:500;color:var(--wf-fg);padding:11px 16px">Client Brief (post-intake call)</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-fg-subtle);padding:11px 16px">45–60 min</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-green);padding:11px 16px">8–10 min</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--wf-border)">
+            <td style="font-family:var(--sans);font-size:14px;font-weight:500;color:var(--wf-fg);padding:11px 16px">LinkedIn Post (from scratch)</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-fg-subtle);padding:11px 16px">30–45 min</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-green);padding:11px 16px">8–12 min</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--wf-border)">
+            <td style="font-family:var(--sans);font-size:14px;font-weight:500;color:var(--wf-fg);padding:11px 16px">Article (draft to publishable)</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-fg-subtle);padding:11px 16px">6–8 hours</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-green);padding:11px 16px">60–90 min</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--sans);font-size:14px;font-weight:500;color:var(--wf-fg);padding:11px 16px">Portfolio Update</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-fg-subtle);padding:11px 16px">1–2 days</td>
+            <td style="font-family:var(--sans);font-size:14px;color:var(--wf-green);padding:11px 16px">15 min</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="art-h2" id="the-system">The System <em>Prompt That Changed Everything</em></h2>
+      <p class="art-p">Everything above — the brand audits, the content, the briefs — runs through a single master system prompt. I've iterated on it over six months and it's now 580 words. The core structure has stayed the same. Here's the pattern (not the full prompt — that's in the IO Knowledge Base):</p>
+
+      <div class="code-block">
+        <div class="cb-header"><span class="cb-lang">System Prompt · NR Master Pattern</span><button class="cb-copy" onclick="copyCode(this)">Copy</button></div>
+        <div class="cb-body"><pre><span class="cm"># WHO YOU ARE WRITING AS</span>
+You are writing as [Name], a [role] based in [location].
+Your work focuses on [3 areas]. Your clients are [ICP description].
+
+<span class="cm"># VOICE ATTRIBUTES (pick 8-12)</span>
+- Direct without being blunt
+- Specific and example-driven, not abstract
+- Confident but not arrogant
+- [Your specific attributes here...]
+
+<span class="cm"># WHAT YOU NEVER DO</span>
+- Never use the word "delve" or "leverage"
+- Never open with "In today's..."
+- [Your specific avoidances here...]
+
+<span class="cm"># OUTPUT FORMAT</span>
+For LinkedIn posts: Hook (1 line) &#8594; Body (4-6 lines) &#8594; CTA
+For articles: Strong opener &#8594; 3-5 H2 sections &#8594; Close
+[Specify your preferred formats here...]
+
+<span class="cm"># CONTEXT (injected dynamically)</span>
+Current brand docs: [Notion MCP retrieval]
+Recent outputs: [From Supabase]</pre></div>
+      </div>
+
+      <h2 class="art-h2" id="tools">Tools <em>&amp; Editors</em></h2>
+      <p class="art-p">The technical stack is simpler than it looks. Everything runs on HTML/CSS/JS pages that make API calls to Claude. No frameworks, no build steps for most tools. The ones that need slightly more (the Portfolio Builder, the Style Tastemaker) use vanilla JavaScript that most creatives with basic coding exposure can read and modify.</p>
+      <p class="art-p">The development environment is almost entirely <a href="https://claude.ai" target="_blank">Claude.ai</a> itself — I describe what I want, Claude generates the code, I test it in a browser. For a creative director with no formal engineering background, this is the most important thing to understand: <strong>you don't need to write code from scratch to build these tools.</strong></p>
+
+      <h2 class="art-h2" id="team">Team <em>&amp; Scaling</em></h2>
+      <p class="art-p">I built this system for myself, but I've started thinking about how it scales to Motion Co. as a team. The honest answer is that scaling a personal brand OS to a studio OS is a different problem. The architecture is similar but the data layer gets more complex — you need client-specific context that doesn't contaminate other clients, role-based access to different tools, and a review workflow that accounts for multiple people's voices.</p>
+      <p class="art-p">For now, the NR IO system stays personal. Motion Co. client work uses some of the same tools (Brand Compass, Brief Generator) but those tools run on client-specific system prompts, not the NR voice prompt.</p>
+
+      <h2 class="art-h2" id="deploy">Deploy <em>Options</em></h2>
+      <p class="art-p">Everything in the NR IO system is deployed on GitHub Pages, with a Cloudflare CDN in front. Zero infrastructure cost, near-instant global delivery, and the deploy workflow is a single GitHub push. For tools that process sensitive client data, I'd recommend a more private setup — but for a personal brand OS, public hosting is fine and removes significant operational overhead.</p>
+
+      <h2 class="art-h2" id="whats-next">What's <em>Next</em></h2>
+      <p class="art-p">Six months in, I'm more committed to this approach than I was when I started — not because it's perfect, but because it keeps improving. Every month, the system prompts get more calibrated, the tools get more connected, and the outputs get closer to what I would have produced myself.</p>
+      <p class="art-p">The next major evolution is real-time context awareness — tools that surface relevant knowledge base entries as you work, without you having to ask. I'm prototyping this now and the early results are promising.</p>
+      <p class="art-p">If you're building a similar system and want to compare notes, I'm genuinely interested in hearing what's working. <a href="https://linkedin.com" target="_blank">Find me on LinkedIn</a> or reach out via <a href="https://intelligentoperations.ai/cx-io/motion-co-website.html" target="_blank">Motion Co.</a></p>
+
+      <!-- Author -->
+      <div class="author-block">
+        <div class="ab-avatar">Nr</div>
+        <div>
+          <div class="ab-name">Nathaniel Rockett</div>
+          <div class="ab-role">Creative Director & Founder · Motion Co. · Kansas City, MO</div>
+          <p class="ab-bio">9+ years in film, brand, and creative production. Founder of Motion Co. and the NR IO Operating System. Writing about AI, creative direction, and building real things in the Midwest.</p>
+          <div class="ab-links">
+            <a href="https://linkedin.com" target="_blank" class="ab-link">LinkedIn &#8599;</a>
+            <a href="https://intelligentoperations.ai" target="_blank" class="ab-link">IO Platform &#8599;</a>
+            <a href="https://intelligentoperations.ai/cx-io/motion-co-website.html" target="_blank" class="ab-link">Motion Co. &#8599;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share -->
+      <div class="share-bar">
+        <span class="sb-label">Share</span>
+        <a href="https://linkedin.com" target="_blank" class="sb-btn">LinkedIn &#8599;</a>
+        <span class="sb-btn">Copy Link</span>
+        <span class="sb-btn">Tweet &#8599;</span>
+        <a href="nr-blog-category.html" style="margin-left:auto;font-family:var(--mono);font-size:8px;color:var(--wf-fg-faint);padding:6px 12px;border:1px solid var(--wf-border);border-radius:var(--radius-sm);transition:all var(--fast) var(--ease)">&larr; All AI Articles</a>
+      </div>
+
+    </article>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="right-sidebar">
+      <a href="https://intelligentoperations.ai/io-operating-system-nathaniel-rockets.html" target="_blank" class="rs-cta">
+        <div class="rs-label">IO Operating System</div>
+        <div class="rs-cta-title">Try the <em>IO System</em> live</div>
+        <p class="rs-cta-desc">All six tools running on Claude Sonnet 4.6. The exact system described in this article — live and explorable.</p>
+        <span class="rs-cta-btn">Open IO System &#8594;</span>
+      </a>
+
+      <div>
+        <div class="rs-label">Read Next</div>
+        <a href="nr-blog-pillar.html" class="rs-rel-item">
+          <div class="rri-cat">Pillar Guide</div>
+          <div class="rri-title">What Is an AI Operating System for Creatives?</div>
+          <div class="rri-meta">NR · 18 min · Deep dive</div>
+        </a>
+        <a href="#" class="rs-rel-item">
+          <div class="rri-cat">Prompts</div>
+          <div class="rri-title">The 12 Prompts I Run Every Week Without Fail</div>
+          <div class="rri-meta">NR · 7 min</div>
+        </a>
+        <a href="#" class="rs-rel-item">
+          <div class="rri-cat">Notion</div>
+          <div class="rri-title">The Notion Database Structure Behind My KB</div>
+          <div class="rri-meta">NR · 11 min</div>
+        </a>
+        <a href="nr-blog-category.html" class="rs-rel-item">
+          <div class="rri-cat">Category</div>
+          <div class="rri-title">All AI & Creative Production</div>
+          <div class="rri-meta">10 articles</div>
+        </a>
+      </div>
+
+      <div class="rs-newsletter">
+        <div class="rsnl-label">The NR Letter</div>
+        <div class="rsnl-title">Ideas on <em>AI & creative</em></div>
+        <input class="rsnl-input" type="email" placeholder="your@email.com">
+        <button class="rsnl-btn">Subscribe &#8594;</button>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- ── WHAT'S NEXT ── -->
+<div class="whats-next">
+  <div class="wn-inner">
+    <div class="wn-label">What's Next</div>
+    <h2 class="wn-title">Go <em>deeper</em> into the IO System</h2>
+    <p class="wn-desc">This article covers one use case. The full IO Operating System walkthrough — all six tools, the architecture, and how to build your own — is in the Pillar Guide.</p>
+    <div class="wn-btns">
+      <a href="nr-blog-pillar.html" class="wn-btn">Read: What Is an AI OS? &#8594;</a>
+      <a href="https://intelligentoperations.ai/io-operating-system-nathaniel-rockets.html" target="_blank" class="wn-btn-ghost">Open IO System &#8599;</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── RELATED ── -->
+<div class="related">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-label">Related</span>
+      <h2 class="sec-title">Keep <em>Reading</em></h2>
+      <div class="sec-rule"></div>
+      <a href="nr-blog-category.html" class="see-all">All AI Articles &#8594;</a>
+    </div>
+    <div class="rel-grid">
+      <a href="nr-blog-pillar.html" class="rel-card">
+        <div class="relc-img ph-gold" style="position:relative"><div class="ph-ghost" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:24px">IO</div><div class="ph-grid-overlay"></div></div>
+        <div class="relc-body">
+          <span class="relc-cat" style="color:var(--wf-brand);border-color:var(--wf-brand-border-strong);background:var(--wf-brand-muted)">Pillar Guide</span>
+          <div class="relc-title">What Is an AI Operating System for Creatives?</div>
+          <div class="relc-meta">NR · March 2026 · 18 min</div>
+        </div>
+      </a>
+      <a href="#" class="rel-card">
+        <div class="relc-img ph-purple" style="position:relative"><div class="ph-ghost" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:24px">Pr</div><div class="ph-grid-overlay"></div></div>
+        <div class="relc-body">
+          <span class="relc-cat" style="color:var(--wf-purple);border-color:rgba(190,149,255,0.3);background:rgba(190,149,255,0.08)">Prompts</span>
+          <div class="relc-title">The 12 Prompts I Run Every Week Without Fail</div>
+          <div class="relc-meta">NR · Feb 2026 · 7 min</div>
+        </div>
+      </a>
+      <a href="#" class="rel-card">
+        <div class="relc-img ph-teal" style="position:relative"><div class="ph-ghost" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:24px">No</div><div class="ph-grid-overlay"></div></div>
+        <div class="relc-body">
+          <span class="relc-cat" style="color:var(--wf-teal);border-color:rgba(8,189,186,0.3);background:rgba(8,189,186,0.08)">Notion</span>
+          <div class="relc-title">The Notion Database Structure Behind My Knowledge Base</div>
+          <div class="relc-meta">NR · Feb 2026 · 11 min</div>
+        </div>
+      </a>
+      <a href="nr-blog-category.html" class="rel-card">
+        <div class="relc-img ph-blue" style="position:relative"><div class="ph-ghost" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:24px">AI</div><div class="ph-grid-overlay"></div></div>
+        <div class="relc-body">
+          <span class="relc-cat" style="color:var(--wf-blue);border-color:rgba(69,137,255,0.3);background:rgba(69,137,255,0.08)">Category</span>
+          <div class="relc-title">All AI & Creative Production Articles</div>
+          <div class="relc-meta">NR · 10 articles</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo"><div class="footer-mark">NR</div><div class="footer-name">Nathaniel <em>Rockett</em></div></div>
+        <p class="footer-bio">Director, Creative Producer, and founder of Motion Co. Writing about AI, creative production, and building real things in Kansas City.</p>
+        <div class="footer-socials">
+          <a href="https://linkedin.com" target="_blank" class="footer-social">in</a>
+          <a href="#" class="footer-social">tw</a>
+          <a href="https://intelligentoperations.ai" target="_blank" class="footer-social">IO</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div>
+          <div class="footer-col-title">Portfolio</div>
+          <a href="https://intelligentoperations.ai/cx-io/nathaniel-rockett-portfolio.html" target="_blank" class="footer-link">NR Portfolio</a>
+          <a href="https://intelligentoperations.ai/cx-io/motion-co-website.html" target="_blank" class="footer-link">Motion Co.</a>
+          <a href="https://intelligentoperations.ai" target="_blank" class="footer-link">IO Platform</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Tools</div>
+          <a href="https://intelligentoperations.ai/io-operating-system-nathaniel-rockets.html" target="_blank" class="footer-link">IO Operating System</a>
+          <a href="https://intelligentoperations.ai/portfolio-style-playground.html" target="_blank" class="footer-link">Style Tastemaker</a>
+          <a href="https://intelligentoperations.ai/cx-io/portfolio-generator.html" target="_blank" class="footer-link">Portfolio Generator</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Ideas</div>
+          <a href="nr-blog-home.html" class="footer-link">Blog Home</a>
+          <a href="nr-blog-category.html" class="footer-link">AI & Production</a>
+          <a href="nr-blog-pillar.html" class="footer-link">What Is an AI OS?</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Connect</div>
+          <a href="#" class="footer-link">Newsletter</a>
+          <a href="https://linkedin.com" target="_blank" class="footer-link">LinkedIn</a>
+          <a href="https://intelligentoperations.ai/cx-io/motion-co-website.html" target="_blank" class="footer-link">Work with NR</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">&copy; 2026 Nathaniel Rockett · Motion Co. · Kansas City, MO</div>
+      <div class="footer-chips"><span class="footer-chip live">&#9679; Live</span><span class="footer-chip">Claude 4.6</span><span class="footer-chip">NR &times; Carbon</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Progress bar
+const fill=document.getElementById('prog-fill'),pct=document.getElementById('prog-pct');
+const art=document.querySelector('.article');
+window.addEventListener('scroll',()=>{
+  if(!art)return;
+  const r=art.getBoundingClientRect();
+  const p=Math.max(0,Math.min(100,Math.round((-r.top/(r.height-window.innerHeight))*100)));
+  if(fill){fill.style.width=p+'%';}
+  if(pct){pct.textContent=p+'%';}
+});
+
+// TOC active highlighting
+const secs=document.querySelectorAll('h2[id],h3[id]');
+const tis=document.querySelectorAll('.toc-item');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      tis.forEach(i=>i.classList.remove('active'));
+      const a=document.querySelector('.toc-link[href="#'+e.target.id+'"]');
+      if(a)a.closest('.toc-item').classList.add('active');
+    }
+  });
+},{rootMargin:'-15% 0px -80% 0px'});
+secs.forEach(s=>observer.observe(s));
+
+// Code copy button
+function copyCode(btn){
+  const code=btn.closest('.code-block').querySelector('pre').textContent;
+  navigator.clipboard.writeText(code).catch(()=>{});
+  const orig=btn.textContent;btn.textContent='Copied';
+  setTimeout(()=>btn.textContent=orig,2000);
+}
+
+// Scroll-based fade-in animations
+setTimeout(()=>{
+  document.querySelectorAll('.anim').forEach((el,i)=>{
+    setTimeout(()=>{
+      el.style.opacity='1';
+      el.style.transform='translateY(0)';
+    },i*80);
+  });
+},50);
+</script>
+</body>
+</html>
