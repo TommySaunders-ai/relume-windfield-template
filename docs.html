@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-brand-ring:rgba(29,185,84,0.28);--wf-violet:#7c3aed;--wf-violet-muted:rgba(124,58,237,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-shadow-md:0 4px 16px rgba(0,0,0,0.28);--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+img{max-width:100%;display:block}
+
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+
+/* ── NAVBAR ── */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}
+.navbar-link:hover{color:var(--wf-fg)}
+.navbar-link.active{color:var(--wf-fg)}
+.navbar-link svg{width:12px;height:12px}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}
+.mobile-toggle svg{width:24px;height:24px}
+
+/* ── DOCS LAYOUT ── */
+.docs-layout{display:grid;grid-template-columns:240px 1fr 220px;gap:0;min-height:calc(100vh - 64px)}
+
+/* ── LEFT SIDEBAR ── */
+.docs-sidebar-left{position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;border-right:1px solid var(--wf-border);padding:24px 24px 24px 0;align-self:start}
+.docs-sidebar-left::-webkit-scrollbar{width:4px}
+.docs-sidebar-left::-webkit-scrollbar-track{background:transparent}
+.docs-sidebar-left::-webkit-scrollbar-thumb{background:var(--wf-border);border-radius:2px}
+
+.docs-search{width:100%;height:40px;padding:0 12px 0 36px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans);margin-bottom:24px}
+.docs-search::placeholder{color:var(--wf-fg-faint)}
+.docs-search:hover{border-color:var(--wf-border-strong)}
+.docs-search:focus{outline:none;border-color:var(--wf-brand)}
+.docs-search-wrap{position:relative}
+.docs-search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--wf-fg-faint);pointer-events:none}
+
+.docs-nav-section{margin-bottom:8px}
+.docs-nav-header{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:12px;font-weight:600;color:var(--wf-fg-subtle);letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;user-select:none}
+.docs-nav-header svg{width:14px;height:14px;color:var(--wf-fg-faint);transition:transform var(--wf-dur)}
+.docs-nav-section.collapsed .docs-nav-header svg{transform:rotate(-90deg)}
+.docs-nav-section.collapsed .docs-nav-items{display:none}
+.docs-nav-items{padding:0 0 8px}
+.docs-nav-item{display:block;padding:6px 0 6px 12px;font-size:13px;color:var(--wf-fg-muted);border-left:2px solid transparent;transition:all var(--wf-dur);line-height:1.4}
+.docs-nav-item:hover{color:var(--wf-fg);background:var(--wf-brand-muted);border-left-color:var(--wf-border-strong)}
+.docs-nav-item.active{color:var(--wf-brand);border-left-color:var(--wf-brand);font-weight:500}
+
+/* ── MAIN CONTENT ── */
+.docs-main{padding:32px 48px 80px;border-right:1px solid var(--wf-border);min-width:0}
+
+.docs-breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-subtle);margin-bottom:32px}
+.docs-breadcrumb a{color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.docs-breadcrumb a:hover{color:var(--wf-brand)}
+.docs-breadcrumb .sep{color:var(--wf-fg-faint)}
+.docs-breadcrumb .current{color:var(--wf-fg)}
+
+.docs-content h1{font-size:36px;font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:var(--wf-fg);margin-bottom:16px}
+.docs-content > p{font-size:16px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:20px}
+.docs-content h2{font-size:26px;font-weight:700;letter-spacing:-0.015em;line-height:1.25;color:var(--wf-fg);margin:40px 0 16px;scroll-margin-top:80px}
+.docs-content h2:first-of-type{margin-top:32px}
+
+/* Code block */
+.code-block{position:relative;margin:24px 0;border-radius:var(--wf-r-lg);overflow:hidden;border:1px solid var(--wf-border)}
+.code-block-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--wf-surface);border-bottom:1px solid var(--wf-border)}
+.code-block-lang{font-size:12px;font-weight:600;color:var(--wf-fg-subtle);font-family:var(--font-mono)}
+.code-copy-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--wf-fg-muted);padding:4px 10px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);background:var(--wf-bg);transition:all var(--wf-dur);cursor:pointer}
+.code-copy-btn:hover{border-color:var(--wf-brand);color:var(--wf-brand)}
+.code-copy-btn svg{width:14px;height:14px}
+.code-block pre{margin:0;padding:20px;background:var(--wf-bg-sunken);overflow-x:auto}
+.code-block code{font-family:var(--font-mono);font-size:13px;line-height:1.7;color:var(--wf-fg-muted)}
+.code-block code .kw{color:var(--wf-brand)}
+.code-block code .str{color:#f59e0b}
+.code-block code .cm{color:var(--wf-fg-faint);font-style:italic}
+.code-block code .fn{color:#818cf8}
+
+/* Bullet list */
+.docs-content ul{margin:16px 0 24px 20px;list-style:none}
+.docs-content ul li{position:relative;padding:4px 0 4px 20px;font-size:15px;color:var(--wf-fg-muted);line-height:1.7}
+.docs-content ul li::before{content:"";position:absolute;left:0;top:14px;width:6px;height:6px;border-radius:50%;background:var(--wf-brand)}
+
+/* Ordered list */
+.docs-content ol{margin:16px 0 24px 0;list-style:none;counter-reset:docs-counter}
+.docs-content ol li{position:relative;padding:4px 0 4px 32px;font-size:15px;color:var(--wf-fg-muted);line-height:1.7;counter-increment:docs-counter}
+.docs-content ol li::before{content:counter(docs-counter);position:absolute;left:0;top:4px;width:22px;height:22px;border-radius:50%;background:var(--wf-brand-muted);color:var(--wf-brand);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+
+/* Callout */
+.docs-callout{display:flex;gap:12px;padding:16px 20px;margin:28px 0;background:var(--wf-brand-muted);border-left:3px solid var(--wf-brand);border-radius:0 var(--wf-r-md) var(--wf-r-md) 0}
+.docs-callout-icon{flex-shrink:0;width:20px;height:20px;color:var(--wf-brand);margin-top:1px}
+.docs-callout p{font-size:14px;color:var(--wf-fg-muted);line-height:1.65;margin:0}
+.docs-callout strong{color:var(--wf-brand);font-weight:600}
+
+/* Prev / Next nav */
+.docs-pager{display:flex;justify-content:space-between;margin-top:56px;padding-top:32px;border-top:1px solid var(--wf-border);gap:16px}
+.docs-pager-link{display:flex;flex-direction:column;gap:4px;padding:16px 20px;border:1px solid var(--wf-border);border-radius:var(--wf-r-md);transition:all var(--wf-dur);min-width:0;flex:1;max-width:280px}
+.docs-pager-link:hover{border-color:var(--wf-brand);background:var(--wf-brand-muted)}
+.docs-pager-link.next{align-items:flex-end;margin-left:auto}
+.docs-pager-dir{font-size:12px;color:var(--wf-fg-subtle);display:flex;align-items:center;gap:4px}
+.docs-pager-dir svg{width:14px;height:14px}
+.docs-pager-title{font-size:14px;font-weight:600;color:var(--wf-fg)}
+
+/* ── RIGHT SIDEBAR ── */
+.docs-sidebar-right{position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;padding:32px 0 32px 24px;align-self:start}
+
+.toc-label{font-size:12px;font-weight:600;color:var(--wf-fg-subtle);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:16px}
+.toc-list{display:flex;flex-direction:column;gap:8px;margin-bottom:32px}
+.toc-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);padding:2px 0}
+.toc-link:hover{color:var(--wf-brand)}
+.toc-link.active{color:var(--wf-brand);font-weight:500}
+
+.toc-divider{height:1px;background:var(--wf-border);margin:8px 0 24px}
+
+.toc-section-label{font-size:12px;font-weight:600;color:var(--wf-fg-subtle);margin-bottom:12px}
+.helpful-btns{display:flex;gap:8px;margin-bottom:24px}
+.helpful-btn{height:32px;padding:0 14px;font-size:12px;font-weight:500;border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);color:var(--wf-fg-muted);display:inline-flex;align-items:center;gap:6px;transition:all var(--wf-dur)}
+.helpful-btn:hover{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+.helpful-btn svg{width:14px;height:14px}
+
+.edit-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.edit-link:hover{color:var(--wf-brand)}
+.edit-link svg{width:14px;height:14px}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-brand .navbar-logo{margin-bottom:16px}
+.footer-subscribe-text{font-size:13px;color:var(--wf-fg-muted);margin-bottom:12px}
+.footer-form{display:flex;gap:8px;margin-bottom:12px}
+.footer-input{flex:1;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-input::placeholder{color:var(--wf-fg-faint)}
+.footer-input:hover{border-color:var(--wf-border-strong)}
+.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disclaimer{font-size:11px;color:var(--wf-fg-faint);line-height:1.5}
+.footer-disclaimer a{text-decoration:underline;text-underline-offset:2px}
+.footer-col-title{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:8px}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-link svg{width:16px;height:16px;flex-shrink:0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg)}
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .docs-layout{grid-template-columns:240px 1fr}
+  .docs-sidebar-right{display:none}
+  .docs-main{border-right:none}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .docs-layout{grid-template-columns:1fr}
+  .docs-sidebar-left{display:none}
+  .docs-main{padding:24px 0 60px;border-right:none}
+  .docs-content h1{font-size:28px}
+  .docs-content h2{font-size:22px}
+  .navbar-links{display:none}
+  .mobile-toggle{display:flex}
+  .docs-pager{flex-direction:column}
+  .docs-pager-link,.docs-pager-link.next{max-width:100%;align-items:flex-start}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="index.html" class="navbar-link">Home</a>
+      <a href="product.html" class="navbar-link">Product</a>
+      <a href="pricing.html" class="navbar-link">Pricing</a>
+      <a href="blog-post.html" class="navbar-link">Blog</a>
+      <a href="docs.html" class="navbar-link active">Docs</a>
+      <a href="about.html" class="navbar-link">About</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-outline">Log in</a>
+      <a href="#" class="btn btn-sm btn-primary">Get started</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ DOCS LAYOUT ═══════════════ -->
+<div class="container">
+  <div class="docs-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="docs-sidebar-left">
+      <div class="docs-search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" class="docs-search" placeholder="Search docs...">
+      </div>
+
+      <nav>
+        <!-- Getting Started -->
+        <div class="docs-nav-section">
+          <div class="docs-nav-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            Getting Started
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="docs-nav-items">
+            <a href="#" class="docs-nav-item active">Introduction</a>
+            <a href="#" class="docs-nav-item">Quick Start</a>
+            <a href="#" class="docs-nav-item">Installation</a>
+            <a href="#" class="docs-nav-item">Configuration</a>
+          </div>
+        </div>
+
+        <!-- Core Concepts -->
+        <div class="docs-nav-section">
+          <div class="docs-nav-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            Core Concepts
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="docs-nav-items">
+            <a href="#" class="docs-nav-item">Overview</a>
+            <a href="#" class="docs-nav-item">Architecture</a>
+            <a href="#" class="docs-nav-item">Data Model</a>
+            <a href="#" class="docs-nav-item">Authentication</a>
+          </div>
+        </div>
+
+        <!-- API Reference -->
+        <div class="docs-nav-section">
+          <div class="docs-nav-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            API Reference
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="docs-nav-items">
+            <a href="#" class="docs-nav-item">Endpoints</a>
+            <a href="#" class="docs-nav-item">Parameters</a>
+            <a href="#" class="docs-nav-item">Responses</a>
+            <a href="#" class="docs-nav-item">Errors</a>
+          </div>
+        </div>
+
+        <!-- Guides -->
+        <div class="docs-nav-section">
+          <div class="docs-nav-header" onclick="this.parentElement.classList.toggle('collapsed')">
+            Guides
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="docs-nav-items">
+            <a href="#" class="docs-nav-item">Best Practices</a>
+            <a href="#" class="docs-nav-item">Migration</a>
+            <a href="#" class="docs-nav-item">Deployment</a>
+            <a href="#" class="docs-nav-item">Troubleshooting</a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="#">Docs</a>
+        <span class="sep">/</span>
+        <a href="#">Getting Started</a>
+        <span class="sep">/</span>
+        <span class="current">Introduction</span>
+      </div>
+
+      <div class="docs-content">
+        <h1>Introduction</h1>
+        <p>Welcome to the platform documentation. This guide will walk you through everything you need to know to get started, from initial setup to advanced configuration. Whether you're building a new project from scratch or integrating into an existing system, you'll find comprehensive guidance here.</p>
+
+        <h2 id="overview">Overview</h2>
+        <p>The platform provides a unified API layer for managing data, authentication, and real-time events across your applications. Built with performance and developer experience in mind, it handles the infrastructure complexity so you can focus on building features your users care about.</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-lang">javascript</span>
+            <button class="code-copy-btn" onclick="navigator.clipboard.writeText(this.closest('.code-block').querySelector('code').textContent)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <pre><code><span class="cm">// Initialize the client</span>
+<span class="kw">import</span> { createClient } <span class="kw">from</span> <span class="str">'@windfield/sdk'</span>;
+
+<span class="kw">const</span> client = <span class="fn">createClient</span>({
+  apiKey: process.env.<span class="str">WINDFIELD_API_KEY</span>,
+  project: <span class="str">'my-project'</span>,
+});
+
+<span class="cm">// Fetch data with type safety</span>
+<span class="kw">const</span> { data, error } = <span class="kw">await</span> client
+  .<span class="fn">from</span>(<span class="str">'users'</span>)
+  .<span class="fn">select</span>(<span class="str">'id, name, email'</span>)
+  .<span class="fn">limit</span>(10);</code></pre>
+        </div>
+
+        <h2 id="key-features">Key Features</h2>
+        <ul>
+          <li><strong>Type-safe SDK</strong> — Full TypeScript support with auto-generated types from your schema, eliminating runtime type errors.</li>
+          <li><strong>Real-time subscriptions</strong> — Listen for changes in your data with WebSocket-powered subscriptions that scale automatically.</li>
+          <li><strong>Built-in authentication</strong> — Row-level security, JWT tokens, and OAuth providers configured out of the box.</li>
+          <li><strong>Edge-first deployment</strong> — Run your functions at the edge for sub-50ms response times globally.</li>
+        </ul>
+
+        <div class="docs-callout">
+          <svg class="docs-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p><strong>Note:</strong> This documentation covers version 2.x of the SDK. If you're using version 1.x, refer to the <a href="#" style="color:var(--wf-brand);text-decoration:underline;text-underline-offset:2px">legacy documentation</a> for migration guidance and API differences.</p>
+        </div>
+
+        <h2 id="next-steps">Next Steps</h2>
+        <ol>
+          <li>Follow the <strong>Quick Start</strong> guide to create your first project and make your initial API call in under five minutes.</li>
+          <li>Read the <strong>Architecture</strong> overview to understand how the platform components work together.</li>
+          <li>Explore the <strong>API Reference</strong> for detailed endpoint documentation, request parameters, and response schemas.</li>
+          <li>Check out the <strong>Deployment</strong> guide when you're ready to ship to production with confidence.</li>
+        </ol>
+
+        <!-- Prev / Next -->
+        <div class="docs-pager">
+          <a href="#" class="docs-pager-link">
+            <span class="docs-pager-dir">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Previous
+            </span>
+            <span class="docs-pager-title">Quick Start</span>
+          </a>
+          <a href="#" class="docs-pager-link next">
+            <span class="docs-pager-dir">
+              Next
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+            <span class="docs-pager-title">Installation</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="docs-sidebar-right">
+      <div class="toc-label">On this page</div>
+      <div class="toc-list">
+        <a href="#overview" class="toc-link active">Overview</a>
+        <a href="#key-features" class="toc-link">Key Features</a>
+        <a href="#next-steps" class="toc-link">Next Steps</a>
+      </div>
+
+      <div class="toc-divider"></div>
+
+      <div class="toc-section-label">Was this helpful?</div>
+      <div class="helpful-btns">
+        <button class="helpful-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+          Yes
+        </button>
+        <button class="helpful-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 15V19a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0122 4v7a2.31 2.31 0 01-2.33 2H17"/></svg>
+          No
+        </button>
+      </div>
+
+      <a href="#" class="edit-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit this page
+      </a>
+    </aside>
+
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="navbar-logo" style="margin-bottom:16px">Logo</div>
+        <p class="footer-subscribe-text">Join our newsletter to stay up to date on features and releases.</p>
+        <form class="footer-form" onsubmit="return false;">
+          <input type="email" class="footer-input" placeholder="Enter your email">
+          <button type="submit" class="btn btn-sm btn-outline">Subscribe</button>
+        </form>
+        <p class="footer-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Column One</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link One</a>
+          <a href="#" class="footer-link">Link Two</a>
+          <a href="#" class="footer-link">Link Three</a>
+          <a href="#" class="footer-link">Link Four</a>
+          <a href="#" class="footer-link">Link Five</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Column Two</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Six</a>
+          <a href="#" class="footer-link">Link Seven</a>
+          <a href="#" class="footer-link">Link Eight</a>
+          <a href="#" class="footer-link">Link Nine</a>
+          <a href="#" class="footer-link">Link Ten</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Follow Us</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> Facebook</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg> Instagram</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> X</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg> Youtube</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2023 Relume. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookies Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
