@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Post — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-brand-ring:rgba(29,185,84,0.28);--wf-violet:#7c3aed;--wf-violet-muted:rgba(124,58,237,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-shadow-md:0 4px 16px rgba(0,0,0,0.28);--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+img{max-width:100%;display:block}
+
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.section{padding:80px 0}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}
+.link-arrow:hover{gap:10px}
+.link-arrow svg{width:16px;height:16px}
+
+/* Placeholder */
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+
+/* ── NAVBAR ── */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}
+.navbar-link:hover{color:var(--wf-fg)}
+.navbar-link.active{color:var(--wf-fg)}
+.navbar-link svg{width:12px;height:12px}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}
+.mobile-toggle svg{width:24px;height:24px}
+
+/* ── BLOG POST LAYOUT ── */
+.post-layout{display:grid;grid-template-columns:240px 1fr;gap:64px;padding:48px 0 80px}
+
+/* ── POST HEADER (spans sidebar+main) ── */
+.post-header{display:grid;grid-template-columns:240px 1fr;gap:64px;padding:48px 0 0}
+.post-header-left{padding-top:16px}
+.post-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--wf-fg-muted);margin-bottom:20px;transition:color var(--wf-dur)}
+.post-back:hover{color:var(--wf-brand)}
+.post-back svg{width:14px;height:14px}
+.post-tags{display:flex;gap:8px;margin-bottom:16px}
+.post-tag{font-size:12px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em}
+.post-tag-sep{color:var(--wf-fg-faint)}
+.post-title{font-size:40px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:var(--wf-fg);margin-bottom:16px}
+.post-date{font-size:13px;color:var(--wf-fg-subtle)}
+.post-hero{aspect-ratio:16/10}
+
+/* ── SIDEBAR ── */
+.sidebar{position:sticky;top:80px;align-self:start}
+.sidebar-section{margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--wf-border)}
+.sidebar-section:last-child{border-bottom:none}
+.sidebar-label{font-size:14px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+
+.contributor{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.contributor:last-child{margin-bottom:0}
+.contributor-avatar{width:40px;height:40px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contributor-avatar svg{width:20px;height:20px;color:var(--wf-fg-faint)}
+.contributor-name{font-size:13px;font-weight:600;color:var(--wf-fg)}
+.contributor-role{font-size:12px;color:var(--wf-fg-subtle)}
+
+.sidebar-input{width:100%;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans);margin-bottom:10px}
+.sidebar-input::placeholder{color:var(--wf-fg-faint)}
+.sidebar-input:focus{outline:none;border-color:var(--wf-brand)}
+.sidebar-sub-btn{width:100%;height:40px;display:flex;align-items:center;justify-content:center;background:var(--wf-brand);color:var(--wf-brand-fg);font-weight:600;font-size:13px;border:none;border-radius:var(--wf-r-sm);cursor:pointer;transition:background var(--wf-dur)}
+.sidebar-sub-btn:hover{background:var(--wf-brand-hover)}
+.sidebar-disclaimer{font-size:11px;color:var(--wf-fg-faint);margin-top:8px;line-height:1.5}
+.sidebar-disclaimer a{text-decoration:underline;text-underline-offset:2px}
+
+.share-icons{display:flex;gap:12px}
+.share-icon{width:32px;height:32px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;color:var(--wf-fg-muted);transition:all var(--wf-dur)}
+.share-icon:hover{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+.share-icon svg{width:16px;height:16px}
+
+/* ── ARTICLE BODY ── */
+.article{max-width:100%}
+.article h2{font-size:32px;font-weight:700;letter-spacing:-0.015em;line-height:1.2;color:var(--wf-fg);margin:48px 0 20px}
+.article h2:first-child{margin-top:0}
+.article p{font-size:16px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:20px}
+.article p strong{color:var(--wf-fg);font-weight:600}
+.article p.bold-intro{font-size:17px;font-weight:700;color:var(--wf-fg);line-height:1.65}
+
+.article-img{margin:32px 0;border-radius:var(--wf-r-lg);overflow:hidden}
+.article-img .ph{aspect-ratio:16/9;border-radius:0}
+.article-caption{font-size:13px;color:var(--wf-fg-subtle);margin-top:8px;font-style:italic}
+
+.article blockquote{border-left:3px solid var(--wf-brand);padding:16px 0 16px 24px;margin:32px 0;background:transparent}
+.article blockquote p{font-size:17px;font-style:italic;color:var(--wf-fg);line-height:1.7;margin-bottom:0}
+
+/* ── RELATED POSTS ── */
+.related{padding:80px 0;border-top:1px solid var(--wf-border)}
+.related-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px}
+.related-header h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:var(--wf-fg)}
+.related-header p{font-size:16px;color:var(--wf-fg-muted);margin-top:8px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.rp-card{display:flex;gap:20px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;transition:all var(--wf-dur);cursor:pointer}
+.rp-card:hover{border-color:var(--wf-border-strong);transform:translateY(-2px)}
+.rp-card-img{width:200px;flex-shrink:0;background:var(--wf-bg-sunken);display:flex;align-items:center;justify-content:center}
+.rp-card-img svg{width:36px;height:36px;color:var(--wf-fg-faint)}
+.rp-card-body{padding:20px 20px 20px 0;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.rp-meta{display:flex;gap:12px;margin-bottom:8px;font-size:12px}
+.rp-meta-cat{font-weight:600;color:var(--wf-brand)}
+.rp-meta-read{color:var(--wf-fg-subtle)}
+.rp-title{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-0.01em;line-height:1.3}
+.rp-excerpt{font-size:13px;color:var(--wf-fg-muted);line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-brand .navbar-logo{margin-bottom:16px}
+.footer-subscribe-text{font-size:13px;color:var(--wf-fg-muted);margin-bottom:12px}
+.footer-form{display:flex;gap:8px;margin-bottom:12px}
+.footer-input{flex:1;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-input::placeholder{color:var(--wf-fg-faint)}
+.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disclaimer{font-size:11px;color:var(--wf-fg-faint);line-height:1.5}
+.footer-disclaimer a{text-decoration:underline;text-underline-offset:2px}
+.footer-col-title{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:8px}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-link svg{width:16px;height:16px;flex-shrink:0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg)}
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .post-header,.post-layout{grid-template-columns:1fr;gap:32px}
+  .sidebar{position:static}
+  .related-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .post-title{font-size:30px}
+  .article h2{font-size:24px}
+  .navbar-links{display:none}
+  .mobile-toggle{display:flex}
+  .rp-card{flex-direction:column}
+  .rp-card-img{width:100%;aspect-ratio:16/9}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .related-header{flex-direction:column;align-items:flex-start;gap:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="home-v1.html" class="navbar-link">Home v1</a>
+      <a href="home-v2.html" class="navbar-link">Home v2</a>
+      <a href="index.html" class="navbar-link">Home v3</a>
+      <a href="blog-post.html" class="navbar-link active">Blog Post</a>
+      <a href="#" class="navbar-link">Link Four <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-outline">Log in</a>
+      <a href="#" class="btn btn-sm btn-primary">Get started</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ POST HEADER ═══════════════ -->
+<div class="container">
+  <div class="post-header">
+    <div class="post-header-left">
+      <a href="#" class="post-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        All Posts
+      </a>
+      <div class="post-tags">
+        <span class="post-tag">Category</span>
+        <span class="post-tag-sep">&middot;</span>
+        <span class="post-tag" style="color:var(--wf-fg-subtle)">5 min read</span>
+      </div>
+      <h1 class="post-title">Blog title heading will go here</h1>
+      <p class="post-date">Published on 11 Jan 2022</p>
+    </div>
+    <div class="ph post-hero">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ POST BODY ═══════════════ -->
+<div class="container">
+  <div class="post-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Contributors</div>
+        <div class="contributor">
+          <div class="contributor-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="contributor-name">Full Name</div>
+            <div class="contributor-role">Job title, Company name</div>
+          </div>
+        </div>
+        <div class="contributor">
+          <div class="contributor-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="contributor-name">Full Name</div>
+            <div class="contributor-role">Job title, Company name</div>
+          </div>
+        </div>
+        <div class="contributor">
+          <div class="contributor-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="contributor-name">Full Name</div>
+            <div class="contributor-role">Job title, Company name</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Subscribe to newsletter</div>
+        <input type="email" class="sidebar-input" placeholder="Enter your email">
+        <button class="sidebar-sub-btn">Subscribe</button>
+        <p class="sidebar-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a>.</p>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Share</div>
+        <div class="share-icons">
+          <a href="#" class="share-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a>
+          <a href="#" class="share-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#" class="share-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
+          <a href="#" class="share-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ARTICLE -->
+    <article class="article">
+      <h2>Introduction</h2>
+      <p>Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu amet, vitae nisi, tellus tincidunt. At feugiat sapien varius id.</p>
+      <p>Eget quis mi enim, leo lacinia pharetra, semper. Eget in volutpat mollis at volutpat lectus velit, sed auctor. Porttitor fames arcu quis fusce augue enim. Quis at habitant diam at. Suscipit tristique risus, at donec. In turpis vel et quam imperdiet. Ipsum molestie aliquet sodales id est ac volutpat.</p>
+
+      <div class="article-img">
+        <div class="ph" style="aspect-ratio:16/9;border-radius:0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <p class="article-caption">Image caption goes here</p>
+      </div>
+
+      <p class="bold-intro"><strong>Dolor enim eu tortor urna sed duis nulla. Aliquam vestibulum, nulla odio nisl vitae. In aliquet pellentesque aenean hac vestibulum turpis mi bibendum diam. Tempor integer aliquam in vitae malesuada fringilla.</strong></p>
+
+      <p>Elit nisi in eleifend sed nisi. Pulvinar at orci, proin imperdiet commodo consectetur convallis risus. Sed condimentum enim dignissim adipiscing faucibus consequat, urna. Viverra purus et erat auctor aliquam. Risus, volutpat vulputate posuere purus sit congue convallis aliquet. Arcu id augue ut feugiat donec porttitor neque. Mauris, neque ultricies eu vestibulum, bibendum quam lorem id. Dolor lacus, eget nunc lectus in tellus, pharetra, porttitor.</p>
+
+      <blockquote>
+        <p>"Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim mauris id. Non pellentesque congue eget consectetur turpis. Sapien, dictum molestie sem tempor. Diam elit, orci, tincidunt aenean tempus."</p>
+      </blockquote>
+
+      <p>Tristique odio senectus nam posuere ornare leo metus, ultricies. Blandit duis ultricies vulputate morbi feugiat cras placerat elit. Aliquam tellus lorem sed ac. Montes, sed mattis pellentesque suscipit accumsan. Cursus viverra aenean magna risus elementum faucibus molestie pellentesque. Arcu ultricies sed mauris vestibulum.</p>
+
+      <h2>Conclusion</h2>
+      <p>Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies. Duis est sit sed leo nisl, blandit elit sagittis. Quisque tristique consequat quam sed. Nisl at scelerisque amet nulla purus habitasse.</p>
+
+      <p>Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas condimentum mi massa. In tincidunt pharetra consectetur sed duis facilisis metus. Etiam egestas in nec sed et. Quis lobortis at sit dictum eget nibl tortor commodo cursus.</p>
+
+      <p>Odio felis sagittis, morbi feugiat tortor vitae feugiat fusce aliquet. Nam elementum urna nisi aliquet erat dolor enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut id eget consectetur dictum. Donec posuere pharetra odio consequat scelerisque et, nunc tortor.Nulla adipiscing erat a erat. Condimentum lorem posuere gravida enim posuere cursus diam.</p>
+    </article>
+  </div>
+</div>
+
+<!-- ═══════════════ RELATED POSTS ═══════════════ -->
+<section class="related">
+  <div class="container">
+    <div class="related-header">
+      <div>
+        <h2>Related posts</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+      <a href="#" class="btn btn-sm btn-outline">View all</a>
+    </div>
+    <div class="related-grid">
+      <a href="#" class="rp-card">
+        <div class="rp-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="rp-card-body">
+          <div class="rp-meta"><span class="rp-meta-cat">Category</span><span class="rp-meta-read">5 min read</span></div>
+          <h3 class="rp-title">Blog title heading will go here</h3>
+          <p class="rp-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <span class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+      <a href="#" class="rp-card">
+        <div class="rp-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="rp-card-body">
+          <div class="rp-meta"><span class="rp-meta-cat">Category</span><span class="rp-meta-read">5 min read</span></div>
+          <h3 class="rp-title">Blog title heading will go here</h3>
+          <p class="rp-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <span class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+      <a href="#" class="rp-card">
+        <div class="rp-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="rp-card-body">
+          <div class="rp-meta"><span class="rp-meta-cat">Category</span><span class="rp-meta-read">5 min read</span></div>
+          <h3 class="rp-title">Blog title heading will go here</h3>
+          <p class="rp-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <span class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+      <a href="#" class="rp-card">
+        <div class="rp-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="rp-card-body">
+          <div class="rp-meta"><span class="rp-meta-cat">Category</span><span class="rp-meta-read">5 min read</span></div>
+          <h3 class="rp-title">Blog title heading will go here</h3>
+          <p class="rp-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <span class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="navbar-logo" style="margin-bottom:16px">Logo</div>
+        <p class="footer-subscribe-text">Join our newsletter to stay up to date on features and releases.</p>
+        <form class="footer-form" onsubmit="return false;">
+          <input type="email" class="footer-input" placeholder="Enter your email">
+          <button type="submit" class="btn btn-sm btn-outline">Subscribe</button>
+        </form>
+        <p class="footer-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Column One</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link One</a>
+          <a href="#" class="footer-link">Link Two</a>
+          <a href="#" class="footer-link">Link Three</a>
+          <a href="#" class="footer-link">Link Four</a>
+          <a href="#" class="footer-link">Link Five</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Column Two</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Six</a>
+          <a href="#" class="footer-link">Link Seven</a>
+          <a href="#" class="footer-link">Link Eight</a>
+          <a href="#" class="footer-link">Link Nine</a>
+          <a href="#" class="footer-link">Link Ten</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Follow Us</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> Facebook</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg> Instagram</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> X</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg> Youtube</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2023 Relume. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookies Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
