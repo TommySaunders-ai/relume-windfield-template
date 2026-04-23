@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Page v2 — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-violet: #7c3aed;
+  --wf-violet-muted: rgba(124,58,237,0.10);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-success: #22c55e;
+  --wf-r-xs: 4px;
+  --wf-r-sm: 6px;
+  --wf-r-md: 8px;
+  --wf-r-lg: 12px;
+  --wf-r-xl: 16px;
+  --wf-r-pill: 9999px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.container-sm { max-width: 768px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 80px 0; }
+.section-lg { padding: 100px 0; }
+.text-center { text-align: center; }
+
+.kicker {
+  font-size: 14px; font-weight: 600; color: var(--wf-brand);
+  letter-spacing: 0.02em; margin-bottom: 12px;
+}
+.heading-xl {
+  font-size: 48px; font-weight: 700; letter-spacing: -0.025em;
+  line-height: 1.1; color: var(--wf-fg);
+}
+.heading-lg {
+  font-size: 40px; font-weight: 700; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg);
+}
+.heading-md {
+  font-size: 32px; font-weight: 700; letter-spacing: -0.015em;
+  line-height: 1.2; color: var(--wf-fg);
+}
+.heading-sm {
+  font-size: 20px; font-weight: 600; letter-spacing: -0.01em;
+  line-height: 1.3; color: var(--wf-fg);
+}
+.body-text { font-size: 16px; color: var(--wf-fg-muted); line-height: 1.6; }
+.body-sm { font-size: 14px; color: var(--wf-fg-muted); line-height: 1.5; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 600; border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap; border: 1px solid transparent;
+}
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-sm { height: 36px; padding: 0 16px; font-size: 13px; }
+.btn-primary { background: var(--wf-brand); color: var(--wf-brand-fg); }
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-outline { background: transparent; color: var(--wf-fg); border-color: var(--wf-border-strong); }
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+.btn-ghost { background: transparent; color: var(--wf-fg-muted); padding: 0; height: auto; }
+.btn-ghost:hover { color: var(--wf-fg); }
+
+/* ── NAVBAR ── */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--wf-bg); border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex; align-items: center; height: 64px; gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  letter-spacing: -0.02em;
+  position: absolute; left: 50%; transform: translateX(-50%);
+}
+.navbar-links {
+  display: flex; align-items: center; gap: 28px;
+}
+.navbar-link {
+  font-size: 14px; color: var(--wf-fg-muted); transition: color var(--wf-dur);
+  display: flex; align-items: center; gap: 4px;
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link svg { width: 12px; height: 12px; }
+.navbar-actions {
+  display: flex; align-items: center; gap: 12px; margin-left: auto;
+}
+.mobile-toggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; color: var(--wf-fg); }
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ── Placeholder image ── */
+.placeholder-img {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); display: flex; align-items: center;
+  justify-content: center; overflow: hidden;
+}
+.placeholder-img svg { width: 48px; height: 48px; color: var(--wf-fg-faint); }
+.placeholder-img-sm svg { width: 36px; height: 36px; }
+
+/* ── HERO ── */
+.hero { padding: 64px 0 80px; text-align: center; }
+.hero-title {
+  font-size: 52px; font-weight: 800; letter-spacing: -0.03em;
+  line-height: 1.05; color: var(--wf-fg); margin-bottom: 20px;
+  max-width: 720px; margin-left: auto; margin-right: auto;
+}
+.hero-desc {
+  font-size: 16px; color: var(--wf-fg-muted); line-height: 1.6;
+  margin-bottom: 32px; max-width: 560px; margin-left: auto; margin-right: auto;
+}
+.hero-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 48px; }
+.hero-img {
+  aspect-ratio: 16/9; max-width: 900px; margin: 0 auto;
+}
+
+/* ── LOGO BAR ── */
+.logo-bar { padding: 48px 0; border-bottom: 1px solid var(--wf-border); }
+.logo-bar-title {
+  text-align: center; font-size: 14px; color: var(--wf-fg-subtle); margin-bottom: 28px;
+}
+.logo-grid {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: center; gap: 32px 48px;
+}
+.logo-item {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--wf-fg-faint); font-size: 16px; font-weight: 600;
+  letter-spacing: -0.01em; transition: color var(--wf-dur);
+}
+.logo-item:hover { color: var(--wf-fg-muted); }
+.logo-item svg { width: 20px; height: 20px; }
+
+/* ── FEATURES (alternating) ── */
+.feature-section { padding: 80px 0; border-top: 1px solid var(--wf-border); }
+.feature-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 64px; align-items: center;
+}
+.feature-row.reversed .feature-content { order: 2; }
+.feature-row.reversed .feature-media { order: 1; }
+.feature-title {
+  font-size: 36px; font-weight: 700; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 20px;
+}
+.feature-text {
+  font-size: 16px; color: var(--wf-fg-muted); line-height: 1.6; margin-bottom: 24px;
+}
+.feature-img { aspect-ratio: 4/3; }
+.check-list { display: flex; flex-direction: column; gap: 12px; }
+.check-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.5;
+}
+.check-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--wf-brand-muted); color: var(--wf-brand);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.check-icon svg { width: 12px; height: 12px; }
+
+/* ── CUSTOMERS ── */
+.customers-section { padding: 80px 0; border-top: 1px solid var(--wf-border); }
+.customers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+.customer-card {
+  text-align: center; background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); overflow: hidden; transition: all var(--wf-dur);
+}
+.customer-card:hover { border-color: var(--wf-border-strong); }
+.customer-card-img {
+  aspect-ratio: 16/9; background: var(--wf-bg-sunken);
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid var(--wf-border);
+}
+.customer-card-img svg { width: 36px; height: 36px; color: var(--wf-fg-faint); }
+.customer-card-body { padding: 24px; }
+.customer-card-title {
+  font-size: 18px; font-weight: 600; color: var(--wf-fg); margin-bottom: 8px;
+}
+.customer-card-text {
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.6;
+}
+
+/* ── TESTIMONIALS ── */
+.testimonials-section {
+  padding: 80px 0; border-top: 1px solid var(--wf-border);
+  background: var(--wf-bg-elevated);
+}
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+.testimonial-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); padding: 28px;
+  display: flex; flex-direction: column; transition: all var(--wf-dur);
+}
+.testimonial-card:hover { border-color: var(--wf-border-strong); }
+.stars { display: flex; gap: 4px; margin-bottom: 16px; }
+.star { color: var(--wf-brand); }
+.star svg { width: 18px; height: 18px; fill: currentColor; }
+.testimonial-quote {
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.65;
+  flex: 1; margin-bottom: 24px;
+}
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+.author-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--wf-surface-active); border: 1px solid var(--wf-border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.author-avatar svg { width: 20px; height: 20px; color: var(--wf-fg-faint); }
+.author-name { font-size: 14px; font-weight: 600; color: var(--wf-fg); }
+.author-role { font-size: 13px; color: var(--wf-fg-subtle); }
+
+.carousel-controls {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 28px;
+}
+.carousel-dots { display: flex; gap: 8px; }
+.carousel-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--wf-fg-faint); transition: background var(--wf-dur); cursor: pointer;
+}
+.carousel-dot.active { background: var(--wf-brand); }
+.carousel-arrows { display: flex; gap: 8px; }
+.carousel-arrow {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--wf-border-strong);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--wf-fg-muted); transition: all var(--wf-dur);
+}
+.carousel-arrow:hover { border-color: var(--wf-fg-subtle); color: var(--wf-fg); }
+.carousel-arrow svg { width: 18px; height: 18px; }
+
+/* ── CTA ── */
+.cta-section { padding: 80px 0; border-top: 1px solid var(--wf-border); text-align: center; }
+.cta-section .heading-lg { margin-bottom: 16px; max-width: 640px; margin-left: auto; margin-right: auto; }
+.cta-section .body-text { margin-bottom: 28px; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; }
+
+/* ── FAQ ── */
+.faq-section { padding: 80px 0; border-top: 1px solid var(--wf-border); }
+.faq-header { margin-bottom: 48px; text-align: center; }
+.faq-header .body-text { margin-top: 16px; max-width: 640px; margin-left: auto; margin-right: auto; }
+.faq-list { max-width: 768px; margin: 0 auto; }
+.faq-item {
+  padding: 20px 0; border-bottom: 1px solid var(--wf-border); cursor: pointer;
+}
+.faq-question {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  font-size: 15px; font-weight: 500; color: var(--wf-fg); transition: color var(--wf-dur);
+}
+.faq-item:hover .faq-question { color: var(--wf-brand); }
+.faq-chevron { flex-shrink: 0; color: var(--wf-fg-subtle); }
+.faq-chevron svg { width: 18px; height: 18px; }
+
+/* ── STILL HAVE QUESTIONS ── */
+.still-q { padding: 48px 0 80px; text-align: center; }
+.still-q .heading-sm { margin-bottom: 8px; }
+.still-q .body-text { margin-bottom: 24px; }
+
+/* ── CASE STUDIES ── */
+.case-studies-section {
+  padding: 80px 0; border-top: 1px solid var(--wf-border);
+  background: var(--wf-bg-elevated);
+}
+.case-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+.case-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); overflow: hidden; transition: all var(--wf-dur);
+  cursor: pointer;
+}
+.case-card:hover { border-color: var(--wf-border-strong); transform: translateY(-2px); }
+.case-card-img {
+  aspect-ratio: 16/9; background: var(--wf-bg-sunken);
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid var(--wf-border);
+}
+.case-card-img svg { width: 36px; height: 36px; color: var(--wf-fg-faint); }
+.case-card-body { padding: 24px; }
+.case-category {
+  font-size: 12px; font-weight: 600; color: var(--wf-brand);
+  letter-spacing: 0.02em; margin-bottom: 8px;
+}
+.case-title {
+  font-size: 18px; font-weight: 600; color: var(--wf-fg); margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.case-text {
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.5; margin-bottom: 16px;
+}
+.case-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 16px; border-top: 1px solid var(--wf-border-subtle);
+}
+.case-brand {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--wf-fg-muted);
+}
+.case-brand-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--wf-surface-active); border: 1px solid var(--wf-border);
+  display: flex; align-items: center; justify-content: center;
+}
+.case-brand-icon svg { width: 12px; height: 12px; color: var(--wf-fg-faint); }
+.link-arrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 500; color: var(--wf-brand); transition: gap var(--wf-dur);
+}
+.link-arrow:hover { gap: 10px; }
+.link-arrow svg { width: 16px; height: 16px; }
+.view-all-wrap { text-align: center; margin-top: 40px; }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--wf-border); padding: 56px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 32px; padding-bottom: 40px;
+}
+.footer-newsletter-label {
+  font-size: 13px; font-weight: 600; color: var(--wf-fg); margin-bottom: 4px;
+}
+.footer-subscribe-text {
+  font-size: 13px; color: var(--wf-fg-muted); margin-bottom: 12px;
+}
+.footer-form { display: flex; gap: 8px; margin-bottom: 12px; }
+.footer-input {
+  flex: 1; height: 40px; padding: 0 12px;
+  background: var(--wf-bg); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-sm); font-size: 13px; color: var(--wf-fg);
+  font-family: var(--font-sans);
+}
+.footer-input::placeholder { color: var(--wf-fg-faint); }
+.footer-input:focus { outline: none; border-color: var(--wf-brand); }
+.footer-disclaimer {
+  font-size: 11px; color: var(--wf-fg-faint); line-height: 1.5;
+}
+.footer-disclaimer a { text-decoration: underline; text-underline-offset: 2px; }
+.footer-logo-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 24px;
+}
+.footer-logo {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg); letter-spacing: -0.02em;
+}
+.footer-col-title {
+  font-size: 13px; font-weight: 600; color: var(--wf-fg); margin-bottom: 16px;
+}
+.footer-links { display: flex; flex-direction: column; gap: 10px; }
+.footer-link {
+  font-size: 13px; color: var(--wf-fg-muted); transition: color var(--wf-dur);
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-social {
+  display: flex; gap: 16px; align-items: center; margin-top: auto;
+}
+.footer-social-icon {
+  width: 24px; height: 24px; color: var(--wf-fg-subtle);
+  transition: color var(--wf-dur);
+}
+.footer-social-icon:hover { color: var(--wf-fg); }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; border-top: 1px solid var(--wf-border);
+  font-size: 12px; color: var(--wf-fg-subtle);
+}
+.footer-legal { display: flex; gap: 24px; }
+.footer-legal a {
+  color: var(--wf-fg-subtle); text-decoration: underline;
+  text-underline-offset: 2px; transition: color var(--wf-dur);
+}
+.footer-legal a:hover { color: var(--wf-fg); }
+
+/* ── SVG icon helper ── */
+.img-icon { width: 48px; height: 48px; color: var(--wf-fg-faint); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .hero-title { font-size: 40px; }
+  .feature-row { grid-template-columns: 1fr; gap: 40px; }
+  .feature-row.reversed .feature-content { order: 1; }
+  .feature-row.reversed .feature-media { order: 2; }
+  .customers-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .case-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .section { padding: 56px 0; }
+  .heading-xl { font-size: 36px; }
+  .heading-lg { font-size: 32px; }
+  .heading-md { font-size: 26px; }
+  .feature-title { font-size: 28px; }
+  .navbar-links { display: none; }
+  .mobile-toggle { display: flex; }
+  .hero-title { font-size: 32px; }
+  .hero-btns { flex-direction: column; align-items: center; }
+  .cta-btns { flex-direction: column; align-items: center; }
+  .footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner" style="position: relative;">
+    <div class="navbar-links">
+      <a href="index.html" class="navbar-link">Home v3</a>
+      <a href="home-v2.html" class="navbar-link active">Home v2</a>
+      <a href="#" class="navbar-link">Link Three
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </div>
+    <a href="home-v2.html" class="navbar-logo">Logo</a>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-primary">Get started</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="container">
+    <h1 class="hero-title">Headline that highlights the Value Proposition</h1>
+    <p class="hero-desc">Describe exactly what your product or service does and how it makes your customers' lives better. Avoid using tedious words or phrases.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn btn-md btn-primary">Get started</a>
+      <a href="#" class="btn btn-md btn-outline">Learn more</a>
+    </div>
+    <div class="placeholder-img hero-img">
+      <svg class="img-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LOGO BAR ═══════════════ -->
+<section class="logo-bar">
+  <div class="container">
+    <p class="logo-bar-title">Trusted by the world's best companies [Social proof to build credibility]</p>
+    <div class="logo-grid">
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg> Webfl</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURE ONE ═══════════════ -->
+<section class="feature-section">
+  <div class="container">
+    <div class="feature-row">
+      <div class="feature-content">
+        <h2 class="feature-title">Describe feature one</h2>
+        <p class="feature-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+        <div class="check-list">
+          <div class="check-item">
+            <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span>Benefit one of the feature</span>
+          </div>
+          <div class="check-item">
+            <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span>Benefit two of the feature</span>
+          </div>
+          <div class="check-item">
+            <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span>Benefit three of the feature</span>
+          </div>
+        </div>
+      </div>
+      <div class="placeholder-img feature-img">
+        <svg class="img-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURE TWO (reversed) ═══════════════ -->
+<section class="feature-section">
+  <div class="container">
+    <div class="feature-row reversed">
+      <div class="feature-content">
+        <h2 class="feature-title">Describe feature two</h2>
+        <p class="feature-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+        <div class="check-list">
+          <div class="check-item">
+            <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span>Benefit one of the feature</span>
+          </div>
+          <div class="check-item">
+            <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span>Benefit two of the feature</span>
+          </div>
+          <div class="check-item">
+            <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span>Benefit three of the feature</span>
+          </div>
+        </div>
+      </div>
+      <div class="placeholder-img feature-img">
+        <svg class="img-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURE THREE ═══════════════ -->
+<section class="feature-section">
+  <div class="container">
+    <div class="feature-row">
+      <div class="feature-content">
+        <h2 class="feature-title">Describe feature three</h2>
+        <p class="feature-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+        <div class="check-list">
+          <div class="check-item">
+            <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span>Benefit one of the feature</span>
+          </div>
+          <div class="check-item">
+            <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span>Benefit two of the feature</span>
+          </div>
+          <div class="check-item">
+            <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+            <span>Benefit three of the feature</span>
+          </div>
+        </div>
+      </div>
+      <div class="placeholder-img feature-img">
+        <svg class="img-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CUSTOMERS ═══════════════ -->
+<section class="customers-section">
+  <div class="container text-center">
+    <p class="kicker">Customers</p>
+    <h2 class="heading-lg">Short headline about who the product or service is for</h2>
+    <div class="customers-grid">
+      <div class="customer-card">
+        <div class="customer-card-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="customer-card-body">
+          <h3 class="customer-card-title">Customer group one</h3>
+          <p class="customer-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        </div>
+      </div>
+      <div class="customer-card">
+        <div class="customer-card-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="customer-card-body">
+          <h3 class="customer-card-title">Customer group two</h3>
+          <p class="customer-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        </div>
+      </div>
+      <div class="customer-card">
+        <div class="customer-card-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="customer-card-body">
+          <h3 class="customer-card-title">Customer group three</h3>
+          <p class="customer-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIALS ═══════════════ -->
+<section class="testimonials-section">
+  <div class="container text-center">
+    <h2 class="heading-lg">Customer testimonials<br>[more social proof]</h2>
+    <p class="body-text" style="margin-top: 16px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <div class="testimonials-grid" style="text-align: left;">
+      <div class="testimonial-card">
+        <div class="stars">
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+        </div>
+        <p class="testimonial-quote">"A customer testimonial that highlights features of your product or service. Showcase testimonials from a similar demographic to your customers."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="author-name">Customer Name</div>
+            <div class="author-role">Position, Company name</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+        </div>
+        <p class="testimonial-quote">"A customer testimonial that highlights features of your product or service. Showcase testimonials from a similar demographic to your customers."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="author-name">Customer Name</div>
+            <div class="author-role">Position, Company name</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+        </div>
+        <p class="testimonial-quote">"A customer testimonial that highlights features of your product or service. Showcase testimonials from a similar demographic to your customers."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="author-name">Customer Name</div>
+            <div class="author-role">Position, Company name</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls" style="margin-top: 28px;">
+      <div class="carousel-dots">
+        <div class="carousel-dot active"></div>
+        <div class="carousel-dot"></div>
+        <div class="carousel-dot"></div>
+        <div class="carousel-dot"></div>
+        <div class="carousel-dot"></div>
+      </div>
+      <div class="carousel-arrows">
+        <button class="carousel-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <button class="carousel-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="heading-lg">Call to action that excites the visitor to try your product</h2>
+    <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn btn-md btn-primary">Get started</a>
+      <a href="#" class="btn btn-md btn-outline">Learn more</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="faq-header">
+      <h2 class="heading-lg">Frequently asked questions</h2>
+      <p class="body-text">Frequently asked questions ordered by popularity. Remember that if the visitor has not committed to the call to action, they may still have questions (doubts) that can be answered.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STILL HAVE QUESTIONS ═══════════════ -->
+<section class="still-q">
+  <div class="container">
+    <h3 class="heading-sm">Still have a questions?</h3>
+    <p class="body-text">Support details to capture customers that might be on the fence.</p>
+    <a href="#" class="btn btn-md btn-outline">Contact us</a>
+  </div>
+</section>
+
+<!-- ═══════════════ CASE STUDIES ═══════════════ -->
+<section class="case-studies-section">
+  <div class="container text-center">
+    <p class="kicker">Case studies</p>
+    <h2 class="heading-lg">Short headline introducing case studies</h2>
+    <p class="body-text" style="margin-top: 16px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <div class="case-grid" style="text-align: left;">
+      <div class="case-card">
+        <div class="case-card-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="case-card-body">
+          <div class="case-category">Category</div>
+          <h3 class="case-title">Company name: Use case</h3>
+          <p class="case-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <div class="case-footer">
+            <div class="case-brand">
+              <div class="case-brand-icon"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg></div>
+              <span>Company name</span>
+            </div>
+            <a href="#" class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="case-card-body">
+          <div class="case-category">Category</div>
+          <h3 class="case-title">Company name: Use case</h3>
+          <p class="case-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <div class="case-footer">
+            <div class="case-brand">
+              <div class="case-brand-icon"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg></div>
+              <span>Company name</span>
+            </div>
+            <a href="#" class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="case-card-body">
+          <div class="case-category">Category</div>
+          <h3 class="case-title">Company name: Use case</h3>
+          <p class="case-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <div class="case-footer">
+            <div class="case-brand">
+              <div class="case-brand-icon"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg></div>
+              <span>Company name</span>
+            </div>
+            <a href="#" class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="view-all-wrap">
+      <a href="#" class="btn btn-md btn-outline">View all</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-newsletter-label">Join our newsletter</div>
+        <form class="footer-form" onsubmit="return false;">
+          <input type="email" class="footer-input" placeholder="Enter your email">
+          <button type="submit" class="btn btn-sm btn-outline">Subscribe</button>
+        </form>
+        <p class="footer-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p>
+        <div class="footer-logo-row" style="margin-top: 24px;">
+          <span class="footer-logo">Logo</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Column One</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link One</a>
+          <a href="#" class="footer-link">Link Two</a>
+          <a href="#" class="footer-link">Link Three</a>
+          <a href="#" class="footer-link">Link Four</a>
+          <a href="#" class="footer-link">Link Five</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Column Two</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Six</a>
+          <a href="#" class="footer-link">Link Seven</a>
+          <a href="#" class="footer-link">Link Eight</a>
+          <a href="#" class="footer-link">Link Nine</a>
+          <a href="#" class="footer-link">Link Ten</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Column Three</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Eleven</a>
+          <a href="#" class="footer-link">Link Twelve</a>
+          <a href="#" class="footer-link">Link Thirteen</a>
+          <a href="#" class="footer-link">Link Fourteen</a>
+          <a href="#" class="footer-link">Link Fifteen</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Column Four</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Sixteen</a>
+          <a href="#" class="footer-link">Link Seventeen</a>
+          <a href="#" class="footer-link">Link Eighteen</a>
+          <a href="#" class="footer-link">Link Nineteen</a>
+          <a href="#" class="footer-link">Link Twenty</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <span>&copy; 2025 Relume. All rights reserved.</span>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Settings</a>
+        </div>
+      </div>
+      <div class="footer-social">
+        <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+        <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></a>
+        <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
+        <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
