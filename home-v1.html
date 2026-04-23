@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Page v1 — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-violet: #7c3aed;
+  --wf-violet-muted: rgba(124,58,237,0.10);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-success: #22c55e;
+  --wf-r-sm: 6px;
+  --wf-r-md: 8px;
+  --wf-r-lg: 12px;
+  --wf-r-xl: 16px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+img{max-width:100%;display:block}
+ul{list-style:none}
+
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.section{padding:80px 0}
+.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.heading-xl{font-size:48px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:var(--wf-fg)}
+.heading-lg{font-size:40px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:var(--wf-fg)}
+.heading-md{font-size:32px;font-weight:700;letter-spacing:-0.015em;line-height:1.2;color:var(--wf-fg)}
+.heading-sm{font-size:20px;font-weight:600;letter-spacing:-0.01em;line-height:1.3;color:var(--wf-fg)}
+.body-text{font-size:16px;color:var(--wf-fg-muted);line-height:1.6}
+.body-sm{font-size:14px;color:var(--wf-fg-muted);line-height:1.5}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}
+.link-arrow:hover{gap:10px}
+.link-arrow svg{width:16px;height:16px}
+
+/* Placeholder */
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+.ph-sm svg{width:36px;height:36px}
+
+/* ── NAVBAR ── */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}
+.navbar-link:hover{color:var(--wf-fg)}
+.navbar-link.active{color:var(--wf-fg)}
+.navbar-link svg{width:12px;height:12px}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}
+.mobile-toggle svg{width:24px;height:24px}
+
+/* ── HERO ── */
+.hero{padding:64px 0 80px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-title{font-size:52px;font-weight:800;letter-spacing:-0.03em;line-height:1.05;color:var(--wf-fg);margin-bottom:20px}
+.hero-desc{font-size:16px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:32px;max-width:480px}
+.hero-btns{display:flex;gap:12px}
+.hero-img{aspect-ratio:4/3}
+
+/* ── LOGO BAR ── */
+.logo-bar{padding:48px 0;border-bottom:1px solid var(--wf-border)}
+.logo-bar-title{text-align:center;font-size:14px;color:var(--wf-fg-subtle);margin-bottom:28px}
+.logo-grid{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:32px 48px}
+.logo-item{display:flex;align-items:center;gap:8px;color:var(--wf-fg-faint);font-size:16px;font-weight:600;letter-spacing:-0.01em;transition:color var(--wf-dur)}
+.logo-item:hover{color:var(--wf-fg-muted)}
+.logo-item svg{width:20px;height:20px}
+
+/* ── HOW IT WORKS ── */
+.hiw{padding:80px 0;border-top:1px solid var(--wf-border)}
+.hiw-title{text-align:center;margin-bottom:48px}
+.hiw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.hiw-card{text-align:center}
+.hiw-icon{width:48px;height:48px;border-radius:var(--wf-r-lg);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--wf-brand)}
+.hiw-icon svg{width:24px;height:24px}
+.hiw-card-title{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:10px}
+.hiw-card-text{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:14px}
+
+/* ── KEY FEATURE ── */
+.key-feature{padding:80px 0;border-top:1px solid var(--wf-border);text-align:center}
+.key-feature .heading-lg{max-width:720px;margin:0 auto 16px}
+.key-feature .body-text{max-width:600px;margin:0 auto 40px}
+.key-feature-img{aspect-ratio:16/9;max-width:960px;margin:0 auto}
+.key-feature-btn{margin-top:24px}
+
+/* ── FEATURE LIST ── */
+.feat-list{padding:80px 0;border-top:1px solid var(--wf-border)}
+.feat-list-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.feat-list-img{aspect-ratio:1/1}
+.feat-items{display:flex;flex-direction:column;gap:32px}
+.feat-item{display:flex;gap:16px;align-items:flex-start}
+.feat-item-icon{width:40px;height:40px;border-radius:var(--wf-r-md);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--wf-brand)}
+.feat-item-icon svg{width:20px;height:20px}
+.feat-item-title{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:6px}
+.feat-item-text{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:8px}
+
+/* ── CUSTOMER RESULTS ── */
+.results{padding:80px 0;border-top:1px solid var(--wf-border)}
+.results-top{margin-bottom:48px}
+.results-top .body-text{margin-top:16px;max-width:480px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px 64px;max-width:480px}
+.stat-value{font-size:48px;font-weight:700;letter-spacing:-0.03em;color:var(--wf-fg);line-height:1;font-variant-numeric:tabular-nums}
+.stat-label{font-size:14px;color:var(--wf-fg-muted);margin-top:4px}
+
+/* ── TESTIMONIAL (single) ── */
+.testimonial-single{padding:80px 0;border-top:1px solid var(--wf-border);text-align:center;background:var(--wf-bg-elevated)}
+.testi-logo{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:24px;color:var(--wf-fg-muted);font-size:16px;font-weight:600}
+.testi-logo svg{width:20px;height:20px}
+.testi-quote{font-size:18px;color:var(--wf-fg);line-height:1.65;max-width:720px;margin:0 auto 28px;font-style:italic}
+.testi-author{display:flex;flex-direction:column;align-items:center;gap:8px}
+.testi-avatar{width:48px;height:48px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center}
+.testi-avatar svg{width:24px;height:24px;color:var(--wf-fg-faint)}
+.testi-name{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.testi-role{font-size:13px;color:var(--wf-fg-subtle)}
+
+/* ── CTA ── */
+.cta{padding:80px 0;border-top:1px solid var(--wf-border);text-align:center}
+.cta .heading-lg{max-width:640px;margin:0 auto 16px}
+.cta .body-text{margin-bottom:28px}
+
+/* ── FAQ ── */
+.faq{padding:80px 0;border-top:1px solid var(--wf-border)}
+.faq-header{text-align:center;margin-bottom:48px}
+.faq-header .body-text{margin-top:16px;max-width:640px;margin-left:auto;margin-right:auto}
+.faq-list{max-width:768px;margin:0 auto}
+.faq-item{padding:20px 0;border-bottom:1px solid var(--wf-border);cursor:pointer}
+.faq-q{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:15px;font-weight:500;color:var(--wf-fg);transition:color var(--wf-dur)}
+.faq-item:hover .faq-q{color:var(--wf-brand)}
+.faq-chev{flex-shrink:0;color:var(--wf-fg-subtle)}
+.faq-chev svg{width:18px;height:18px}
+
+/* ── STILL QUESTIONS ── */
+.still-q{padding:48px 0 80px;text-align:center}
+.still-q .heading-sm{margin-bottom:8px}
+.still-q .body-text{margin-bottom:24px}
+
+/* ── BLOG / RESOURCES ── */
+.blog-section{padding:80px 0;border-top:1px solid var(--wf-border)}
+.blog-header{text-align:center;margin-bottom:48px}
+.blog-header .body-text{margin-top:16px;max-width:600px;margin-left:auto;margin-right:auto}
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:40px}
+.blog-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;transition:all var(--wf-dur);cursor:pointer}
+.blog-card:hover{border-color:var(--wf-border-strong);transform:translateY(-2px)}
+.blog-card-img{aspect-ratio:16/9;background:var(--wf-bg-sunken);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--wf-border)}
+.blog-card-img svg{width:36px;height:36px;color:var(--wf-fg-faint)}
+.blog-body{padding:24px}
+.blog-tags{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.blog-tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:var(--wf-r-sm);background:var(--wf-brand-muted);color:var(--wf-brand)}
+.blog-tag-alt{background:var(--wf-violet-muted);color:var(--wf-violet)}
+.blog-title{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:8px;letter-spacing:-0.01em;line-height:1.3}
+.blog-excerpt{font-size:14px;color:var(--wf-fg-muted);line-height:1.5;margin-bottom:16px}
+.view-all-wrap{text-align:center}
+
+/* ── NEWSLETTER BAR ── */
+.newsletter-bar{padding:32px 0;border-top:1px solid var(--wf-border);background:var(--wf-bg-elevated)}
+.newsletter-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.newsletter-text div:first-child{font-size:14px;font-weight:600;color:var(--wf-fg);margin-bottom:2px}
+.newsletter-text div:last-child{font-size:13px;color:var(--wf-fg-muted)}
+.newsletter-form{display:flex;gap:8px}
+.newsletter-input{height:40px;padding:0 12px;width:280px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}
+.newsletter-input::placeholder{color:var(--wf-fg-faint)}
+.newsletter-input:focus{outline:none;border-color:var(--wf-brand)}
+.newsletter-disclaimer{font-size:11px;color:var(--wf-fg-faint);margin-top:6px}
+.newsletter-disclaimer a{text-decoration:underline;text-underline-offset:2px}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--wf-border);padding:48px 0 0;background:var(--wf-bg)}
+.footer-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:32px;padding-bottom:40px}
+.footer-col-title{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-bottom-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-title{font-size:40px}
+  .hiw-grid{grid-template-columns:1fr}
+  .feat-list-grid{grid-template-columns:1fr;gap:40px}
+  .stats-grid{max-width:100%}
+  .blog-grid{grid-template-columns:1fr}
+  .footer-cols{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .section{padding:56px 0}
+  .heading-xl,.hero-title{font-size:36px}
+  .heading-lg{font-size:32px}
+  .heading-md{font-size:26px}
+  .stat-value{font-size:36px}
+  .navbar-links{display:none}
+  .mobile-toggle{display:flex}
+  .hero-btns{flex-direction:column;align-items:flex-start}
+  .footer-cols{grid-template-columns:1fr 1fr}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .newsletter-inner{flex-direction:column;align-items:flex-start}
+  .newsletter-input{width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="home-v1.html" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="home-v1.html" class="navbar-link active">Home v1</a>
+      <a href="home-v2.html" class="navbar-link">Home v2</a>
+      <a href="index.html" class="navbar-link">Home v3</a>
+      <a href="#" class="navbar-link">Link Four <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+      <a href="#" class="navbar-link">Link 5 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-primary">Get started</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <h1 class="hero-title">Resonate with the visitor's problem</h1>
+        <p class="hero-desc">Describe exactly what your product or service does to solve this problem. Avoid using tedious words or phrases.</p>
+        <div class="hero-btns">
+          <a href="#" class="btn btn-md btn-primary">Get started</a>
+          <a href="#" class="btn btn-md btn-outline">Learn more</a>
+        </div>
+      </div>
+      <div class="ph hero-img">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LOGO BAR ═══════════════ -->
+<section class="logo-bar">
+  <div class="container">
+    <p class="logo-bar-title">Trusted by the world's best companies [Social proof to build credibility]</p>
+    <div class="logo-grid">
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+<section class="hiw">
+  <div class="container">
+    <h2 class="heading-lg hiw-title">How it works</h2>
+    <div class="hiw-grid">
+      <div class="hiw-card">
+        <div class="hiw-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <h3 class="hiw-card-title">Short summary of step one</h3>
+        <p class="hiw-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="hiw-card">
+        <div class="hiw-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h3 class="hiw-card-title">Short summary of step two</h3>
+        <p class="hiw-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="hiw-card">
+        <div class="hiw-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+        <h3 class="hiw-card-title">Short summary of step three</h3>
+        <p class="hiw-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ KEY FEATURE ═══════════════ -->
+<section class="key-feature">
+  <div class="container">
+    <p class="kicker">Key Feature</p>
+    <h2 class="heading-lg">Short headline about the benefit of using your product or service</h2>
+    <p class="body-text">Highlight the Unique Selling Proposition (USP) with a short summary of the main feature and how it benefits your customers. It should be 1-2 lines long.</p>
+    <div class="ph key-feature-img">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    </div>
+    <div class="key-feature-btn">
+      <a href="#" class="btn btn-md btn-outline">Learn more</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURE LIST ═══════════════ -->
+<section class="feat-list">
+  <div class="container">
+    <div class="feat-list-grid">
+      <div class="ph feat-list-img">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <div class="feat-items">
+        <div class="feat-item">
+          <div class="feat-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+          <div>
+            <div class="feat-item-title">Describe feature one</div>
+            <p class="feat-item-text">Highlight the Unique Selling Proposition with a short summary of the key feature and your 3 benefits customers.</p>
+            <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div>
+            <div class="feat-item-title">Describe feature two</div>
+            <p class="feat-item-text">Highlight the Unique Selling Proposition with a short summary of the key feature and your 3 benefits customers.</p>
+            <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+          <div>
+            <div class="feat-item-title">Describe feature three</div>
+            <p class="feat-item-text">Highlight the Unique Selling Proposition with a short summary of the key feature and your 3 benefits customers.</p>
+            <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CUSTOMER RESULTS ═══════════════ -->
+<section class="section results">
+  <div class="container">
+    <div class="results-top">
+      <p class="kicker">Customer Results</p>
+      <h2 class="heading-lg">Headline highlighting customer results</h2>
+      <p class="body-text">Demonstrate the positive outcomes and measurable improvements credibility.</p>
+    </div>
+    <div class="stats-grid">
+      <div>
+        <div class="stat-value">10x</div>
+        <div class="stat-label">Increase in productivity</div>
+      </div>
+      <div>
+        <div class="stat-value">300%</div>
+        <div class="stat-label">Return on investment</div>
+      </div>
+      <div>
+        <div class="stat-value">5k+</div>
+        <div class="stat-label">Happy customers</div>
+      </div>
+      <div>
+        <div class="stat-value">100+</div>
+        <div class="stat-label">5-star reviews</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIAL ═══════════════ -->
+<section class="testimonial-single">
+  <div class="container">
+    <div class="testi-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg>
+      Webflow
+    </div>
+    <p class="testi-quote">"A customer testimonial that highlights features and answers potential customer doubts about your product or service. Showcase testimonials from a similar demographic to your customers."</p>
+    <div class="testi-author">
+      <div class="testi-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="testi-name">Customer name</div>
+      <div class="testi-role">Position, Company name</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta">
+  <div class="container">
+    <h2 class="heading-lg">Call to action that excites the visitor to try your product</h2>
+    <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+    <a href="#" class="btn btn-md btn-primary">Get started</a>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section class="faq">
+  <div class="container">
+    <div class="faq-header">
+      <h2 class="heading-lg">Frequently asked questions</h2>
+      <p class="body-text">Frequently asked questions ordered by popularity. Remember that if the visitor has not committed to the call to action, they may still have questions (doubts) that can be answered.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+      <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+      <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+      <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+      <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STILL HAVE QUESTIONS ═══════════════ -->
+<section class="still-q">
+  <div class="container">
+    <h3 class="heading-sm">Still have a questions?</h3>
+    <p class="body-text">Support details to capture customers that might be on the fence.</p>
+    <a href="#" class="btn btn-md btn-outline">Contact us</a>
+  </div>
+</section>
+
+<!-- ═══════════════ BLOG / RESOURCES ═══════════════ -->
+<section class="blog-section">
+  <div class="container">
+    <div class="blog-header">
+      <p class="kicker">Blog</p>
+      <h2 class="heading-lg">Headline introducing resources</h2>
+      <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+    </div>
+    <div class="blog-grid">
+      <a href="#" class="blog-card">
+        <div class="blog-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="blog-body">
+          <div class="blog-tags"><span class="blog-tag">Category</span><span class="blog-tag blog-tag-alt">Sub-cat</span></div>
+          <h3 class="blog-title">Blog title heading will go here</h3>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <span class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+      <a href="#" class="blog-card">
+        <div class="blog-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="blog-body">
+          <div class="blog-tags"><span class="blog-tag">Category</span><span class="blog-tag blog-tag-alt">Sub-cat</span></div>
+          <h3 class="blog-title">Blog title heading will go here</h3>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <span class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+      <a href="#" class="blog-card">
+        <div class="blog-card-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="blog-body">
+          <div class="blog-tags"><span class="blog-tag">Category</span><span class="blog-tag blog-tag-alt">Sub-cat</span></div>
+          <h3 class="blog-title">Blog title heading will go here</h3>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <span class="link-arrow">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+    </div>
+    <div class="view-all-wrap">
+      <a href="#" class="btn btn-md btn-outline">View all</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ NEWSLETTER BAR ═══════════════ -->
+<section class="newsletter-bar">
+  <div class="container">
+    <div class="newsletter-inner">
+      <div class="newsletter-text">
+        <div>Join our newsletter</div>
+        <div>We'll send you a nice letter once per week. No spam.</div>
+      </div>
+      <div>
+        <div class="newsletter-form">
+          <input type="email" class="newsletter-input" placeholder="Enter your email">
+          <button class="btn btn-sm btn-primary">Subscribe</button>
+        </div>
+        <p class="newsletter-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-cols">
+      <div>
+        <div class="footer-col-title">Column One</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link One</a>
+          <a href="#" class="footer-link">Link Two</a>
+          <a href="#" class="footer-link">Link Three</a>
+          <a href="#" class="footer-link">Link Four</a>
+          <a href="#" class="footer-link">Link Five</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Column Two</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Six</a>
+          <a href="#" class="footer-link">Link Seven</a>
+          <a href="#" class="footer-link">Link Eight</a>
+          <a href="#" class="footer-link">Link Nine</a>
+          <a href="#" class="footer-link">Link Ten</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Column Three</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Eleven</a>
+          <a href="#" class="footer-link">Link Twelve</a>
+          <a href="#" class="footer-link">Link Thirteen</a>
+          <a href="#" class="footer-link">Link Fourteen</a>
+          <a href="#" class="footer-link">Link Fifteen</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Column Four</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Sixteen</a>
+          <a href="#" class="footer-link">Link Seventeen</a>
+          <a href="#" class="footer-link">Link Eighteen</a>
+          <a href="#" class="footer-link">Link Nineteen</a>
+          <a href="#" class="footer-link">Link Twenty</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Column Five</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Twenty-One</a>
+          <a href="#" class="footer-link">Link Twenty-Two</a>
+          <a href="#" class="footer-link">Link Twenty-Three</a>
+          <a href="#" class="footer-link">Link Twenty-Four</a>
+          <a href="#" class="footer-link">Link Twenty-Five</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-bottom-logo">Logo</span>
+      <span>&copy; 2024 Relume. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
