@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing v2 — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}
+.navbar-link:hover{color:var(--wf-fg)}.navbar-link.active{color:var(--wf-fg)}.navbar-link svg{width:12px;height:12px}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}.mobile-toggle svg{width:24px;height:24px}
+
+/* Pricing header */
+.ph-header{padding:64px 0 48px;text-align:center}
+.ph-header h1{font-size:48px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:var(--wf-fg);margin-bottom:16px;max-width:640px;margin-left:auto;margin-right:auto}
+.ph-header p{font-size:16px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto}
+
+/* Pricing cards */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding-bottom:80px}
+.pc{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;display:flex;flex-direction:column;transition:border-color var(--wf-dur)}
+.pc:hover{border-color:var(--wf-border-strong)}
+.pc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.pc-plan{font-size:16px;font-weight:600;color:var(--wf-fg)}
+.pc-icon{width:40px;height:40px;border-radius:var(--wf-r-md);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;color:var(--wf-brand)}
+.pc-icon svg{width:22px;height:22px}
+.pc-price{font-size:48px;font-weight:700;letter-spacing:-0.03em;color:var(--wf-fg);line-height:1;margin-bottom:4px}
+.pc-price span{font-size:18px;font-weight:500;color:var(--wf-fg-muted)}
+.pc-yearly{font-size:14px;color:var(--wf-fg-subtle);margin-bottom:20px}
+.pc-div{height:1px;background:var(--wf-border);margin-bottom:20px}
+.pc-inc{font-size:13px;color:var(--wf-fg-subtle);margin-bottom:14px}
+.pc-feats{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;flex:1}
+.pc-f{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--wf-fg-muted)}
+.pc-ck{width:18px;height:18px;flex-shrink:0;color:var(--wf-brand)}.pc-ck svg{width:18px;height:18px}
+.pc-cta{width:100%;height:44px;display:flex;align-items:center;justify-content:center;background:var(--wf-brand);color:var(--wf-brand-fg);font-weight:600;font-size:14px;border:none;border-radius:var(--wf-r-md);cursor:pointer;transition:background var(--wf-dur)}
+.pc-cta:hover{background:var(--wf-brand-hover)}
+
+/* Compare plans */
+.compare{padding:80px 0;border-top:1px solid var(--wf-border)}
+.compare-header{text-align:center;margin-bottom:48px}
+.compare-header h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.compare-header p{font-size:16px;color:var(--wf-fg-muted)}
+.compare-cols{display:grid;grid-template-columns:1fr repeat(3,180px);gap:0;margin-bottom:0}
+.compare-plan-head{text-align:center;padding:0 12px 24px}
+.compare-plan-name{font-size:13px;font-weight:600;color:var(--wf-fg-subtle);margin-bottom:4px}
+.compare-plan-price{font-size:36px;font-weight:700;letter-spacing:-0.03em;color:var(--wf-fg);line-height:1}
+.compare-plan-price span{font-size:16px;font-weight:500;color:var(--wf-fg-muted)}
+.compare-plan-desc{font-size:12px;color:var(--wf-fg-subtle);margin-top:6px;margin-bottom:16px}
+.compare-plan-btn{width:100%;height:38px;display:flex;align-items:center;justify-content:center;background:var(--wf-brand);color:var(--wf-brand-fg);font-weight:600;font-size:13px;border:none;border-radius:var(--wf-r-md);cursor:pointer;transition:background var(--wf-dur)}
+.compare-plan-btn:hover{background:var(--wf-brand-hover)}
+
+.compare-cat{font-size:14px;font-weight:700;color:var(--wf-fg);padding:16px 0 12px;border-bottom:1px solid var(--wf-border);grid-column:1/-1}
+.compare-row{display:contents}
+.compare-row>*{padding:12px 12px;border-bottom:1px solid var(--wf-border-subtle);font-size:13px;display:flex;align-items:center}
+.compare-feat{color:var(--wf-fg-muted);padding-left:0}
+.compare-val{justify-content:center;color:var(--wf-fg-muted)}
+.compare-val svg{width:18px;height:18px;color:var(--wf-brand)}
+.compare-footer{grid-column:1/-1;display:grid;grid-template-columns:1fr repeat(3,180px);gap:0;padding-top:24px}
+.compare-footer-spacer{grid-column:1}
+.compare-footer-btn{display:flex;justify-content:center;padding:0 12px}
+
+/* FAQ */
+.faq{padding:80px 0;border-top:1px solid var(--wf-border)}
+.faq-header{text-align:center;margin-bottom:48px}
+.faq-header h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:16px}
+.faq-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.faq-item{padding:20px 0;border-bottom:1px solid var(--wf-border);cursor:pointer}
+.faq-grid>:nth-child(odd){padding-right:32px;border-right:1px solid var(--wf-border)}
+.faq-grid>:nth-child(even){padding-left:32px}
+.faq-q{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:15px;font-weight:500;color:var(--wf-fg);transition:color var(--wf-dur)}
+.faq-item:hover .faq-q{color:var(--wf-brand)}
+.faq-chev{flex-shrink:0;color:var(--wf-fg-subtle)}.faq-chev svg{width:18px;height:18px}
+
+/* Still questions */
+.still-q{padding:48px 0;text-align:center}
+.still-q h3{font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}
+.still-q p{font-size:15px;color:var(--wf-fg-muted);margin-bottom:24px}
+
+/* CTA */
+.cta{padding:80px 0;border-top:1px solid var(--wf-border);text-align:center}
+.cta h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:16px;max-width:520px;margin-left:auto;margin-right:auto}
+.cta p{font-size:16px;color:var(--wf-fg-muted);margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:12px;justify-content:center;margin-bottom:40px}
+.cta-trust{font-size:13px;color:var(--wf-fg-subtle);margin-bottom:20px}
+.logo-grid{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:32px 40px}
+.logo-item{display:flex;align-items:center;gap:8px;color:var(--wf-fg-faint);font-size:16px;font-weight:600;transition:color var(--wf-dur)}
+.logo-item:hover{color:var(--wf-fg-muted)}.logo-item svg{width:20px;height:20px}
+
+/* Footer */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-sub-text{font-size:13px;color:var(--wf-fg-muted);margin-bottom:12px}
+.footer-form{display:flex;gap:8px;margin-bottom:12px}
+.footer-input{flex:1;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-input::placeholder{color:var(--wf-fg-faint)}.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disc{font-size:11px;color:var(--wf-fg-faint);line-height:1.5}.footer-disc a{text-decoration:underline;text-underline-offset:2px}
+.ft{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.fl{display:flex;flex-direction:column;gap:10px}
+.fl a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:8px}
+.fl a:hover{color:var(--wf-fg)}.fl a svg{width:16px;height:16px;flex-shrink:0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
+
+@media(max-width:1024px){.container{padding:0 24px}.pricing-grid{grid-template-columns:1fr}.compare-cols,.compare-footer{overflow-x:auto}.faq-grid{grid-template-columns:1fr}.faq-grid>:nth-child(odd){padding-right:0;border-right:none}.faq-grid>:nth-child(even){padding-left:0}.footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.container{padding:0 20px}.ph-header h1,.compare-header h2,.faq-header h2,.cta h2{font-size:32px}.pc-price,.compare-plan-price{font-size:36px}.navbar-links{display:none}.mobile-toggle{display:flex}.cta-btns{flex-direction:column;align-items:center}.footer-top{grid-template-columns:1fr;gap:32px}.footer-bottom{flex-direction:column;gap:12px;text-align:center}}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar"><div class="container navbar-inner">
+  <a href="index.html" class="navbar-logo">Logo</a>
+  <div class="navbar-links">
+    <a href="home-v1.html" class="navbar-link">Home v1</a>
+    <a href="about.html" class="navbar-link">About</a>
+    <a href="pricing.html" class="navbar-link">Pricing</a>
+    <a href="pricing-v2.html" class="navbar-link active">Pricing v2</a>
+    <a href="blog-post.html" class="navbar-link">Blog Post</a>
+    <a href="portfolio.html" class="navbar-link">Portfolio</a>
+  </div>
+  <div class="navbar-actions"><a href="#" class="btn btn-sm btn-outline">Log in</a><a href="#" class="btn btn-sm btn-primary">Get started</a></div>
+  <button class="mobile-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</div></nav>
+
+<!-- PRICING HEADER -->
+<div class="container"><div class="ph-header">
+  <p class="kicker">Pricing plans</p>
+  <h1>Remind your visitor why they should sign up</h1>
+  <p>Describe how you have structured your pricing plan and finish with a strong call to action.</p>
+</div></div>
+
+<!-- PRICING CARDS -->
+<div class="container"><div class="pricing-grid">
+  <div class="pc"><div class="pc-top"><div class="pc-plan">Basic plan</div><div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div></div><div class="pc-price">$19<span>/mo</span></div><div class="pc-yearly">or $199 yearly</div><div class="pc-div"></div><div class="pc-inc">Includes:</div><div class="pc-feats"><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div></div><button class="pc-cta">Get started</button></div>
+  <div class="pc"><div class="pc-top"><div class="pc-plan">Business plan</div><div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div></div><div class="pc-price">$29<span>/mo</span></div><div class="pc-yearly">or $299 yearly</div><div class="pc-div"></div><div class="pc-inc">Includes:</div><div class="pc-feats"><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div></div><button class="pc-cta">Get started</button></div>
+  <div class="pc"><div class="pc-top"><div class="pc-plan">Enterprise plan</div><div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div></div><div class="pc-price">$49<span>/mo</span></div><div class="pc-yearly">or $499 yearly</div><div class="pc-div"></div><div class="pc-inc">Includes:</div><div class="pc-feats"><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div><div class="pc-f"><span class="pc-ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></span>Feature text goes here</div></div><button class="pc-cta">Get started</button></div>
+</div></div>
+
+<!-- COMPARE PLANS -->
+<div class="container"><div class="compare">
+  <div class="compare-header"><h2>Compare plans</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
+  <div class="compare-cols">
+    <!-- Column headers -->
+    <div></div>
+    <div class="compare-plan-head"><div class="compare-plan-name">Basic</div><div class="compare-plan-price">$19<span>/mo</span></div><div class="compare-plan-desc">Lorem ipsum dolor sit amet</div><button class="compare-plan-btn">Get started</button></div>
+    <div class="compare-plan-head"><div class="compare-plan-name">Business</div><div class="compare-plan-price">$29<span>/mo</span></div><div class="compare-plan-desc">Lorem ipsum dolor sit amet</div><button class="compare-plan-btn">Get started</button></div>
+    <div class="compare-plan-head"><div class="compare-plan-name">Enterprise</div><div class="compare-plan-price">$49<span>/mo</span></div><div class="compare-plan-desc">Lorem ipsum dolor sit amet</div><button class="compare-plan-btn">Get started</button></div>
+
+    <!-- Category 1 -->
+    <div class="compare-cat">Feature Category</div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val">10</div><div class="compare-val">25</div><div class="compare-val" style="font-weight:600;color:var(--wf-fg)">Unlimited</div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"></div><div class="compare-val"></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"></div><div class="compare-val"></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+
+    <!-- Category 2 -->
+    <div class="compare-cat">Feature Category</div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val">10</div><div class="compare-val">25</div><div class="compare-val" style="font-weight:600;color:var(--wf-fg)">Unlimited</div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"></div><div class="compare-val"></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"></div><div class="compare-val"></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+
+    <!-- Category 3 -->
+    <div class="compare-cat">Feature Category</div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val">10</div><div class="compare-val">25</div><div class="compare-val" style="font-weight:600;color:var(--wf-fg)">Unlimited</div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"></div><div class="compare-val"></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+    <div class="compare-row"><div class="compare-feat">Feature text goes here</div><div class="compare-val"></div><div class="compare-val"></div><div class="compare-val"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></div></div>
+  </div>
+  <div class="compare-footer"><div class="compare-footer-spacer"></div><div class="compare-footer-btn"><button class="compare-plan-btn" style="width:100%">Get started</button></div><div class="compare-footer-btn"><button class="compare-plan-btn" style="width:100%">Get started</button></div><div class="compare-footer-btn"><button class="compare-plan-btn" style="width:100%">Get started</button></div></div>
+</div></div>
+
+<!-- FAQ -->
+<div class="container"><div class="faq">
+  <div class="faq-header"><h2>Frequently asked questions</h2><p>Frequently asked questions ordered by popularity. Remember that if the visitor has not committed to the call to action, they may still have questions (doubts) that can be answered.</p></div>
+  <div class="faq-grid">
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+    <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div>
+  </div>
+</div></div>
+
+<!-- STILL QUESTIONS -->
+<div class="container"><div class="still-q">
+  <h3>Still have a questions?</h3>
+  <p>Support details to capture customers that might be on the fence.</p>
+  <a href="#" class="btn btn-md btn-outline">Contact us</a>
+</div></div>
+
+<!-- CTA -->
+<div class="container"><div class="cta">
+  <h2>Call to action that persuades the visitor to take action</h2>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+  <div class="cta-btns"><a href="#" class="btn btn-md btn-primary">Get started</a><a href="#" class="btn btn-md btn-outline">Chat to sales</a></div>
+  <p class="cta-trust">Trusted by the world's best companies [social proof to build credibility]</p>
+  <div class="logo-grid">
+    <div class="logo-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg> Webflow</div>
+    <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+    <div class="logo-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg> Webflow</div>
+    <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+    <div class="logo-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg> Webflow</div>
+    <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+  </div>
+</div></div>
+
+<!-- FOOTER -->
+<footer class="footer"><div class="container">
+  <div class="footer-top">
+    <div><div class="navbar-logo" style="margin-bottom:16px">Logo</div><p class="footer-sub-text">Join our newsletter to stay up to date on features and releases.</p><form class="footer-form" onsubmit="return false;"><input type="email" class="footer-input" placeholder="Enter your email"><button type="submit" class="btn btn-sm btn-outline">Subscribe</button></form><p class="footer-disc">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p></div>
+    <div><div class="ft">Column One</div><div class="fl"><a href="#">Link One</a><a href="#">Link Two</a><a href="#">Link Three</a><a href="#">Link Four</a><a href="#">Link Five</a></div></div>
+    <div><div class="ft">Column Two</div><div class="fl"><a href="#">Link Six</a><a href="#">Link Seven</a><a href="#">Link Eight</a><a href="#">Link Nine</a><a href="#">Link Ten</a></div></div>
+    <div><div class="ft">Follow Us</div><div class="fl">
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> Facebook</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg> Instagram</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> X</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg> Youtube</a>
+    </div></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2023 Relume. All rights reserved.</span><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookies Settings</a></div></div>
+</div></footer>
+
+</body>
+</html>
