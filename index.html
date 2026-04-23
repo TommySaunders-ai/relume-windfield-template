@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Page v3 — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Windfield IO Design Tokens ── */
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-violet: #7c3aed;
+  --wf-violet-muted: rgba(124,58,237,0.10);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+  --wf-overlay: rgba(0,0,0,0.72);
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-success: #22c55e;
+  --wf-warning: #f59e0b;
+  --wf-danger: #ef4444;
+  --wf-info: #3b82f6;
+  --wf-r-xs: 4px;
+  --wf-r-sm: 6px;
+  --wf-r-md: 8px;
+  --wf-r-lg: 12px;
+  --wf-r-xl: 16px;
+  --wf-r-pill: 9999px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+
+/* ── Utilities ── */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.container-sm { max-width: 768px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 80px 0; }
+.section-lg { padding: 100px 0; }
+.text-center { text-align: center; }
+.kicker {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-brand);
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+}
+.heading-xl {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--wf-fg);
+}
+.heading-lg {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--wf-fg);
+}
+.heading-md {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--wf-fg);
+}
+.heading-sm {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--wf-fg);
+}
+.body-text {
+  font-size: 16px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+}
+.body-sm {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.5;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-sm { height: 36px; padding: 0 16px; font-size: 13px; }
+.btn-primary {
+  background: var(--wf-brand);
+  color: var(--wf-brand-fg);
+}
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-outline {
+  background: transparent;
+  color: var(--wf-fg);
+  border-color: var(--wf-border-strong);
+}
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+.btn-ghost {
+  background: transparent;
+  color: var(--wf-fg-muted);
+  padding: 0;
+  height: auto;
+}
+.btn-ghost:hover { color: var(--wf-fg); }
+
+/* ── NAVBAR ── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--wf-bg);
+  border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wf-fg);
+  letter-spacing: -0.02em;
+}
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex: 1;
+}
+.navbar-link {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link svg { width: 12px; height: 12px; }
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.navbar-phone {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-md);
+  padding: 8px 16px;
+  transition: all var(--wf-dur);
+}
+.navbar-phone:hover { border-color: var(--wf-border-strong); color: var(--wf-fg); }
+
+/* ── SUB-NAV BANNER ── */
+.subnav-banner {
+  border-bottom: 1px solid var(--wf-border);
+  background: var(--wf-bg-elevated);
+}
+.subnav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.subnav-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px 24px;
+  border-right: 1px solid var(--wf-border);
+  transition: background var(--wf-dur);
+  cursor: pointer;
+}
+.subnav-item:last-child { border-right: none; }
+.subnav-item:hover { background: var(--wf-surface-hover); }
+.subnav-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--wf-r-sm);
+  background: var(--wf-brand-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.subnav-icon svg { width: 14px; height: 14px; color: var(--wf-brand); }
+.subnav-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 2px;
+}
+.subnav-desc {
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+  line-height: 1.4;
+}
+
+/* ── ANNOUNCEMENT BAR ── */
+.announce-bar {
+  text-align: center;
+  padding: 10px;
+  background: var(--wf-bg);
+  border-bottom: 1px solid var(--wf-border);
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+}
+.announce-bar a {
+  color: var(--wf-brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.announce-bar a:hover { color: var(--wf-brand-hover); }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, var(--wf-bg) 0%, #0d1a0f 50%, var(--wf-bg) 100%);
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -100px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(29,185,84,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-content { position: relative; z-index: 1; }
+.hero-title {
+  font-size: 52px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--wf-fg);
+  margin-bottom: 20px;
+}
+.hero-desc {
+  font-size: 16px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 480px;
+}
+.hero-image {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-image svg { width: 48px; height: 48px; color: var(--wf-fg-faint); }
+
+/* ── LOGO BAR ── */
+.logo-bar {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--wf-border);
+}
+.logo-bar-title {
+  text-align: center;
+  font-size: 14px;
+  color: var(--wf-fg-subtle);
+  margin-bottom: 28px;
+}
+.logo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 32px 48px;
+}
+.logo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--wf-fg-faint);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: color var(--wf-dur);
+}
+.logo-item:hover { color: var(--wf-fg-muted); }
+.logo-item svg { width: 20px; height: 20px; }
+
+/* ── ABOUT SECTION ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.about-image {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.about-image svg { width: 48px; height: 48px; color: var(--wf-fg-faint); }
+.about-content .body-text { margin-top: 20px; margin-bottom: 24px; }
+.bullet-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.5;
+}
+.bullet-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--wf-brand);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* ── SERVICES SECTION ── */
+.services-top {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+.services-left .body-text { margin-top: 20px; margin-bottom: 32px; }
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.service-card {
+  padding: 32px;
+  border: 1px solid var(--wf-border);
+  margin-right: -1px;
+  margin-bottom: -1px;
+  transition: background var(--wf-dur);
+}
+.service-card:hover { background: var(--wf-surface); }
+.service-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+.service-card-text {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--wf-brand);
+  transition: gap var(--wf-dur);
+}
+.link-arrow:hover { gap: 10px; }
+.link-arrow svg { width: 16px; height: 16px; }
+
+/* ── TESTIMONIAL SECTION ── */
+.testimonial-section {
+  background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+  border-bottom: 1px solid var(--wf-border);
+}
+.testimonial-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  overflow: hidden;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.testimonial-media {
+  background: var(--wf-bg-sunken);
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.play-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all var(--wf-dur);
+}
+.play-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+.play-btn svg { width: 24px; height: 24px; margin-left: 3px; }
+.testimonial-content {
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+.star { color: var(--wf-brand); }
+.star svg { width: 18px; height: 18px; fill: currentColor; }
+.testimonial-quote {
+  font-size: 16px;
+  color: var(--wf-fg);
+  line-height: 1.65;
+  margin-bottom: 28px;
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.author-info .author-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-fg);
+}
+.author-info .author-role {
+  font-size: 13px;
+  color: var(--wf-fg-subtle);
+}
+.author-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-fg-muted);
+}
+.author-logo svg { width: 18px; height: 18px; }
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 960px;
+  margin: 28px auto 0;
+}
+.carousel-dots {
+  display: flex;
+  gap: 8px;
+}
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--wf-fg-faint);
+  transition: background var(--wf-dur);
+  cursor: pointer;
+}
+.carousel-dot.active { background: var(--wf-brand); }
+.carousel-arrows {
+  display: flex;
+  gap: 8px;
+}
+.carousel-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--wf-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wf-fg-muted);
+  transition: all var(--wf-dur);
+}
+.carousel-arrow:hover { border-color: var(--wf-fg-subtle); color: var(--wf-fg); }
+.carousel-arrow svg { width: 18px; height: 18px; }
+
+/* ── RESOURCES / BLOG ── */
+.resources-header { margin-bottom: 48px; }
+.resources-header .body-text { margin-top: 16px; }
+.blog-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+.blog-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  overflow: hidden;
+  transition: all var(--wf-dur);
+  cursor: pointer;
+}
+.blog-card:hover { border-color: var(--wf-border-strong); transform: translateY(-2px); }
+.blog-image {
+  background: var(--wf-bg-sunken);
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--wf-border);
+}
+.blog-image svg { width: 36px; height: 36px; color: var(--wf-fg-faint); }
+.blog-body { padding: 24px; }
+.blog-category {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--wf-brand);
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+.blog-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+.blog-excerpt {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.blog-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+.blog-meta-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--wf-fg-faint);
+}
+.view-all-wrap { text-align: center; }
+
+/* ── FAQ ── */
+.faq-header { margin-bottom: 48px; }
+.faq-header .body-text { margin-top: 16px; max-width: 640px; margin-left: auto; margin-right: auto; }
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.faq-item {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--wf-border);
+  cursor: pointer;
+}
+.faq-grid > :nth-child(odd) { padding-right: 32px; border-right: 1px solid var(--wf-border); }
+.faq-grid > :nth-child(even) { padding-left: 32px; }
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--wf-fg);
+  transition: color var(--wf-dur);
+}
+.faq-item:hover .faq-question { color: var(--wf-brand); }
+.faq-chevron {
+  flex-shrink: 0;
+  color: var(--wf-fg-subtle);
+  transition: transform var(--wf-dur);
+}
+.faq-chevron svg { width: 18px; height: 18px; }
+
+/* ── CTA ── */
+.cta-section {
+  padding: 80px 0;
+  text-align: center;
+  background: var(--wf-bg);
+}
+.cta-section .heading-md { margin-bottom: 12px; }
+.cta-section .body-text { margin-bottom: 28px; }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--wf-border);
+  padding: 56px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+}
+.footer-brand .navbar-logo { margin-bottom: 16px; }
+.footer-subscribe-text {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  margin-bottom: 12px;
+}
+.footer-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.footer-input {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  background: var(--wf-bg);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-sm);
+  font-size: 13px;
+  color: var(--wf-fg);
+  font-family: var(--font-sans);
+}
+.footer-input::placeholder { color: var(--wf-fg-faint); }
+.footer-input:focus { outline: none; border-color: var(--wf-brand); }
+.footer-disclaimer {
+  font-size: 11px;
+  color: var(--wf-fg-faint);
+  line-height: 1.5;
+}
+.footer-disclaimer a { text-decoration: underline; text-underline-offset: 2px; }
+.footer-col-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 16px;
+}
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-link {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid var(--wf-border);
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+.footer-legal a {
+  color: var(--wf-fg-subtle);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--wf-dur);
+}
+.footer-legal a:hover { color: var(--wf-fg); }
+
+/* ── NAV: mobile hamburger ── */
+.mobile-toggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; color: var(--wf-fg); }
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ── Active nav highlight ── */
+.navbar-link.active { color: var(--wf-fg); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero-title { font-size: 40px; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-image { max-height: 400px; }
+  .services-top { grid-template-columns: 1fr; }
+  .testimonial-card { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .section { padding: 56px 0; }
+  .heading-xl { font-size: 36px; }
+  .heading-lg { font-size: 32px; }
+  .heading-md { font-size: 26px; }
+  .navbar-links { display: none; }
+  .navbar-actions .navbar-phone { display: none; }
+  .mobile-toggle { display: flex; }
+  .subnav-grid { grid-template-columns: 1fr 1fr; }
+  .subnav-item:nth-child(2) { border-right: none; }
+  .services-grid { grid-template-columns: 1fr; }
+  .blog-grid { grid-template-columns: 1fr; }
+  .faq-grid { grid-template-columns: 1fr; }
+  .faq-grid > :nth-child(odd) { padding-right: 0; border-right: none; }
+  .faq-grid > :nth-child(even) { padding-left: 0; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="#" class="navbar-link active">Link One</a>
+      <a href="#" class="navbar-link">Link Two</a>
+      <a href="#" class="navbar-link">Link Three</a>
+      <a href="#" class="navbar-link">Link Four
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </div>
+    <div class="navbar-actions">
+      <a href="tel:1888123456" class="navbar-phone">Call us 1 888 123 456</a>
+      <a href="#" class="btn btn-sm btn-primary">Book a consultation</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ SUB-NAV BANNER ═══════════════ -->
+<div class="subnav-banner">
+  <div class="container">
+    <div class="subnav-grid">
+      <div class="subnav-item">
+        <div class="subnav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>
+        </div>
+        <div>
+          <div class="subnav-title">Page One</div>
+          <div class="subnav-desc">Lorem ipsum dolor sit amet consectetur elit</div>
+        </div>
+      </div>
+      <div class="subnav-item">
+        <div class="subnav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+        </div>
+        <div>
+          <div class="subnav-title">Page Two</div>
+          <div class="subnav-desc">Lorem ipsum dolor sit amet consectetur elit</div>
+        </div>
+      </div>
+      <div class="subnav-item">
+        <div class="subnav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div>
+          <div class="subnav-title">Page Three</div>
+          <div class="subnav-desc">Lorem ipsum dolor sit amet consectetur elit</div>
+        </div>
+      </div>
+      <div class="subnav-item">
+        <div class="subnav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div>
+          <div class="subnav-title">Page Four</div>
+          <div class="subnav-desc">Lorem ipsum dolor sit amet consectetur elit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ANNOUNCEMENT BAR ═══════════════ -->
+<div class="announce-bar">
+  Looking for a new career? <a href="#">Get in touch</a>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <h1 class="hero-title">Describe what your company does in a few words</h1>
+        <p class="hero-desc">Describe exactly what the company does and what a customer can expect when working with the company. Avoid using tedious words or phrases.</p>
+        <a href="#" class="btn btn-md btn-primary">Book a consultation</a>
+      </div>
+      <div class="hero-image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LOGO BAR ═══════════════ -->
+<section class="logo-bar">
+  <div class="container">
+    <p class="logo-bar-title">We've worked with great companies [Social proof to build credibility]</p>
+    <div class="logo-grid">
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Relume</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Webflow</div>
+      <div class="logo-item"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg> Webflow</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <div class="about-content">
+        <p class="kicker">About</p>
+        <h2 class="heading-lg">Describe what makes your company different to competitors</h2>
+        <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+        <div class="bullet-list">
+          <div class="bullet-item">
+            <div class="bullet-dot"></div>
+            <span>Lorem ipsum dolor sit amet consectetur adipiscing elit</span>
+          </div>
+          <div class="bullet-item">
+            <div class="bullet-dot"></div>
+            <span>Lorem ipsum dolor sit amet consectetur adipiscing elit</span>
+          </div>
+          <div class="bullet-item">
+            <div class="bullet-dot"></div>
+            <span>Lorem ipsum dolor sit amet consectetur adipiscing elit</span>
+          </div>
+        </div>
+        <a href="#" class="btn btn-md btn-outline">Learn more</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SERVICES ═══════════════ -->
+<section class="section" id="services" style="border-top: 1px solid var(--wf-border);">
+  <div class="container">
+    <div class="services-top">
+      <div class="services-left">
+        <p class="kicker">Services</p>
+        <h2 class="heading-lg">Short headline of how the company can help</h2>
+        <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+        <a href="#" class="btn btn-md btn-primary">Book a consultation</a>
+      </div>
+      <div></div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <h3 class="service-card-title">Summary of service one</h3>
+        <p class="service-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-card">
+        <h3 class="service-card-title">Summary of service two</h3>
+        <p class="service-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-card">
+        <h3 class="service-card-title">Summary of service three</h3>
+        <p class="service-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-card">
+        <h3 class="service-card-title">Summary of service four</h3>
+        <p class="service-card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+        <a href="#" class="link-arrow">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIAL ═══════════════ -->
+<section class="section-lg testimonial-section" id="testimonials">
+  <div class="container">
+    <p class="kicker text-center">Customer Stories</p>
+    <h2 class="heading-lg text-center" style="margin-bottom: 48px;">Don't just take our word for it</h2>
+    <div class="testimonial-card">
+      <div class="testimonial-media">
+        <button class="play-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <div class="testimonial-content">
+        <div class="stars">
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+        </div>
+        <p class="testimonial-quote">"A testimonial that shares a customer's positive experience with your company and answers potential customer doubts. Showcase testimonials from a similar demographic to your customers."</p>
+        <div class="testimonial-author">
+          <div class="author-info">
+            <div class="author-name">Name Surname</div>
+            <div class="author-role">Position, Company name</div>
+          </div>
+          <div class="author-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>
+            Webflow
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls">
+      <div class="carousel-dots">
+        <div class="carousel-dot active"></div>
+        <div class="carousel-dot"></div>
+        <div class="carousel-dot"></div>
+        <div class="carousel-dot"></div>
+        <div class="carousel-dot"></div>
+      </div>
+      <div class="carousel-arrows">
+        <button class="carousel-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <button class="carousel-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ RESOURCES / BLOG ═══════════════ -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="resources-header text-center">
+      <p class="kicker">Resources</p>
+      <h2 class="heading-lg">Introduce resources that can provide value to the visitor</h2>
+      <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+    <div class="blog-grid">
+      <a href="#" class="blog-card">
+        <div class="blog-image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="blog-body">
+          <div class="blog-category">Category</div>
+          <h3 class="blog-title">Blog title heading will go here</h3>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <div class="blog-meta">
+            <span>Full name</span>
+            <span class="blog-meta-dot"></span>
+            <span>11 Jan 2022</span>
+            <span class="blog-meta-dot"></span>
+            <span>5 min read</span>
+          </div>
+        </div>
+      </a>
+      <a href="#" class="blog-card">
+        <div class="blog-image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="blog-body">
+          <div class="blog-category">Category</div>
+          <h3 class="blog-title">Blog title heading will go here</h3>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <div class="blog-meta">
+            <span>Full name</span>
+            <span class="blog-meta-dot"></span>
+            <span>11 Jan 2022</span>
+            <span class="blog-meta-dot"></span>
+            <span>5 min read</span>
+          </div>
+        </div>
+      </a>
+      <a href="#" class="blog-card">
+        <div class="blog-image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="blog-body">
+          <div class="blog-category">Category</div>
+          <h3 class="blog-title">Blog title heading will go here</h3>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <div class="blog-meta">
+            <span>Full name</span>
+            <span class="blog-meta-dot"></span>
+            <span>11 Jan 2022</span>
+            <span class="blog-meta-dot"></span>
+            <span>5 min read</span>
+          </div>
+        </div>
+      </a>
+      <a href="#" class="blog-card">
+        <div class="blog-image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="blog-body">
+          <div class="blog-category">Category</div>
+          <h3 class="blog-title">Blog title heading will go here</h3>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim...</p>
+          <div class="blog-meta">
+            <span>Full name</span>
+            <span class="blog-meta-dot"></span>
+            <span>11 Jan 2022</span>
+            <span class="blog-meta-dot"></span>
+            <span>5 min read</span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="view-all-wrap">
+      <a href="#" class="btn btn-md btn-outline">View all</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section class="section" id="faq" style="border-top: 1px solid var(--wf-border);">
+  <div class="container">
+    <div class="faq-header text-center">
+      <h2 class="heading-lg">Frequently asked questions</h2>
+      <p class="body-text">Frequently asked questions ordered by popularity. Remember that if the visitor has not committed to the call to action, they may still have questions (doubts) that can be answered.</p>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Question text goes here</span>
+          <span class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-section">
+  <div class="container-sm">
+    <h2 class="heading-md">Still have a questions?</h2>
+    <p class="body-text">Support details to capture customers that might be on the fence.</p>
+    <a href="tel:1888123456" class="btn btn-md btn-outline">Call us 1 888 123 456</a>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="navbar-logo">Logo</div>
+        <p class="footer-subscribe-text">Join our newsletter to stay up to date on features and releases.</p>
+        <form class="footer-form" onsubmit="return false;">
+          <input type="email" class="footer-input" placeholder="Enter your email">
+          <button type="submit" class="btn btn-sm btn-outline">Subscribe</button>
+        </form>
+        <p class="footer-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Column One</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link One</a>
+          <a href="#" class="footer-link">Link Two</a>
+          <a href="#" class="footer-link">Link Three</a>
+          <a href="#" class="footer-link">Link Four</a>
+          <a href="#" class="footer-link">Link Five</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Column Two</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Link Six</a>
+          <a href="#" class="footer-link">Link Seven</a>
+          <a href="#" class="footer-link">Link Eight</a>
+          <a href="#" class="footer-link">Link More</a>
+          <a href="#" class="footer-link">Link Ten</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Follow Us</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> Facebook</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg> Instagram</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> X</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg> Youtube</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2025 Relume. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
