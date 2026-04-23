@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product Page — Windfield Template</title>
+<title>Product Page v2 — Windfield Template</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -40,11 +40,15 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 .breadcrumb strong{color:var(--wf-fg);font-weight:500}
 
 /* Product Gallery */
-.gallery-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:48px}
-.gallery-main{grid-column:1;grid-row:1/3}.gallery-main .ph{aspect-ratio:auto;height:100%;min-height:400px}
-.gallery-sm .ph{aspect-ratio:1/1}
-.gallery-sm:last-child{position:relative}
-.product-bottom{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-bottom:64px}
+.product-header{display:grid;grid-template-columns:auto 1fr 1fr;gap:24px;padding-bottom:64px}
+.thumb-strip{display:flex;flex-direction:column;gap:8px;width:72px}
+.thumb-strip .ph{width:72px;height:72px;border-radius:var(--wf-r-sm);cursor:pointer;transition:border-color var(--wf-dur)}.thumb-strip .ph:hover{border-color:var(--wf-border-strong)}
+.main-image .ph{aspect-ratio:3/4;height:100%;min-height:480px}
+.product-right{display:flex;flex-direction:column}
+.accordion-item{border-top:1px solid var(--wf-border);padding:20px 0}
+.accordion-q{display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:600;color:var(--wf-fg);cursor:pointer;transition:color var(--wf-dur)}.accordion-q:hover{color:var(--wf-brand)}
+.accordion-q svg{width:18px;height:18px;color:var(--wf-fg-subtle);flex-shrink:0}
+.accordion-a{font-size:14px;color:var(--wf-fg-muted);line-height:1.65;margin-top:12px}
 .show-all{position:absolute;bottom:12px;right:12px;font-size:12px;font-weight:600;padding:6px 14px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);color:var(--wf-fg);cursor:pointer;transition:all var(--wf-dur)}.show-all:hover{background:var(--wf-surface-hover)}
 
 /* Product Info */
@@ -176,7 +180,7 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 .footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
 .footer-legal{display:flex;gap:24px}.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
 
-@media(max-width:1024px){.container{padding:0 24px}.product-bottom,.details-grid,.stats-grid,.testi-layout,.dark-band-top{grid-template-columns:1fr;gap:32px}.dark-features{grid-template-columns:1fr 1fr}.products-grid{grid-template-columns:1fr 1fr}.gallery-grid{grid-template-columns:1fr}.gallery-main{grid-row:auto}.footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:1024px){.container{padding:0 24px}.product-header{grid-template-columns:1fr;gap:24px}.thumb-strip{flex-direction:row;width:auto}.main-image .ph{min-height:320px}.details-grid,.stats-grid,.testi-layout,.dark-band-top{grid-template-columns:1fr;gap:32px}.dark-features{grid-template-columns:1fr 1fr}.products-grid{grid-template-columns:1fr 1fr}.gallery-grid{grid-template-columns:1fr}.gallery-main{grid-row:auto}.footer-top{grid-template-columns:1fr 1fr}}
 @media(max-width:768px){.container{padding:0 20px}.product-info h1,.details-title,.dark-band-title,.stats-title,.testi-left h2,.faq-header h2,.related-header h2,.cta h2{font-size:28px}.stat-val,.purchase-price{font-size:36px}.navbar-links{display:none}.mobile-toggle{display:flex}.dark-features,.stats-nums{grid-template-columns:1fr}.products-grid{grid-template-columns:1fr 1fr}.testi-cards{flex-direction:column}.testi-card{min-width:100%}.cta-btns{flex-direction:column;align-items:center}.footer-top{grid-template-columns:1fr;gap:32px}.footer-bottom{flex-direction:column;gap:12px;text-align:center}.related-header{flex-direction:column;align-items:flex-start;gap:12px}}
 </style>
 </head>
@@ -189,7 +193,8 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
     <a href="home-v1.html" class="navbar-link">Home v1</a>
     <a href="about.html" class="navbar-link">About</a>
     <a href="pricing.html" class="navbar-link">Pricing</a>
-    <a href="product.html" class="navbar-link active">Product</a>
+    <a href="product.html" class="navbar-link">Product</a>
+    <a href="product-v2.html" class="navbar-link active">Product v2</a>
     <a href="portfolio.html" class="navbar-link">Portfolio</a>
     <a href="blog-post.html" class="navbar-link">Blog Post</a>
   </div>
@@ -205,40 +210,32 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
     <strong>Product name</strong>
   </div>
 
-  <!-- GALLERY (full-width) -->
-  <div class="gallery-grid">
-    <div class="gallery-main"><div class="ph"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
-    <div class="gallery-sm"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
-    <div class="gallery-sm"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
-    <div class="gallery-sm"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
-    <div class="gallery-sm" style="position:relative"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><button class="show-all">Show All Photos</button></div>
-  </div>
-
-  <!-- PRODUCT INFO + PURCHASE -->
-  <div class="product-bottom">
-    <div class="product-info">
-      <h1>Product name</h1>
-      <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
-      <ul class="product-bullets">
-        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-      </ul>
-      <div class="product-tabs">
-        <div class="product-tab active">Details</div>
-        <div class="product-tab">Shipping</div>
-        <div class="product-tab">Returns</div>
-      </div>
-      <div class="tab-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div>
+  <!-- PRODUCT HEADER: Thumbnails + Main Image + Info/Purchase -->
+  <div class="product-header">
+    <!-- Thumbnail strip -->
+    <div class="thumb-strip">
+      <div class="ph"><svg style="width:28px;height:28px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="ph"><svg style="width:28px;height:28px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="ph"><svg style="width:28px;height:28px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="ph"><svg style="width:28px;height:28px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
     </div>
-
-    <!-- Purchase Panel -->
-    <div class="purchase">
-      <div class="purchase-price">$55</div>
-      <div class="purchase-rating">
+    <!-- Main image -->
+    <div class="main-image">
+      <div class="ph"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    </div>
+    <!-- Product info + purchase -->
+    <div class="product-right">
+      <h1 style="font-size:36px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px">Product name</h1>
+      <div class="purchase-price" style="font-size:32px;margin-bottom:8px">$55</div>
+      <div class="purchase-rating" style="margin-bottom:20px">
         <div class="stars-sm"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" class="half"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" class="half"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
         (3.5 stars) &middot; 10 reviews
       </div>
+      <p class="product-desc" style="margin-bottom:20px">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+      <div class="variant-label">Variant</div>
+      <select style="width:100%;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:14px;color:var(--wf-fg);font-family:var(--font-sans);margin-bottom:16px;appearance:auto;cursor:pointer">
+        <option>Select</option><option>Option A</option><option>Option B</option>
+      </select>
       <div class="variant-label">Variant</div>
       <div class="variant-options">
         <button class="variant-btn active">Option One</button>
@@ -249,7 +246,21 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
       <input type="number" class="qty-input" value="1" min="1">
       <button class="cart-btn">Add To Cart</button>
       <button class="buy-btn">Buy Now</button>
-      <p class="shipping-note">Free shipping over $50</p>
+      <p class="shipping-note" style="margin-bottom:24px">Free shipping over $50</p>
+
+      <!-- Accordion details -->
+      <div class="accordion-item">
+        <div class="accordion-q"><span>Details</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="accordion-a">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div>
+      </div>
+      <div class="accordion-item">
+        <div class="accordion-q"><span>Shipping</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="accordion-a">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div>
+      </div>
+      <div class="accordion-item" style="border-bottom:1px solid var(--wf-border)">
+        <div class="accordion-q"><span>Returns</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="accordion-a">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div>
+      </div>
     </div>
   </div>
 </div>
