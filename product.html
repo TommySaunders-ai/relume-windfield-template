@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Page — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.btn-full{width:100%;justify-content:center}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}.link-arrow:hover{gap:10px}.link-arrow svg{width:16px;height:16px}
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+.ph-sm svg{width:36px;height:36px}
+.ic{width:48px;height:48px;color:var(--wf-fg-faint)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}.navbar-link:hover{color:var(--wf-fg)}.navbar-link.active{color:var(--wf-fg)}.navbar-link svg{width:12px;height:12px}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}.mobile-toggle svg{width:24px;height:24px}
+
+/* Breadcrumb */
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-subtle);padding:20px 0}
+.breadcrumb a{transition:color var(--wf-dur)}.breadcrumb a:hover{color:var(--wf-brand)}
+.breadcrumb svg{width:12px;height:12px;flex-shrink:0}
+.breadcrumb strong{color:var(--wf-fg);font-weight:500}
+
+/* Product Gallery */
+.product-top{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-bottom:64px}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gallery-main{grid-column:1;grid-row:1/3}.gallery-main .ph{aspect-ratio:3/4;height:100%}
+.gallery-sm .ph{aspect-ratio:1/1}
+.gallery-sm:last-child{position:relative}
+.show-all{position:absolute;bottom:12px;right:12px;font-size:12px;font-weight:600;padding:6px 14px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);color:var(--wf-fg);cursor:pointer;transition:all var(--wf-dur)}.show-all:hover{background:var(--wf-surface-hover)}
+
+/* Product Info */
+.product-info h1{font-size:40px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;margin-bottom:16px}
+.product-desc{font-size:15px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:16px}
+.product-bullets{margin-bottom:24px}
+.product-bullets li{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--wf-fg-muted);padding:4px 0}
+.product-bullets li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--wf-fg-subtle);flex-shrink:0}
+.product-tabs{display:flex;gap:24px;border-bottom:1px solid var(--wf-border);margin-bottom:20px}
+.product-tab{padding:10px 0;font-size:14px;font-weight:500;color:var(--wf-fg-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all var(--wf-dur)}
+.product-tab.active{color:var(--wf-fg);border-bottom-color:var(--wf-brand)}
+.product-tab:hover{color:var(--wf-fg)}
+.tab-content{font-size:14px;color:var(--wf-fg-muted);line-height:1.65}
+
+/* Purchase Panel */
+.purchase{position:sticky;top:80px}
+.purchase-price{font-size:48px;font-weight:700;letter-spacing:-0.03em;color:var(--wf-fg);margin-bottom:8px}
+.purchase-rating{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:13px;color:var(--wf-fg-muted)}
+.stars-sm{display:flex;gap:2px}.stars-sm svg{width:16px;height:16px;fill:var(--wf-brand)}
+.stars-sm .half{fill:var(--wf-fg-faint)}
+.variant-label{font-size:14px;font-weight:600;color:var(--wf-fg);margin-bottom:10px}
+.variant-options{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.variant-btn{height:36px;padding:0 16px;font-size:13px;font-weight:500;border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);color:var(--wf-fg-muted);cursor:pointer;transition:all var(--wf-dur);background:transparent}
+.variant-btn:hover{border-color:var(--wf-border-strong);color:var(--wf-fg)}
+.variant-btn.active{background:var(--wf-brand);color:var(--wf-brand-fg);border-color:var(--wf-brand)}
+.variant-btn.disabled{opacity:0.4;cursor:not-allowed}
+.qty-label{font-size:14px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.qty-input{width:64px;height:40px;text-align:center;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:14px;color:var(--wf-fg);font-family:var(--font-sans);margin-bottom:24px}
+.qty-input:focus{outline:none;border-color:var(--wf-brand)}
+.cart-btn{width:100%;height:48px;display:flex;align-items:center;justify-content:center;background:var(--wf-brand);color:var(--wf-brand-fg);font-weight:600;font-size:15px;border:none;border-radius:var(--wf-r-md);cursor:pointer;transition:background var(--wf-dur);margin-bottom:10px}
+.cart-btn:hover{background:var(--wf-brand-hover)}
+.buy-btn{width:100%;height:48px;display:flex;align-items:center;justify-content:center;background:transparent;color:var(--wf-fg);font-weight:600;font-size:15px;border:1px solid var(--wf-border-strong);border-radius:var(--wf-r-md);cursor:pointer;transition:all var(--wf-dur);margin-bottom:12px}
+.buy-btn:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.shipping-note{font-size:13px;color:var(--wf-fg-subtle);text-align:center}
+
+/* Product Details + Specs */
+.details-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.details-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:start;margin-bottom:40px}
+.details-title{font-size:32px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:0}
+.details-body p{font-size:15px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:16px}
+.spec-table{margin-top:24px}
+.spec-row{display:flex;justify-content:space-between;padding:14px 0;border-top:1px solid var(--wf-brand);font-size:14px}
+.spec-row:last-child{border-bottom:1px solid var(--wf-brand)}
+.spec-label{font-weight:600;color:var(--wf-fg)}
+.spec-value{color:var(--wf-fg-muted)}
+.video-ph{aspect-ratio:16/9;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;position:relative}
+.play-btn{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:white;cursor:pointer}.play-btn svg{width:24px;height:24px;margin-left:3px}
+
+/* Dark Feature Band */
+.dark-band{padding:80px 0;background:var(--wf-surface);border-top:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border)}
+.dark-band-top{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-bottom:48px}
+.dark-band-title{font-size:36px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:var(--wf-fg)}
+.dark-band-desc{font-size:15px;color:var(--wf-fg-muted);line-height:1.65}
+.dark-features{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.dark-feat-icon{width:40px;height:40px;border-radius:var(--wf-r-md);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;color:var(--wf-brand);margin-bottom:16px}
+.dark-feat-icon svg{width:20px;height:20px}
+.dark-feat-title{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.dark-feat-text{font-size:13px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:12px}
+
+/* Stats */
+.stats-section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.stats-title{font-size:36px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:var(--wf-fg)}
+.stats-desc{font-size:15px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:32px}
+.stats-nums{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.stat-val{font-size:48px;font-weight:700;letter-spacing:-0.03em;color:var(--wf-fg);line-height:1}
+.stat-lbl{font-size:14px;color:var(--wf-fg-muted);margin-top:4px}
+
+/* Testimonials */
+.testi-section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.testi-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:48px;align-items:start}
+.testi-left h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.testi-left p{font-size:15px;color:var(--wf-fg-muted)}
+.testi-cards{display:flex;gap:16px;overflow:hidden}
+.testi-card{min-width:320px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:24px;flex-shrink:0}
+.testi-stars{display:flex;gap:3px;margin-bottom:16px}.testi-stars svg{width:16px;height:16px;fill:var(--wf-brand)}
+.testi-quote{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:20px;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-avatar{width:40px;height:40px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center}.testi-avatar svg{width:20px;height:20px;color:var(--wf-fg-faint)}
+.testi-name{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.testi-role{font-size:12px;color:var(--wf-fg-subtle)}
+.testi-controls{display:flex;align-items:center;justify-content:space-between;margin-top:24px}
+.carousel-arrows{display:flex;gap:8px}
+.carousel-arrow{width:40px;height:40px;border-radius:50%;border:1px solid var(--wf-border-strong);display:flex;align-items:center;justify-content:center;color:var(--wf-fg-muted);transition:all var(--wf-dur);cursor:pointer}.carousel-arrow:hover{border-color:var(--wf-fg-subtle);color:var(--wf-fg)}.carousel-arrow svg{width:18px;height:18px}
+.carousel-dots{display:flex;gap:8px}.carousel-dot{width:8px;height:8px;border-radius:50%;background:var(--wf-fg-faint);cursor:pointer}.carousel-dot.active{background:var(--wf-brand)}
+
+/* FAQ Accordion */
+.faq-section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.faq-header{margin-bottom:48px}
+.faq-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.faq-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px}
+.faq-item{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);margin-bottom:12px;overflow:hidden}
+.faq-q{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;font-size:15px;font-weight:600;color:var(--wf-fg);cursor:pointer;transition:color var(--wf-dur)}
+.faq-q:hover{color:var(--wf-brand)}
+.faq-x{flex-shrink:0;color:var(--wf-fg-subtle)}.faq-x svg{width:18px;height:18px}
+.faq-a{padding:0 24px 20px;font-size:14px;color:var(--wf-fg-muted);line-height:1.65}
+.still-q{margin-top:48px}
+.still-q h3{font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}
+.still-q p{font-size:15px;color:var(--wf-fg-muted);margin-bottom:20px}
+
+/* Related Products */
+.related{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.related-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px}
+.related-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg)}
+.related-header p{font-size:15px;color:var(--wf-fg-muted);margin-top:4px}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.prod-card{cursor:pointer;transition:transform var(--wf-dur)}.prod-card:hover{transform:translateY(-2px)}
+.prod-card-img{aspect-ratio:3/4;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;margin-bottom:12px;transition:border-color var(--wf-dur)}.prod-card:hover .prod-card-img{border-color:var(--wf-border-strong)}
+.prod-card-img svg{width:36px;height:36px;color:var(--wf-fg-faint)}
+.prod-name{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.prod-variant{font-size:12px;color:var(--wf-fg-subtle)}
+.prod-price{font-size:16px;font-weight:700;color:var(--wf-fg);margin-top:4px}
+
+/* CTA */
+.cta{padding:80px 0;text-align:center}
+.cta h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:16px;max-width:640px;margin-left:auto;margin-right:auto}
+.cta p{font-size:16px;color:var(--wf-fg-muted);margin-bottom:28px;max-width:520px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:12px;justify-content:center}
+
+/* Footer */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-sub-text{font-size:13px;color:var(--wf-fg-muted);margin-bottom:12px}
+.footer-form{display:flex;gap:8px;margin-bottom:12px}
+.footer-input{flex:1;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}.footer-input::placeholder{color:var(--wf-fg-faint)}.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disc{font-size:11px;color:var(--wf-fg-faint);line-height:1.5}.footer-disc a{text-decoration:underline;text-underline-offset:2px}
+.ft{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.fl{display:flex;flex-direction:column;gap:10px}.fl a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:8px}.fl a:hover{color:var(--wf-fg)}.fl a svg{width:16px;height:16px;flex-shrink:0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
+
+@media(max-width:1024px){.container{padding:0 24px}.product-top,.details-grid,.stats-grid,.testi-layout,.dark-band-top{grid-template-columns:1fr;gap:32px}.dark-features{grid-template-columns:1fr 1fr}.products-grid{grid-template-columns:1fr 1fr}.gallery-grid{grid-template-columns:1fr}.gallery-main{grid-row:auto}.footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.container{padding:0 20px}.product-info h1,.details-title,.dark-band-title,.stats-title,.testi-left h2,.faq-header h2,.related-header h2,.cta h2{font-size:28px}.stat-val,.purchase-price{font-size:36px}.navbar-links{display:none}.mobile-toggle{display:flex}.dark-features,.stats-nums{grid-template-columns:1fr}.products-grid{grid-template-columns:1fr 1fr}.testi-cards{flex-direction:column}.testi-card{min-width:100%}.cta-btns{flex-direction:column;align-items:center}.footer-top{grid-template-columns:1fr;gap:32px}.footer-bottom{flex-direction:column;gap:12px;text-align:center}.related-header{flex-direction:column;align-items:flex-start;gap:12px}}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar"><div class="container navbar-inner">
+  <a href="index.html" class="navbar-logo">Logo</a>
+  <div class="navbar-links">
+    <a href="home-v1.html" class="navbar-link">Home v1</a>
+    <a href="about.html" class="navbar-link">About</a>
+    <a href="pricing.html" class="navbar-link">Pricing</a>
+    <a href="product.html" class="navbar-link active">Product</a>
+    <a href="portfolio.html" class="navbar-link">Portfolio</a>
+    <a href="blog-post.html" class="navbar-link">Blog Post</a>
+  </div>
+  <div class="navbar-actions"><a href="#" class="btn btn-sm btn-outline">Log in</a><a href="#" class="btn btn-sm btn-primary">Get started</a></div>
+  <button class="mobile-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</div></nav>
+
+<!-- BREADCRUMB + PRODUCT -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="#">Shop all</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    <a href="#">Category</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    <strong>Product name</strong>
+  </div>
+
+  <!-- GALLERY + PURCHASE -->
+  <div class="product-top">
+    <div>
+      <!-- Gallery -->
+      <div class="gallery-grid">
+        <div class="gallery-main"><div class="ph"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+        <div class="gallery-sm"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+        <div class="gallery-sm"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+        <div class="gallery-sm"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+        <div class="gallery-sm" style="position:relative"><div class="ph" style="aspect-ratio:1/1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><button class="show-all">Show All Photos</button></div>
+      </div>
+      <!-- Product Info -->
+      <div class="product-info" style="margin-top:32px">
+        <h1>Product name</h1>
+        <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+        <ul class="product-bullets">
+          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+        </ul>
+        <div class="product-tabs">
+          <div class="product-tab active">Details</div>
+          <div class="product-tab">Shipping</div>
+          <div class="product-tab">Returns</div>
+        </div>
+        <div class="tab-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div>
+      </div>
+    </div>
+
+    <!-- Purchase Panel -->
+    <div class="purchase">
+      <div class="purchase-price">$55</div>
+      <div class="purchase-rating">
+        <div class="stars-sm"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" class="half"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24" class="half"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        (3.5 stars) &middot; 10 reviews
+      </div>
+      <div class="variant-label">Variant</div>
+      <div class="variant-options">
+        <button class="variant-btn active">Option One</button>
+        <button class="variant-btn">Option Two</button>
+        <button class="variant-btn disabled">Option Three</button>
+      </div>
+      <div class="qty-label">Quantity</div>
+      <input type="number" class="qty-input" value="1" min="1">
+      <button class="cart-btn">Add To Cart</button>
+      <button class="buy-btn">Buy Now</button>
+      <p class="shipping-note">Free shipping over $50</p>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT DETAILS + SPECS -->
+<div class="container"><div class="details-section">
+  <div class="details-grid">
+    <h2 class="details-title">Medium length section heading goes here</h2>
+    <div>
+      <div class="details-body">
+        <p>Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies. Duis est sit sed leo nisl, blandit elit sagittis. Quisque tristique consequat quam sed. Nisl at scelerisque amet nulla purus habitasse.</p>
+        <p>Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas condimentum mi massa. In tincidunt pharetra consectetur sed duis facilisis metus. Etiam egestas in nec sed et. Quis lobortis at sit dictum eget nibh tortor commodo cursus.</p>
+        <p>Odio felis sagittis, morbi feugiat tortor vitae feugiat fusce aliquet. Nam elementum urna nisi aliquet erat dolor enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut id eget consectetur dictum. Donec posuere pharetra odio consequat scelerisque et, nunc tortor. Nulla adipiscing erat a erat. Condimentum lorem posuere gravida enim posuere cursus diam.</p>
+      </div>
+      <div class="spec-table">
+        <div class="spec-row"><span class="spec-label">Label</span><span class="spec-value">Lorem Ipsum</span></div>
+        <div class="spec-row"><span class="spec-label">Label</span><span class="spec-value">Lorem Ipsum</span></div>
+        <div class="spec-row"><span class="spec-label">Label</span><span class="spec-value">Lorem Ipsum</span></div>
+        <div class="spec-row"><span class="spec-label">Label</span><span class="spec-value">Lorem Ipsum</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="video-ph"><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button></div>
+</div></div>
+
+<!-- DARK FEATURE BAND -->
+<section class="dark-band"><div class="container">
+  <div class="dark-band-top">
+    <h2 class="dark-band-title">Long heading is what you see here in this feature section</h2>
+    <p class="dark-band-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
+  </div>
+  <div class="dark-features">
+    <div><div class="dark-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div><div class="dark-feat-title">Medium length section heading goes here</div><p class="dark-feat-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p><a href="#" class="link-arrow">Button <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    <div><div class="dark-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div><div class="dark-feat-title">Medium length section heading goes here</div><p class="dark-feat-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p><a href="#" class="link-arrow">Button <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    <div><div class="dark-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div><div class="dark-feat-title">Medium length section heading goes here</div><p class="dark-feat-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p><a href="#" class="link-arrow">Button <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    <div><div class="dark-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div><div class="dark-feat-title">Medium length section heading goes here</div><p class="dark-feat-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p><a href="#" class="link-arrow">Button <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+  </div>
+</div></section>
+
+<!-- STATS -->
+<div class="container"><div class="stats-section">
+  <div class="stats-grid">
+    <h2 class="stats-title">Long heading is what you see here in this feature section</h2>
+    <div><p class="stats-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+    <div class="stats-nums"><div><div class="stat-val">50%</div><div class="stat-lbl">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div></div><div><div class="stat-val">50%</div><div class="stat-lbl">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div></div></div></div>
+  </div>
+</div></div>
+
+<!-- TESTIMONIALS -->
+<div class="container"><div class="testi-section">
+  <div class="testi-layout">
+    <div class="testi-left"><h2>Customer testimonials</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
+    <div class="testi-cards">
+      <div class="testi-card"><div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="testi-quote">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare."</p><div class="testi-author"><div class="testi-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="testi-name">Name Surname</div><div class="testi-role">Position, Company name</div></div></div></div>
+      <div class="testi-card"><div class="testi-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="testi-quote">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare."</p><div class="testi-author"><div class="testi-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="testi-name">Name Surname</div><div class="testi-role">Position, Company name</div></div></div></div>
+    </div>
+  </div>
+  <div class="testi-controls"><div class="carousel-arrows"><button class="carousel-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><button class="carousel-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div><div class="carousel-dots"><div class="carousel-dot active"></div><div class="carousel-dot"></div><div class="carousel-dot"></div><div class="carousel-dot"></div><div class="carousel-dot"></div></div></div>
+</div></div>
+
+<!-- FAQ -->
+<div class="container"><div class="faq-section">
+  <div class="faq-header"><h2>FAQs</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p></div>
+  <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></span></div><div class="faq-a">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div></div>
+  <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></span></div><div class="faq-a">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div></div>
+  <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></span></div><div class="faq-a">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div></div>
+  <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></span></div><div class="faq-a">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div></div>
+  <div class="faq-item"><div class="faq-q"><span>Question text goes here</span><span class="faq-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></span></div><div class="faq-a">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</div></div>
+  <div class="still-q"><h3>Still have questions?</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p><a href="#" class="btn btn-md btn-outline">Contact</a></div>
+</div></div>
+
+<!-- RELATED PRODUCTS -->
+<div class="container"><div class="related">
+  <div class="related-header"><div><p class="kicker">Tagline</p><h2>Products</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div><a href="#" class="btn btn-sm btn-outline">View all</a></div>
+  <div class="products-grid">
+    <a href="#" class="prod-card"><div class="prod-card-img ph-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="prod-name">Product name</div><div class="prod-variant">Variant</div><div class="prod-price">$55</div></a>
+    <a href="#" class="prod-card"><div class="prod-card-img ph-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="prod-name">Product name</div><div class="prod-variant">Variant</div><div class="prod-price">$55</div></a>
+    <a href="#" class="prod-card"><div class="prod-card-img ph-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="prod-name">Product name</div><div class="prod-variant">Variant</div><div class="prod-price">$55</div></a>
+    <a href="#" class="prod-card"><div class="prod-card-img ph-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div class="prod-name">Product name</div><div class="prod-variant">Variant</div><div class="prod-price">$55</div></a>
+  </div>
+</div></div>
+
+<!-- CTA -->
+<div class="container"><div class="cta">
+  <p class="kicker">Tagline</p>
+  <h2>Medium length section heading goes here</h2>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+  <div class="cta-btns"><a href="#" class="btn btn-md btn-primary">Button</a><a href="#" class="link-arrow">Button <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+</div></div>
+
+<!-- FOOTER -->
+<footer class="footer"><div class="container">
+  <div class="footer-top">
+    <div><div class="navbar-logo" style="margin-bottom:16px">Logo</div><p class="footer-sub-text">Join our newsletter to stay up to date on features and releases.</p><form class="footer-form" onsubmit="return false;"><input type="email" class="footer-input" placeholder="Enter your email"><button type="submit" class="btn btn-sm btn-outline">Subscribe</button></form><p class="footer-disc">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p></div>
+    <div><div class="ft">Column One</div><div class="fl"><a href="#">Link One</a><a href="#">Link Two</a><a href="#">Link Three</a><a href="#">Link Four</a><a href="#">Link Five</a></div></div>
+    <div><div class="ft">Column Two</div><div class="fl"><a href="#">Link Six</a><a href="#">Link Seven</a><a href="#">Link Eight</a><a href="#">Link Nine</a><a href="#">Link Ten</a></div></div>
+    <div><div class="ft">Follow Us</div><div class="fl">
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg> Facebook</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg> Instagram</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> X</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg> Youtube</a>
+    </div></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2023 Relume. All rights reserved.</span><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookies Settings</a></div></div>
+</div></footer>
+
+</body>
+</html>
