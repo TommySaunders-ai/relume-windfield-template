@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Page v2 — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}img{max-width:100%;display:block}
+
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}
+.link-arrow:hover{gap:10px}
+.link-arrow svg{width:16px;height:16px}
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-right{display:flex;align-items:center;gap:12px}
+.menu-btn{display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;background:var(--wf-brand);color:var(--wf-brand-fg);font-size:13px;font-weight:600;border-radius:var(--wf-r-md);transition:background var(--wf-dur)}
+.menu-btn:hover{background:var(--wf-brand-hover)}
+.hamburger{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--wf-border);border-radius:var(--wf-r-md);color:var(--wf-fg-muted);transition:all var(--wf-dur)}
+.hamburger:hover{border-color:var(--wf-border-strong);color:var(--wf-fg)}
+.hamburger svg{width:18px;height:18px}
+.nav-links{display:flex;align-items:center;gap:16px;margin-right:auto;margin-left:32px}
+.nav-link{font-size:13px;color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
+.nav-link:hover{color:var(--wf-fg)}.nav-link.active{color:var(--wf-fg)}
+
+/* Hero with overlay */
+.hero-banner{position:relative;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 40px;background:linear-gradient(135deg,#2a2a2e 0%,#3a3a40 40%,#4a4a50 100%);min-height:360px}
+.hero-banner::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.3)}
+.hero-banner-content{position:relative;z-index:1;max-width:720px}
+.hero-banner h1{font-size:48px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:#fff;margin-bottom:16px}
+.hero-banner p{font-size:16px;color:rgba(255,255,255,0.75);margin-bottom:24px;line-height:1.6}
+.hero-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.hero-tag{font-size:12px;font-weight:600;padding:5px 14px;border-radius:var(--wf-r-sm);background:rgba(29,185,84,0.2);color:var(--wf-brand);border:1px solid rgba(29,185,84,0.3)}
+
+/* Metadata bar */
+.meta-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;padding:40px 0;border-bottom:1px solid var(--wf-border)}
+.meta-bar-label{font-size:12px;font-weight:600;color:var(--wf-fg-subtle);margin-bottom:4px}
+.meta-bar-value{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.meta-bar-value a{color:var(--wf-brand);text-decoration:underline;text-underline-offset:2px}
+
+/* Body text block */
+.body-block{padding:40px 0;max-width:720px}
+.body-block p{font-size:15px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:16px}
+
+/* Content section */
+.csec{padding:64px 0;border-top:1px solid var(--wf-border)}
+.csec-title{font-size:36px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:var(--wf-fg);margin-bottom:20px}
+.csec-body{max-width:640px;margin-bottom:40px}
+.csec-body p{font-size:15px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:16px}
+
+/* Image grids */
+.img-full{margin-bottom:64px}
+.img-full .ph{aspect-ratio:16/9;width:100%}
+.img-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:0}
+.img-2col .ph{aspect-ratio:4/3}
+.img-1plus3{margin-top:0}
+.img-1plus3-main{margin-bottom:16px}
+.img-1plus3-main .ph{aspect-ratio:16/9}
+.img-1plus3-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.img-1plus3-row .ph{aspect-ratio:4/3}
+
+/* Full-width standalone image */
+.fw-img{padding:0 0 64px}
+.fw-img .ph{aspect-ratio:16/9;width:100%}
+
+/* Testimonial */
+.testimonial{padding:64px 0;border-top:1px solid var(--wf-border);text-align:center}
+.stars{display:flex;gap:4px;justify-content:center;margin-bottom:20px}
+.star{color:var(--wf-brand)}
+.star svg{width:18px;height:18px;fill:currentColor}
+.testi-quote{font-size:18px;color:var(--wf-fg);line-height:1.65;max-width:720px;margin:0 auto 28px;font-style:italic}
+.testi-author-row{display:flex;align-items:center;justify-content:center;gap:24px}
+.testi-author-left{display:flex;align-items:center;gap:12px}
+.testi-avatar{width:44px;height:44px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.testi-avatar svg{width:22px;height:22px;color:var(--wf-fg-faint)}
+.testi-name{font-size:14px;font-weight:600;color:var(--wf-fg);text-align:left}
+.testi-role{font-size:13px;color:var(--wf-fg-subtle);text-align:left}
+.testi-divider{width:1px;height:32px;background:var(--wf-border)}
+.testi-brand{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--wf-fg-muted)}
+.testi-brand svg{width:18px;height:18px}
+
+/* Related Projects */
+.related{padding:80px 0;border-top:1px solid var(--wf-border)}
+.related-header{text-align:center;margin-bottom:48px}
+.related-header h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.related-header p{font-size:16px;color:var(--wf-fg-muted)}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.rp-card{cursor:pointer;transition:transform var(--wf-dur)}
+.rp-card:hover{transform:translateY(-2px)}
+.rp-card-img{margin-bottom:16px}
+.rp-card-img .ph{aspect-ratio:16/9;transition:border-color var(--wf-dur)}
+.rp-card:hover .rp-card-img .ph{border-color:var(--wf-border-strong)}
+.rp-card-title{font-size:20px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}
+.rp-card-desc{font-size:14px;color:var(--wf-fg-muted);line-height:1.5;margin-bottom:12px}
+.rp-card-tags{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.rp-tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:var(--wf-r-sm);background:var(--wf-brand-muted);color:var(--wf-brand)}
+
+/* Footer */
+.footer{border-top:1px solid var(--wf-border);padding:40px 0 0;background:var(--wf-bg)}
+.footer-top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;padding-bottom:20px}
+.footer-subscribe-wrap{text-align:right}
+.footer-form{display:flex;gap:8px}
+.footer-input{height:40px;padding:0 12px;width:240px;background:var(--wf-bg-elevated);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-input::placeholder{color:var(--wf-fg-faint)}.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disclaimer{font-size:11px;color:var(--wf-fg-faint);margin-top:6px}
+.footer-disclaimer a{text-decoration:underline;text-underline-offset:2px}
+.footer-mid{display:flex;align-items:center;gap:24px;padding:16px 0;border-top:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border)}
+.footer-mid-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.footer-mid-link:hover{color:var(--wf-fg)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:16px 0;font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg)}
+
+@media(max-width:1024px){.container{padding:0 24px}.meta-bar{grid-template-columns:1fr 1fr}.related-grid{grid-template-columns:1fr}.img-2col,.img-1plus3-row{grid-template-columns:1fr}}
+@media(max-width:768px){.container{padding:0 20px}.hero-banner h1{font-size:32px}.csec-title{font-size:28px}.nav-links{display:none}.meta-bar{grid-template-columns:1fr}.footer-top-row{flex-direction:column}.footer-input{width:100%}.footer-subscribe-wrap{text-align:left}.footer-bottom{flex-direction:column;gap:12px;text-align:center}}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Logo</a>
+    <div class="nav-links">
+      <a href="home-v1.html" class="nav-link">Home v1</a>
+      <a href="home-v2.html" class="nav-link">Home v2</a>
+      <a href="index.html" class="nav-link">Home v3</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="portfolio.html" class="nav-link">Portfolio</a>
+      <a href="portfolio-v2.html" class="nav-link active">Portfolio v2</a>
+    </div>
+    <div class="navbar-right">
+      <button class="menu-btn">Menu</button>
+      <button class="hamburger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO BANNER -->
+<div class="hero-banner">
+  <div class="hero-banner-content">
+    <h1>Project name here</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Tag one</span>
+      <span class="hero-tag">Tag two</span>
+      <span class="hero-tag">Tag three</span>
+    </div>
+  </div>
+</div>
+
+<!-- METADATA BAR -->
+<div class="container">
+  <div class="meta-bar">
+    <div><div class="meta-bar-label">Client</div><div class="meta-bar-value">Full name</div></div>
+    <div><div class="meta-bar-label">Date</div><div class="meta-bar-value">March 2023</div></div>
+    <div><div class="meta-bar-label">Role</div><div class="meta-bar-value">Role name</div></div>
+    <div><div class="meta-bar-label">Website</div><div class="meta-bar-value"><a href="#">www.relume.io</a></div></div>
+  </div>
+</div>
+
+<!-- BODY TEXT -->
+<div class="container">
+  <div class="body-block">
+    <p>Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies. Duis est sit sed leo nisl, blandit elit sagittis. Quisque tristique consequat quam sed. Nisl at scelerisque amet nulla purus habitasse. Semper tristique consequat quam sed. Varius sit in amet pellentesque. Sit turpis pretium eget maecenas.</p>
+    <p>Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas condimentum mi massa. In tincidunt pharetra consectetur sed duis facilisis metus. Etiam egestas in nec sed et. Quis lobortis at sit dictum eget nibl tortor commodo cursus.</p>
+    <p>Odio felis sagittis, morbi feugiat tortor vitae feugiat fusce aliquet. Nam elementum urna nisi aliquet erat dolor enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut id eget consectetur dictum. Donec posuere pharetra odio consequat scelerisque et, nunc tortor. Nulla adipiscing erat a erat. Condimentum lorem posuere gravida enim posuere cursus diam.</p>
+  </div>
+</div>
+
+<!-- FULL-WIDTH IMAGE -->
+<div class="container img-full">
+  <div class="ph" style="aspect-ratio:16/9;width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+</div>
+
+<!-- THE OPPORTUNITY -->
+<div class="container">
+  <div class="csec">
+    <h2 class="csec-title">The opportunity</h2>
+    <div class="csec-body">
+      <p>Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies. Duis est sit sed leo nisl, blandit elit sagittis. Quisque tristique consequat quam sed. Nisl at scelerisque amet nulla purus habitasse.</p>
+      <p>Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas condimentum mi massa. In tincidunt pharetra consectetur sed duis facilisis metus. Etiam egestas in nec sed et. Quis lobortis at sit dictum eget nibl tortor commodo cursus.</p>
+      <p>Odio felis sagittis, morbi feugiat tortor vitae feugiat fusce aliquet. Nam elementum urna nisi aliquet erat dolor enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut id eget consectetur dictum. Condimentum lorem posuere gravida enim posuere cursus diam.</p>
+    </div>
+    <div class="img-2col">
+      <div class="ph" style="aspect-ratio:4/3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="ph" style="aspect-ratio:4/3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT WE DID -->
+<div class="container">
+  <div class="csec">
+    <h2 class="csec-title">What we did</h2>
+    <div class="csec-body">
+      <p>Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies. Duis est sit sed leo nisl, blandit elit sagittis. Quisque tristique consequat quam sed. Nisl at scelerisque amet nulla purus habitasse.</p>
+      <p>Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas condimentum mi massa. In tincidunt pharetra consectetur sed duis facilisis metus. Etiam egestas in nec sed et. Quis lobortis at sit dictum eget nibl tortor commodo cursus.</p>
+      <p>Odio felis sagittis, morbi feugiat tortor vitae feugiat fusce aliquet. Nam elementum urna nisi aliquet erat dolor enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut id eget consectetur dictum. Condimentum lorem posuere gravida enim posuere cursus diam.</p>
+    </div>
+    <div class="img-2col">
+      <div class="ph" style="aspect-ratio:4/3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <div class="ph" style="aspect-ratio:4/3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    </div>
+  </div>
+</div>
+
+<!-- FULL-WIDTH IMAGE -->
+<div class="container fw-img">
+  <div class="ph" style="aspect-ratio:16/9;width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+</div>
+
+<!-- THE OUTCOME -->
+<div class="container">
+  <div class="csec">
+    <h2 class="csec-title">The outcome</h2>
+    <div class="csec-body">
+      <p>Morbi sed imperdiet in ipsum, adipiscing elit dui lectus. Tellus id scelerisque est ultricies ultricies. Duis est sit sed leo nisl, blandit elit sagittis. Quisque tristique consequat quam sed. Nisl at scelerisque amet nulla purus habitasse.</p>
+      <p>Nunc sed faucibus bibendum feugiat sed interdum. Ipsum egestas condimentum mi massa. In tincidunt pharetra consectetur sed duis facilisis metus. Etiam egestas in nec sed et. Quis lobortis at sit dictum eget nibl tortor commodo cursus.</p>
+      <p>Odio felis sagittis, morbi feugiat tortor vitae feugiat fusce aliquet. Nam elementum urna nisi aliquet erat dolor enim. Ornare id morbi eget ipsum. Aliquam senectus neque ut id eget consectetur dictum. Condimentum lorem posuere gravida enim posuere cursus diam.</p>
+    </div>
+  </div>
+</div>
+
+<!-- IMAGE GALLERY: 1 + 3 -->
+<div class="container img-1plus3" style="padding-bottom:0">
+  <div class="img-1plus3-main">
+    <div class="ph" style="aspect-ratio:16/9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+  </div>
+  <div class="img-1plus3-row">
+    <div class="ph" style="aspect-ratio:4/3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    <div class="ph" style="aspect-ratio:4/3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    <div class="ph" style="aspect-ratio:4/3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+  </div>
+</div>
+
+<!-- TESTIMONIAL -->
+<div class="container">
+  <div class="testimonial">
+    <div class="stars">
+      <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      <span class="star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+    </div>
+    <p class="testi-quote">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat."</p>
+    <div class="testi-author-row">
+      <div class="testi-author-left">
+        <div class="testi-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div>
+          <div class="testi-name">Name Surname</div>
+          <div class="testi-role">Position, Company name</div>
+        </div>
+      </div>
+      <div class="testi-divider"></div>
+      <div class="testi-brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg>
+        Webflow
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED PROJECTS -->
+<section class="related">
+  <div class="container">
+    <div class="related-header">
+      <p class="kicker">Portfolio</p>
+      <h2>Related Projects</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+    <div class="related-grid">
+      <a href="#" class="rp-card">
+        <div class="rp-card-img"><div class="ph" style="aspect-ratio:16/9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+        <h3 class="rp-card-title">Project name here</h3>
+        <p class="rp-card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.</p>
+        <div class="rp-card-tags"><span class="rp-tag">Tag one</span><span class="rp-tag">Tag two</span><span class="rp-tag">Tag three</span></div>
+        <span class="link-arrow">View project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </a>
+      <a href="#" class="rp-card">
+        <div class="rp-card-img"><div class="ph" style="aspect-ratio:16/9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div></div>
+        <h3 class="rp-card-title">Project name here</h3>
+        <p class="rp-card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.</p>
+        <div class="rp-card-tags"><span class="rp-tag">Tag one</span><span class="rp-tag">Tag two</span><span class="rp-tag">Tag three</span></div>
+        <span class="link-arrow">View project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top-row">
+      <div class="navbar-logo">Logo</div>
+      <div class="footer-subscribe-wrap">
+        <div class="footer-form"><input type="email" class="footer-input" placeholder="Enter your email"><button class="btn btn-sm btn-outline">Subscribe</button></div>
+        <p class="footer-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a>.</p>
+      </div>
+    </div>
+    <div class="footer-mid">
+      <a href="#" class="footer-mid-link">Link One</a>
+      <a href="#" class="footer-mid-link">Link Two</a>
+      <a href="#" class="footer-mid-link">Link Three</a>
+      <a href="#" class="footer-mid-link">Link Four</a>
+      <a href="#" class="footer-mid-link">Link Five</a>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookies Settings</a></div>
+      <span>&copy; 2024 Relume. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
