@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Modern — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-r-xl:16px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}img{max-width:100%;display:block}
+
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.text-center{text-align:center}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent;cursor:pointer;text-decoration:none}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.btn-ghost{background:transparent;color:var(--wf-fg-muted);border-color:transparent}
+.btn-ghost:hover{color:var(--wf-brand)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(9,9,11,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em;flex-shrink:0}
+.navbar-links{display:flex;align-items:center;gap:24px;margin:0 auto}
+.navbar-link{font-size:13px;color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
+.navbar-link:hover{color:var(--wf-fg)}
+.navbar-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.mobile-toggle{display:none;width:36px;height:36px;align-items:center;justify-content:center;border:1px solid var(--wf-border);border-radius:var(--wf-r-md);color:var(--wf-fg-muted)}
+.mobile-toggle svg{width:18px;height:18px}
+
+/* Hero */
+.hero{position:relative;padding:100px 0 80px;text-align:center;overflow:hidden;border-bottom:1px solid var(--wf-border)}
+.hero::before{content:"";position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse at center,rgba(29,185,84,0.08) 0%,rgba(29,185,84,0.03) 30%,transparent 70%);pointer-events:none;z-index:0}
+.hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.03) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:0}
+.hero .container{position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:var(--wf-brand-muted);border:1px solid rgba(29,185,84,0.2);border-radius:100px;font-size:13px;font-weight:600;color:var(--wf-brand);margin-bottom:28px}
+.hero-badge svg{width:16px;height:16px}
+.hero-title{font-size:56px;font-weight:800;letter-spacing:-0.035em;line-height:1.05;color:var(--wf-fg);margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.hero-subtitle{font-size:20px;color:var(--wf-fg-muted);line-height:1.5;max-width:640px;margin:0 auto 16px}
+.hero-tagline{font-size:15px;color:var(--wf-fg-subtle);font-family:var(--font-mono);letter-spacing:-0.01em}
+
+/* Quick Nav Grid */
+.quick-nav-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.qn-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px;transition:all var(--wf-dur) var(--wf-ease)}
+.qn-card:hover{transform:translateY(-2px);border-color:var(--wf-border-strong);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.qn-icon{width:44px;height:44px;background:var(--wf-brand-muted);border-radius:var(--wf-r-md);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.qn-icon svg{width:22px;height:22px;color:var(--wf-brand)}
+.qn-title{font-size:17px;font-weight:700;color:var(--wf-fg);margin-bottom:8px;letter-spacing:-0.01em}
+.qn-desc{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:16px}
+.qn-cta{font-size:13px;font-weight:600;color:var(--wf-brand);display:inline-flex;align-items:center;gap:6px;transition:gap var(--wf-dur) var(--wf-ease)}
+.qn-cta:hover{gap:10px}
+.qn-cta svg{width:14px;height:14px}
+
+/* Section Headers */
+.section-header{text-align:center;max-width:680px;margin:0 auto 48px}
+.section-title{font-size:36px;font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:var(--wf-fg);margin-bottom:12px}
+.section-subtitle{font-size:16px;color:var(--wf-fg-muted);line-height:1.6}
+
+/* Research Areas */
+.research-primary{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px}
+.research-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px;transition:all var(--wf-dur) var(--wf-ease)}
+.research-card:hover{transform:translateY(-2px);border-color:var(--wf-border-strong);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.research-card-lg{padding:32px}
+.rc-icon{width:48px;height:48px;background:var(--wf-brand-muted);border-radius:var(--wf-r-md);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.rc-icon svg{width:24px;height:24px;color:var(--wf-brand)}
+.rc-title{font-size:18px;font-weight:700;color:var(--wf-fg);margin-bottom:10px;letter-spacing:-0.01em}
+.rc-desc{font-size:14px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:20px}
+.rc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.rc-tag{font-size:11px;font-weight:500;padding:4px 10px;background:var(--wf-surface-hover);border:1px solid var(--wf-border);border-radius:100px;color:var(--wf-fg-subtle);white-space:nowrap}
+.research-supporting{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.research-card-sm .rc-icon{width:40px;height:40px;margin-bottom:16px}
+.research-card-sm .rc-icon svg{width:20px;height:20px}
+.research-card-sm .rc-title{font-size:16px;margin-bottom:8px}
+.research-card-sm .rc-desc{font-size:13px;margin-bottom:16px}
+
+/* Featured Projects */
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.project-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;transition:all var(--wf-dur) var(--wf-ease);display:flex;flex-direction:column}
+.project-card:hover{transform:translateY(-2px);border-color:var(--wf-border-strong);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.project-thumb{aspect-ratio:16/9;background:var(--wf-surface-hover);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--wf-border)}
+.project-thumb svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+.project-body{padding:24px;flex:1;display:flex;flex-direction:column}
+.project-name{font-size:18px;font-weight:700;color:var(--wf-fg);margin-bottom:10px;letter-spacing:-0.01em}
+.project-summary{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:20px;flex:1}
+.project-cta{font-size:13px;font-weight:600;color:var(--wf-brand);display:inline-flex;align-items:center;gap:6px;transition:gap var(--wf-dur) var(--wf-ease)}
+.project-cta:hover{gap:10px}
+.project-cta svg{width:14px;height:14px}
+
+/* CTA Section */
+.cta-section{padding:100px 0;background:var(--wf-bg-elevated);text-align:center;border-bottom:1px solid var(--wf-border)}
+.cta-title{font-size:40px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:var(--wf-fg);margin-bottom:16px}
+.cta-subtitle{font-size:17px;color:var(--wf-fg-muted);margin-bottom:32px;max-width:520px;margin-left:auto;margin-right:auto}
+.cta-buttons{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+
+/* Footer */
+.footer{padding:64px 0 0;background:var(--wf-bg);border-top:1px solid var(--wf-border)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid var(--wf-border)}
+.footer-brand{max-width:320px}
+.footer-sub-text{font-size:14px;color:var(--wf-fg-muted);margin:12px 0 16px}
+.footer-form{display:flex;gap:8px;margin-bottom:12px}
+.footer-input{flex:1;height:36px;padding:0 12px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);color:var(--wf-fg);font-size:13px;font-family:var(--font-sans);outline:none;transition:border-color var(--wf-dur)}
+.footer-input:focus{border-color:var(--wf-brand)}
+.footer-input::placeholder{color:var(--wf-fg-faint)}
+.footer-disc{font-size:12px;color:var(--wf-fg-faint)}
+.footer-disc a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px}
+.ft{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px;letter-spacing:0.02em}
+.fl{display:flex;flex-direction:column;gap:10px}
+.fl a{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.fl a:hover{color:var(--wf-fg)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:24px 0;font-size:13px;color:var(--wf-fg-faint)}
+.footer-legal{display:flex;gap:20px}
+.footer-legal a{color:var(--wf-fg-faint);transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg-muted)}
+
+/* Responsive */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .hero-title{font-size:42px}
+  .quick-nav-grid,.research-primary,.research-supporting,.projects-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .navbar-links{display:none}
+}
+@media(max-width:768px){
+  .hero{padding:72px 0 56px}
+  .hero-title{font-size:32px}
+  .hero-subtitle{font-size:17px}
+  .section{padding:56px 0}
+  .section-title{font-size:28px}
+  .quick-nav-grid,.research-primary,.research-supporting,.projects-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .navbar-actions{display:none}
+  .mobile-toggle{display:flex}
+  .cta-title{font-size:30px}
+  .cta-buttons{flex-direction:column;align-items:stretch;max-width:280px;margin:0 auto}
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar"><div class="container navbar-inner">
+  <a href="index.html" class="navbar-logo">Logo</a>
+  <div class="navbar-links">
+    <a href="home-v1.html" class="navbar-link">Home v1</a>
+    <a href="about.html" class="navbar-link">About</a>
+    <a href="pricing.html" class="navbar-link">Pricing</a>
+    <a href="product.html" class="navbar-link">Product</a>
+    <a href="portfolio.html" class="navbar-link">Portfolio</a>
+    <a href="digital-product.html" class="navbar-link">Digital Product</a>
+    <a href="contact.html" class="navbar-link">Contact</a>
+    <a href="blog-home.html" class="navbar-link">Blog Home</a>
+    <a href="docs.html" class="navbar-link">Docs</a>
+  </div>
+  <div class="navbar-actions"><a href="#" class="btn btn-sm btn-outline">Log in</a><a href="#" class="btn btn-sm btn-primary">Get started</a></div>
+  <button class="mobile-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</div></nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      AI Revenue Operations Expert
+    </div>
+    <h1 class="hero-title">AI Revenue Operations Architect</h1>
+    <p class="hero-subtitle">I Help Organizations Create Intelligence &mdash; That's Not Artificial</p>
+    <p class="hero-tagline">guiding through the chaos &rarr; with real solutions &rarr; that make an immediate impact... today.</p>
+  </div>
+</section>
+
+<!-- Quick Navigation -->
+<section class="section">
+  <div class="container">
+    <div class="quick-nav-grid">
+      <!-- Card 1: Home -->
+      <div class="qn-card">
+        <div class="qn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h3 class="qn-title">Home</h3>
+        <p class="qn-desc">I provide end-to-end expertise&mdash;helping organizations strategize, develop, implement, optimize, and scale their AI-powered MarTech infrastructure and operations</p>
+        <a href="home-v1.html" class="qn-cta">Visit <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- Card 2: About -->
+      <div class="qn-card">
+        <div class="qn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <h3 class="qn-title">About</h3>
+        <p class="qn-desc">Strategic Leadership in AI. I design intelligent systems that transform how businesses operate and grow. As an AI Revenue Operations Architect...</p>
+        <a href="about.html" class="qn-cta">Learn <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- Card 3: Portfolio -->
+      <div class="qn-card">
+        <div class="qn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+        <h3 class="qn-title">Portfolio</h3>
+        <p class="qn-desc">Explore my complete portfolio of AI implementations, revenue operations transformations, and strategic consulting engagements. Case studies demonstrating measurable business impact and ROI.</p>
+        <a href="portfolio.html" class="qn-cta">Browse <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- Card 4: Market Intelligence -->
+      <div class="qn-card">
+        <div class="qn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h3 class="qn-title">Market Intelligence</h3>
+        <p class="qn-desc">Strategic insights and analysis on AI market trends, competitive intelligence, and emerging opportunities in the AI-powered business landscape.</p>
+        <a href="#" class="qn-cta">Browse <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- Card 5: Resources -->
+      <div class="qn-card">
+        <div class="qn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        <h3 class="qn-title">Resources</h3>
+        <p class="qn-desc">Comprehensive collection of tools, templates, frameworks, and guides for implementing AI solutions. Free resources for revenue operations, prompt engineering, and system architecture.</p>
+        <a href="#" class="qn-cta">Browse <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- Card 6: Projects -->
+      <div class="qn-card">
+        <div class="qn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <h3 class="qn-title">Projects</h3>
+        <p class="qn-desc">Browse the complete collection of AI implementations, revenue operations transformations, and innovative solutions. Each project demonstrates measurable business impact.</p>
+        <a href="#" class="qn-cta">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Research Areas -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Explore My Core Research Areas</h2>
+      <p class="section-subtitle">A collection of insights, frameworks, and technical guides on building proprietary, AI-powered operating systems</p>
+    </div>
+
+    <!-- Primary Focus Areas -->
+    <div class="research-primary">
+      <!-- MarTech Architecture -->
+      <div class="research-card research-card-lg">
+        <div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <h3 class="rc-title">MarTech Architecture</h3>
+        <p class="rc-desc">Building scalable marketing technology ecosystems that drive sustainable growth. Explore comprehensive frameworks for designing integrated tech stacks that eliminate data silos, optimize customer journeys, and create seamless operational workflows that scale infinitely with your business.</p>
+        <div class="rc-tags">
+          <span class="rc-tag">MarTech Stack Design</span>
+          <span class="rc-tag">Technology Integration</span>
+          <span class="rc-tag">Customer Data Platform</span>
+          <span class="rc-tag">Marketing Automation</span>
+          <span class="rc-tag">Tech Stack Optimization</span>
+          <span class="rc-tag">CRM Architecture</span>
+          <span class="rc-tag">Data Warehousing</span>
+          <span class="rc-tag">System Integration</span>
+          <span class="rc-tag">Enterprise Architecture</span>
+        </div>
+      </div>
+      <!-- API Integration -->
+      <div class="research-card research-card-lg">
+        <div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h3 class="rc-title">API Integration</h3>
+        <p class="rc-desc">Master the critical discipline of connecting disparate systems to create unified, intelligent operations. Learn advanced practices for designing robust API architectures that enable seamless data flow, automated workflows, and real-time synchronization across your entire technology ecosystem.</p>
+        <div class="rc-tags">
+          <span class="rc-tag">API Design</span>
+          <span class="rc-tag">System Integration</span>
+          <span class="rc-tag">Webhook Architecture</span>
+          <span class="rc-tag">Real-Time Data Sync</span>
+          <span class="rc-tag">Third-Party Integrations</span>
+          <span class="rc-tag">RESTful APIs</span>
+          <span class="rc-tag">Data Pipeline</span>
+          <span class="rc-tag">Integration Patterns</span>
+          <span class="rc-tag">Enterprise APIs</span>
+        </div>
+      </div>
+      <!-- Infinite Operations -->
+      <div class="research-card research-card-lg">
+        <div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 18.36A9 9 0 005.64 5.64 9 9 0 0018.36 18.36z"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+        <h3 class="rc-title">Infinite Operations</h3>
+        <p class="rc-desc">Build self-sustaining business processes using our proven 19-step framework that continuously optimizes and scales without human intervention. Transform traditional operations into intelligent, adaptive systems across Discovery, Foundation, Enrichment, Synthesis, Engagement, and Amplification phases.</p>
+        <div class="rc-tags">
+          <span class="rc-tag">Infinite Scaling</span>
+          <span class="rc-tag">Self-Optimizing Systems</span>
+          <span class="rc-tag">Power User Adoption</span>
+          <span class="rc-tag">Data Acquisition</span>
+          <span class="rc-tag">Lead Nurturing</span>
+          <span class="rc-tag">Campaign Optimization</span>
+          <span class="rc-tag">Autonomous Systems</span>
+          <span class="rc-tag">Growth Operations</span>
+          <span class="rc-tag">Intelligent Scaling</span>
+          <span class="rc-tag">19-Step Framework</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supporting Research Areas -->
+    <div class="research-supporting">
+      <!-- Model Context Protocol -->
+      <div class="research-card research-card-sm">
+        <div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+        <h3 class="rc-title">Model Context Protocol</h3>
+        <p class="rc-desc">Unlock the full potential of AI through standardized context management. Explore how MCP creates seamless integration between AI models and enterprise systems, enabling sophisticated automation while maintaining data security and operational control.</p>
+        <div class="rc-tags">
+          <span class="rc-tag">MCP Implementation</span>
+          <span class="rc-tag">AI Integration</span>
+          <span class="rc-tag">Context Management</span>
+          <span class="rc-tag">Enterprise AI</span>
+          <span class="rc-tag">AI Architecture</span>
+          <span class="rc-tag">Model Integration</span>
+          <span class="rc-tag">AI Orchestration</span>
+          <span class="rc-tag">Intelligent Systems</span>
+        </div>
+      </div>
+      <!-- AI Solutions -->
+      <div class="research-card research-card-sm">
+        <div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 01-1 1H9a1 1 0 01-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/><line x1="9" y1="21" x2="15" y2="21"/></svg></div>
+        <h3 class="rc-title">AI Solutions</h3>
+        <p class="rc-desc">Architect intelligent systems that solve real business problems. From strategic planning to implementation, discover how to design AI solutions that deliver measurable ROI, scale efficiently, and integrate seamlessly with existing operations.</p>
+        <div class="rc-tags">
+          <span class="rc-tag">AI Strategy</span>
+          <span class="rc-tag">Machine Learning</span>
+          <span class="rc-tag">AI Implementation</span>
+          <span class="rc-tag">Intelligent Automation</span>
+          <span class="rc-tag">AI Architecture</span>
+          <span class="rc-tag">Business AI</span>
+          <span class="rc-tag">AI ROI</span>
+          <span class="rc-tag">AI Development</span>
+          <span class="rc-tag">AI Solutions Design</span>
+        </div>
+      </div>
+      <!-- Prompt Engineering -->
+      <div class="research-card research-card-sm">
+        <div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+        <h3 class="rc-title">Prompt Engineering</h3>
+        <p class="rc-desc">Master the discipline of communicating effectively with AI systems to achieve consistent, high-quality outputs. Explore advanced techniques for designing prompts that unlock the full potential of language models while maintaining reliability and precision.</p>
+        <div class="rc-tags">
+          <span class="rc-tag">Prompt Design</span>
+          <span class="rc-tag">AI Communication</span>
+          <span class="rc-tag">Language Models</span>
+          <span class="rc-tag">Prompt Optimization</span>
+          <span class="rc-tag">AI Prompting</span>
+          <span class="rc-tag">Chain-of-Thought</span>
+          <span class="rc-tag">Prompt Templates</span>
+          <span class="rc-tag">AI Interaction Design</span>
+        </div>
+      </div>
+      <!-- Automation & Orchestration -->
+      <div class="research-card research-card-sm">
+        <div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3 class="rc-title">Automation &amp; Orchestration</h3>
+        <p class="rc-desc">Design self-optimizing systems that eliminate manual bottlenecks and scale operations effortlessly. Learn frameworks for creating intelligent workflows that adapt, optimize, and execute complex processes with minimal human intervention.</p>
+        <div class="rc-tags">
+          <span class="rc-tag">Process Automation</span>
+          <span class="rc-tag">Workflow Orchestration</span>
+          <span class="rc-tag">Intelligent Systems</span>
+          <span class="rc-tag">Operational Efficiency</span>
+          <span class="rc-tag">Automated Workflows</span>
+          <span class="rc-tag">Business Process Automation</span>
+          <span class="rc-tag">System Orchestration</span>
+          <span class="rc-tag">Scalable Operations</span>
+        </div>
+      </div>
+      <!-- Activating Data Insights -->
+      <div class="research-card research-card-sm">
+        <div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <h3 class="rc-title">Activating Data Insights</h3>
+        <p class="rc-desc">Transform raw data into actionable intelligence that drives revenue growth. Discover methodologies for turning customer behavior patterns, market signals, and performance metrics into strategic advantages through systematic analysis and intelligent activation frameworks.</p>
+        <div class="rc-tags">
+          <span class="rc-tag">Data Analytics</span>
+          <span class="rc-tag">Customer Intelligence</span>
+          <span class="rc-tag">Behavioral Analytics</span>
+          <span class="rc-tag">Performance Metrics</span>
+          <span class="rc-tag">Data Activation</span>
+          <span class="rc-tag">Business Intelligence</span>
+          <span class="rc-tag">Predictive Analytics</span>
+          <span class="rc-tag">Data-Driven Strategy</span>
+        </div>
+      </div>
+      <!-- Analytics, Attribution, & Conversion Tracking -->
+      <div class="research-card research-card-sm">
+        <div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+        <h3 class="rc-title">Analytics, Attribution, &amp; Conversion Tracking</h3>
+        <p class="rc-desc">Implement sophisticated measurement systems that provide complete visibility into customer journeys and campaign performance. Learn advanced techniques for multi-touch attribution, conversion optimization, and data-driven decision making.</p>
+        <div class="rc-tags">
+          <span class="rc-tag">Conversion Tracking</span>
+          <span class="rc-tag">Multi-Touch Attribution</span>
+          <span class="rc-tag">Performance Analytics</span>
+          <span class="rc-tag">Customer Journey Analytics</span>
+          <span class="rc-tag">ROI Measurement</span>
+          <span class="rc-tag">Campaign Analytics</span>
+          <span class="rc-tag">Data Attribution</span>
+          <span class="rc-tag">Analytics Implementation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Projects -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Featured Projects</h2>
+      <p class="section-subtitle">Transformative AI solutions and implementations</p>
+    </div>
+
+    <div class="projects-grid">
+      <!-- Project 1 -->
+      <div class="project-card">
+        <div class="project-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        </div>
+        <div class="project-body">
+          <h3 class="project-name">The Prompt Engineering Project</h3>
+          <p class="project-summary">Operational infrastructure designed to facilitate all growth marketing workflows built with prompt libraries. Creates all content, strategy development, and task execution simultaneously instead of traditional step-by-step workflows.</p>
+          <a href="#" class="project-cta">Explore Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <!-- Project 2 -->
+      <div class="project-card">
+        <div class="project-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><path d="M12 3a15 15 0 014 9 15 15 0 01-4 9 15 15 0 01-4-9 15 15 0 014-9z"/></svg>
+        </div>
+        <div class="project-body">
+          <h3 class="project-name">MCP Studio</h3>
+          <p class="project-summary">Comprehensive AI Content Operating System (OS) that centralizes, standardizes, and scales all AI communication context and content generation processes within an organization. Democratizes AI capabilities for non-technical users.</p>
+          <a href="#" class="project-cta">Learn More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <!-- Project 3 -->
+      <div class="project-card">
+        <div class="project-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </div>
+        <div class="project-body">
+          <h3 class="project-name">MCP Chrome Extension</h3>
+          <p class="project-summary">Advanced browser extension that integrates with Claude.ai and GitHub, revolutionizing prompt management through version-controlled context injection and intelligent variable-driven workflows.</p>
+          <a href="#" class="project-cta">View Extension <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="cta-title">Ready to Connect?</h2>
+    <p class="cta-subtitle">Let's discuss how we can architect your AI-powered future together.</p>
+    <div class="cta-buttons">
+      <a href="#" class="btn btn-md btn-primary">Email Me</a>
+      <a href="#" class="btn btn-md btn-outline">LinkedIn</a>
+      <a href="#" class="btn btn-md btn-outline">Medium</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer"><div class="container">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="navbar-logo">Logo</a>
+      <p class="footer-sub-text">Subscribe to stay updated</p>
+      <form class="footer-form"><input type="email" class="footer-input" placeholder="Your email"><button type="submit" class="btn btn-sm btn-primary">Subscribe</button></form>
+      <p class="footer-disc">By subscribing you agree to our <a href="#">Privacy Policy</a>.</p>
+    </div>
+    <div><p class="ft">Product</p><div class="fl"><a href="#">Features</a><a href="#">Pricing</a><a href="#">Documentation</a><a href="#">API</a><a href="#">Integrations</a></div></div>
+    <div><p class="ft">Company</p><div class="fl"><a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Contact</a></div></div>
+    <div><p class="ft">Connect</p><div class="fl"><a href="#">Twitter / X</a><a href="#">LinkedIn</a><a href="#">GitHub</a><a href="#">YouTube</a></div></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Company. All rights reserved.</span>
+    <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
+  </div>
+</div></footer>
+
+</body>
+</html>

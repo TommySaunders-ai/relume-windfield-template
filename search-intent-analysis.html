@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search Intent Analysis — Windfield IO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== WINDFIELD IO DESIGN TOKENS ===== */
+:root{
+  --font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  --wf-brand:#1db954;
+  --wf-brand-hover:#17a34a;
+  --wf-brand-fg:#05150a;
+  --wf-brand-muted:rgba(29,185,84,0.10);
+  --wf-brand-glow:rgba(29,185,84,0.06);
+  --wf-bg:#09090b;
+  --wf-bg-elevated:#111113;
+  --wf-bg-sunken:#050507;
+  --wf-surface:#141417;
+  --wf-surface-hover:#1a1a1e;
+  --wf-surface-active:#1f1f24;
+  --wf-fg:#fafafa;
+  --wf-fg-muted:#a1a1aa;
+  --wf-fg-subtle:#71717a;
+  --wf-fg-faint:#52525b;
+  --wf-border:#27272a;
+  --wf-border-strong:#3f3f46;
+  --wf-border-subtle:#1e1e22;
+  --wf-r-sm:6px;
+  --wf-r-md:8px;
+  --wf-r-lg:12px;
+  --wf-r-xl:16px;
+  --wf-ease:cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur:160ms;
+  --nav-height:64px;
+  --section-py:80px;
+  --section-py-lg:100px;
+  --container-max:1280px
+}
+
+/* ===== RESET ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+img{display:block;max-width:100%}
+
+/* ===== UTILITIES ===== */
+.container{max-width:var(--container-max);margin:0 auto;padding:0 40px}
+.text-center{text-align:center}
+.kicker{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--wf-brand);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:12px}
+.section-border{border-bottom:1px solid var(--wf-border)}
+
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent;cursor:pointer}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-lg{height:52px;padding:0 32px;font-size:16px}
+.btn-xl{height:56px;padding:0 40px;font-size:16px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.btn-ghost{background:transparent;color:var(--wf-fg-muted)}.btn-ghost:hover{color:var(--wf-fg);background:var(--wf-surface)}
+.btn-full{width:100%}
+
+/* ===== 1. NAVBAR ===== */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(9,9,11,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:var(--nav-height);gap:32px}
+.navbar-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-logo svg{width:28px;height:28px;color:var(--wf-brand)}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}.navbar-link:hover{color:var(--wf-fg)}.navbar-link.active{color:var(--wf-fg)}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}.mobile-toggle svg{width:24px;height:24px}
+
+/* ===== 2. HERO IMAGE GALLERY ===== */
+.hero-gallery{padding:24px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-gallery-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;padding-bottom:24px}
+.hero-gallery-item{aspect-ratio:16/9;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.hero-gallery-item.large{grid-row:span 2;aspect-ratio:auto}
+.gallery-ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--wf-fg-faint)}
+.gallery-ph svg{width:32px;height:32px}
+.gallery-ph span{font-family:var(--font-mono);font-size:11px;letter-spacing:0.04em;text-transform:uppercase}
+
+/* ===== 3. BREADCRUMB ===== */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wf-border)}
+.breadcrumb-inner{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-subtle)}
+.breadcrumb-inner a{color:var(--wf-fg-muted);transition:color var(--wf-dur)}.breadcrumb-inner a:hover{color:var(--wf-fg)}
+.breadcrumb-sep{color:var(--wf-fg-faint)}
+.breadcrumb-current{color:var(--wf-fg)}
+
+/* ===== 4. PRODUCT HERO ===== */
+.product-hero{padding:var(--section-py) 0;border-bottom:1px solid var(--wf-border)}
+.product-hero-grid{display:grid;grid-template-columns:1fr 380px;gap:64px;align-items:start}
+.product-hero h1{font-size:44px;font-weight:800;letter-spacing:-0.03em;line-height:1.08;margin-bottom:12px;color:var(--wf-fg)}
+.product-hero-sub{font-size:17px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:8px}
+.product-hero-body{font-size:15px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:24px}
+.hero-benefits{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+.hero-benefit{display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--wf-fg-muted);line-height:1.5}
+.hero-benefit svg{width:20px;height:20px;color:var(--wf-brand);flex-shrink:0;margin-top:2px}
+.hero-stats{display:flex;align-items:center;gap:16px;font-size:14px;color:var(--wf-fg-muted);font-variant-numeric:tabular-nums}
+.hero-stats .stat-sep{color:var(--wf-fg-faint)}
+
+/* Pricing Card */
+.pricing-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:32px;position:sticky;top:calc(var(--nav-height) + 24px)}
+.pricing-card-label{font-family:var(--font-mono);font-size:12px;color:var(--wf-fg-subtle);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:16px}
+.pricing-card-price{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.pricing-card-price .current{font-size:44px;font-weight:800;letter-spacing:-0.03em;color:var(--wf-fg)}
+.pricing-card-price .period{font-size:15px;color:var(--wf-fg-subtle);font-weight:400}
+.pricing-card-original{font-size:14px;color:var(--wf-fg-faint);margin-bottom:20px}
+.pricing-card-original s{margin-right:6px;color:#ef4444}
+.pricing-card .btn{margin-bottom:12px}
+.pricing-card-guarantee{font-size:13px;color:var(--wf-fg-subtle);text-align:center;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:6px}
+.pricing-card-guarantee svg{width:14px;height:14px;color:var(--wf-brand)}
+.pricing-includes{border-top:1px solid var(--wf-border);padding-top:20px}
+.pricing-includes-title{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:12px}
+.pricing-includes-list{display:flex;flex-direction:column;gap:8px}
+.pricing-includes-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-muted)}
+.pricing-includes-item svg{width:14px;height:14px;color:var(--wf-brand);flex-shrink:0}
+.pricing-includes-item .free-badge{font-family:var(--font-mono);font-size:10px;padding:2px 6px;border-radius:var(--wf-r-sm);background:var(--wf-brand-muted);color:var(--wf-brand);font-weight:500;letter-spacing:0.02em;text-transform:uppercase;margin-left:4px}
+
+/* ===== 5. OVERVIEW ===== */
+.overview{padding:var(--section-py-lg) 0;border-bottom:1px solid var(--wf-border)}
+.overview-inner{max-width:720px;margin:0 auto;text-align:center}
+.overview h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:16px}
+.overview-text{font-size:17px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:16px}
+.overview-promise{font-size:15px;color:var(--wf-brand);font-weight:500;font-style:italic}
+
+/* ===== 6. UNIVERSAL WORKFLOW ===== */
+.workflow{padding:var(--section-py) 0;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.workflow-header{text-align:center;margin-bottom:48px}
+.workflow-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.workflow-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto}
+.workflow-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px}
+.workflow-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:32px;transition:border-color var(--wf-dur)}.workflow-card:hover{border-color:var(--wf-border-strong)}
+.workflow-num{width:48px;height:48px;border-radius:var(--wf-r-md);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--wf-brand);margin-bottom:20px;font-family:var(--font-mono)}
+.workflow-card h3{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.workflow-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+.workflow-diagram{aspect-ratio:21/9;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);display:flex;align-items:center;justify-content:center}
+.workflow-diagram-ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--wf-fg-faint)}
+.workflow-diagram-ph svg{width:48px;height:48px}
+.workflow-diagram-ph span{font-family:var(--font-mono);font-size:11px;letter-spacing:0.04em;text-transform:uppercase}
+
+/* ===== 7. COLUMN PROMPTS ===== */
+.col-prompts{padding:var(--section-py) 0;border-bottom:1px solid var(--wf-border)}
+.col-prompts-header{margin-bottom:48px}
+.col-prompts-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.col-prompts-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px}
+.col-prompts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.cp-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px;transition:all var(--wf-dur) var(--wf-ease)}.cp-card:hover{border-color:var(--wf-border-strong);transform:translateY(-1px)}
+.cp-num{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--wf-brand);letter-spacing:0.04em;margin-bottom:12px}
+.cp-card h3{font-size:16px;font-weight:600;color:var(--wf-fg)}
+
+/* ===== 8. POWERED BY ===== */
+.powered-by{padding:var(--section-py) 0;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.pb-header{text-align:center;margin-bottom:48px}
+.pb-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.pb-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto}
+.pb-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:800px;margin:0 auto}
+.pb-item{display:flex;align-items:flex-start;gap:12px;padding:16px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);transition:border-color var(--wf-dur)}.pb-item:hover{border-color:var(--wf-border-strong)}
+.pb-item svg{width:20px;height:20px;color:var(--wf-brand);flex-shrink:0;margin-top:2px}
+.pb-item span{font-size:14px;color:var(--wf-fg-muted);line-height:1.5}
+
+/* ===== 9. USE CASES ===== */
+.use-cases{padding:var(--section-py) 0;border-bottom:1px solid var(--wf-border)}
+.uc-header{text-align:center;margin-bottom:48px}
+.uc-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.uc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.uc-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px;transition:all var(--wf-dur) var(--wf-ease)}.uc-card:hover{border-color:var(--wf-border-strong);transform:translateY(-1px)}
+.uc-icon{width:44px;height:44px;border-radius:var(--wf-r-md);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.uc-icon svg{width:20px;height:20px;color:var(--wf-brand)}
+.uc-card h3{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:6px}
+.uc-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+
+/* ===== 10. RATING SECTION ===== */
+.rating-section{padding:60px 0;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.rating-inner{text-align:center}
+.rating-stars{display:flex;justify-content:center;gap:4px;margin-bottom:12px}
+.rating-stars svg{width:28px;height:28px;fill:var(--wf-brand)}
+.rating-score{font-size:48px;font-weight:800;color:var(--wf-fg);margin-bottom:4px;letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
+.rating-count-lg{font-size:15px;color:var(--wf-fg-muted)}
+
+/* ===== 11. OTHER PROMPT LIBRARIES ===== */
+.other-products{padding:var(--section-py) 0;border-bottom:1px solid var(--wf-border)}
+.op-header{margin-bottom:48px}
+.op-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg)}
+.op-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.op-card{display:flex;align-items:stretch;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;transition:all var(--wf-dur) var(--wf-ease)}.op-card:hover{border-color:var(--wf-border-strong);transform:translateY(-1px)}
+.op-accent{width:4px;background:var(--wf-brand);flex-shrink:0}
+.op-body{padding:20px 24px;flex:1;display:flex;flex-direction:column;gap:4px}
+.op-card h3{font-size:15px;font-weight:600;color:var(--wf-fg)}
+.op-meta{display:flex;align-items:center;justify-content:space-between}
+.op-label{font-family:var(--font-mono);font-size:11px;color:var(--wf-fg-subtle);letter-spacing:0.04em;text-transform:uppercase}
+.op-price{font-size:15px;font-weight:700;color:var(--wf-fg)}
+
+/* ===== 12. FINAL CTA ===== */
+.final-cta{padding:var(--section-py-lg) 0;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.final-cta-inner{text-align:center;max-width:640px;margin:0 auto}
+.final-cta h2{font-size:40px;font-weight:800;letter-spacing:-0.03em;color:var(--wf-fg);margin-bottom:4px}
+.final-cta h3{font-size:24px;font-weight:600;color:var(--wf-fg-muted);margin-bottom:16px}
+.final-cta p{font-size:16px;color:var(--wf-fg-muted);margin-bottom:28px;line-height:1.65}
+.final-cta-price{font-size:52px;font-weight:800;letter-spacing:-0.03em;color:var(--wf-brand);margin-bottom:16px;font-variant-numeric:tabular-nums}
+.final-cta .guarantee{font-size:13px;color:var(--wf-fg-subtle);margin-top:16px;display:flex;align-items:center;justify-content:center;gap:6px}
+.final-cta .guarantee svg{width:14px;height:14px;color:var(--wf-brand)}
+
+/* ===== 13. FOOTER ===== */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-brand-block{display:flex;flex-direction:column;gap:12px}
+.footer-sub-text{font-size:13px;color:var(--wf-fg-muted);line-height:1.6}
+.footer-form{display:flex;gap:8px;margin-bottom:8px}
+.footer-input{flex:1;height:36px;padding:0 12px;font-size:13px;font-family:var(--font-sans);background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);color:var(--wf-fg);outline:none;transition:border-color var(--wf-dur)}.footer-input:focus{border-color:var(--wf-brand)}
+.footer-disc{font-size:11px;color:var(--wf-fg-faint);line-height:1.5}.footer-disc a{text-decoration:underline;text-underline-offset:2px}
+.ft{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px;font-family:var(--font-mono);letter-spacing:0.02em;text-transform:uppercase}
+.fl{display:flex;flex-direction:column;gap:10px}
+.fl a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}.fl a:hover{color:var(--wf-fg)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .product-hero-grid{grid-template-columns:1fr;gap:40px}
+  .pricing-card{position:static}
+  .hero-gallery-grid{grid-template-columns:1fr 1fr}
+  .hero-gallery-item.large{grid-row:auto}
+  .workflow-steps{grid-template-columns:1fr 1fr}
+  .uc-grid{grid-template-columns:1fr 1fr}
+  .pb-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  :root{--section-py:56px;--section-py-lg:72px}
+  .container{padding:0 20px}
+  .product-hero h1,.final-cta h2{font-size:32px}
+  .overview h2,.workflow-header h2,.col-prompts-header h2,.pb-header h2,.uc-header h2,.op-header h2{font-size:28px}
+  .final-cta-price{font-size:36px}
+  .rating-score{font-size:36px}
+  .navbar-links{display:none}.mobile-toggle{display:flex}
+  .hero-gallery-grid,.workflow-steps,.uc-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap;gap:8px}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================== -->
+<!-- 1. NAVBAR                      -->
+<!-- ============================== -->
+<nav class="navbar"><div class="container navbar-inner">
+  <a href="index.html" class="navbar-logo">Logo</a>
+  <div class="navbar-links">
+    <a href="home-v1.html" class="navbar-link">Home v1</a>
+    <a href="about.html" class="navbar-link">About</a>
+    <a href="pricing.html" class="navbar-link">Pricing</a>
+    <a href="product.html" class="navbar-link">Product</a>
+    <a href="portfolio.html" class="navbar-link">Portfolio</a>
+    <a href="digital-product.html" class="navbar-link">Digital Product</a>
+    <a href="contact.html" class="navbar-link">Contact</a>
+    <a href="blog-home.html" class="navbar-link">Blog Home</a>
+    <a href="docs.html" class="navbar-link">Docs</a>
+  </div>
+  <div class="navbar-actions"><a href="#" class="btn btn-sm btn-outline">Log in</a><a href="#" class="btn btn-sm btn-primary">Get started</a></div>
+  <button class="mobile-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</div></nav>
+
+<!-- ============================== -->
+<!-- 2. HERO IMAGE GALLERY          -->
+<!-- ============================== -->
+<section class="hero-gallery"><div class="container">
+  <div class="hero-gallery-grid">
+    <div class="hero-gallery-item large">
+      <div class="gallery-ph">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Search Intent Dashboard</span>
+      </div>
+    </div>
+    <div class="hero-gallery-item">
+      <div class="gallery-ph">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Prompt Library View</span>
+      </div>
+    </div>
+    <div class="hero-gallery-item">
+      <div class="gallery-ph">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Knowledge Base</span>
+      </div>
+    </div>
+    <div class="hero-gallery-item">
+      <div class="gallery-ph">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Column Prompts</span>
+      </div>
+    </div>
+    <div class="hero-gallery-item">
+      <div class="gallery-ph">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Intent Classification</span>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 3. BREADCRUMB                  -->
+<!-- ============================== -->
+<div class="breadcrumb"><div class="container">
+  <div class="breadcrumb-inner">
+    <a href="#">Products</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="#">Prompt Libraries</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Search Intent Analysis</span>
+  </div>
+</div></div>
+
+<!-- ============================== -->
+<!-- 4. PRODUCT HERO                -->
+<!-- ============================== -->
+<section class="product-hero"><div class="container">
+  <div class="product-hero-grid">
+    <!-- LEFT: Product Info -->
+    <div>
+      <p class="kicker">Prompt Library</p>
+      <h1>Decode Search Intent &rarr; Capture Demand</h1>
+      <p class="product-hero-sub">Decode search intent. Capture demand.</p>
+      <p class="product-hero-body">Transform keyword research into a systematic framework that classifies intent, aligns content to buyer journey stages, and builds intent-driven strategies.</p>
+
+      <div class="hero-benefits">
+        <div class="hero-benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>Systematic intent classification across all search types</span>
+        </div>
+        <div class="hero-benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>Content alignment to every buyer journey stage</span>
+        </div>
+        <div class="hero-benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>Intent-driven strategies that capture demand at every level</span>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <span>4.8 rating</span>
+        <span class="stat-sep">|</span>
+        <span>15 column prompts</span>
+        <span class="stat-sep">|</span>
+        <span>15 sections</span>
+        <span class="stat-sep">|</span>
+        <span>29 reviews</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Pricing Card -->
+    <div class="pricing-card">
+      <div class="pricing-card-label">One-time purchase</div>
+      <div class="pricing-card-price">
+        <span class="current">$24</span>
+        <span class="period">one-time</span>
+      </div>
+      <div class="pricing-card-original">
+        Total Value: <s>$900</s>
+      </div>
+
+      <div class="pricing-includes" style="border-top:none;padding-top:0;margin-bottom:20px">
+        <div class="pricing-includes-title">Includes:</div>
+        <div class="pricing-includes-list">
+          <div class="pricing-includes-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Context Brief <span class="free-badge">FREE</span>
+          </div>
+          <div class="pricing-includes-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Starting Points Database
+          </div>
+          <div class="pricing-includes-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Prompt Library Database
+          </div>
+          <div class="pricing-includes-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Knowledge Base Database
+          </div>
+          <div class="pricing-includes-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Column Prompts Database
+          </div>
+          <div class="pricing-includes-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Questionnaire Template
+          </div>
+        </div>
+      </div>
+
+      <a href="#" class="btn btn-lg btn-primary btn-full" style="margin-bottom:12px">
+        Get Prompt Library &mdash; $24
+      </a>
+
+      <div class="pricing-card-guarantee">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        30-Day Money-Back Guarantee
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 5. OVERVIEW                    -->
+<!-- ============================== -->
+<section class="overview"><div class="container">
+  <div class="overview-inner">
+    <p class="kicker">Overview</p>
+    <p class="overview-text">Map the entire search intent landscape across every buyer journey stage. From informational queries to transactional searches, this prompt library builds a living classification system that turns raw keyword data into strategic content decisions.</p>
+    <p class="overview-promise">Classification. Alignment. Intent-driven systems that scale.</p>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 6. UNIVERSAL WORKFLOW          -->
+<!-- ============================== -->
+<section class="workflow"><div class="container">
+  <div class="workflow-header">
+    <p class="kicker">Universal Workflow</p>
+    <h2>Three steps. One operating system.</h2>
+  </div>
+  <div class="workflow-steps">
+    <div class="workflow-card">
+      <div class="workflow-num">1</div>
+      <h3>Starting Point</h3>
+      <p>Guided questionnaire for capturing keywords and audience intent. Answer the questions, and the system maps your inputs into structured data.</p>
+    </div>
+    <div class="workflow-card">
+      <div class="workflow-num">2</div>
+      <h3>Prompt Library</h3>
+      <p>Auto-generation through 15 column prompts powered by Notion AI. Each prompt builds on your starting point data to produce classified, actionable outputs.</p>
+    </div>
+    <div class="workflow-card">
+      <div class="workflow-num">3</div>
+      <h3>Knowledge Base</h3>
+      <p>Living knowledge base for content strategy and optimization. Every output feeds back into a centralized reference that grows with your business.</p>
+    </div>
+  </div>
+  <div class="workflow-diagram">
+    <div class="workflow-diagram-ph">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+      <span>Workflow Diagram</span>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 7. COLUMN PROMPTS              -->
+<!-- ============================== -->
+<section class="col-prompts"><div class="container">
+  <div class="col-prompts-header">
+    <p class="kicker">15 Column Prompts</p>
+    <h2>Auto-generated. AI-powered.</h2>
+    <p>Each column prompt auto-fills a specific field in your Prompt Library database. Together, they build a complete search intent classification system.</p>
+  </div>
+  <div class="col-prompts-grid">
+    <div class="cp-card"><div class="cp-num">01</div><h3>Informational Intent Markers</h3></div>
+    <div class="cp-card"><div class="cp-num">02</div><h3>Navigational Intent Patterns</h3></div>
+    <div class="cp-card"><div class="cp-num">03</div><h3>Commercial Intent Indicators</h3></div>
+    <div class="cp-card"><div class="cp-num">04</div><h3>Transactional Intent Signals</h3></div>
+    <div class="cp-card"><div class="cp-num">05</div><h3>Research Phase Keywords</h3></div>
+    <div class="cp-card"><div class="cp-num">06</div><h3>Evaluation Phase Keywords</h3></div>
+    <div class="cp-card"><div class="cp-num">07</div><h3>Decision Phase Keywords</h3></div>
+    <div class="cp-card"><div class="cp-num">08</div><h3>Problem Awareness Terms</h3></div>
+    <div class="cp-card"><div class="cp-num">09</div><h3>Solution Discovery Terms</h3></div>
+    <div class="cp-card"><div class="cp-num">10</div><h3>Brand Comparison Queries</h3></div>
+    <div class="cp-card"><div class="cp-num">11</div><h3>Feature Comparison Searches</h3></div>
+    <div class="cp-card"><div class="cp-num">12</div><h3>Price Comparison Keywords</h3></div>
+    <div class="cp-card"><div class="cp-num">13</div><h3>Location-Specific Intent</h3></div>
+    <div class="cp-card"><div class="cp-num">14</div><h3>Device-Specific Search Behaviors</h3></div>
+    <div class="cp-card"><div class="cp-num">15</div><h3>Long-Tail Query Interpretation</h3></div>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 8. POWERED BY NOTION & AI      -->
+<!-- ============================== -->
+<section class="powered-by"><div class="container">
+  <div class="pb-header">
+    <p class="kicker">Powered by Notion & AI</p>
+    <h2>Set it up once. Run it forever.</h2>
+  </div>
+  <div class="pb-grid">
+    <div class="pb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      <span>Structured databases and column prompts</span>
+    </div>
+    <div class="pb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      <span>Built-in AI-friendly fields for reuse</span>
+    </div>
+    <div class="pb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      <span>Workflow for easy updates</span>
+    </div>
+    <div class="pb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      <span>Custom AI Auto-Fill</span>
+    </div>
+    <div class="pb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      <span>Auto-Update on Page Edits</span>
+    </div>
+    <div class="pb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      <span>Context Brief included FREE</span>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 9. USE CASES                   -->
+<!-- ============================== -->
+<section class="use-cases"><div class="container">
+  <div class="uc-header">
+    <p class="kicker">Use Cases</p>
+    <h2>Built for operators, not experimenters.</h2>
+  </div>
+  <div class="uc-grid">
+    <div class="uc-card">
+      <div class="uc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+      </div>
+      <h3>Organic Growth</h3>
+      <p>Intent-based content strategies for organic growth. Map every keyword to a specific intent type and build content that ranks.</p>
+    </div>
+    <div class="uc-card">
+      <div class="uc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <h3>Buyer Journey</h3>
+      <p>Keyword targeting frameworks for buyer journey. Align search terms to awareness, consideration, and decision stages.</p>
+    </div>
+    <div class="uc-card">
+      <div class="uc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </div>
+      <h3>SEO Content Plans</h3>
+      <p>SEO content plans matching search intent precisely. Build topic clusters and content calendars driven by real intent data.</p>
+    </div>
+    <div class="uc-card">
+      <div class="uc-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
+      <h3>Landing Pages</h3>
+      <p>Landing page optimization for transactional queries. Match page structure and messaging to high-intent search patterns.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 10. RATING                     -->
+<!-- ============================== -->
+<section class="rating-section"><div class="container">
+  <div class="rating-inner">
+    <p class="kicker">Rating</p>
+    <div class="rating-score">4.8</div>
+    <div class="rating-stars">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    </div>
+    <div class="rating-count-lg">29 reviews</div>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 11. OTHER PROMPT LIBRARIES     -->
+<!-- ============================== -->
+<section class="other-products"><div class="container">
+  <div class="op-header">
+    <h2>Other Prompt Libraries</h2>
+  </div>
+  <div class="op-grid">
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Company Identity</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Content Strategy</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Target Audience</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Brand Voice & Messaging</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Sales Enablement</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Service Offerings</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Product Offerings</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Website Pages</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Brand Identity</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Brand Language</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Brand Strategy</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Ideal Customer Profile</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Customer Profiles</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Customer Problems & Pain Points</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Customer Goals Desires & Motivations</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Customer Insights & Behaviors</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Customer Communication & Engagement</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+    <a href="#" class="op-card"><div class="op-accent"></div><div class="op-body"><h3>Search Intent Analysis</h3><div class="op-meta"><span class="op-label">Prompt Library</span><span class="op-price">$24</span></div></div></a>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 12. FINAL CTA                  -->
+<!-- ============================== -->
+<section class="final-cta" id="cta"><div class="container">
+  <div class="final-cta-inner">
+    <p class="kicker">Get Started</p>
+    <h2>Build the system.</h2>
+    <h3>Get your time back.</h3>
+    <p>Stop guessing at search intent. Build a living classification system that maps every keyword to buyer journey stages, generates content strategies automatically, and scales with your business.</p>
+    <div class="final-cta-price">$24</div>
+    <a href="#" class="btn btn-xl btn-primary">Get Prompt Library</a>
+    <div class="guarantee">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      30-Day Money-Back Guarantee
+    </div>
+  </div>
+</div></section>
+
+<!-- ============================== -->
+<!-- 13. FOOTER                     -->
+<!-- ============================== -->
+<footer class="footer"><div class="container">
+  <div class="footer-top">
+    <div class="footer-brand-block">
+      <a href="index.html" class="navbar-logo">Logo</a>
+      <p class="footer-sub-text">Subscribe to stay updated</p>
+      <form class="footer-form"><input type="email" class="footer-input" placeholder="Your email"><button type="submit" class="btn btn-sm btn-primary">Subscribe</button></form>
+      <p class="footer-disc">By subscribing you agree to our <a href="#">Privacy Policy</a>.</p>
+    </div>
+    <div><p class="ft">Product</p><div class="fl"><a href="#">Features</a><a href="#">Pricing</a><a href="#">Documentation</a><a href="#">API</a><a href="#">Integrations</a></div></div>
+    <div><p class="ft">Company</p><div class="fl"><a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Contact</a></div></div>
+    <div><p class="ft">Connect</p><div class="fl"><a href="#">Twitter / X</a><a href="#">LinkedIn</a><a href="#">GitHub</a><a href="#">YouTube</a></div></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Company. All rights reserved.</span>
+    <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
+  </div>
+</div></footer>
+
+</body>
+</html>
