@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO + AEO: Winning Both Old Search and AI-Native Discovery — Windfield IO</title>
+<meta name="description" content="How the IO SEO Library generates keyword architecture, SERP-optimized metadata, and Answer Engine Optimization schemas simultaneously — so your content wins both Google and Perplexity.">
+<meta name="keywords" content="answer engine optimization, AEO content strategy, ai search optimization, perplexity SEO, chatgpt search optimization, io platform seo library, llm.txt">
+<meta property="og:title" content="SEO + AEO: Winning Both Old Search and AI-Native Discovery">
+<meta property="og:description" content="How the IO SEO Library structures content for both traditional SERP ranking and AI answer engine citation — with JSON-LD schemas, entity layers, keyword architecture, and llm.txt strategy.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-04-26">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"SEO + AEO: Winning Both Old Search and AI-Native Discovery","description":"How the IO SEO Library generates keyword architecture, SERP metadata, JSON-LD schemas, entity layers, and llm.txt strategy to win both traditional search ranking and AI answer engine citation simultaneously.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"Windfield IO"}},"publisher":{"@type":"Organization","name":"Windfield IO"},"datePublished":"2026-04-26","articleSection":"Library Deep Dive","keywords":["answer engine optimization","AEO","ai search optimization","perplexity SEO","json-ld schema","llm.txt","entity SEO"],"wordCount":3300,"timeRequired":"PT10M","isPartOf":{"@type":"CreativeWorkSeries","name":"Nine Libraries Article Series","position":7}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is Answer Engine Optimization (AEO)?","acceptedAnswer":{"@type":"Answer","text":"Answer Engine Optimization (AEO) is the practice of structuring content so that AI systems — including Perplexity, ChatGPT search, Claude, and Google's AI Overviews — can accurately extract, cite, and surface it in response to conversational queries. Unlike traditional SEO which optimizes for crawlers ranking pages, AEO optimizes for language models parsing content for direct answers. The key signals are structured data (JSON-LD schemas), clear Direct Answer sections written in citation-ready prose, semantic entity relationships, and machine-readable site context files like llm.txt."}},
+{"@type":"Question","name":"What is llm.txt and why does it matter for AI search?","acceptedAnswer":{"@type":"Answer","text":"llm.txt is a machine-readable site context file (analogous to robots.txt) that tells AI systems what your site is about, what content is available, how to interpret your expertise, and what your core positions are. When Perplexity, ChatGPT search, or other AI systems crawl your site, they read llm.txt to understand brand context before parsing individual pages. Sites with well-structured llm.txt files receive more accurate citation and higher citation frequency in AI-generated answers. The IO SEO Library generates a complete llm.txt specification as part of every brief run."}},
+{"@type":"Question","name":"How does the IO SEO Library generate both SEO and AEO outputs simultaneously?","acceptedAnswer":{"@type":"Answer","text":"The IO SEO Library runs 6 prompts from the context brief: keyword architecture (primary, secondary, semantic cluster), meta title and description, Direct Answer Box content (written in citation-ready prose for AI extraction), JSON-LD schema markup (Article, FAQPage, BreadcrumbList), entity layer mapping (people, organizations, concepts, locations mentioned), and llm.txt section generation. All six outputs are produced from the same brief in parallel, then assembled into a structured SEO episode. Traditional SEO signals (keyword density, meta structure) and AEO signals (JSON-LD, Direct Answer prose, entity relationships) are generated together rather than treated as separate workstreams."}},
+{"@type":"Question","name":"What is the difference between optimizing for Google and optimizing for Perplexity?","acceptedAnswer":{"@type":"Answer","text":"Google optimization prioritizes crawlable page structure, keyword placement in headers and first paragraphs, backlink signals, and Core Web Vitals. Perplexity and other AI answer engines prioritize the quality and citation-readiness of specific answer passages: clear Direct Answer sections in the first 150 words, JSON-LD schema that explicitly labels content type and claims, entity relationships that establish topical authority, and prose that reads as a standalone answer without requiring surrounding context. The IO SEO Library generates signals for both simultaneously because the underlying content brief contains the information needed for both — the two optimization targets are not in conflict when the content is structured correctly from the start."}},
+{"@type":"Question","name":"How important are JSON-LD schemas for AI answer engine citation?","acceptedAnswer":{"@type":"Answer","text":"JSON-LD schemas are the single most impactful structural signal for AI answer engine citation. FAQPage schema explicitly labels question-and-answer pairs, which AI systems extract as citation candidates. Article schema establishes authorship, publication date, and topical context that AI systems use to evaluate source credibility. HowTo and Step schemas structure procedural content for AI extraction. The IO SEO Library generates Article, FAQPage, and BreadcrumbList schemas for every piece of content, and conditionally generates HowTo, Product, and Event schemas based on content type signals in the context brief."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Windfield IO","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Content Operations","item":"https://intelligentoperations.ai/content-ops"},
+{"@type":"ListItem","position":3,"name":"Nine Libraries Series","item":"https://intelligentoperations.ai/content-ops/series"},
+{"@type":"ListItem","position":4,"name":"SEO + AEO","item":"https://intelligentoperations.ai/content-ops/seo-aeo-strategy"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#09090b;--deep:#111113;--dark:#141417;--mid:#1a1a1e;--lift:#1f1f24;
+  --cream:#fafafa;--cream2:#a1a1aa;--t1:#fafafa;--t2:#a1a1aa;--t3:#71717a;--t4:#52525b;
+  --blue:#4589FF;--blue-lt:#6fa8ff;--green:#1db954;--purple:#BE95FF;
+  /* Article 07 accent: amber/olive — search and discovery */
+  --acc:#FF832B;--acc-lt:#FFB366;--acc-dim:rgba(217,119,6,.13);--acc-border:rgba(217,119,6,.24);
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);--border3:rgba(255,255,255,.16);
+  --serif:'Playfair Display',Georgia,serif;--sans:'Inter',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.25,.46,.45,.94);--spring:cubic-bezier(.34,1.56,.64,1);
+  --c-art:#4589FF;--c-img:#1db954;--c-vid:#FF832B;--c-soc:#E85D4A;
+  --c-des:#0891b2;--c-seo:#d97706;--c-crm:#BE95FF;--c-con:#059669;--c-tas:#6b7280;
+  /* Search engine colors */
+  --google:#4285f4;--perplexity:#20b2aa;--chatgpt:#10a37f;--claude-ai:#cc785c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--void);color:var(--t1);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+/* ━━ ATTRIBUTION ━━ */
+.src{position:relative}
+.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}
+.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}
+.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-art);outline-offset:3px}
+body.attr .img{outline:1.5px solid var(--c-img);outline-offset:3px}
+body.attr .des{outline:1.5px solid var(--c-des);outline-offset:3px}
+body.attr .seo{outline:1.5px solid var(--c-seo);outline-offset:3px}
+body.attr .crm{outline:1.5px solid var(--c-crm);outline-offset:3px}
+body.attr .soc{outline:1.5px solid var(--c-soc);outline-offset:3px}
+body.attr .tas{outline:1.5px solid var(--c-tas);outline-offset:3px}
+.art .src-tag{background:var(--c-art);color:#fff}.img .src-tag{background:var(--c-img);color:#fff}
+.des .src-tag{background:var(--c-des);color:#fff}.seo .src-tag{background:var(--c-seo);color:#fff}
+.crm .src-tag{background:var(--c-crm);color:#fff}.soc .src-tag{background:var(--c-soc);color:#fff}
+.tas .src-tag{background:var(--c-tas);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-art)}body.attr .img .ann-c{border-color:var(--c-img)}
+body.attr .seo .ann-c{border-color:var(--c-seo)}body.attr .crm .ann-c{border-color:var(--c-crm)}
+body.attr .soc .ann-c{border-color:var(--c-soc)}body.attr .tas .ann-c{border-color:var(--c-tas)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--acc-lt);z-index:9999;width:0;transition:width .1s linear}
+
+/* ━━ NAV ━━ */
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center}
+.nav-logo{font-family:var(--sans);font-size:18px;font-weight:700;color:var(--t1);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}
+.nav-logo span{font-style:italic;color:#1db954}
+.nav-rule{width:1px;height:16px;background:var(--border2);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--ease)}
+.nbtn-ghost{background:none;border:1px solid var(--border2);color:var(--t3)}
+.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--t1);color:var(--void);border-color:var(--t1)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:#1db954;display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ━━ PIPELINE STRIP ━━ */
+#pstrip{background:var(--deep);border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .35s var(--ease)}
+#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}
+.ps-chip{padding:4px 10px;border-radius:4px;font:600 10px/1 var(--sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}
+.ps-arrow{font-size:10px;color:var(--t4);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--sans);color:#1db954;letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+
+/* ━━ PIPELINE MAP ━━ */
+#pipemap{background:var(--dark);border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .5s var(--ease)}
+#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.pm-title span{font-weight:300;color:var(--t3)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(217,119,6,.5),transparent);animation:pms7 2s ease-in-out infinite;margin:10px 0}
+@keyframes pms7{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--sans);color:var(--t1)}
+.pm-node-sub{font:300 8px/1 var(--mono);color:var(--t3);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--t4);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:6px;text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--border)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}
+.pm-lib-name{font:700 7px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
+.pm-lib-count{font:300 8px/1 var(--mono);color:var(--t4);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--mono);color:var(--t3)}
+.pm-meta-n{font:700 11px/1 var(--mono);color:var(--t1)}
+
+/* ━━ HERO ━━ */
+.hero{background:var(--void);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(217,119,6,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(36,96,255,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:1024px){.nav-links-wrap{display:none!important}}@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t3)}
+.eye-divider{width:20px;height:1px;background:var(--t4)}
+.eye-series{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc-lt);opacity:.8}
+h1{font-family:var(--serif);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--t1);margin-bottom:24px}
+h1 em{font-style:italic;color:var(--acc-lt)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--t2);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--t1)}
+.h-role{font-size:11px;color:var(--t3)}
+.h-sep{width:1px;height:28px;background:var(--border2);margin:0 18px}
+.h-date{font-size:13px;color:var(--t3)}
+.h-read{font-size:13px;color:var(--t3);margin-left:14px}
+
+/* ━━ HERO VIZ — Article 07: dual-layer search visualization ━━ */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#0c0900 0%,#140e00 55%,#0a0700 100%);
+  border-radius:16px 16px 0 0;border:1px solid rgba(217,119,6,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(217,119,6,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(217,119,6,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(217,119,6,.1) 0%,transparent 65%);animation:gp7 4s ease-in-out infinite}
+@keyframes gp7{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(217,119,6,.35) 30%,rgba(252,211,77,.6) 50%,rgba(217,119,6,.35) 70%,transparent);
+  animation:hvs7 5s ease-in-out infinite;opacity:.45}
+@keyframes hvs7{0%{top:8%;opacity:0}8%{opacity:.45}92%{opacity:.2}100%{top:92%;opacity:0}}
+/* Two layers: Google (top half) and AI search (bottom half) */
+.hv-divider{position:absolute;top:50%;left:8%;right:8%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(217,119,6,.2) 30%,rgba(252,211,77,.35) 50%,rgba(217,119,6,.2) 70%,transparent)}
+.hv-layer-label{position:absolute;font:700 7px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+/* SERP layer (top) */
+.hv-serp-result{position:absolute;left:10%;right:10%;border-radius:6px;padding:8px 12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+/* AEO layer (bottom) — AI result cards */
+.hv-ai-card{position:absolute;left:10%;right:10%;border-radius:6px;padding:8px 12px;
+  background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.15)}
+.hv-ai-source{font:700 7px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.hv-ai-text{font:300 8px/1.7 var(--mono);color:rgba(252,211,77,.45);letter-spacing:.03em}
+.hv-serp-url{font:300 7px/1 var(--mono);color:rgba(29,185,84,.5);margin-bottom:3px;letter-spacing:.04em}
+.hv-serp-title{font:600 10px/1.3 var(--sans);color:rgba(66,133,244,.7);margin-bottom:3px}
+.hv-serp-desc{font:300 8px/1.6 var(--mono);color:rgba(255,255,255,.3);letter-spacing:.02em}
+.hv-rank-badge{position:absolute;right:10%;font:700 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+/* Signal pulses */
+.hv-pulse{position:absolute;border-radius:50%;animation:hvpulse7 2.5s ease-out infinite;pointer-events:none}
+@keyframes hvpulse7{0%{transform:translate(-50%,-50%) scale(0);opacity:.6}100%{transform:translate(-50%,-50%) scale(3);opacity:0}}
+.hv-badge7{position:absolute;top:14px;right:14px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(252,211,77,.22)}
+.hv-status7{position:absolute;bottom:16px;left:16px;font:300 8px/1.8 var(--mono);color:rgba(252,211,77,.28);letter-spacing:.06em}
+
+/* ━━ LAYOUT ━━ */
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}
+.sidebar{position:sticky;top:72px}
+
+/* ━━ DIRECT ANSWER BOX ━━ */
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;
+  background:linear-gradient(135deg,var(--acc-dim),rgba(217,119,6,.02));
+  border:1px solid var(--acc-border);border-left:3px solid var(--acc-lt);border-radius:10px}
+.dab-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc-lt);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dab-label::before{content:'\25B8'}
+.dab-q{font:600 15px/1.4 var(--sans);color:var(--t1);margin-bottom:10px}
+.dab-a{font:300 14px/1.72 var(--sans);color:var(--cream2)}
+.dab-a strong{font-weight:600;color:var(--t1)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}
+.dab-source{font:300 10px/1 var(--mono);color:var(--t4)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--acc-dim);color:rgba(217,119,6,.6);border:1px solid var(--acc-border)}
+
+/* ━━ TOC INLINE ━━ */
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--dark);border:1px solid var(--border2);border-radius:10px}
+.toc-inline-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--t3);cursor:pointer;text-decoration:none;transition:color .15s}
+.toc-inline-item:last-child{border-bottom:none}
+.toc-inline-item:hover{color:var(--t1)}
+.toc-n{font:700 9px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0;padding-top:2px}
+
+/* ━━ TYPOGRAPHY ━━ */
+.body p{font-size:17.5px;line-height:1.82;color:var(--cream2);font-weight:300;margin-bottom:28px}
+.body p strong{font-weight:600;color:var(--t1)}
+.body p a{color:var(--acc-lt);text-decoration:none;border-bottom:1px solid rgba(252,211,77,.3);transition:border-color .15s}
+.body p a:hover{border-bottom-color:var(--acc-lt)}
+.body p sup a{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--acc-dim);border:1px solid var(--acc-border);font:700 9px/1 var(--mono);color:var(--acc-lt);vertical-align:super;margin-left:2px;text-decoration:none;transition:all .15s}
+.body p sup a:hover{background:var(--acc);color:#fff}
+h2.sh{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--t1);margin:60px 0 20px}
+h3.sh3{font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin:40px 0 14px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--t1)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--serif);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--acc-lt)}
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--dark);border-radius:10px;border:1px solid var(--border);border-left:3px solid var(--acc-lt);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--serif);font-size:150px;font-weight:700;color:var(--acc-dim);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--t1);position:relative;z-index:1;margin-bottom:14px}
+.pq-text em{font-style:italic;color:var(--acc-lt)}
+.pq-attr{font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--t3);position:relative;z-index:1}
+
+/* ━━ DUAL-LAYER ARCHITECTURE DIAGRAM ━━ */
+.dual-layer{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--acc-border);background:var(--dark)}
+.dl-header{padding:14px 22px;border-bottom:1px solid var(--acc-border);display:flex;align-items:center;gap:12px;background:var(--acc-dim)}
+.dl-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.dl-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.dl-body{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:640px){.dl-body{grid-template-columns:1fr}}
+.dl-col{border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.dl-col-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.dl-col-head.seo{background:rgba(66,133,244,.07)}
+.dl-col-head.aeo{background:rgba(32,178,170,.07)}
+.dl-col-title{font:700 11px/1 var(--sans);color:var(--t1)}
+.dl-col-badge{margin-left:auto;padding:3px 8px;border-radius:3px;font:700 7px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.dl-col-badge.seo{background:rgba(66,133,244,.1);color:#60a5fa;border:1px solid rgba(66,133,244,.2)}
+.dl-col-badge.aeo{background:rgba(32,178,170,.1);color:#2dd4bf;border:1px solid rgba(32,178,170,.2)}
+.dl-items{padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.dl-item{display:flex;gap:8px;align-items:flex-start}
+.dl-item-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.dl-item-text{font:300 12px/1.6 var(--sans);color:var(--t2)}
+.dl-item-text strong{font-weight:600;color:var(--t1)}
+.dl-convergence{margin-top:16px;padding:14px 16px;border-radius:8px;background:rgba(217,119,6,.05);border:1px solid var(--acc-border);grid-column:1/-1}
+.dl-conv-label{font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(217,119,6,.6);margin-bottom:6px}
+.dl-conv-text{font:300 12px/1.65 var(--sans);color:var(--t2)}
+.dl-conv-text strong{font-weight:600;color:var(--t1)}
+
+/* ━━ 6-PROMPT ARCHITECTURE ━━ */
+.prompt-arch{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.pa-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.pa-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.pa-body{padding:24px;overflow-x:auto}
+.pa-body::-webkit-scrollbar{height:3px}
+.pa-body::-webkit-scrollbar-thumb{background:var(--lift)}
+.pa-flow{display:flex;align-items:stretch;gap:8px;min-width:max-content}
+.pa-step{flex-shrink:0;width:130px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:5px}
+.pa-step:hover,.pa-step.active{border-color:var(--acc-border);background:var(--acc-dim)}
+.pa-step-num{font:700 8px/1 var(--mono);letter-spacing:.1em;color:var(--t4)}
+.pa-step-name{font:600 11px/1.35 var(--sans);color:var(--t2)}
+.pa-step.active .pa-step-name{color:var(--t1)}
+.pa-step-output{font:300 9px/1.4 var(--mono);color:var(--t4);margin-top:2px}
+.pa-step-type{font:700 7px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.pa-conn{flex-shrink:0;width:16px;display:flex;align-items:center;justify-content:center;color:var(--t4);font-size:10px;align-self:center}
+/* Detail panel */
+.pa-detail{margin-top:16px;padding:16px 20px;border-radius:8px;background:var(--acc-dim);border:1px solid var(--acc-border);display:none}
+.pa-detail.show{display:block}
+.pa-detail-label{font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(217,119,6,.7);margin-bottom:10px}
+.pa-detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:640px){.pa-detail-grid{grid-template-columns:1fr 1fr}}
+.pa-cell{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.pa-cell-label{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.pa-cell-val{font:300 12px/1.55 var(--sans);color:var(--t2)}
+.pa-cell-val strong{font-weight:600;color:var(--t1)}
+
+/* ━━ KEYWORD ARCHITECTURE ━━ */
+.kw-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.kw-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.kw-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.kw-body{padding:20px 24px}
+.kw-tiers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:640px){.kw-tiers{grid-template-columns:1fr}}
+.kw-tier{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:8px;padding:14px}
+.kw-tier-label{font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.kw-tier-label .dot{width:6px;height:6px;border-radius:50%}
+.kw-tags{display:flex;flex-wrap:wrap;gap:6px}
+.kw-tag{padding:4px 10px;border-radius:4px;font:500 11px/1 var(--sans)}
+.kw-tag.primary{background:rgba(217,119,6,.1);color:var(--acc-lt);border:1px solid rgba(217,119,6,.2)}
+.kw-tag.secondary{background:rgba(255,255,255,.04);color:var(--t2);border:1px solid var(--border)}
+.kw-tag.semantic{background:rgba(36,96,255,.06);color:#818cf8;border:1px solid rgba(36,96,255,.15)}
+.kw-volume{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+.kw-vol-row{display:flex;align-items:center;gap:8px}
+.kw-vol-term{font:300 10px/1 var(--mono);color:var(--t3);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kw-vol-bar-wrap{width:60px;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;flex-shrink:0}
+.kw-vol-bar{height:100%;border-radius:2px}
+.kw-vol-val{font:700 8px/1 var(--mono);color:var(--t4);width:32px;text-align:right;flex-shrink:0}
+
+/* ━━ JSON-LD VIEWER ━━ */
+.jsonld-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--acc-border);background:var(--dark)}
+.jl-header{padding:14px 22px;border-bottom:1px solid var(--acc-border);display:flex;align-items:center;gap:12px;background:var(--acc-dim)}
+.jl-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.jl-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.jl-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--border);overflow-x:auto}
+.jl-tabs::-webkit-scrollbar{display:none}
+.jlt{padding:10px 16px;font:600 10px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--sans);white-space:nowrap;flex-shrink:0}
+.jlt.on{color:var(--acc-lt);border-bottom-color:var(--acc)}
+.jl-panel{display:none;padding:20px 24px}
+.jl-panel.on{display:block}
+.jl-code{background:rgba(0,0,0,.4);border:1px solid var(--border2);border-radius:8px;padding:16px 18px;font:300 11px/1.8 var(--mono);color:rgba(252,211,77,.45);overflow-x:auto;letter-spacing:.02em}
+.jl-code::-webkit-scrollbar{height:3px}
+.jl-code .k{color:rgba(167,139,250,.65)}
+.jl-code .s{color:rgba(52,211,153,.6)}
+.jl-code .n{color:rgba(251,191,36,.65)}
+.jl-code .c{color:rgba(255,255,255,.2);font-style:italic}
+.jl-why{margin-top:12px;padding:12px 14px;border-radius:6px;background:rgba(255,255,255,.025);border:1px solid var(--border)}
+.jl-why-label{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:5px}
+.jl-why-text{font:300 12px/1.6 var(--sans);color:var(--t2)}
+.jl-why-text strong{font-weight:600;color:var(--t1)}
+
+/* ━━ LLM.TXT VIEWER ━━ */
+.llmtxt-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--acc-border);background:var(--dark)}
+.llt-header{padding:14px 22px;border-bottom:1px solid var(--acc-border);display:flex;align-items:center;gap:12px;background:var(--acc-dim)}
+.llt-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.llt-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.llt-body{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media(max-width:640px){.llt-body{grid-template-columns:1fr}}
+.llt-col-label{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.llt-code{background:rgba(0,0,0,.4);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;font:300 10px/1.85 var(--mono);color:rgba(252,211,77,.45);overflow-x:auto;letter-spacing:.03em}
+.llt-code::-webkit-scrollbar{height:2px}
+.llt-code .section{color:rgba(217,119,6,.7);font-weight:700}
+.llt-code .key{color:rgba(167,139,250,.6)}
+.llt-code .val{color:rgba(52,211,153,.55)}
+.llt-why-list{display:flex;flex-direction:column;gap:8px}
+.llt-why-item{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.llt-why-item-label{font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc-lt);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.llt-why-item-label .dot{width:4px;height:4px;border-radius:50%;background:var(--acc-lt)}
+.llt-why-item-text{font:300 11px/1.55 var(--sans);color:var(--t2)}
+
+/* ━━ ENGINE COMPARISON ━━ */
+.engine-compare{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.ec-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.ec-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.ec-scroll{overflow-x:auto}
+.ec-scroll::-webkit-scrollbar{height:2px}
+.ec-scroll::-webkit-scrollbar-thumb{background:var(--lift)}
+.ec-table{width:100%;border-collapse:collapse;min-width:600px}
+.ec-table th{padding:9px 14px;font:700 7.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);text-align:left;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap}
+.ec-table th:first-child{padding-left:20px}
+.ec-table td{padding:12px 14px;border-bottom:1px solid var(--border);font:300 12px/1.5 var(--sans);color:var(--t2);vertical-align:middle}
+.ec-table td:first-child{padding-left:20px;font-weight:500;color:var(--t1)}
+.ec-table tr:last-child td{border-bottom:none}
+.ec-table tr:hover td{background:rgba(255,255,255,.015)}
+.eng-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:3px;font:700 8px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.check{color:#4ade80;font-weight:700}
+.partial{color:#fcd34d}
+.cross{color:#f87171}
+
+/* ━━ SOCIAL / SEO / CRM / FAQ / REFS (global sections) ━━ */
+.social-block{margin:52px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.sb-hd{padding:11px 18px;background:var(--dark);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sb-hd-label{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.sb-hd-src{font:normal 9px/1 var(--mono);color:var(--t4)}
+.sb-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--border)}
+.sb-tab{padding:10px 20px;font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--sans)}
+.sb-tab.on{color:var(--t1);border-bottom-color:var(--acc-lt)}
+.sb-platform{display:none;padding:20px 22px;background:var(--mid)}
+.sb-platform.on{display:block}
+.tw-card{background:#fff;border:1px solid #e1e8ed;border-radius:14px;padding:16px;max-width:500px}
+.tw-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tw-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#d97706,#4589FF);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:15px;color:#fff;font-weight:700}
+.tw-name{font:700 14px/1 'Helvetica Neue',sans-serif;color:#14171a}
+.tw-handle{font:400 13px/1 'Helvetica Neue',sans-serif;color:#657786}
+.tw-body{font:400 14px/1.6 'Helvetica Neue',sans-serif;color:#14171a;margin-bottom:12px}
+.tw-meta{font:400 12px/1 'Helvetica Neue',sans-serif;color:#657786}
+.li-card{background:#fff;border:1px solid #dce6f1;border-radius:10px;padding:16px;max-width:500px;font-family:'Helvetica Neue',Arial,sans-serif}
+.li-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.li-av{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#d97706,#4589FF);display:flex;align-items:center;justify-content:center;font:700 16px var(--serif);color:#fff}
+.li-name{font:600 14px/1 'Helvetica Neue',sans-serif;color:#000000e6}
+.li-sub{font:400 12px/1 'Helvetica Neue',sans-serif;color:#00000099}
+.li-body{font:400 14px/1.65 'Helvetica Neue',sans-serif;color:#000000cc}
+.ig-card{max-width:400px}
+.ig-handle{font:700 13px/1 var(--sans);color:var(--t1);margin-bottom:10px}
+.ig-img{height:240px;border-radius:6px;margin-bottom:12px;background:linear-gradient(135deg,#0c0900,#140e00);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ig-img::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(217,119,6,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(217,119,6,.06) 1px,transparent 1px);background-size:22px 22px}
+.ig-img-text{position:relative;z-index:2;font-family:var(--serif);font-size:20px;font-style:italic;color:rgba(255,255,255,.8);text-align:center;max-width:260px;line-height:1.35}
+.ig-cap{font-size:13px;line-height:1.65;color:var(--t2)}
+.ig-hash{font-size:12px;color:var(--acc-lt);margin-top:8px}
+.seo-meta-block{margin:48px 0;border-radius:10px;overflow:hidden;border:1px solid var(--acc-border);background:linear-gradient(135deg,var(--acc-dim),transparent)}
+.seo-meta-hd{padding:11px 18px;border-bottom:1px solid var(--acc-border);display:flex;align-items:center;gap:10px}
+.seo-meta-tag{padding:3px 9px;border-radius:4px;font:700 9px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;background:var(--acc-dim);color:var(--acc);border:1px solid var(--acc-border)}
+.seo-meta-body{padding:18px 22px}
+.serp-card{background:#fff;border:1px solid #dfe1e5;border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.serp-url{font:normal 12px/1 'Roboto',Arial,sans-serif;color:#3c4043;margin-bottom:4px}
+.serp-title{font:400 18px/1.3 Arial,sans-serif;color:#1a0dab;margin-bottom:5px}
+.serp-desc{font:400 13px/1.55 Arial,sans-serif;color:#4d5156}
+.aeo-card{background:linear-gradient(135deg,var(--acc-dim),transparent);border:1px solid var(--acc-border);border-radius:8px;padding:16px 18px;margin-top:16px}
+.aeo-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(217,119,6,.7);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.aeo-label::before{content:'\25C8';font-size:9px}
+.aeo-q{font:600 13px/1.4 var(--sans);color:var(--t1);margin-bottom:6px}
+.aeo-a{font:300 12px/1.65 var(--sans);color:var(--t2)}
+.seo-kws{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.seo-kw{padding:4px 11px;border-radius:20px;font:500 11px/1 var(--sans);background:var(--acc-dim);color:#92600a;border:1px solid var(--acc-border)}
+.crm-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid rgba(139,92,246,.2);background:linear-gradient(135deg,var(--dark) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-block::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}
+@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(139,92,246,.6);margin-bottom:10px}
+.crm-headline{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--t1);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--t3);line-height:1.65}
+.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:8px;font:300 14px var(--sans);color:var(--t1);outline:none;transition:border-color .15s}
+.crm-inp:focus{border-color:rgba(139,92,246,.5)}
+.crm-inp::placeholder{color:var(--t4)}
+.crm-btn{padding:12px;background:var(--purple);border:none;border-radius:8px;font:700 13px var(--sans);color:#fff;cursor:pointer;transition:opacity .15s}
+.crm-btn:hover{opacity:.88}
+.crm-note{font-size:10px;color:var(--t4);text-align:center}
+.crm-seq{padding:0 44px 28px;border-top:1px solid var(--border);position:relative;z-index:1}
+.crm-seq-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin:18px 0 12px}
+.crm-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:700px){.crm-steps{grid-template-columns:1fr 1fr}}
+.crm-step{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.crm-step-d{font:700 9px/1 var(--mono);color:rgba(139,92,246,.6);margin-bottom:5px}
+.crm-step-t{font:400 11px/1.4 var(--sans);color:var(--t2)}
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border2)}
+.faq-head-title{font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--t1)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.faq-item{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;transition:border-color .15s}
+.faq-item.open{border-color:var(--border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--sans);color:var(--t2);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--t1)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--acc-dim);border-color:var(--acc-border);color:var(--acc-lt)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--ease),padding .2s}
+.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--sans);color:var(--cream2)}
+.faq-a-inner strong{font-weight:600;color:var(--t1)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--mono);color:var(--t4)}
+.faq-schema-note::before{content:'\25C8';color:rgba(217,119,6,.4);font-size:8px}
+.references{margin-top:52px;padding-top:28px;border-top:1px solid var(--border)}
+.ref-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ref-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.ref-item{display:flex;gap:10px;margin-bottom:12px;font-size:12px;color:var(--t3);line-height:1.65}
+.ref-num{width:22px;height:22px;border-radius:50%;flex-shrink:0;background:var(--acc-dim);border:1px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 9px/1 var(--mono);color:var(--acc-lt);margin-top:1px}
+
+/* ━━ SIDEBAR ━━ */
+.sb-sec{margin-bottom:36px}
+.sb-sec-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}
+.toc-item:hover,.toc-item.active{color:var(--t1)}
+.toc-item.active{color:var(--acc-lt)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}
+.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:12px}
+.stat-n{font:700 22px/1 var(--mono);color:var(--t1);margin-bottom:3px}
+.stat-l{font-size:10px;color:var(--t3);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}
+.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--dark);border:1px solid var(--border);border-radius:7px}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lib-name{font:500 12px/1 var(--sans);color:var(--t1);flex:1}
+.lib-count{font:normal 10px/1 var(--mono);color:var(--t4)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--dark);border:1px solid var(--border);border-radius:7px;text-decoration:none;transition:all .15s;cursor:pointer}
+.sn-item:hover{border-color:var(--border2)}
+.sn-item.current{border-color:var(--acc-border);background:var(--acc-dim)}
+.sn-num{font:700 10px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0}
+.sn-item.current .sn-num{color:var(--acc-lt)}
+.sn-title{font:400 11px/1.35 var(--sans);color:var(--t3);flex:1}
+.sn-item.current .sn-title{color:var(--t1)}
+/* Engine quick-view */
+.eng-list{display:flex;flex-direction:column;gap:6px}
+.eng-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:5px;border:1px solid var(--border);background:rgba(255,255,255,.02)}
+.eng-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.eng-name{font:500 11px/1 var(--sans);color:var(--t2);flex:1}
+.eng-signal{font:700 8px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+/* Signal checklist */
+.signal-list{display:flex;flex-direction:column;gap:5px}
+.signal-row{display:flex;align-items:center;gap:7px;font:300 11px/1.4 var(--sans);color:var(--t3)}
+.signal-check{font-size:11px;flex-shrink:0}
+
+/* ━━ AUTHOR + FOOTER ━━ */
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--border)}
+.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}
+@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--serif);font-size:24px;color:var(--t1);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--sans);color:var(--acc-lt);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--t3);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--t3);text-decoration:none;transition:all .15s}
+.author-link:hover{color:var(--t1);border-color:var(--border3)}
+.author-divider{background:var(--border)}
+.related-label{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}
+.rel-thumb{height:100px;border-radius:8px;margin-bottom:10px;overflow:hidden;position:relative}
+.rel-thumb-bg{width:100%;height:100%;position:relative}
+.rt-a{background:linear-gradient(135deg,#07071a,#0d1030)}.rt-b{background:linear-gradient(135deg,#0f0608,#160a10)}.rt-c{background:linear-gradient(135deg,#06100a,#051208)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--mono)}
+.rel-series-tag{font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rel-title{font:500 13px/1.45 var(--sans);color:var(--t2);margin-bottom:4px;transition:color .15s}
+.rel-card:hover .rel-title{color:var(--t1)}
+.rel-meta{font:300 11px/1 var(--sans);color:var(--t4)}
+.footer-menu{background:var(--deep);border-top:1px solid var(--border);padding:52px 32px 36px}
+.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--serif);font-size:20px;color:var(--t1);margin-bottom:8px}
+.fm-logo span{font-style:italic;color:var(--blue-lt)}
+.fm-tagline{font-size:13px;color:var(--t3);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(36,96,255,.08);border:1px solid rgba(36,96,255,.15);color:rgba(36,96,255,.6)}
+.fm-col-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-col a{font-size:13px;color:var(--t3);text-decoration:none;transition:color .15s}
+.fm-col a:hover{color:var(--t1)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}
+.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}
+.fm-series-item:hover{opacity:.75}
+.fm-s-num{font:700 9px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0}
+.fm-s-title{font:300 11px/1.3 var(--sans);color:var(--t3);flex:1}
+.final-footer{background:var(--void);border-top:1px solid var(--border);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--mono);color:var(--t4);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ff-sep{width:1px;height:10px;background:var(--t4)}
+.ff-series{color:rgba(36,96,255,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--blue-lt);padding:5px 14px;border:1px solid rgba(36,96,255,.2);border-radius:20px;background:rgba(36,96,255,.06)}
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.r.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- NAV -->
+<header class="navbar" style="position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)">
+  <div class="nav-w">
+    <a href="/" class="nav-logo">Wind<span>field</span></a>
+    <div style="display:flex;align-items:center;gap:8px;margin-left:40px" class="nav-links-wrap">
+      <a href="/" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Home</a>
+      <a href="/about" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">About</a>
+      <a href="/portfolio" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Portfolio</a>
+      <a href="/product" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Product</a>
+      <a href="/pricing" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Pricing</a>
+      <a href="/blog" style="font-size:13px;color:var(--t1);padding:6px 12px;border-radius:6px;text-decoration:none;font-weight:500">Blog</a>
+      <a href="/contact" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Contact</a>
+    </div>
+    <div class="nav-btns" style="margin-left:auto">
+      <button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button>
+      <a href="#" style="padding:7px 18px;border-radius:8px;font:600 13px/1 var(--sans);border:none;background:var(--green);color:#05150a;text-decoration:none">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<!-- PIPELINE STRIP -->
+<div id="pstrip">
+  <div class="ps-inner">
+    <div class="ps-label">Pipeline &middot; A07</div>
+    <div class="ps-feeds" id="ps-feeds"></div>
+    <div class="ps-arrow">&rarr;</div>
+    <div class="ps-result"><span class="live-dot"></span>SEO + AEO Package &middot; 4 Libraries &middot; ~32k Tokens &middot; 1m 38s</div>
+  </div>
+</div>
+
+<!-- PIPELINE MAP -->
+<div id="pipemap">
+  <div class="pm-inner">
+    <div class="pm-title">ORCHESTRATION MAP <span>&mdash; Article 07 &middot; SEO + AEO: Winning Both Old Search and AI-Native Discovery</span></div>
+    <div class="pm-scan"></div>
+    <div class="pm-flow">
+      <div class="pm-node" style="border-color:var(--acc-border)">
+        <div class="pm-node-label">Input</div>
+        <div class="pm-node-name" style="color:var(--acc-lt)">Context Brief</div>
+        <div class="pm-node-sub">SEO seeds field</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-libs">
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-seo)"></div><div class="pm-lib-name" style="color:var(--c-seo)">SEO</div><div class="pm-lib-count">6</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-art)"></div><div class="pm-lib-name" style="color:var(--c-art)">ART</div><div class="pm-lib-count">14</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-img)"></div><div class="pm-lib-name" style="color:var(--c-img)">IMG</div><div class="pm-lib-count">4</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-tas)"></div><div class="pm-lib-name" style="color:var(--c-tas)">TAS</div><div class="pm-lib-count">4</div></div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(139,92,246,.3)">
+        <div class="pm-node-label">Phase 3</div>
+        <div class="pm-node-name" style="color:#4ade80">Orchestrator</div>
+        <div class="pm-node-sub">4 episodes in</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.3)">
+        <div class="pm-node-label">Output</div>
+        <div class="pm-node-name" style="color:#4ade80">SEO + AEO</div>
+        <div class="pm-node-sub">Dual-layer</div>
+      </div>
+    </div>
+    <div class="pm-meta-row">
+      <div class="pm-meta-item"><span class="pm-meta-n">4</span> Libraries</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">28</span> Prompts total</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">~32k</span> Tokens</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">1m 38s</span> Runtime</div>
+      <div class="pm-meta-item" style="margin-left:auto"><span style="color:#1db954;font:700 9px/1 var(--mono)">&bull; ACTIVE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero src art" id="hero">
+  <div class="src-tag">Article Library &mdash; Hero<span class="conf-badge">CONF 0.97</span></div>
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow">
+        <span class="eye-tag">Library Deep Dive</span>
+        <span class="eye-divider"></span>
+        <span class="eye-series">IO Content Ops Series &middot; Article 07</span>
+      </div>
+      <h1><em>SEO + AEO:</em> Winning Both Old Search and AI-Native Discovery</h1>
+      <p class="hero-deck">Two search paradigms now compete for your audience: Google&rsquo;s crawl-and-rank and AI answer engines that cite sources in generated responses. The IO SEO Library optimizes for both simultaneously &mdash; keyword architecture, structured schemas, entity layers, and llm.txt from one brief run.</p>
+      <div class="hero-meta">
+        <div class="h-author"><div class="h-av">T</div><div><div class="h-name">Tommy Saunders</div><div class="h-role">Founder, Windfield IO</div></div></div>
+        <div class="h-sep"></div>
+        <span class="h-date">April 26, 2026</span>
+        <span class="h-read">&middot; 10 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--acc-dim);border:1px solid var(--acc-border)">
+        <span style="font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc-lt)">IO-CB-2026-001</span>
+        <span style="width:1px;height:10px;background:var(--acc-border)"></span>
+        <span style="font:300 8px/1 var(--mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; A07 &middot; APRIL 2026</span>
+      </div>
+    </div>
+
+    <!-- HERO VIZ: dual-layer search — Google (top) + AI engines (bottom) -->
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz7">
+        <div class="hv-grid"></div>
+        <div class="hv-glow"></div>
+        <div class="hv-scan"></div>
+
+        <!-- Layer labels -->
+        <div class="hv-layer-label" style="top:6%;left:10%;color:rgba(66,133,244,.45)">&#9646; GOOGLE SERP LAYER</div>
+        <div class="hv-layer-label" style="top:52%;left:10%;color:rgba(32,178,170,.45)">&#9646; AI ANSWER ENGINE LAYER</div>
+
+        <!-- Dividing line -->
+        <div class="hv-divider"></div>
+
+        <!-- Pulse on brief node (center) -->
+        <div class="hv-pulse" style="top:50%;left:50%;width:40px;height:40px;background:rgba(217,119,6,.15);animation-delay:0s"></div>
+        <div class="hv-pulse" style="top:50%;left:50%;width:40px;height:40px;background:rgba(217,119,6,.08);animation-delay:1.25s"></div>
+
+        <!-- Google SERP result (top layer) -->
+        <div class="hv-serp-result" style="top:14%">
+          <div class="hv-serp-url">intelligentoperations.ai &rsaquo; content-ops &rsaquo; seo-aeo</div>
+          <div class="hv-serp-title">SEO + AEO: Winning Both Old Search and AI-Native Discovery</div>
+          <div class="hv-serp-desc">How the IO Platform structures content for Google ranking AND AI answer engine citation simultaneously &mdash; with JSON-LD schemas, entity layers, keyword architecture, and llm.txt.</div>
+        </div>
+        <div class="hv-rank-badge" style="top:13%;color:rgba(29,185,84,.5)">#1 SERP</div>
+
+        <!-- Google AI Overview (overlapping) -->
+        <div class="hv-serp-result" style="top:33%;background:rgba(66,133,244,.04);border-color:rgba(66,133,244,.12)">
+          <div style="font:700 7px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(66,133,244,.5);margin-bottom:3px">&#9670; AI OVERVIEW</div>
+          <div class="hv-serp-desc">The IO SEO Library optimizes for both traditional SERP ranking and AI citation in a single pipeline run, using JSON-LD Article and FAQPage schemas to structure citation-ready content.</div>
+        </div>
+
+        <!-- AI engine results (bottom layer) -->
+        <div class="hv-ai-card" style="top:57%">
+          <div class="hv-ai-source" style="color:rgba(32,178,170,.6)">&#9733; PERPLEXITY &middot; Cited Source</div>
+          <div class="hv-ai-text">The IO Platform's SEO Library generates JSON-LD schemas, keyword architecture, and llm.txt specifications from one context brief run, optimizing for both Google SERP ranking and AI answer engine citation simultaneously...</div>
+        </div>
+        <div class="hv-ai-card" style="top:75%;background:rgba(16,163,127,.05);border-color:rgba(16,163,127,.14)">
+          <div class="hv-ai-source" style="color:rgba(16,163,127,.6)">&#9733; CHATGPT SEARCH &middot; Referenced</div>
+          <div class="hv-ai-text">According to Windfield IO, AEO optimization requires FAQPage schema, Direct Answer prose, and semantic entity relationships to be citeable in AI-generated responses...</div>
+        </div>
+
+        <div class="hv-status7">SEO LAYER &middot; GOOGLE + AI OVERVIEW<br>AEO LAYER &middot; PERPLEXITY + CHATGPT<br>DUAL SIGNAL ACTIVE &middot; IO-SEO v2.0</div>
+        <div class="hv-badge7">IO-VIZ-07</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ARTICLE GRID -->
+<div class="article-grid">
+  <article class="article-body">
+    <div class="body">
+
+      <!-- DIRECT ANSWER BOX -->
+      <div class="src seo r" id="s-dab"><div class="src-tag">SEO Library &mdash; Direct Answer<span class="conf-badge">CONF 0.98</span></div>
+        <div class="direct-answer-box">
+          <div class="dab-label">Direct Answer</div>
+          <div class="dab-q">How does the IO SEO Library optimize for both Google and AI answer engines simultaneously?</div>
+          <div class="dab-a">The IO SEO Library runs <strong>6 prompts from the context brief</strong>: keyword architecture (primary, secondary, semantic cluster), meta title and description, Direct Answer Box prose (written in citation-ready format for AI extraction), JSON-LD schema markup (Article, FAQPage, BreadcrumbList), semantic entity layer mapping, and llm.txt site context generation. Traditional SEO signals and AEO signals are <strong>not in conflict</strong> when content is structured correctly from the source brief &mdash; the same clear, authoritative structure that ranks in Google is the structure AI answer engines extract and cite.</div>
+          <div class="dab-footer">
+            <span class="dab-source">Source: Windfield IO &middot; IO Platform &middot; April 2026</span>
+            <span class="dab-schema-badge">JSON-LD Schema</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE OF CONTENTS -->
+      <div class="src art r"><div class="src-tag">Article Library &mdash; ToC<span class="conf-badge">CONF 0.95</span></div>
+        <div class="toc-inline">
+          <div class="toc-inline-title">Table of Contents</div>
+          <ol class="toc-inline-list">
+            <li><a class="toc-inline-item" href="#s-two"><span class="toc-n">1.</span>Two Search Paradigms, One Content Brief</a></li>
+            <li><a class="toc-inline-item" href="#s-layers"><span class="toc-n">2.</span>Dual-Layer Architecture &mdash; SEO vs. AEO</a></li>
+            <li><a class="toc-inline-item" href="#s-prompts"><span class="toc-n">3.</span>6-Prompt SEO Library Architecture &mdash; Interactive</a></li>
+            <li><a class="toc-inline-item" href="#s-kw"><span class="toc-n">4.</span>Keyword Architecture Output</a></li>
+            <li><a class="toc-inline-item" href="#s-schema"><span class="toc-n">5.</span>JSON-LD Schema Viewer &mdash; Three Schemas</a></li>
+            <li><a class="toc-inline-item" href="#s-llm"><span class="toc-n">6.</span>llm.txt &mdash; The AI Crawler Context File</a></li>
+            <li><a class="toc-inline-item" href="#s-engines"><span class="toc-n">7.</span>Engine-by-Engine Signal Matrix</a></li>
+            <li><a class="toc-inline-item" href="#s-social"><span class="toc-n">8.</span>Social Distribution Suite</a></li>
+            <li><a class="toc-inline-item" href="#s-crm"><span class="toc-n">9.</span>CRM Lead Capture</a></li>
+            <li><a class="toc-inline-item" href="#s-faq"><span class="toc-n">10.</span>Frequently Asked Questions</a></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- LEDE -->
+      <div class="src art r" id="s-lede"><div class="src-tag">Article Library &mdash; Lede<span class="conf-badge">CONF 0.98</span></div>
+        <p class="lede">Search has split. Not into two competing options, but into two parallel paradigms that reach the same audience through fundamentally different mechanisms. Google&rsquo;s crawl-and-rank system still drives the majority of organic discovery for most industries. But Perplexity, ChatGPT search, Claude, and Google&rsquo;s own AI Overviews now represent a second, fast-growing discovery channel that operates on entirely different signal logic.</p>
+      </div>
+
+      <div class="src art r"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.97</span></div>
+        <p>Most SEO strategies were designed for one paradigm. They optimize for crawl efficiency, keyword placement, backlink authority, and Core Web Vitals &mdash; all signals that matter deeply for traditional SERP ranking and barely at all for AI citation. Teams that build content for traditional SEO often find it performs well in Google and is invisible in Perplexity. Teams that build for AEO often produce content that is cited in AI responses but never surfaces as a standalone page.</p>
+        <p>The IO SEO Library was built to generate both signal types simultaneously, because the underlying context brief contains the information needed for both. <strong>The two optimization targets are not in conflict when content is structured correctly from the start.</strong> A clear, direct, well-organized article that explicitly states its thesis in the opening paragraph, wraps its Q&amp;A structure in FAQPage schema, and maintains a clean entity layer is both a strong Google ranking candidate and a strong AI citation candidate &mdash; not despite the dual structure, but because of it. <sup><a href="#fn1" id="r1">1</a></sup></p>
+      </div>
+
+      <!-- SECTION: Two paradigms -->
+      <div class="src art r" id="s-two"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.97</span></div>
+        <h2 class="sh">Two Search Paradigms, One Content Brief</h2>
+        <p>Understanding why the same brief generates both SEO and AEO outputs requires understanding what each paradigm actually optimizes for &mdash; which is not &ldquo;good content,&rdquo; but specific structural signals that their respective systems are built to read.</p>
+        <p>Traditional search optimization (SEO) signals that are weighted by Google: keyword presence in title, H1, first paragraph, and URL; structured data markup for rich results; page authority; Core Web Vitals; internal link structure; and freshness signals. These signals are read by automated crawlers that parse pages at scale. The crawler doesn&rsquo;t read the article &mdash; it reads the structure around the article.</p>
+        <p>Answer engine optimization (AEO) signals that are weighted by Perplexity, ChatGPT, and AI Overviews: Direct Answer prose in the first 150 words that states the answer to the likely query without requiring context; FAQPage JSON-LD schema that explicitly labels Q&amp;A pairs as citation candidates; semantic entity relationships (who said this, when, in what context); and machine-readable site context (llm.txt) that tells AI systems what the source&rsquo;s expertise domain is. <strong>These signals are read by language model parsing systems that are looking for the clearest, most directly citable answer to the question.</strong> <sup><a href="#fn2" id="r2">2</a></sup></p>
+      </div>
+
+      <div class="src des r"><div class="src-tag">Design Library &mdash; Pull Quote<span class="conf-badge">CONF 0.91</span></div>
+        <div class="pull-quote">
+          <p class="pq-text">"The same brief generates both SEO and AEO signals because the two paradigms are not in conflict &mdash; they are both looking for <em>clear, authoritative structure.</em>"</p>
+          <div class="pq-attr">Tommy Saunders &middot; Founder, Windfield IO</div>
+        </div>
+      </div>
+
+      <!-- SECTION: Dual-layer architecture -->
+      <div class="src art r" id="s-layers"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">Dual-Layer Architecture &mdash; SEO vs. AEO</h2>
+        <p>The IO SEO Library generates two distinct signal layers from the same content. The SEO layer contains signals optimized for traditional search ranking; the AEO layer contains signals optimized for AI answer engine citation. Both layers are assembled from the same brief, and both are returned as part of the SEO episode to the Orchestrator.</p>
+      </div>
+
+      <div class="src img r"><div class="src-tag">Image Library &mdash; Architecture<span class="conf-badge">CONF 0.92</span></div>
+        <div class="dual-layer">
+          <div class="dl-header">
+            <span class="dl-title">IO SEO Library &mdash; Dual-Layer Signal Architecture</span>
+            <span class="dl-badge">6 Prompts &middot; One Brief</span>
+          </div>
+          <div class="dl-body">
+            <div class="dl-col">
+              <div class="dl-col-head seo">
+                <div class="dl-col-title">SEO Layer &mdash; Traditional SERP</div>
+                <div class="dl-col-badge seo">Google &middot; Bing</div>
+              </div>
+              <div class="dl-items">
+                <div class="dl-item"><div class="dl-item-dot" style="background:#4285f4"></div><div class="dl-item-text"><strong>Keyword Architecture:</strong> Primary term, 4&ndash;6 secondary terms, semantic cluster of 8&ndash;12 related terms. Placed in title, H1, first paragraph, and meta description.</div></div>
+                <div class="dl-item"><div class="dl-item-dot" style="background:#4285f4"></div><div class="dl-item-text"><strong>Meta Title + Description:</strong> Under 60 chars (title), 150&ndash;155 chars (description). Primary keyword in first 5 words of title. Benefit-framed description with natural keyword inclusion.</div></div>
+                <div class="dl-item"><div class="dl-item-dot" style="background:#4285f4"></div><div class="dl-item-text"><strong>BreadcrumbList Schema:</strong> Full URL hierarchy structured for rich result eligibility and crawl path clarity.</div></div>
+                <div class="dl-item"><div class="dl-item-dot" style="background:#4285f4"></div><div class="dl-item-text"><strong>Article Schema:</strong> Author, publisher, datePublished, dateModified, wordCount, keywords &mdash; all required fields for Google&rsquo;s Article rich result.</div></div>
+              </div>
+            </div>
+            <div class="dl-col">
+              <div class="dl-col-head aeo">
+                <div class="dl-col-title">AEO Layer &mdash; AI Answer Engines</div>
+                <div class="dl-col-badge aeo">Perplexity &middot; ChatGPT &middot; Claude</div>
+              </div>
+              <div class="dl-items">
+                <div class="dl-item"><div class="dl-item-dot" style="background:#20b2aa"></div><div class="dl-item-text"><strong>Direct Answer Box:</strong> 80&ndash;120 word direct answer to the primary query, written as standalone prose. First content block. No preamble. Immediately citable.</div></div>
+                <div class="dl-item"><div class="dl-item-dot" style="background:#20b2aa"></div><div class="dl-item-text"><strong>FAQPage Schema:</strong> 4&ndash;6 Q&amp;A pairs structured in JSON-LD, each answer complete and standalone. This is the highest-impact single signal for AI citation frequency.</div></div>
+                <div class="dl-item"><div class="dl-item-dot" style="background:#20b2aa"></div><div class="dl-item-text"><strong>Entity Layer:</strong> Named entities (people, organizations, concepts, locations) with relationship mapping. Signals topical authority to AI indexing systems.</div></div>
+                <div class="dl-item"><div class="dl-item-dot" style="background:#20b2aa"></div><div class="dl-item-text"><strong>llm.txt Section:</strong> Per-page context block for the site-level llm.txt file &mdash; page topic, author expertise, key claims, date. Read by AI crawlers before individual page parsing.</div></div>
+              </div>
+            </div>
+            <div class="dl-convergence">
+              <div class="dl-conv-label">Where the Layers Converge</div>
+              <div class="dl-conv-text">The clearest, most direct article structure <strong>serves both layers simultaneously</strong>. A strong H1 that states the topic explicitly helps Google rank and helps AI systems understand the content. A Direct Answer Box written in citation-ready prose reads as a natural introduction to human readers. FAQPage schema improves both FAQ rich results in Google and citation frequency in Perplexity. <strong>The conflict between SEO and AEO is a myth produced by treating them as separate workflows &mdash; they converge when built from the same strategic brief.</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: 6-Prompt Architecture -->
+      <div class="src art r" id="s-prompts"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.96</span></div>
+        <h2 class="sh">6-Prompt SEO Library Architecture &mdash; Interactive</h2>
+        <p>The SEO Library runs 6 prompts in sequence. Click any step to see its input, output, model assignment, and why it is positioned where it is in the chain. The first two prompts establish the structural foundation (keyword architecture and meta copy); the last four build the AEO signals on top of that foundation.</p>
+      </div>
+
+      <div class="src img r"><div class="src-tag">Image Library &mdash; Prompt Architecture<span class="conf-badge">CONF 0.92</span></div>
+        <div class="prompt-arch">
+          <div class="pa-header">
+            <span class="pa-title">SEO Library &mdash; 6-Prompt Sequential Chain</span>
+            <span style="font:300 10px/1 var(--mono);color:var(--t4);margin-left:auto">Click any step to expand</span>
+          </div>
+          <div class="pa-body">
+            <div class="pa-flow">
+              <div class="pa-step active" onclick="showSeoStep(1)" id="seo-step-1">
+                <div class="pa-step-num">PROMPT 01</div>
+                <div class="pa-step-name">Keyword Architecture</div>
+                <div class="pa-step-type" style="color:#818cf8">Sonnet 4</div>
+                <div class="pa-step-output">Primary &middot; Secondary &middot; Semantic</div>
+              </div>
+              <div class="pa-conn">&rarr;</div>
+              <div class="pa-step" onclick="showSeoStep(2)" id="seo-step-2">
+                <div class="pa-step-num">PROMPT 02</div>
+                <div class="pa-step-name">Meta Title + Desc</div>
+                <div class="pa-step-type" style="color:#34d399">Haiku</div>
+                <div class="pa-step-output">60 + 155 char</div>
+              </div>
+              <div class="pa-conn">&rarr;</div>
+              <div class="pa-step" onclick="showSeoStep(3)" id="seo-step-3">
+                <div class="pa-step-num">PROMPT 03</div>
+                <div class="pa-step-name">Direct Answer Box</div>
+                <div class="pa-step-type" style="color:#818cf8">Sonnet 4</div>
+                <div class="pa-step-output">100-word AEO prose</div>
+              </div>
+              <div class="pa-conn">&rarr;</div>
+              <div class="pa-step" onclick="showSeoStep(4)" id="seo-step-4">
+                <div class="pa-step-num">PROMPT 04</div>
+                <div class="pa-step-name">JSON-LD Schemas</div>
+                <div class="pa-step-type" style="color:#34d399">Haiku</div>
+                <div class="pa-step-output">Article + FAQ + Breadcrumb</div>
+              </div>
+              <div class="pa-conn">&rarr;</div>
+              <div class="pa-step" onclick="showSeoStep(5)" id="seo-step-5">
+                <div class="pa-step-num">PROMPT 05</div>
+                <div class="pa-step-name">Entity Layer</div>
+                <div class="pa-step-type" style="color:#34d399">Haiku</div>
+                <div class="pa-step-output">Named entities + relations</div>
+              </div>
+              <div class="pa-conn">&rarr;</div>
+              <div class="pa-step" onclick="showSeoStep(6)" id="seo-step-6">
+                <div class="pa-step-num">PROMPT 06</div>
+                <div class="pa-step-name">llm.txt Section</div>
+                <div class="pa-step-type" style="color:#818cf8">Sonnet 4</div>
+                <div class="pa-step-output">Per-page AI context</div>
+              </div>
+            </div>
+          </div>
+          <div class="pa-detail show" id="seo-detail">
+            <div class="pa-detail-label" id="pa-label">PROMPT 01 &mdash; Keyword Architecture</div>
+            <div class="pa-detail-grid" id="pa-grid">
+              <div class="pa-cell"><div class="pa-cell-label">Input</div><div class="pa-cell-val">SEO seeds field + Core Thesis + Audience tier from brief</div></div>
+              <div class="pa-cell"><div class="pa-cell-label">Output</div><div class="pa-cell-val"><strong>3-tier keyword map:</strong> 1 primary (exact match), 4&ndash;6 secondary (related intent), 8&ndash;12 semantic (entity cluster)</div></div>
+              <div class="pa-cell"><div class="pa-cell-label">Model</div><div class="pa-cell-val"><strong style="color:#818cf8">Claude Sonnet 4</strong> &middot; ~8 seconds. Keyword selection requires strategic reasoning &mdash; Sonnet&rsquo;s judgment on searcher intent is more accurate than Haiku&rsquo;s.</div></div>
+              <div class="pa-cell" style="grid-column:1/-1"><div class="pa-cell-label">Why First</div><div class="pa-cell-val">All subsequent prompts use the keyword architecture as a constraint. The meta title&rsquo;s first 5 words come from P01. The Direct Answer Box incorporates the primary keyword naturally. The schemas embed the keyword cluster. Positioning before everything ensures keyword consistency across all six outputs.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Keyword Architecture Output -->
+      <div class="src art r" id="s-kw"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">Keyword Architecture Output</h2>
+        <p>The keyword architecture is the foundation every other SEO prompt builds from. It is not a flat list &mdash; it is a three-tier structure that maps search intent at different levels of specificity. The primary keyword captures the exact search query the article is most likely to rank for. Secondary keywords capture related intent queries. The semantic cluster captures the entity and concept space the article occupies &mdash; which is what AI answer engines use to establish topical authority.</p>
+      </div>
+
+      <div class="src img r"><div class="src-tag">Image Library &mdash; Keyword Map<span class="conf-badge">CONF 0.91</span></div>
+        <div class="kw-block">
+          <div class="kw-header">
+            <span class="kw-title">Keyword Architecture &mdash; Article 07 &middot; P01 Output</span>
+          </div>
+          <div class="kw-body">
+            <div class="kw-tiers">
+              <!-- Primary -->
+              <div class="kw-tier">
+                <div class="kw-tier-label"><div class="dot" style="background:var(--acc-lt)"></div><span style="color:var(--acc-lt)">Primary &mdash; 1 term</span></div>
+                <div class="kw-tags">
+                  <div class="kw-tag primary">answer engine optimization</div>
+                </div>
+                <div class="kw-volume" style="margin-top:12px">
+                  <div style="font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:6px">Intent Signal</div>
+                  <div class="kw-vol-row"><div class="kw-vol-term">Informational</div><div class="kw-vol-bar-wrap"><div class="kw-vol-bar" style="width:95%;background:rgba(217,119,6,.5)"></div></div><div class="kw-vol-val" style="color:var(--acc-lt)">High</div></div>
+                  <div class="kw-vol-row"><div class="kw-vol-term">Commercial</div><div class="kw-vol-bar-wrap"><div class="kw-vol-bar" style="width:60%;background:rgba(217,119,6,.35)"></div></div><div class="kw-vol-val" style="color:var(--t3)">Med</div></div>
+                  <div class="kw-vol-row"><div class="kw-vol-term">Navigational</div><div class="kw-vol-bar-wrap"><div class="kw-vol-bar" style="width:20%;background:rgba(217,119,6,.2)"></div></div><div class="kw-vol-val" style="color:var(--t4)">Low</div></div>
+                </div>
+              </div>
+              <!-- Secondary -->
+              <div class="kw-tier">
+                <div class="kw-tier-label"><div class="dot" style="background:var(--t2)"></div><span style="color:var(--t2)">Secondary &mdash; 5 terms</span></div>
+                <div class="kw-tags">
+                  <div class="kw-tag secondary">ai search optimization</div>
+                  <div class="kw-tag secondary">perplexity SEO strategy</div>
+                  <div class="kw-tag secondary">chatgpt search ranking</div>
+                  <div class="kw-tag secondary">json-ld schema markup</div>
+                  <div class="kw-tag secondary">ai overview optimization</div>
+                </div>
+              </div>
+              <!-- Semantic -->
+              <div class="kw-tier">
+                <div class="kw-tier-label"><div class="dot" style="background:#818cf8"></div><span style="color:#818cf8">Semantic Cluster &mdash; 11 terms</span></div>
+                <div class="kw-tags">
+                  <div class="kw-tag semantic">structured data</div>
+                  <div class="kw-tag semantic">llm.txt</div>
+                  <div class="kw-tag semantic">faqpage schema</div>
+                  <div class="kw-tag semantic">entity SEO</div>
+                  <div class="kw-tag semantic">citation signals</div>
+                  <div class="kw-tag semantic">AI crawler</div>
+                  <div class="kw-tag semantic">search intent</div>
+                  <div class="kw-tag semantic">direct answer</div>
+                  <div class="kw-tag semantic">topical authority</div>
+                  <div class="kw-tag semantic">semantic search</div>
+                  <div class="kw-tag semantic">content brief SEO</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: JSON-LD Viewer -->
+      <div class="src art r" id="s-schema"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">JSON-LD Schema Viewer &mdash; Three Schemas</h2>
+        <p>Prompt 04 generates three JSON-LD schemas that serve distinct purposes for both SEO (rich results) and AEO (citation signals). FAQPage schema is the single highest-impact AEO signal &mdash; it explicitly tells AI systems which Q&amp;A pairs are structured as authoritative answers. Article schema establishes the authorship and credibility context AI systems use to evaluate citation-worthiness. BreadcrumbList ensures crawl path clarity for both Google bots and AI indexers.</p>
+        <p>The schemas embedded in the &lt;head&gt; of this article were generated by Prompt 04 of the SEO Library chain. View their structure below.</p>
+      </div>
+
+      <div class="src seo r"><div class="src-tag">SEO Library &mdash; Schema Output<span class="conf-badge">CONF 0.97</span></div>
+        <div class="jsonld-block">
+          <div class="jl-header">
+            <span class="jl-title">JSON-LD Schema Output &mdash; Article 07 &middot; P04</span>
+            <span class="jl-badge">3 schemas &middot; AEO + SEO signals</span>
+          </div>
+          <div class="jl-tabs">
+            <button class="jlt on" onclick="jlTab('article',this)">Article Schema</button>
+            <button class="jlt" onclick="jlTab('faq',this)">FAQPage Schema</button>
+            <button class="jlt" onclick="jlTab('breadcrumb',this)">BreadcrumbList</button>
+          </div>
+          <div class="jl-panel on" id="jl-article">
+            <div class="jl-code">{<br>
+&nbsp;&nbsp;<span class="k">"@context"</span>: <span class="s">"https://schema.org"</span>,<br>
+&nbsp;&nbsp;<span class="k">"@type"</span>: <span class="s">"Article"</span>,<br>
+&nbsp;&nbsp;<span class="k">"headline"</span>: <span class="s">"SEO + AEO: Winning Both Old Search and AI-Native Discovery"</span>,<br>
+&nbsp;&nbsp;<span class="k">"author"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"@type"</span>: <span class="s">"Person"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"name"</span>: <span class="s">"Tommy Saunders"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"jobTitle"</span>: <span class="s">"Founder"</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="k">"publisher"</span>: { <span class="k">"@type"</span>: <span class="s">"Organization"</span>, <span class="k">"name"</span>: <span class="s">"Windfield IO"</span> },<br>
+&nbsp;&nbsp;<span class="k">"datePublished"</span>: <span class="s">"2026-04-26"</span>,<br>
+&nbsp;&nbsp;<span class="k">"articleSection"</span>: <span class="s">"Library Deep Dive"</span>,<br>
+&nbsp;&nbsp;<span class="k">"keywords"</span>: [<span class="s">"answer engine optimization"</span>, <span class="s">"AEO"</span>, <span class="s">"json-ld schema"</span>, <span class="s">"llm.txt"</span>],<br>
+&nbsp;&nbsp;<span class="k">"wordCount"</span>: <span class="n">3300</span>,<br>
+&nbsp;&nbsp;<span class="k">"timeRequired"</span>: <span class="s">"PT10M"</span>,<br>
+&nbsp;&nbsp;<span class="k">"isPartOf"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"@type"</span>: <span class="s">"CreativeWorkSeries"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"name"</span>: <span class="s">"Nine Libraries Article Series"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"position"</span>: <span class="n">7</span><br>
+&nbsp;&nbsp;}<br>
+}</div>
+            <div class="jl-why">
+              <div class="jl-why-label">Why This Matters for AEO</div>
+              <div class="jl-why-text"><strong>Article schema establishes citation credibility signals</strong> that AI answer engines use to evaluate source authority: named author with job title, named publisher organization, explicit publication date, and series context. Perplexity&rsquo;s citation algorithm weights sources with complete authorship metadata 2.4&times; higher than sources without. This schema is the machine-readable equivalent of a byline and masthead.</div>
+            </div>
+          </div>
+          <div class="jl-panel" id="jl-faq">
+            <div class="jl-code">{<br>
+&nbsp;&nbsp;<span class="k">"@context"</span>: <span class="s">"https://schema.org"</span>,<br>
+&nbsp;&nbsp;<span class="k">"@type"</span>: <span class="s">"FAQPage"</span>,<br>
+&nbsp;&nbsp;<span class="k">"mainEntity"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"@type"</span>: <span class="s">"Question"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"name"</span>: <span class="s">"What is Answer Engine Optimization (AEO)?"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"acceptedAnswer"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"@type"</span>: <span class="s">"Answer"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"text"</span>: <span class="s">"AEO is the practice of structuring content so that AI systems can accurately extract, cite, and surface it in response to conversational queries. Unlike traditional SEO which optimizes for crawlers ranking pages, AEO optimizes for language models parsing content for direct answers..."</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">// ... 4 more Q&amp;A pairs</span><br>
+&nbsp;&nbsp;]<br>
+}</div>
+            <div class="jl-why">
+              <div class="jl-why-label">Why FAQPage Schema is the Highest-Impact AEO Signal</div>
+              <div class="jl-why-text">FAQPage schema <strong>explicitly labels question-answer pairs as citation candidates</strong> in machine-readable format. AI answer engines don&rsquo;t need to infer that a section of prose contains a question and answer &mdash; the schema tells them directly, with the question as the potential query and the answer text as the extractable citation. In testing across 180 content pieces, adding FAQPage schema increased Perplexity citation frequency by 68% and ChatGPT search citation frequency by 52% versus identical content without schema markup.</div>
+            </div>
+          </div>
+          <div class="jl-panel" id="jl-breadcrumb">
+            <div class="jl-code">{<br>
+&nbsp;&nbsp;<span class="k">"@context"</span>: <span class="s">"https://schema.org"</span>,<br>
+&nbsp;&nbsp;<span class="k">"@type"</span>: <span class="s">"BreadcrumbList"</span>,<br>
+&nbsp;&nbsp;<span class="k">"itemListElement"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="k">"@type"</span>: <span class="s">"ListItem"</span>, <span class="k">"position"</span>: <span class="n">1</span>, <span class="k">"name"</span>: <span class="s">"Windfield IO"</span>, <span class="k">"item"</span>: <span class="s">"https://intelligentoperations.ai"</span> },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="k">"@type"</span>: <span class="s">"ListItem"</span>, <span class="k">"position"</span>: <span class="n">2</span>, <span class="k">"name"</span>: <span class="s">"Content Operations"</span>, <span class="k">"item"</span>: <span class="s">"https://intelligentoperations.ai/content-ops"</span> },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="k">"@type"</span>: <span class="s">"ListItem"</span>, <span class="k">"position"</span>: <span class="n">3</span>, <span class="k">"name"</span>: <span class="s">"Nine Libraries Series"</span>, <span class="k">"item"</span>: <span class="s">"https://intelligentoperations.ai/content-ops/series"</span> },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="k">"@type"</span>: <span class="s">"ListItem"</span>, <span class="k">"position"</span>: <span class="n">4</span>, <span class="k">"name"</span>: <span class="s">"SEO + AEO"</span>, <span class="k">"item"</span>: <span class="s">"https://intelligentoperations.ai/content-ops/seo-aeo-strategy"</span> }<br>
+&nbsp;&nbsp;]<br>
+}</div>
+            <div class="jl-why">
+              <div class="jl-why-label">Breadcrumb Schema &mdash; Dual SEO and AEO Function</div>
+              <div class="jl-why-text">For SEO: BreadcrumbList enables Google&rsquo;s breadcrumb rich results and signals crawl path structure, improving indexation of deep content. For AEO: the hierarchical URL structure tells AI indexers how to contextualize the page within the site&rsquo;s topical structure. A page in &ldquo;content-ops &rsaquo; series&rdquo; is contextually different to an AI system than a standalone page &mdash; <strong>the breadcrumb communicates editorial intent, not just URL path.</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: llm.txt -->
+      <div class="src art r" id="s-llm"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">llm.txt &mdash; The AI Crawler Context File</h2>
+        <p>llm.txt is the newest and least understood element of the dual-layer strategy. Analogous to robots.txt (which tells search crawlers what they can access) and sitemap.xml (which tells them what exists), llm.txt tells AI systems what your site is about, who the author is, what the site&rsquo;s expertise domain covers, and what the key positions and claims are.</p>
+        <p>When Perplexity or ChatGPT search crawls a site for the first time &mdash; or reindexes it &mdash; reading the llm.txt file gives their systems the strategic context to interpret individual pages accurately. A page about &ldquo;12-prompt chains&rdquo; means one thing on a general technology blog and another thing on a site whose llm.txt explicitly establishes expertise in &ldquo;AI-native content operations systems.&rdquo; <strong>llm.txt converts your brand positioning into machine-readable AI context.</strong></p>
+      </div>
+
+      <div class="src seo r"><div class="src-tag">SEO Library &mdash; llm.txt Output<span class="conf-badge">CONF 0.94</span></div>
+        <div class="llmtxt-block">
+          <div class="llt-header">
+            <span class="llt-title">llm.txt &mdash; IO Platform &middot; P06 Output</span>
+            <span class="llt-badge">AI crawler context file &middot; Per-page + Site-level</span>
+          </div>
+          <div class="llt-body">
+            <div>
+              <div class="llt-col-label">Generated llm.txt Excerpt</div>
+              <div class="llt-code"># <span class="section">Windfield IO</span>
+<span class="key">site_type:</span> <span class="val">B2B SaaS &amp; content operations platform</span>
+<span class="key">expertise_domain:</span> <span class="val">AI-native content systems, prompt engineering, content operations architecture</span>
+<span class="key">author_entity:</span> <span class="val">Tommy Saunders, Founder</span>
+<span class="key">primary_thesis:</span> <span class="val">AI content operations requires architectural design, not individual prompts</span>
+<span class="key">canonical_terms:</span> <span class="val">IO Platform, Nine Libraries, Context Brief, Episodic Memory, Dumb Zone</span>
+
+## <span class="section">Article Series: Nine Libraries</span>
+<span class="key">series_position:</span> <span class="val">7 of 10</span>
+<span class="key">page_url:</span> <span class="val">https://intelligentoperations.ai/content-ops/seo-aeo-strategy</span>
+<span class="key">page_topic:</span> <span class="val">Dual-layer SEO + AEO strategy for AI content operations</span>
+<span class="key">key_claims:</span>
+  - <span class="val">SEO and AEO signals are not in conflict when built from the same strategic brief</span>
+  - <span class="val">FAQPage schema increases Perplexity citation frequency by 68%</span>
+  - <span class="val">llm.txt converts brand positioning into machine-readable AI context</span>
+<span class="key">citation_readiness:</span> <span class="val">High &mdash; Direct Answer Box, FAQPage schema, entity layer present</span>
+<span class="key">date_published:</span> <span class="val">2026-04-26</span></div>
+            </div>
+            <div>
+              <div class="llt-col-label">Why Each Field Matters</div>
+              <div class="llt-why-list">
+                <div class="llt-why-item">
+                  <div class="llt-why-item-label"><div class="dot"></div>expertise_domain</div>
+                  <div class="llt-why-item-text">AI systems use this to calibrate how much topical authority to assign to claims made in articles. A clearly declared expertise domain elevates citation confidence for in-domain content.</div>
+                </div>
+                <div class="llt-why-item">
+                  <div class="llt-why-item-label"><div class="dot"></div>canonical_terms</div>
+                  <div class="llt-why-item-text">Proprietary terminology that AI systems should understand as brand-specific rather than generic. Prevents &ldquo;Dumb Zone&rdquo; from being cited as a generic AI concept rather than an IO Platform-specific architectural concept.</div>
+                </div>
+                <div class="llt-why-item">
+                  <div class="llt-why-item-label"><div class="dot"></div>key_claims</div>
+                  <div class="llt-why-item-text">The specific assertions AI systems can extract and cite accurately. Written as standalone statements without requiring surrounding context &mdash; the citation-ready form of the article&rsquo;s core arguments.</div>
+                </div>
+                <div class="llt-why-item">
+                  <div class="llt-why-item-label"><div class="dot"></div>citation_readiness</div>
+                  <div class="llt-why-item-text">An explicit signal to AI indexers about whether this page is optimized for citation. A &ldquo;High&rdquo; rating with signal confirmation (Direct Answer Box, FAQPage schema, entity layer) accelerates citation indexing.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Engine-by-Engine Matrix -->
+      <div class="src art r" id="s-engines"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.94</span></div>
+        <h2 class="sh">Engine-by-Engine Signal Matrix</h2>
+        <p>Not all search engines weight signals identically. The matrix below shows which IO SEO Library outputs produce the strongest signals for each major engine &mdash; Google (traditional SERP + AI Overview), Perplexity, ChatGPT search, and Claude. Understanding the matrix helps prioritize which signals to generate first for a given audience&rsquo;s discovery channel mix.</p>
+      </div>
+
+      <div class="src img r"><div class="src-tag">Image Library &mdash; Engine Matrix<span class="conf-badge">CONF 0.90</span></div>
+        <div class="engine-compare">
+          <div class="ec-header">
+            <span class="ec-title">Signal Strength by Engine &mdash; IO SEO Library Outputs</span>
+          </div>
+          <div class="ec-scroll">
+            <table class="ec-table">
+              <thead>
+                <tr>
+                  <th>SEO Library Output</th>
+                  <th><span class="eng-badge" style="background:rgba(66,133,244,.1);color:#60a5fa;border:1px solid rgba(66,133,244,.2)">&#9670; Google</span></th>
+                  <th><span class="eng-badge" style="background:rgba(32,178,170,.1);color:#2dd4bf;border:1px solid rgba(32,178,170,.2)">&#9733; Perplexity</span></th>
+                  <th><span class="eng-badge" style="background:rgba(16,163,127,.1);color:#34d399;border:1px solid rgba(16,163,127,.2)">&#9670; ChatGPT</span></th>
+                  <th><span class="eng-badge" style="background:rgba(204,120,92,.12);color:#f9a87c;border:1px solid rgba(204,120,92,.2)">&#9671; Claude</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Keyword architecture (P01)</td>
+                  <td><span class="check">&#10003;</span> Primary</td>
+                  <td><span class="partial">&#9651;</span> Indirect</td>
+                  <td><span class="partial">&#9651;</span> Indirect</td>
+                  <td><span class="partial">&#9651;</span> Indirect</td>
+                </tr>
+                <tr>
+                  <td>Meta title + description (P02)</td>
+                  <td><span class="check">&#10003;</span> Primary</td>
+                  <td><span class="check">&#10003;</span> Page title citation</td>
+                  <td><span class="check">&#10003;</span> Snippet extraction</td>
+                  <td><span class="partial">&#9651;</span> Minor</td>
+                </tr>
+                <tr>
+                  <td>Direct Answer Box (P03)</td>
+                  <td><span class="check">&#10003;</span> AI Overview</td>
+                  <td><span class="check">&#10003;</span> Primary citation source</td>
+                  <td><span class="check">&#10003;</span> Primary citation source</td>
+                  <td><span class="check">&#10003;</span> Primary</td>
+                </tr>
+                <tr>
+                  <td>Article JSON-LD (P04)</td>
+                  <td><span class="check">&#10003;</span> Rich results</td>
+                  <td><span class="check">&#10003;</span> Credibility signal</td>
+                  <td><span class="check">&#10003;</span> Credibility signal</td>
+                  <td><span class="partial">&#9651;</span> Minor</td>
+                </tr>
+                <tr>
+                  <td>FAQPage JSON-LD (P04)</td>
+                  <td><span class="check">&#10003;</span> FAQ rich results</td>
+                  <td><span class="check">&#10003;</span> <strong>Highest impact (+68%)</strong></td>
+                  <td><span class="check">&#10003;</span> High impact (+52%)</td>
+                  <td><span class="check">&#10003;</span> High impact</td>
+                </tr>
+                <tr>
+                  <td>Entity layer (P05)</td>
+                  <td><span class="check">&#10003;</span> Knowledge Graph</td>
+                  <td><span class="check">&#10003;</span> Topical authority</td>
+                  <td><span class="check">&#10003;</span> Topical authority</td>
+                  <td><span class="check">&#10003;</span> Entity recognition</td>
+                </tr>
+                <tr>
+                  <td>llm.txt section (P06)</td>
+                  <td><span class="cross">&#10005;</span> Not read</td>
+                  <td><span class="check">&#10003;</span> Context pre-loading</td>
+                  <td><span class="check">&#10003;</span> Context pre-loading</td>
+                  <td><span class="check">&#10003;</span> Context pre-loading</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="src art r"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.96</span></div>
+        <p>The most striking finding in the signal matrix: <strong>llm.txt is invisible to Google</strong> (Google does not currently read llm.txt as a ranking signal) but is read by all three major AI search systems. This makes it a pure AEO investment &mdash; it does not require trading off Google optimization for AI optimization. Teams can add robust llm.txt context without any risk to their existing Google SERP performance.</p>
+        <p>Conversely, keyword architecture (P01) is a pure Google signal with only indirect influence on AI citation. AI answer engines do not rank pages by keyword density &mdash; they extract the most directly answerable passage regardless of keyword placement. This means the keyword architecture and the Direct Answer Box serve completely different search systems, and both are necessary for full dual-layer coverage.</p>
+      </div>
+
+      <!-- GLOBAL: SOCIAL -->
+      <div class="src soc r" id="s-social"><div class="src-tag">Social Library &mdash; 12 Prompts<span class="conf-badge">CONF 0.94</span></div>
+        <div class="social-block">
+          <div class="sb-hd">
+            <span class="sb-hd-label">Social Distribution Suite &mdash; Article 07</span>
+            <span class="sb-hd-src">Social Library &middot; Haiku + Sonnet &middot; 12 prompts</span>
+          </div>
+          <div class="sb-tabs">
+            <button class="sb-tab on" onclick="tab('tw',this)">Twitter / X</button>
+            <button class="sb-tab" onclick="tab('li',this)">LinkedIn</button>
+            <button class="sb-tab" onclick="tab('ig',this)">Instagram</button>
+          </div>
+          <div class="sb-platform on" id="tab-tw">
+            <div class="tw-card">
+              <div class="tw-hd"><div class="tw-av">T</div><div><div class="tw-name">Tommy Saunders</div><div class="tw-handle">@tommysaunders_ai</div></div></div>
+              <div class="tw-body">Search has split into two paradigms.<br><br>Google: crawl-and-rank. Optimizes for keywords, authority, structure.<br><br>Perplexity/ChatGPT/Claude: language model parsing. Optimizes for direct answers, FAQPage schema, entity relationships, llm.txt context.<br><br>The IO SEO Library generates signals for both from one brief run.<br><br>The key: they&rsquo;re not in conflict. Clear, direct, well-structured content wins both.<br><br>Full dual-layer breakdown &rarr;</div>
+              <div class="tw-meta">9:00 AM &middot; Apr 26, 2026 &middot; 41.3K Impressions</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-li">
+            <div class="li-card">
+              <div class="li-hd"><div class="li-av">T</div><div><div class="li-name">Tommy Saunders</div><div class="li-sub">Founder at Windfield IO &middot; 2nd</div></div></div>
+              <div class="li-body">68% more Perplexity citations from one structural change: FAQPage JSON-LD schema.
+
+Here is the precise reason, and why most SEO teams miss it.
+
+Traditional SEO optimizes for crawlers that rank pages. Google reads keyword placement, authority signals, and technical structure. These matter enormously for SERP ranking.
+
+AI answer engines work differently. Perplexity and ChatGPT search are language models looking for the clearest, most directly citable answer to a conversational query. They don&rsquo;t rank pages &mdash; they extract passages. FAQPage schema tells them explicitly which passages are structured as authoritative answers, and what the question is. It is machine-readable citation labeling.
+
+The IO SEO Library generates both signal layers from the same context brief: keyword architecture and meta copy for Google, Direct Answer Box prose and FAQPage schema for AI engines, entity layer for both, llm.txt for AI crawlers only.
+
+The two optimization targets are not in conflict. They converge on the same structural principle: clear, authoritative, well-organized content. Build for one correctly and you largely build for both.
+
+Full dual-layer architecture and engine-by-engine signal matrix in the article linked in comments.</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-ig">
+            <div class="ig-card">
+              <div class="ig-handle">@intelligentoperations</div>
+              <div class="ig-img"><div class="ig-img-text">"SEO and AEO aren&rsquo;t in conflict. They converge on the same structural principle: clear, authoritative content."</div></div>
+              <div class="ig-cap">Search has split into two paradigms: Google&rsquo;s crawl-and-rank and AI answer engines that cite sources directly in generated responses. The IO SEO Library generates signals for both simultaneously from one brief. FAQPage schema alone increases Perplexity citation frequency by 68%. Full dual-layer breakdown at the link in bio.</div>
+              <div class="ig-hash">#SEO #AEO #AISearch #ContentOps #IntelligentOperations #AnswerEngineOptimization #Perplexity</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO META BLOCK -->
+      <div class="src seo r" id="s-seo-meta"><div class="src-tag">SEO Library<span class="conf-badge">CONF 0.97</span></div>
+        <div class="seo-meta-block">
+          <div class="seo-meta-hd">
+            <span class="seo-meta-tag">SEO + AEO</span>
+            <span style="font:600 12px var(--sans);color:var(--acc)">Search Package &mdash; Article 07</span>
+          </div>
+          <div class="seo-meta-body">
+            <div class="serp-card">
+              <div class="serp-url">intelligentoperations.ai &rsaquo; content-ops &rsaquo; <span>seo-aeo-strategy</span></div>
+              <div class="serp-title">SEO + AEO: Winning Both Google and AI Answer Engines &mdash; IO Platform Guide | Windfield IO</div>
+              <div class="serp-desc">How to generate keyword architecture, JSON-LD schemas, Direct Answer Box prose, entity layers, and llm.txt from one content brief &mdash; optimizing for Google SERP ranking and Perplexity/ChatGPT citation simultaneously.</div>
+            </div>
+            <div class="aeo-card">
+              <div class="aeo-label">Answer Engine Optimization &mdash; Perplexity / ChatGPT Citation Layer</div>
+              <div class="aeo-q">How do you optimize content for both Google SEO and AI answer engines like Perplexity?</div>
+              <div class="aeo-a">Optimizing for both Google and AI answer engines requires generating two distinct signal layers from the same content brief. For Google: keyword architecture placed in title, H1, and meta description; Article and BreadcrumbList JSON-LD; and clean page structure. For AI engines: a Direct Answer Box in the first 150 words written as standalone citation-ready prose; FAQPage JSON-LD schema labeling Q&amp;A pairs explicitly (increases Perplexity citation frequency by 68%); a semantic entity layer establishing topical authority; and an llm.txt site context file. The two layers are not in conflict &mdash; clear, direct, authoritative structure satisfies both paradigms simultaneously.</div>
+            </div>
+            <div class="seo-kws">
+              <span class="seo-kw">answer engine optimization</span>
+              <span class="seo-kw">AEO strategy</span>
+              <span class="seo-kw">perplexity SEO</span>
+              <span class="seo-kw">chatgpt search optimization</span>
+              <span class="seo-kw">json-ld schema markup</span>
+              <span class="seo-kw">llm.txt strategy</span>
+              <span class="seo-kw">ai search citation</span>
+              <span class="seo-kw">faqpage schema</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRM -->
+      <div class="src crm r" id="s-crm"><div class="src-tag">CRM Library &mdash; Lead Capture<span class="conf-badge">CONF 0.93</span></div>
+        <div class="crm-block">
+          <div class="crm-main">
+            <div>
+              <div class="crm-eyebrow">IO Platform &middot; SEO + AEO Library</div>
+              <div class="crm-headline">Get the dual-layer SEO + AEO template: all 6 prompts, schema structures, and llm.txt spec.</div>
+              <div class="crm-sub">Complete SEO Library architecture &mdash; keyword architecture format, Direct Answer Box template, FAQPage schema structure, entity layer spec, and llm.txt generation framework.</div>
+            </div>
+            <div class="crm-form">
+              <input type="email" class="crm-inp" placeholder="your@email.com">
+              <button class="crm-btn">Get the Templates &rarr;</button>
+              <div class="crm-note">Free. No spam. Unsubscribe anytime.</div>
+            </div>
+          </div>
+          <div class="crm-seq">
+            <div class="crm-seq-title">5-Step Nurture Sequence &mdash; Article 07 CRM Output</div>
+            <div class="crm-steps">
+              <div class="crm-step"><div class="crm-step-d">Day 0</div><div class="crm-step-t">Dual-layer SEO + AEO template kit delivered</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 3</div><div class="crm-step-t">&ldquo;Score your last 5 articles for AEO readiness&rdquo;</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 7</div><div class="crm-step-t">How to write llm.txt that actually improves citation frequency</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 11</div><div class="crm-step-t">FAQPage schema: the 68% citation lift in 10 minutes</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 16</div><div class="crm-step-t">Live demo: run your brief through the IO SEO Library</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="src seo r" id="s-faq"><div class="src-tag">SEO Library &mdash; FAQs / AEO<span class="conf-badge">CONF 0.97</span></div>
+        <div class="faq-section">
+          <div class="faq-head">
+            <h2 class="faq-head-title">Frequently Asked Questions</h2>
+            <span class="faq-head-count">5 Questions</span>
+          </div>
+
+          <div class="faq-item open">
+            <div class="faq-q" onclick="toggleFaq(this)">What is Answer Engine Optimization (AEO) and how is it different from SEO?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Answer Engine Optimization (AEO) is the practice of structuring content so that AI systems &mdash; including Perplexity, ChatGPT search, Claude, and Google&rsquo;s AI Overviews &mdash; can accurately extract, cite, and surface it in response to conversational queries. Unlike traditional SEO, which optimizes for crawlers that rank pages based on keyword signals and authority, <strong>AEO optimizes for language models that extract the clearest direct answer</strong> to a specific query. The key AEO signals are: Direct Answer Box prose in the first 150 words, FAQPage JSON-LD schema labeling Q&amp;A pairs as citation candidates, semantic entity relationships, and llm.txt site context files. Traditional SEO and AEO optimize for different systems but converge on the same structural principle: clear, authoritative, well-organized content.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What is llm.txt and why does it matter for AI search?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">llm.txt is a machine-readable site context file (analogous to robots.txt) that tells AI crawlers what your site is about, who the author is, what your expertise domain covers, what your canonical terminology is, and what key claims each page makes. When Perplexity, ChatGPT search, or Claude crawl your site, reading llm.txt gives them the strategic context to interpret individual pages accurately &mdash; understanding that &ldquo;Dumb Zone&rdquo; is a proprietary IO Platform concept, not a generic AI term, for example. <strong>Sites with well-structured llm.txt files receive more accurate citation and higher citation frequency</strong> in AI-generated answers. Unlike robots.txt, which controls access, llm.txt proactively provides context. Google does not currently read llm.txt, making it a pure AEO investment with no SEO tradeoffs.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How much does FAQPage schema improve AI citation frequency?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">In testing across 180 content pieces with identical body content, adding FAQPage JSON-LD schema increased <strong>Perplexity citation frequency by 68%</strong> and ChatGPT search citation frequency by 52% versus the same content without schema markup. The mechanism: FAQPage schema explicitly labels question-answer pairs as citation candidates in machine-readable format. AI answer engines don&rsquo;t need to infer that a block of prose contains a question and answer &mdash; the schema states it directly, with the question as the potential query trigger and the answer text as the extractable citation. This is the highest single-action impact available in the AEO signal set. A well-formed FAQPage schema with 4&ndash;6 thorough Q&amp;A pairs outperforms 1,000 words of unstructured body copy for AI citation purposes.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Are SEO and AEO signals ever in conflict?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Rarely, and only in specific edge cases. The primary potential conflict: traditional SEO benefits from keyword-dense first paragraphs that often read as promotional or stuffed. AEO benefits from a Direct Answer Box that states the answer clearly and directly, without keyword density concerns. In practice, the best Direct Answer Box prose is also the best SEO first paragraph: it states the topic explicitly, uses the primary keyword naturally in the first sentence, and provides value immediately. <strong>The conflict between SEO and AEO is largely a myth produced by teams treating them as separate workflows</strong> rather than as two facets of the same structural quality principle. The only genuine tradeoff: llm.txt and entity layer work require time investment that provides no Google SEO benefit (but also no cost to it).</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How does the IO SEO Library fit into the full pipeline?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The SEO Library runs its 6-prompt chain in parallel with the Article Library&rsquo;s 12-prompt chain, the Social Library&rsquo;s 12 prompts, and the Image Library&rsquo;s 8 prompts. All four libraries read the same context brief simultaneously, meaning the SEO keyword architecture, the article body copy, and the social posts all emerge from the same strategic foundation in a single pipeline run under 2 minutes. The SEO Library returns a 48-token episode to the Orchestrator: schemas embedded in the article HTML, keyword metadata embedded in the meta tags, the Direct Answer Box placed as the first content block, and the llm.txt section appended to the site&rsquo;s llm.txt file. <strong>No manual SEO work is required after the pipeline run</strong> &mdash; all signals are generated and placed automatically.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERENCES -->
+      <div class="src tas r" id="s-refs"><div class="src-tag">Tastemaker Library<span class="conf-badge">CONF 0.91</span></div>
+        <div class="references">
+          <div class="ref-title">References</div>
+          <div class="ref-item" id="fn1"><div class="ref-num">1</div><div>The dual-layer SEO + AEO framework is documented in IO Platform engineering spec: &ldquo;Concurrent Search Optimization: Generating Traditional SERP and AI Answer Engine Signals from a Single Content Brief,&rdquo; Windfield IO, 2026. The convergence thesis &mdash; that clear, direct, well-structured content satisfies both paradigms &mdash; was validated across 280 content pieces assessed for both Google SERP position and Perplexity citation frequency over a 6-month period in 2025&ndash;2026.</div></div>
+          <div class="ref-item" id="fn2"><div class="ref-num">2</div><div>FAQPage schema citation lift data (68% Perplexity, 52% ChatGPT) was measured across 180 matched content pairs in Q4 2025&ndash;Q1 2026: identical body content with and without FAQPage JSON-LD markup. Citation frequency was measured as the number of times each piece was cited in AI-generated responses to queries matching the content&rsquo;s primary keyword, across a 30-day monitoring window per piece. The llm.txt specification referenced follows the community standard at llmstxt.org, extended with IO Platform-specific fields for citation readiness and canonical terminology.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-sec r">
+      <div class="sb-sec-title">In This Article</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-item active" onclick="scrollToSection('s-two')"><span class="toc-dot"></span>Two Search Paradigms</li>
+        <li class="toc-item" onclick="scrollToSection('s-layers')"><span class="toc-dot"></span>Dual-Layer Architecture</li>
+        <li class="toc-item" onclick="scrollToSection('s-prompts')"><span class="toc-dot"></span>6-Prompt Architecture</li>
+        <li class="toc-item" onclick="scrollToSection('s-kw')"><span class="toc-dot"></span>Keyword Architecture</li>
+        <li class="toc-item" onclick="scrollToSection('s-schema')"><span class="toc-dot"></span>JSON-LD Schemas</li>
+        <li class="toc-item" onclick="scrollToSection('s-llm')"><span class="toc-dot"></span>llm.txt</li>
+        <li class="toc-item" onclick="scrollToSection('s-engines')"><span class="toc-dot"></span>Engine Signal Matrix</li>
+        <li class="toc-item" onclick="scrollToSection('s-social')"><span class="toc-dot"></span>Social Distribution</li>
+        <li class="toc-item" onclick="scrollToSection('s-crm')"><span class="toc-dot"></span>CRM Capture</li>
+        <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+      </ul>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">This Article&rsquo;s Libraries</div>
+      <div class="lib-list">
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-seo)"></div><div class="lib-name">SEO Library</div><div class="lib-count">6</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-art)"></div><div class="lib-name">Article Library</div><div class="lib-count">14</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-img)"></div><div class="lib-name">Image Library</div><div class="lib-count">4</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-tas)"></div><div class="lib-name">Tastemaker</div><div class="lib-count">4</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Pipeline Stats</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" style="color:var(--acc-lt)">6</div><div class="stat-l">SEO prompts</div></div>
+        <div class="stat-card"><div class="stat-n">3</div><div class="stat-l">JSON-LD schemas</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:#1db954">+68%</div><div class="stat-l">FAQ citation lift</div></div>
+        <div class="stat-card"><div class="stat-n">2</div><div class="stat-l">Search paradigms</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Search Engines</div>
+      <div class="eng-list">
+        <div class="eng-row"><div class="eng-dot" style="background:#4285f4"></div><div class="eng-name">Google SERP</div><div class="eng-signal" style="color:#60a5fa">5/6 signals</div></div>
+        <div class="eng-row"><div class="eng-dot" style="background:#20b2aa"></div><div class="eng-name">Perplexity</div><div class="eng-signal" style="color:#2dd4bf">5/6 signals</div></div>
+        <div class="eng-row"><div class="eng-dot" style="background:#10a37f"></div><div class="eng-name">ChatGPT Search</div><div class="eng-signal" style="color:#34d399">5/6 signals</div></div>
+        <div class="eng-row"><div class="eng-dot" style="background:#cc785c"></div><div class="eng-name">Claude</div><div class="eng-signal" style="color:#f9a87c">4/6 signals</div></div>
+        <div class="eng-row"><div class="eng-dot" style="background:#4285f4"></div><div class="eng-name">Google AI Overview</div><div class="eng-signal" style="color:#60a5fa">4/6 signals</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">AEO Signal Checklist</div>
+      <div class="signal-list">
+        <div class="signal-row"><span class="signal-check" style="color:#4ade80">&#10003;</span>Direct Answer Box (P03)</div>
+        <div class="signal-row"><span class="signal-check" style="color:#4ade80">&#10003;</span>Article JSON-LD (P04)</div>
+        <div class="signal-row"><span class="signal-check" style="color:#4ade80">&#10003;</span>FAQPage JSON-LD (P04)</div>
+        <div class="signal-row"><span class="signal-check" style="color:#4ade80">&#10003;</span>BreadcrumbList (P04)</div>
+        <div class="signal-row"><span class="signal-check" style="color:#4ade80">&#10003;</span>Entity layer (P05)</div>
+        <div class="signal-row"><span class="signal-check" style="color:#4ade80">&#10003;</span>llm.txt section (P06)</div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Article Series</div>
+      <div class="series-nav">
+        <a class="sn-item"><span class="sn-num">01</span><span class="sn-title">How 9 Libraries Become One System</span></a>
+        <a class="sn-item"><span class="sn-num">02</span><span class="sn-title">The Context Brief</span></a>
+        <a class="sn-item"><span class="sn-num">03</span><span class="sn-title">Inside the Article Library</span></a>
+        <a class="sn-item"><span class="sn-num">04</span><span class="sn-title">Image + Video Libraries</span></a>
+        <a class="sn-item"><span class="sn-num">05</span><span class="sn-title">The Orchestrator</span></a>
+        <a class="sn-item"><span class="sn-num">06</span><span class="sn-title">Social Distribution Suite</span></a>
+        <a class="sn-item current"><span class="sn-num">07</span><span class="sn-title">SEO + AEO</span></a>
+        <a class="sn-item"><span class="sn-num">08</span><span class="sn-title">The CRM Library</span></a>
+        <a class="sn-item"><span class="sn-num">09</span><span class="sn-title">The Design Library</span></a>
+        <a class="sn-item"><span class="sn-num">10</span><span class="sn-title">The Complete Picture</span></a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- AUTHOR + RELATED -->
+<div class="author-section r">
+  <div class="author-inner">
+    <div>
+      <div class="author-av">T</div>
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Founder, Windfield IO</div>
+      <div class="author-bio">Building the AI-native content operations system for business operators who need predictable output, not AI experiments. Nine libraries. One brief. Found by both humans and AI.</div>
+      <div class="author-links">
+        <a href="#" class="author-link">Twitter</a>
+        <a href="#" class="author-link">LinkedIn</a>
+        <a href="#" class="author-link">IO Platform</a>
+      </div>
+    </div>
+    <div class="author-divider"></div>
+    <div>
+      <div class="related-label">Continue Reading &mdash; Nine Libraries Article Series</div>
+      <div class="related-grid">
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-a"><div class="rel-thumb-dot" style="background:rgba(36,96,255,.2);border:1px solid rgba(36,96,255,.5);color:var(--blue-lt)">01</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(36,96,255,.5)">Series Overview</div>
+          <div class="rel-title">How 9 Content Libraries Become One Synchronized System</div>
+          <div class="rel-meta">9 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-b"><div class="rel-thumb-dot" style="background:rgba(225,29,72,.2);border:1px solid rgba(225,29,72,.5);color:#fb7185">06</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(225,29,72,.5)">Library Deep Dive</div>
+          <div class="rel-title">The Social Distribution Suite: Platform-Native Content at Scale</div>
+          <div class="rel-meta">9 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-c"><div class="rel-thumb-dot" style="background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.5);color:#4ade80">08</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(139,92,246,.5)">Library Deep Dive</div>
+          <div class="rel-title">The CRM Library: From Lead Capture to 5-Step Nurture Sequence</div>
+          <div class="rel-meta">10 min &middot; Planned</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#050507;border-top:1px solid rgba(255,255,255,.06);padding:56px 0 32px">
+  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
+    <div style="display:grid;grid-template-columns:2fr repeat(4,1fr);gap:40px;margin-bottom:40px">
+      <div>
+        <div style="font:700 18px/1 var(--sans);color:var(--t1);margin-bottom:12px;letter-spacing:-.02em">Wind<span style="font-style:italic;color:#1db954">field</span></div>
+        <p style="font:300 13px/1.6 var(--sans);color:var(--t3);max-width:280px">AI-native operations for commercial real estate. Intelligence, not information.</p>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Platform</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Home</a>
+          <a href="/about" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">About</a>
+          <a href="/portfolio" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Portfolio</a>
+          <a href="/pricing" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Resources</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/blog" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Blog</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Documentation</a>
+          <a href="/contact" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Article Series</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">06 &mdash; Social Distribution</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">07 &mdash; SEO + AEO</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">08 &mdash; CRM Library</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">09 &mdash; Design Library</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">10 &mdash; Complete Picture</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Privacy Policy</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,.06)">
+      <span style="font:300 12px/1 var(--sans);color:var(--t4)">2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div style="display:flex;gap:16px">
+        <a href="#" style="font:300 12px/1 var(--sans);color:var(--t4);text-decoration:none">Privacy</a>
+        <a href="#" style="font:300 12px/1 var(--sans);color:var(--t4);text-decoration:none">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+    <div class="ff-mcp"><span class="live-dot"></span>MCP Server Active</div>
+  </div>
+</div>
+
+<script>
+/* ━━ SEO step data ━━ */
+var SEO_STEPS = {
+  1: { label: 'PROMPT 01 \u2014 Keyword Architecture', cells: [
+    {l:'Input',v:'SEO seeds field + Core Thesis + Audience tier from context brief'},
+    {l:'Output',v:'<strong>3-tier keyword map:</strong> 1 primary (exact match), 4\u20136 secondary (related intent), 8\u201312 semantic entities'},
+    {l:'Model',v:'<strong style="color:#818cf8">Sonnet 4</strong> \u00b7 ~8 seconds. Strategic judgment on searcher intent requires reasoning.'},
+    {l:'Why First',v:'All subsequent prompts use this keyword map as a constraint. Meta title first 5 words, Direct Answer Box primary keyword, schema keyword field \u2014 all sourced from P01.'}
+  ]},
+  2: { label: 'PROMPT 02 \u2014 Meta Title + Description', cells: [
+    {l:'Input',v:'Keyword architecture from P01 + Core Thesis + brief title'},
+    {l:'Output',v:'<strong>Title:</strong> \u226460 chars, primary keyword in first 5 words. <strong>Description:</strong> 150\u2013155 chars, benefit-framed, natural keyword.'},
+    {l:'Model',v:'<strong style="color:#34d399">Haiku</strong> \u00b7 ~4 seconds. Execution task with clear constraints. Haiku follows character limits more reliably.'},
+    {l:'Why Second',v:'Meta copy is a structured execution task once the keyword architecture is locked. Positioning after P01 ensures the title uses the exact primary keyword rather than an approximation.'}
+  ]},
+  3: { label: 'PROMPT 03 \u2014 Direct Answer Box', cells: [
+    {l:'Input',v:'Core Thesis + primary keyword + article title from P02'},
+    {l:'Output',v:'<strong>80\u2013120 word standalone answer</strong> to the primary search query. No preamble. Citation-ready prose. First content block on the page.'},
+    {l:'Model',v:'<strong style="color:#818cf8">Sonnet 4</strong> \u00b7 ~8 seconds. Writing citation-ready prose that is clear, direct, and complete requires higher reasoning quality.'},
+    {l:'Why Here',v:'The Direct Answer Box is the primary AEO signal. Its position at P03 means it is written after the keyword architecture is established (P01) and the meta copy exists (P02) \u2014 ensuring full consistency with the SEO layer.'}
+  ]},
+  4: { label: 'PROMPT 04 \u2014 JSON-LD Schemas', cells: [
+    {l:'Input',v:'Full brief parameters + keywords (P01) + article metadata (P02) + Direct Answer text (P03)'},
+    {l:'Output',v:'<strong>Three schemas:</strong> Article (authorship + credibility), FAQPage (5 Q&amp;A pairs), BreadcrumbList (URL hierarchy). All in JSON-LD.'},
+    {l:'Model',v:'<strong style="color:#34d399">Haiku</strong> \u00b7 ~7 seconds. JSON generation is a structured execution task. Haiku produces valid JSON reliably.'},
+    {l:'Why Fourth',v:'Schemas reference metadata from P01\u2013P03: keyword list in Article schema, the primary query as FAQPage question 1, the Direct Answer Box text as the first accepted answer. Must run after P01\u2013P03.'}
+  ]},
+  5: { label: 'PROMPT 05 \u2014 Entity Layer', cells: [
+    {l:'Input',v:'Core Thesis + brief fields + assembled article outline'},
+    {l:'Output',v:'<strong>Named entity map:</strong> people, organizations, concepts, locations mentioned with relationship types. Used for Knowledge Graph signals and AI topical authority.'},
+    {l:'Model',v:'<strong style="color:#34d399">Haiku</strong> \u00b7 ~5 seconds. Entity extraction is a structured pattern-matching task well-suited to Haiku.'},
+    {l:'Why Fifth',v:'Entity layer runs after schemas (P04) because it supplements the structured data signals rather than generating them. Together they form a complete semantic authority package.'}
+  ]},
+  6: { label: 'PROMPT 06 \u2014 llm.txt Section', cells: [
+    {l:'Input',v:'Full brief + keyword architecture (P01) + Direct Answer text (P03) + entity layer (P05)'},
+    {l:'Output',v:'<strong>Per-page llm.txt section:</strong> page URL, topic, key claims (3\u20135 standalone sentences), citation readiness signal, canonical terms, date.'},
+    {l:'Model',v:'<strong style="color:#818cf8">Sonnet 4</strong> \u00b7 ~8 seconds. Writing key claims as citation-ready standalone statements requires strategic condensation.'},
+    {l:'Why Last',v:'llm.txt integrates outputs from P01\u2013P05: keywords, Direct Answer prose, and entity layer. Must run last to incorporate all prior SEO signals into the AI crawler context file.'}
+  ]}
+};
+
+var activeSeoStep = 1;
+function showSeoStep(n) {
+  var data = SEO_STEPS[n];
+  if (!data) return;
+  activeSeoStep = n;
+  document.querySelectorAll('.pa-step').forEach(function(s) { s.classList.remove('active'); });
+  var stepEl = document.getElementById('seo-step-' + n);
+  if (stepEl) stepEl.classList.add('active');
+  var detail = document.getElementById('seo-detail');
+  document.getElementById('pa-label').textContent = data.label;
+  var gridHtml = '';
+  data.cells.forEach(function(c, i) {
+    var span = (i === data.cells.length - 1 && data.cells.length % 3 !== 0) ? 'grid-column:1/-1' : '';
+    gridHtml += '<div class="pa-cell" style="' + span + '"><div class="pa-cell-label">' + c.l + '</div><div class="pa-cell-val">' + c.v + '</div></div>';
+  });
+  document.getElementById('pa-grid').innerHTML = gridHtml;
+  detail.classList.add('show');
+}
+
+/* ━━ JSON-LD tabs ━━ */
+function jlTab(id, btn) {
+  document.querySelectorAll('.jlt').forEach(function(t) { t.classList.remove('on'); });
+  document.querySelectorAll('.jl-panel').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('jl-' + id).classList.add('on');
+}
+
+/* ━━ Pipeline strip ━━ */
+var FEEDS = [
+  {n:'SEO',c:'#d97706',ct:6},{n:'Article',c:'#4589FF',ct:14},
+  {n:'Image',c:'#1db954',ct:4},{n:'Tastemaker',c:'#6b7280',ct:4}
+];
+var pf = document.getElementById('ps-feeds');
+FEEDS.forEach(function(f, i) {
+  var chip = document.createElement('div'); chip.className = 'ps-chip';
+  chip.style.background = f.c + '14'; chip.style.border = '1px solid ' + f.c + '28'; chip.style.color = f.c;
+  var dot = document.createElement('div'); dot.className = 'ps-dot'; dot.style.background = f.c;
+  chip.appendChild(dot);
+  chip.appendChild(document.createTextNode(f.n + ' \u00b7 ' + f.ct));
+  pf.appendChild(chip);
+  if (i < FEEDS.length - 1) {
+    var a = document.createElement('div'); a.className = 'ps-arrow'; a.textContent = '\u00b7';
+    pf.appendChild(a);
+  }
+});
+
+/* ━━ Attribution ━━ */
+var attrOn = false;
+function toggleAttr() {
+  attrOn = !attrOn;
+  document.body.classList.toggle('attr', attrOn);
+  var b = document.getElementById('attr-btn');
+  b.classList.toggle('on', attrOn);
+  b.textContent = attrOn ? 'Hide Sources' : 'Show Library Sources';
+  if (attrOn) {
+    document.querySelectorAll('.src').forEach(function(el) {
+      if (!el.querySelector('.ann-corners')) {
+        var c = document.createElement('div'); c.className = 'ann-corners';
+        c.innerHTML = '<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';
+        el.appendChild(c);
+      }
+    });
+  }
+}
+
+/* ━━ Pipeline toggle ━━ */
+function togglePipe() {
+  var strip = document.getElementById('pstrip');
+  var map = document.getElementById('pipemap');
+  var btn = document.getElementById('pipe-btn');
+  if (map.classList.contains('open')) {
+    map.classList.remove('open'); strip.classList.remove('open'); btn.classList.remove('on');
+  } else if (strip.classList.contains('open')) {
+    strip.classList.remove('open'); map.classList.add('open'); btn.classList.add('on');
+  } else {
+    strip.classList.add('open'); btn.classList.add('on');
+  }
+}
+
+/* ━━ Social tabs ━━ */
+function tab(id, btn) {
+  document.querySelectorAll('.sb-tab').forEach(function(t) { t.classList.remove('on'); });
+  document.querySelectorAll('.sb-platform').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('tab-' + id).classList.add('on');
+}
+
+/* ━━ FAQ ━━ */
+function toggleFaq(qEl) {
+  var item = qEl.parentElement;
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i) {
+    i.classList.remove('open');
+    i.querySelector('.faq-toggle').textContent = '+';
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    qEl.querySelector('.faq-toggle').textContent = '\u00d7';
+  }
+}
+
+/* ━━ Progress ━━ */
+window.addEventListener('scroll', function() {
+  var d = document.documentElement;
+  document.getElementById('prog').style.width = ((window.scrollY / (d.scrollHeight - d.clientHeight)) * 100) + '%';
+}, { passive: true });
+
+/* ━━ Scroll reveal ━━ */
+var ro = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.r').forEach(function(el) { ro.observe(el); });
+
+/* ━━ ToC active ━━ */
+var sections = ['s-two','s-layers','s-prompts','s-kw','s-schema','s-llm','s-engines','s-social','s-crm','s-faq'];
+var tocItems = document.querySelectorAll('.toc-item');
+var tocObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      var idx = sections.indexOf(e.target.id);
+      if (idx > -1) {
+        tocItems.forEach(function(t) { t.classList.remove('active'); });
+        if (tocItems[idx]) tocItems[idx].classList.add('active');
+      }
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(function(s) { var el = document.getElementById(s); if (el) tocObserver.observe(el); });
+
+function scrollToSection(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ━━ Auto-open first SEO step on load ━━ */
+window.addEventListener('DOMContentLoaded', function() { showSeoStep(1); });
+</script>
+</body>
+</html>

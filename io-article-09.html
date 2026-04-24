@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Design Library: Visual Grammar That Scales Across Nine Outputs — Windfield IO</title>
+<meta name="description" content="How the IO Design Library generates a complete CSS token system, typography scale, color palette, and layout grid from one context brief — ensuring every output looks like it came from the same brand.">
+<meta name="keywords" content="ai design system, css token generation, visual brand consistency ai, design library workflow, design tokens automation, io platform design library">
+<meta property="og:title" content="The Design Library: Visual Grammar That Scales Across Nine Outputs">
+<meta property="og:description" content="How the IO Design Library generates CSS design tokens, typography scale, color palette, and layout specifications from the Visual Style field — so every library output maintains coherent brand visual grammar.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-05-10">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"The Design Library: Visual Grammar That Scales Across Nine Outputs","description":"How the IO Design Library generates a complete visual grammar system — CSS tokens, typography scale, color palette, spacing grid, and component specifications — from the context brief's Visual Style field, ensuring every library output maintains coherent brand identity.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"Windfield IO"}},"publisher":{"@type":"Organization","name":"Windfield IO"},"datePublished":"2026-05-10","articleSection":"Library Deep Dive","keywords":["ai design system","css token generation","visual brand consistency","design library","design tokens","visual grammar"],"wordCount":3100,"timeRequired":"PT9M","isPartOf":{"@type":"CreativeWorkSeries","name":"Nine Libraries Article Series","position":9}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What does the IO Design Library generate from a context brief?","acceptedAnswer":{"@type":"Answer","text":"The IO Design Library generates four outputs from the Visual Style field of the context brief: a CSS custom property token set (color palette, typography scale, spacing system, border radius, shadow levels), a typography specification (font pairing, weight hierarchy, size scale, line-height rationale), a color system (primary, accent, neutral, semantic colors with light/dark mode variants), and component-level layout specifications (card templates, grid systems, pull quote styling, call-to-action patterns). These tokens are then consumed by every other library to ensure visual coherence across all nine outputs."}},
+{"@type":"Question","name":"How does the Design Library ensure visual consistency across all nine IO library outputs?","acceptedAnswer":{"@type":"Answer","text":"The Design Library is the first library to complete in the IO pipeline because its output — the CSS token set — is consumed by all other libraries. The Image Library uses the color palette and aesthetic direction for DALL-E directives. The Article Library uses the typography scale and pull quote styling. The Social Library uses the visual tone for platform-specific image direction notes. The SEO Library uses the brand color for visual elements in SERP snippets. All libraries reading from the same token set means the dark editorial aesthetic, specific accent color, and typography system are architecturally consistent rather than coincidentally similar."}},
+{"@type":"Question","name":"What is a CSS design token system and why does the IO Design Library generate one?","acceptedAnswer":{"@type":"Answer","text":"CSS design tokens are a set of named variables that encode every visual decision in a brand system: color values, font stacks, font sizes, line heights, spacing increments, border radii, shadow levels, and animation easing curves. Rather than making ad-hoc visual decisions at each design moment, a token system makes every decision once and applies it everywhere. The IO Design Library generates this token set from the brief's Visual Style field because doing so at the start of every pipeline run ensures that the generated article, social images, email templates, and PDF layouts all derive from the same visual foundation — not from separate design decisions made by separate AI calls."}},
+{"@type":"Question","name":"How does the Design Library work with the Image Library?","acceptedAnswer":{"@type":"Answer","text":"The Design Library runs before the Image Library in the IO pipeline. Its color palette output — specifically the primary and accent colors, the background tone, and the visual aesthetic descriptor — is passed as part of the Image Library's context. When the Image Library generates DALL-E directives, it incorporates the Design Library's palette: 'electric blue (#4589FF) accent, near-black background, cold editorial lighting' rather than generating a visual direction from scratch. This ensures that generated images are architecturally consistent with the article's visual grammar, not just coincidentally similar in tone."}},
+{"@type":"Question","name":"Can the Design Library generate tokens for an existing brand, or only for new brands?","acceptedAnswer":{"@type":"Answer","text":"The Design Library works equally well for both. For new brands, it generates a complete visual system from the Visual Style field description. For established brands, the context brief's Visual Style field includes the existing brand colors, typography, and aesthetic direction, and the Design Library generates a complete CSS token set that codifies those existing choices in a structured, consistent format. The key value for established brands is not creating new design decisions but structuring existing ones into a token system that every IO library can consume deterministically."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Windfield IO","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Content Operations","item":"https://intelligentoperations.ai/content-ops"},
+{"@type":"ListItem","position":3,"name":"Nine Libraries Series","item":"https://intelligentoperations.ai/content-ops/series"},
+{"@type":"ListItem","position":4,"name":"The Design Library","item":"https://intelligentoperations.ai/content-ops/design-library-visual-grammar"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#09090b;--deep:#111113;--dark:#141417;--mid:#1a1a1e;--lift:#1f1f24;
+  --cream:#fafafa;--cream2:#a1a1aa;--t1:#fafafa;--t2:#a1a1aa;--t3:#71717a;--t4:#52525b;
+  --blue:#4589FF;--blue-lt:#6fa8ff;--green:#1db954;--amber:#e8a000;--purple:#BE95FF;
+  /* Article 09 accent: teal — the Design Library's color */
+  --acc:#08BDBA;--acc-lt:#33E6E3;--acc-dim:rgba(8,145,178,.12);--acc-border:rgba(8,145,178,.22);
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);--border3:rgba(255,255,255,.16);
+  --serif:'Playfair Display',Georgia,serif;--sans:'Inter',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.25,.46,.45,.94);--spring:cubic-bezier(.34,1.56,.64,1);
+  --c-art:#4589FF;--c-img:#1db954;--c-vid:#FF832B;--c-soc:#E85D4A;
+  --c-des:#0891b2;--c-seo:#d97706;--c-crm:#BE95FF;--c-con:#059669;--c-tas:#6b7280;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--void);color:var(--t1);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+/* ━━ ATTRIBUTION ━━ */
+.src{position:relative}
+.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}
+.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}
+.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-art);outline-offset:3px}
+body.attr .img{outline:1.5px solid var(--c-img);outline-offset:3px}
+body.attr .des{outline:1.5px solid var(--c-des);outline-offset:3px}
+body.attr .seo{outline:1.5px solid var(--c-seo);outline-offset:3px}
+body.attr .crm{outline:1.5px solid var(--c-crm);outline-offset:3px}
+body.attr .soc{outline:1.5px solid var(--c-soc);outline-offset:3px}
+body.attr .tas{outline:1.5px solid var(--c-tas);outline-offset:3px}
+.art .src-tag{background:var(--c-art);color:#fff}.img .src-tag{background:var(--c-img);color:#fff}
+.des .src-tag{background:var(--c-des);color:#fff}.seo .src-tag{background:var(--c-seo);color:#fff}
+.crm .src-tag{background:var(--c-crm);color:#fff}.soc .src-tag{background:var(--c-soc);color:#fff}
+.tas .src-tag{background:var(--c-tas);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-art)}body.attr .img .ann-c{border-color:var(--c-img)}
+body.attr .seo .ann-c{border-color:var(--c-seo)}body.attr .crm .ann-c{border-color:var(--c-crm)}
+body.attr .soc .ann-c{border-color:var(--c-soc)}body.attr .des .ann-c{border-color:var(--c-des)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--acc-lt);z-index:9999;width:0;transition:width .1s linear}
+
+/* ━━ NAV ━━ */
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center}
+.nav-logo{font-family:var(--sans);font-size:18px;font-weight:700;color:var(--t1);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}
+.nav-logo span{font-style:italic;color:#1db954}
+.nav-rule{width:1px;height:16px;background:var(--border2);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--ease)}
+.nbtn-ghost{background:none;border:1px solid var(--border2);color:var(--t3)}
+.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--t1);color:var(--void);border-color:var(--t1)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:#1db954;display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ━━ STRIPS ━━ */
+#pstrip{background:var(--deep);border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .35s var(--ease)}
+#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}
+.ps-chip{padding:4px 10px;border-radius:4px;font:600 10px/1 var(--sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}
+.ps-arrow{font-size:10px;color:var(--t4);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--sans);color:#1db954;letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+#pipemap{background:var(--dark);border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .5s var(--ease)}
+#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.pm-title span{font-weight:300;color:var(--t3)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(8,145,178,.5),transparent);animation:pms9 2s ease-in-out infinite;margin:10px 0}
+@keyframes pms9{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--sans);color:var(--t1)}
+.pm-node-sub{font:300 8px/1 var(--mono);color:var(--t3);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--t4);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:6px;text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--border)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}
+.pm-lib-name{font:700 7px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
+.pm-lib-count{font:300 8px/1 var(--mono);color:var(--t4);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--mono);color:var(--t3)}
+.pm-meta-n{font:700 11px/1 var(--mono);color:var(--t1)}
+
+/* ━━ HERO ━━ */
+.hero{background:var(--void);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(8,145,178,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(36,96,255,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:1024px){.nav-links-wrap{display:none!important}}@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t3)}
+.eye-divider{width:20px;height:1px;background:var(--t4)}
+.eye-series{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc-lt);opacity:.8}
+h1{font-family:var(--serif);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--t1);margin-bottom:24px}
+h1 em{font-style:italic;color:var(--acc-lt)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--t2);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--t1)}
+.h-role{font-size:11px;color:var(--t3)}
+.h-sep{width:1px;height:28px;background:var(--border2);margin:0 18px}
+.h-date{font-size:13px;color:var(--t3)}
+.h-read{font-size:13px;color:var(--t3);margin-left:14px}
+
+/* ━━ HERO VIZ — Article 09: CSS token system being applied to 9 outputs ━━ */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#040d10 0%,#071218 55%,#040e12 100%);
+  border-radius:16px 16px 0 0;border:1px solid rgba(8,145,178,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(8,145,178,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(8,145,178,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(8,145,178,.1) 0%,transparent 65%);animation:gp9 4s ease-in-out infinite}
+@keyframes gp9{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(8,145,178,.35) 30%,rgba(56,189,248,.6) 50%,rgba(8,145,178,.35) 70%,transparent);
+  animation:hvs9 5.5s ease-in-out infinite;opacity:.4}
+@keyframes hvs9{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+/* Central token node */
+.hv-token-center{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);
+  width:72px;height:72px;border-radius:10px;
+  background:rgba(8,145,178,.1);border:1.5px solid rgba(8,145,178,.5);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  font:700 9px/1 var(--mono);letter-spacing:.07em;color:var(--acc-lt);z-index:10;
+  box-shadow:0 0 32px rgba(8,145,178,.2)}
+/* Token swatch ring */
+.hv-swatch{position:absolute;transform:translate(-50%,-50%);z-index:8;cursor:pointer;transition:transform .2s var(--spring)}
+.hv-swatch:hover{transform:translate(-50%,-50%) scale(1.2)}
+.hv-sw-box{border-radius:5px;display:flex;align-items:center;justify-content:center;
+  border:1.5px solid rgba(255,255,255,.15);font:700 7px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+/* Output library badges around the center */
+.hv-lib-badge{position:absolute;transform:translate(-50%,-50%);z-index:9;
+  display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;transition:opacity .2s}
+.hv-lb-pill{padding:3px 8px;border-radius:4px;font:700 7px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;
+  border:1px solid;transition:box-shadow .2s}
+.hv-lb-pill:hover{box-shadow:0 0 12px currentColor}
+.hv-lb-label{font:300 6px/1 var(--mono);color:rgba(255,255,255,.2);white-space:nowrap}
+/* Color palette strip at bottom */
+.hv-palette{position:absolute;bottom:12%;left:8%;right:8%;display:flex;gap:6px;align-items:stretch;height:32px}
+.hv-pal-swatch{flex:1;border-radius:4px;position:relative;cursor:pointer;transition:transform .15s var(--spring)}
+.hv-pal-swatch:hover{transform:scaleY(1.2);transform-origin:bottom}
+.hv-pal-swatch-label{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font:700 6px/1 var(--mono);letter-spacing:.05em;white-space:nowrap;color:var(--t4)}
+.hv-badge9{position:absolute;top:14px;right:14px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(56,189,248,.22)}
+.hv-status9{position:absolute;top:14px;left:14px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(56,189,248,.25)}
+
+/* ━━ LAYOUT ━━ */
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}
+.sidebar{position:sticky;top:72px}
+
+/* ━━ DIRECT ANSWER ━━ */
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;
+  background:linear-gradient(135deg,var(--acc-dim),rgba(8,145,178,.02));
+  border:1px solid var(--acc-border);border-left:3px solid var(--acc-lt);border-radius:10px}
+.dab-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc-lt);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dab-label::before{content:'\25B8'}
+.dab-q{font:600 15px/1.4 var(--sans);color:var(--t1);margin-bottom:10px}
+.dab-a{font:300 14px/1.72 var(--sans);color:var(--cream2)}
+.dab-a strong{font-weight:600;color:var(--t1)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}
+.dab-source{font:300 10px/1 var(--mono);color:var(--t4)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--acc-dim);color:rgba(8,145,178,.6);border:1px solid var(--acc-border)}
+
+/* ━━ TOC ━━ */
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--dark);border:1px solid var(--border2);border-radius:10px}
+.toc-inline-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--t3);cursor:pointer;text-decoration:none;transition:color .15s}
+.toc-inline-item:last-child{border-bottom:none}
+.toc-inline-item:hover{color:var(--t1)}
+.toc-n{font:700 9px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0;padding-top:2px}
+
+/* ━━ TYPOGRAPHY ━━ */
+.body p{font-size:17.5px;line-height:1.82;color:var(--cream2);font-weight:300;margin-bottom:28px}
+.body p strong{font-weight:600;color:var(--t1)}
+.body p a{color:var(--acc-lt);text-decoration:none;border-bottom:1px solid rgba(56,189,248,.3);transition:border-color .15s}
+.body p a:hover{border-bottom-color:var(--acc-lt)}
+.body p sup a{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--acc-dim);border:1px solid var(--acc-border);font:700 9px/1 var(--mono);color:var(--acc-lt);vertical-align:super;margin-left:2px;text-decoration:none;transition:all .15s}
+.body p sup a:hover{background:var(--acc);color:#fff}
+h2.sh{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--t1);margin:60px 0 20px}
+h3.sh3{font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin:40px 0 14px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--t1)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--serif);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--acc-lt)}
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--dark);border-radius:10px;border:1px solid var(--border);border-left:3px solid var(--acc-lt);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--serif);font-size:150px;font-weight:700;color:var(--acc-dim);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--t1);position:relative;z-index:1;margin-bottom:14px}
+.pq-text em{font-style:italic;color:var(--acc-lt)}
+.pq-attr{font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--t3);position:relative;z-index:1}
+
+/* ━━ CSS TOKEN VIEWER ━━ */
+.token-viewer{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--acc-border);background:var(--dark)}
+.tv-header{padding:14px 22px;border-bottom:1px solid var(--acc-border);display:flex;align-items:center;gap:12px;background:var(--acc-dim)}
+.tv-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.tv-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.tv-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--border);overflow-x:auto}
+.tv-tabs::-webkit-scrollbar{display:none}
+.tvt{padding:10px 16px;font:600 10px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--sans);white-space:nowrap;flex-shrink:0}
+.tvt.on{color:var(--acc-lt);border-bottom-color:var(--acc)}
+.tv-panel{display:none;padding:20px 24px}
+.tv-panel.on{display:block}
+/* Color palette panel */
+.color-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:640px){.color-grid{grid-template-columns:1fr 1fr}}
+.color-swatch-card{border-radius:8px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:transform .15s var(--spring)}
+.color-swatch-card:hover{transform:scale(1.04)}
+.csw-color{height:64px}
+.csw-info{padding:8px 10px;background:rgba(255,255,255,.025)}
+.csw-name{font:700 9px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--t2);margin-bottom:3px}
+.csw-hex{font:300 10px/1 var(--mono);color:var(--t4)}
+.csw-role{font:300 9px/1 var(--sans);color:var(--t4);margin-top:3px}
+/* Typography panel */
+.type-scale{display:flex;flex-direction:column;gap:12px}
+.type-row{display:flex;align-items:baseline;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+.type-row:last-child{border-bottom:none}
+.type-meta{width:100px;flex-shrink:0}
+.type-label{font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4)}
+.type-spec{font:300 9px/1 var(--mono);color:var(--t4);margin-top:3px}
+.type-sample{flex:1;color:var(--t1)}
+/* Spacing panel */
+.spacing-grid{display:flex;flex-direction:column;gap:8px}
+.sp-row{display:flex;align-items:center;gap:12px}
+.sp-label{font:700 9px/1 var(--mono);letter-spacing:.07em;color:var(--t4);width:60px;flex-shrink:0}
+.sp-bar-wrap{flex:1;height:16px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden}
+.sp-bar{height:100%;border-radius:3px;background:rgba(8,145,178,.4)}
+.sp-val{font:700 10px/1 var(--mono);color:var(--t2);width:60px;text-align:right;flex-shrink:0}
+/* CSS code panel */
+.css-code{background:rgba(0,0,0,.4);border:1px solid var(--border2);border-radius:8px;padding:16px 18px;font:300 11px/1.85 var(--mono);color:rgba(56,189,248,.45);overflow-x:auto;letter-spacing:.02em}
+.css-code::-webkit-scrollbar{height:3px}
+.css-code::-webkit-scrollbar-thumb{background:var(--lift)}
+.css-code .prop{color:rgba(167,139,250,.65)}
+.css-code .val{color:rgba(56,189,248,.7);font-weight:500}
+.css-code .com{color:rgba(255,255,255,.2);font-style:italic}
+.css-code .sec{color:rgba(8,145,178,.7);font-weight:700}
+
+/* ━━ LIBRARY CONSUMPTION MAP ━━ */
+.consumption-map{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.cm-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.cm-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.cm-scroll{overflow-x:auto}
+.cm-scroll::-webkit-scrollbar{height:2px}
+.cm-scroll::-webkit-scrollbar-thumb{background:var(--lift)}
+.cm-table{width:100%;border-collapse:collapse;min-width:580px}
+.cm-table th{padding:9px 14px;font:700 7.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);text-align:left;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap}
+.cm-table th:first-child{padding-left:20px}
+.cm-table td{padding:12px 14px;border-bottom:1px solid var(--border);font:300 12px/1.5 var(--sans);color:var(--t2);vertical-align:middle}
+.cm-table td:first-child{padding-left:20px}
+.cm-table tr:last-child td{border-bottom:none}
+.cm-table tr:hover td{background:rgba(255,255,255,.015)}
+.lib-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:3px;font:700 8px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.token-used{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:3px;font:300 10px/1 var(--mono);background:rgba(8,145,178,.06);color:var(--acc-lt);border:1px solid var(--acc-border);margin:2px}
+
+/* ━━ BEFORE/AFTER: WITH AND WITHOUT DESIGN LIBRARY ━━ */
+.ba-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.ba-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.ba-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.ba-body{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:640px){.ba-body{grid-template-columns:1fr}}
+.ba-col-label{font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;padding:6px 10px;border-radius:5px;display:inline-flex;align-items:center;gap:5px}
+.ba-col-label.without{background:rgba(224,48,48,.07);color:#f87171;border:1px solid rgba(224,48,48,.15)}
+.ba-col-label.with{background:rgba(8,145,178,.07);color:var(--acc-lt);border:1px solid var(--acc-border)}
+/* Mini article card mockups */
+.mini-article{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px}
+.mini-art-hero{height:60px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.mini-art-hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:12px 12px}
+.mini-art-body{padding:8px 10px}
+.mini-art-title{font:600 10px/1.3 var(--sans);color:var(--t2);margin-bottom:4px}
+.mini-art-text{font:300 9px/1.5 var(--sans);color:var(--t4)}
+.mini-social-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:8px}
+.mini-sc-plat{font:700 7px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.mini-sc-content{font:300 9px/1.5 var(--sans);color:var(--t3)}
+.coherence-score{margin-top:8px;padding:8px 10px;border-radius:6px;display:flex;align-items:center;gap:8px;font:700 10px/1 var(--mono)}
+.coherence-score.low{background:rgba(224,48,48,.06);border:1px solid rgba(224,48,48,.15)}
+.coherence-score.high{background:rgba(8,145,178,.06);border:1px solid var(--acc-border)}
+
+/* ━━ TYPOGRAPHY PAIRING EXPLORER ━━ */
+.typo-explorer{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.te-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.te-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.te-body{padding:24px}
+.te-pairing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:640px){.te-pairing-grid{grid-template-columns:1fr}}
+.te-pair-card{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:8px;padding:16px;cursor:pointer;transition:all .2s}
+.te-pair-card:hover,.te-pair-card.on{border-color:var(--acc-border);background:var(--acc-dim)}
+.te-pair-display{margin-bottom:10px}
+.te-pair-serif{line-height:1.1;letter-spacing:-.025em}
+.te-pair-sans{line-height:1.5;margin-top:5px}
+.te-pair-meta{border-top:1px solid var(--border);padding-top:8px}
+.te-pair-label{font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.te-pair-brief-field{font:300 10px/1.4 var(--sans);color:var(--t3)}
+.te-pair-brief-field strong{font-weight:600;color:var(--t2)}
+.te-pair-badge{margin-top:6px;display:inline-flex;align-items:center;padding:2px 7px;border-radius:3px;font:700 7px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+
+/* ━━ SOCIAL / SEO / CRM / FAQ ━━ */
+.social-block{margin:52px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.sb-hd{padding:11px 18px;background:var(--dark);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sb-hd-label{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.sb-hd-src{font:normal 9px/1 var(--mono);color:var(--t4)}
+.sb-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--border)}
+.sb-tab{padding:10px 20px;font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--sans)}
+.sb-tab.on{color:var(--t1);border-bottom-color:var(--acc-lt)}
+.sb-platform{display:none;padding:20px 22px;background:var(--mid)}
+.sb-platform.on{display:block}
+.tw-card{background:#fff;border:1px solid #e1e8ed;border-radius:14px;padding:16px;max-width:500px}
+.tw-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tw-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#0891b2,#4589FF);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:15px;color:#fff;font-weight:700}
+.tw-name{font:700 14px/1 'Helvetica Neue',sans-serif;color:#14171a}
+.tw-handle{font:400 13px/1 'Helvetica Neue',sans-serif;color:#657786}
+.tw-body{font:400 14px/1.6 'Helvetica Neue',sans-serif;color:#14171a;margin-bottom:12px}
+.tw-meta{font:400 12px/1 'Helvetica Neue',sans-serif;color:#657786}
+.li-card{background:#fff;border:1px solid #dce6f1;border-radius:10px;padding:16px;max-width:500px;font-family:'Helvetica Neue',Arial,sans-serif}
+.li-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.li-av{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#0891b2,#4589FF);display:flex;align-items:center;justify-content:center;font:700 16px var(--serif);color:#fff}
+.li-name{font:600 14px/1 'Helvetica Neue',sans-serif;color:#000000e6}
+.li-sub{font:400 12px/1 'Helvetica Neue',sans-serif;color:#00000099}
+.li-body{font:400 14px/1.65 'Helvetica Neue',sans-serif;color:#000000cc}
+.ig-card{max-width:400px}
+.ig-handle{font:700 13px/1 var(--sans);color:var(--t1);margin-bottom:10px}
+.ig-img{height:240px;border-radius:6px;margin-bottom:12px;background:linear-gradient(135deg,#040d10,#071218);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ig-img::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(8,145,178,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(8,145,178,.05) 1px,transparent 1px);background-size:22px 22px}
+.ig-img-text{position:relative;z-index:2;font-family:var(--serif);font-size:20px;font-style:italic;color:rgba(255,255,255,.8);text-align:center;max-width:260px;line-height:1.35}
+.ig-cap{font-size:13px;line-height:1.65;color:var(--t2)}
+.ig-hash{font-size:12px;color:var(--acc-lt);margin-top:8px}
+.seo-block{margin:48px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(217,119,6,.2);background:linear-gradient(135deg,rgba(217,119,6,.04),transparent)}
+.seo-hd{padding:11px 18px;border-bottom:1px solid rgba(217,119,6,.15);display:flex;align-items:center;gap:10px}
+.seo-tag{padding:3px 9px;border-radius:4px;font:700 9px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;background:rgba(217,119,6,.12);color:var(--amber);border:1px solid rgba(217,119,6,.2)}
+.seo-body{padding:18px 22px}
+.serp{background:#fff;border:1px solid #dfe1e5;border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.serp-url{font:normal 12px/1 'Roboto',Arial,sans-serif;color:#3c4043;margin-bottom:4px}
+.serp-title{font:400 18px/1.3 Arial,sans-serif;color:#1a0dab;margin-bottom:5px}
+.serp-desc{font:400 13px/1.55 Arial,sans-serif;color:#4d5156}
+.aeo-panel{background:linear-gradient(135deg,rgba(217,119,6,.04),transparent);border:1px solid rgba(217,119,6,.12);border-radius:8px;padding:16px 18px;margin-top:16px}
+.aeo-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(217,119,6,.6);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.aeo-label::before{content:'\25C8';font-size:9px}
+.aeo-q{font:600 13px/1.4 var(--sans);color:var(--t1);margin-bottom:6px}
+.aeo-a{font:300 12px/1.65 var(--sans);color:var(--t2)}
+.seo-kws{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.seo-kw{padding:4px 11px;border-radius:20px;font:500 11px/1 var(--sans);background:rgba(217,119,6,.08);color:#92600a;border:1px solid rgba(217,119,6,.15)}
+.crm-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid rgba(139,92,246,.2);background:linear-gradient(135deg,var(--dark) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-block::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}
+@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(139,92,246,.6);margin-bottom:10px}
+.crm-headline{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--t1);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--t3);line-height:1.65}
+.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:8px;font:300 14px var(--sans);color:var(--t1);outline:none;transition:border-color .15s}
+.crm-inp:focus{border-color:rgba(139,92,246,.5)}
+.crm-inp::placeholder{color:var(--t4)}
+.crm-btn{padding:12px;background:var(--purple);border:none;border-radius:8px;font:700 13px var(--sans);color:#fff;cursor:pointer;transition:opacity .15s}
+.crm-btn:hover{opacity:.88}
+.crm-note{font-size:10px;color:var(--t4);text-align:center}
+.crm-seq{padding:0 44px 28px;border-top:1px solid var(--border);position:relative;z-index:1}
+.crm-seq-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin:18px 0 12px}
+.crm-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:700px){.crm-steps{grid-template-columns:1fr 1fr}}
+.crm-step{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.crm-step-d{font:700 9px/1 var(--mono);color:rgba(139,92,246,.6);margin-bottom:5px}
+.crm-step-t{font:400 11px/1.4 var(--sans);color:var(--t2)}
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border2)}
+.faq-head-title{font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--t1)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.faq-item{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;transition:border-color .15s}
+.faq-item.open{border-color:var(--border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--sans);color:var(--t2);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--t1)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--acc-dim);border-color:var(--acc-border);color:var(--acc-lt)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--ease),padding .2s}
+.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--sans);color:var(--cream2)}
+.faq-a-inner strong{font-weight:600;color:var(--t1)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--mono);color:var(--t4)}
+.faq-schema-note::before{content:'\25C8';color:rgba(217,119,6,.4);font-size:8px}
+.references{margin-top:52px;padding-top:28px;border-top:1px solid var(--border)}
+.ref-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ref-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.ref-item{display:flex;gap:10px;margin-bottom:12px;font-size:12px;color:var(--t3);line-height:1.65}
+.ref-num{width:22px;height:22px;border-radius:50%;flex-shrink:0;background:var(--acc-dim);border:1px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 9px/1 var(--mono);color:var(--acc-lt);margin-top:1px}
+
+/* ━━ SIDEBAR ━━ */
+.sb-sec{margin-bottom:36px}
+.sb-sec-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}
+.toc-item:hover,.toc-item.active{color:var(--t1)}
+.toc-item.active{color:var(--acc-lt)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}
+.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:12px}
+.stat-n{font:700 22px/1 var(--mono);color:var(--t1);margin-bottom:3px}
+.stat-l{font-size:10px;color:var(--t3);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}
+.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--dark);border:1px solid var(--border);border-radius:7px}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lib-name{font:500 12px/1 var(--sans);color:var(--t1);flex:1}
+.lib-count{font:normal 10px/1 var(--mono);color:var(--t4)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--dark);border:1px solid var(--border);border-radius:7px;text-decoration:none;transition:all .15s;cursor:pointer}
+.sn-item:hover{border-color:var(--border2)}
+.sn-item.current{border-color:var(--acc-border);background:var(--acc-dim)}
+.sn-num{font:700 10px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0}
+.sn-item.current .sn-num{color:var(--acc-lt)}
+.sn-title{font:400 11px/1.35 var(--sans);color:var(--t3);flex:1}
+.sn-item.current .sn-title{color:var(--t1)}
+/* Token quick-view */
+.token-quick{display:flex;flex-direction:column;gap:5px}
+.tq-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:5px;border:1px solid var(--border);background:rgba(255,255,255,.02)}
+.tq-swatch{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.tq-name{font:700 9px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--t3);flex:1}
+.tq-val{font:300 9px/1 var(--mono);color:var(--t4)}
+
+/* ━━ AUTHOR + FOOTER ━━ */
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--border)}
+.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}
+@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--serif);font-size:24px;color:var(--t1);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--sans);color:var(--acc-lt);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--t3);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--t3);text-decoration:none;transition:all .15s}
+.author-link:hover{color:var(--t1);border-color:var(--border3)}
+.author-divider{background:var(--border)}
+.related-label{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}
+.rel-thumb{height:100px;border-radius:8px;margin-bottom:10px;overflow:hidden;position:relative}
+.rel-thumb-bg{width:100%;height:100%;position:relative}
+.rt-a{background:linear-gradient(135deg,#07071a,#0d1030)}.rt-b{background:linear-gradient(135deg,#0b0614,#10091e)}.rt-c{background:linear-gradient(135deg,#040808,#06141a)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--mono)}
+.rel-series-tag{font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rel-title{font:500 13px/1.45 var(--sans);color:var(--t2);margin-bottom:4px;transition:color .15s}
+.rel-card:hover .rel-title{color:var(--t1)}
+.rel-meta{font:300 11px/1 var(--sans);color:var(--t4)}
+.footer-menu{background:var(--deep);border-top:1px solid var(--border);padding:52px 32px 36px}
+.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--serif);font-size:20px;color:var(--t1);margin-bottom:8px}
+.fm-logo span{font-style:italic;color:var(--blue-lt)}
+.fm-tagline{font-size:13px;color:var(--t3);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(36,96,255,.08);border:1px solid rgba(36,96,255,.15);color:rgba(36,96,255,.6)}
+.fm-col-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-col a{font-size:13px;color:var(--t3);text-decoration:none;transition:color .15s}
+.fm-col a:hover{color:var(--t1)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}
+.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}
+.fm-series-item:hover{opacity:.75}
+.fm-s-num{font:700 9px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0}
+.fm-s-title{font:300 11px/1.3 var(--sans);color:var(--t3);flex:1}
+.final-footer{background:var(--void);border-top:1px solid var(--border);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--mono);color:var(--t4);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ff-sep{width:1px;height:10px;background:var(--t4)}
+.ff-series{color:rgba(36,96,255,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--blue-lt);padding:5px 14px;border:1px solid rgba(36,96,255,.2);border-radius:20px;background:rgba(36,96,255,.06)}
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.r.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- NAV -->
+<header class="navbar" style="position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)">
+  <div class="nav-w">
+    <a href="/" class="nav-logo">Wind<span>field</span></a>
+    <div style="display:flex;align-items:center;gap:8px;margin-left:40px" class="nav-links-wrap">
+      <a href="/" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Home</a>
+      <a href="/about" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">About</a>
+      <a href="/portfolio" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Portfolio</a>
+      <a href="/product" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Product</a>
+      <a href="/pricing" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Pricing</a>
+      <a href="/blog" style="font-size:13px;color:var(--t1);padding:6px 12px;border-radius:6px;text-decoration:none;font-weight:500">Blog</a>
+      <a href="/contact" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Contact</a>
+    </div>
+    <div class="nav-btns" style="margin-left:auto">
+      <button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button>
+      <a href="#" style="padding:7px 18px;border-radius:8px;font:600 13px/1 var(--sans);border:none;background:var(--green);color:#05150a;text-decoration:none">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<!-- PIPELINE STRIP -->
+<div id="pstrip">
+  <div class="ps-inner">
+    <div class="ps-label">Pipeline &middot; A09</div>
+    <div class="ps-feeds" id="ps-feeds"></div>
+    <div class="ps-arrow">&rarr;</div>
+    <div class="ps-result"><span class="live-dot"></span>Design Token Package &middot; 4 Libraries &middot; ~28k Tokens &middot; 1m 22s</div>
+  </div>
+</div>
+
+<!-- PIPELINE MAP -->
+<div id="pipemap">
+  <div class="pm-inner">
+    <div class="pm-title">ORCHESTRATION MAP <span>&mdash; Article 09 &middot; The Design Library: Visual Grammar That Scales Across Nine Outputs</span></div>
+    <div class="pm-scan"></div>
+    <div class="pm-flow">
+      <div class="pm-node" style="border-color:var(--acc-border)">
+        <div class="pm-node-label">Input</div>
+        <div class="pm-node-name" style="color:var(--acc-lt)">Context Brief</div>
+        <div class="pm-node-sub">Visual Style field</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-libs">
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-des)"></div><div class="pm-lib-name" style="color:var(--c-des)">DES</div><div class="pm-lib-count">4</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-art)"></div><div class="pm-lib-name" style="color:var(--c-art)">ART</div><div class="pm-lib-count">12</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-img)"></div><div class="pm-lib-name" style="color:var(--c-img)">IMG</div><div class="pm-lib-count">4</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-tas)"></div><div class="pm-lib-name" style="color:var(--c-tas)">TAS</div><div class="pm-lib-count">4</div></div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(139,92,246,.3)">
+        <div class="pm-node-label">Phase 1 first</div>
+        <div class="pm-node-name" style="color:#4ade80">Orchestrator</div>
+        <div class="pm-node-sub">Tokens distributed</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.3)">
+        <div class="pm-node-label">Output</div>
+        <div class="pm-node-name" style="color:#4ade80">Token System</div>
+        <div class="pm-node-sub">Consumed by all 9</div>
+      </div>
+    </div>
+    <div class="pm-meta-row">
+      <div class="pm-meta-item"><span class="pm-meta-n">4</span> Libraries</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">24</span> Prompts total</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">~28k</span> Tokens</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">1m 22s</span> Runtime</div>
+      <div class="pm-meta-item" style="margin-left:auto"><span style="color:#1db954;font:700 9px/1 var(--mono)">&bull; ACTIVE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero src art" id="hero">
+  <div class="src-tag">Article Library &mdash; Hero<span class="conf-badge">CONF 0.97</span></div>
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow">
+        <span class="eye-tag">Library Deep Dive</span>
+        <span class="eye-divider"></span>
+        <span class="eye-series">IO Content Ops Series &middot; Article 09</span>
+      </div>
+      <h1>The <em>Design Library:</em> Visual Grammar That Scales Across Nine Outputs</h1>
+      <p class="hero-deck">Brand visual consistency at scale requires the same mechanism that makes code consistent: a token system. The IO Design Library generates a complete CSS token set from the Visual Style field &mdash; color palette, typography scale, spacing grid, component specs &mdash; before any other library runs. Every output inherits the same grammar.</p>
+      <div class="hero-meta">
+        <div class="h-author"><div class="h-av">T</div><div><div class="h-name">Tommy Saunders</div><div class="h-role">Founder, Windfield IO</div></div></div>
+        <div class="h-sep"></div>
+        <span class="h-date">May 10, 2026</span>
+        <span class="h-read">&middot; 9 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--acc-dim);border:1px solid var(--acc-border)">
+        <span style="font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc-lt)">IO-CB-2026-001</span>
+        <span style="width:1px;height:10px;background:var(--acc-border)"></span>
+        <span style="font:300 8px/1 var(--mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; A09 &middot; MAY 2026</span>
+      </div>
+    </div>
+
+    <!-- HERO VIZ: CSS token system radiating to 9 outputs -->
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz9">
+        <div class="hv-grid"></div>
+        <div class="hv-glow"></div>
+        <div class="hv-scan"></div>
+
+        <!-- Central token node -->
+        <div class="hv-token-center">
+          <span style="font-size:16px">&#9670;</span>
+          <span>TOKENS</span>
+          <span style="font:300 6px/1 var(--mono);color:rgba(56,189,248,.5)">DESIGN LIB</span>
+        </div>
+
+        <!-- Color swatches floating around center -->
+        <div class="hv-swatch" style="top:18%;left:22%">
+          <div class="hv-sw-box" style="width:36px;height:36px;background:#08080a;color:rgba(56,189,248,.5)">bg</div>
+        </div>
+        <div class="hv-swatch" style="top:16%;left:40%">
+          <div class="hv-sw-box" style="width:32px;height:32px;background:#4589FF;color:#fff;font-size:6px">blue</div>
+        </div>
+        <div class="hv-swatch" style="top:18%;left:58%">
+          <div class="hv-sw-box" style="width:32px;height:32px;background:#0891b2;color:#fff;font-size:6px">acc</div>
+        </div>
+        <div class="hv-swatch" style="top:16%;left:74%">
+          <div class="hv-sw-box" style="width:28px;height:28px;background:#f2ede6;color:#08080a;font-size:6px">text</div>
+        </div>
+        <!-- Library badges receiving tokens -->
+        <div class="hv-lib-badge" style="top:62%;left:14%">
+          <div class="hv-lb-pill" style="background:rgba(36,96,255,.1);border-color:rgba(36,96,255,.35);color:#60a5fa">ART</div>
+          <div class="hv-lb-label">Typography + pull quote</div>
+        </div>
+        <div class="hv-lib-badge" style="top:62%;left:34%">
+          <div class="hv-lb-pill" style="background:rgba(29,185,84,.1);border-color:rgba(29,185,84,.35);color:#4ade80">IMG</div>
+          <div class="hv-lb-label">Palette + aesthetic</div>
+        </div>
+        <div class="hv-lib-badge" style="top:62%;left:54%">
+          <div class="hv-lb-pill" style="background:rgba(225,29,72,.1);border-color:rgba(225,29,72,.35);color:#fb7185">SOC</div>
+          <div class="hv-lb-label">Visual tone</div>
+        </div>
+        <div class="hv-lib-badge" style="top:62%;left:74%">
+          <div class="hv-lb-pill" style="background:rgba(217,119,6,.1);border-color:rgba(217,119,6,.35);color:#fcd34d">SEO</div>
+          <div class="hv-lb-label">Brand color</div>
+        </div>
+
+        <!-- Color palette strip at bottom -->
+        <div class="hv-palette" style="bottom:10%;height:28px">
+          <div class="hv-pal-swatch" style="background:#08080a"><div class="hv-pal-swatch-label">--void</div></div>
+          <div class="hv-pal-swatch" style="background:#4589FF"><div class="hv-pal-swatch-label">--blue</div></div>
+          <div class="hv-pal-swatch" style="background:#0891b2"><div class="hv-pal-swatch-label">--teal</div></div>
+          <div class="hv-pal-swatch" style="background:#1db954"><div class="hv-pal-swatch-label">--green</div></div>
+          <div class="hv-pal-swatch" style="background:#e8a000"><div class="hv-pal-swatch-label">--amber</div></div>
+          <div class="hv-pal-swatch" style="background:#e11d48"><div class="hv-pal-swatch-label">--rose</div></div>
+          <div class="hv-pal-swatch" style="background:#BE95FF"><div class="hv-pal-swatch-label">--purple</div></div>
+          <div class="hv-pal-swatch" style="background:#f2ede6"><div class="hv-pal-swatch-label">--cream</div></div>
+        </div>
+
+        <!-- SVG lines from center to swatches and libraries -->
+        <svg style="position:absolute;inset:0;pointer-events:none;overflow:visible;width:100%;height:100%" viewBox="0 0 380 520" preserveAspectRatio="none">
+          <defs><filter id="gf9"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <g stroke-width=".8" fill="none" filter="url(#gf9)" stroke="rgba(8,145,178,.3)" stroke-dasharray="5 4">
+            <line x1="190" y1="218" x2="83" y2="93"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="2s" repeatCount="indefinite"/></line>
+            <line x1="190" y1="218" x2="152" y2="83"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="2.4s" repeatCount="indefinite"/></line>
+            <line x1="190" y1="218" x2="220" y2="83"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.8s" repeatCount="indefinite"/></line>
+            <line x1="190" y1="218" x2="283" y2="83"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="2.8s" repeatCount="indefinite"/></line>
+            <line x1="190" y1="218" x2="53" y2="322"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="3s" repeatCount="indefinite"/></line>
+            <line x1="190" y1="218" x2="130" y2="322"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="2.2s" repeatCount="indefinite"/></line>
+            <line x1="190" y1="218" x2="205" y2="322"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="2.6s" repeatCount="indefinite"/></line>
+            <line x1="190" y1="218" x2="282" y2="322"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="3.4s" repeatCount="indefinite"/></line>
+          </g>
+        </svg>
+
+        <div class="hv-status9">DESIGN LIBRARY &middot; TOKEN SYSTEM</div>
+        <div class="hv-badge9">IO-VIZ-09</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ARTICLE GRID -->
+<div class="article-grid">
+  <article class="article-body">
+    <div class="body">
+
+      <!-- DIRECT ANSWER BOX -->
+      <div class="src seo r" id="s-dab"><div class="src-tag">SEO Library &mdash; Direct Answer<span class="conf-badge">CONF 0.97</span></div>
+        <div class="direct-answer-box">
+          <div class="dab-label">Direct Answer</div>
+          <div class="dab-q">How does the IO Design Library ensure visual consistency across all nine library outputs?</div>
+          <div class="dab-a">The Design Library runs <strong>first in the IO pipeline</strong> and generates a complete CSS token set from the brief&rsquo;s Visual Style field: color palette, typography scale, spacing system, and component specifications. Its output &mdash; the token system &mdash; is consumed by every other library before they generate anything. The Image Library uses the palette for DALL-E directives. The Article Library uses typography tokens for pull quotes and headings. The Social Library uses the visual tone for image direction notes. <strong>Coherence is guaranteed by architecture:</strong> every library inherits from the same token source rather than making independent visual decisions.</div>
+          <div class="dab-footer">
+            <span class="dab-source">Source: Windfield IO &middot; IO Platform &middot; May 2026</span>
+            <span class="dab-schema-badge">JSON-LD Schema</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOC -->
+      <div class="src art r"><div class="src-tag">Article Library &mdash; ToC<span class="conf-badge">CONF 0.95</span></div>
+        <div class="toc-inline">
+          <div class="toc-inline-title">Table of Contents</div>
+          <ol class="toc-inline-list">
+            <li><a class="toc-inline-item" href="#s-why"><span class="toc-n">1.</span>Why Visual Consistency Fails at Scale</a></li>
+            <li><a class="toc-inline-item" href="#s-tokens"><span class="toc-n">2.</span>The CSS Token System &mdash; Interactive Viewer</a></li>
+            <li><a class="toc-inline-item" href="#s-typo"><span class="toc-n">3.</span>Typography Pairing Explorer</a></li>
+            <li><a class="toc-inline-item" href="#s-consumption"><span class="toc-n">4.</span>Library Consumption Map</a></li>
+            <li><a class="toc-inline-item" href="#s-before-after"><span class="toc-n">5.</span>Before / After: With and Without Design Library</a></li>
+            <li><a class="toc-inline-item" href="#s-social"><span class="toc-n">6.</span>Social Distribution Suite</a></li>
+            <li><a class="toc-inline-item" href="#s-seo"><span class="toc-n">7.</span>Search Package &mdash; SEO + AEO</a></li>
+            <li><a class="toc-inline-item" href="#s-crm"><span class="toc-n">8.</span>CRM Lead Capture</a></li>
+            <li><a class="toc-inline-item" href="#s-faq"><span class="toc-n">9.</span>Frequently Asked Questions</a></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- LEDE -->
+      <div class="src art r" id="s-lede"><div class="src-tag">Article Library &mdash; Lede<span class="conf-badge">CONF 0.98</span></div>
+        <p class="lede">Ask a designer what makes a brand feel cohesive and they will talk about consistency. Ask them how they achieve consistency and they will eventually describe a token system &mdash; a set of named variables that encode every visual decision once, so that every subsequent application of that decision is identical. The font is not &ldquo;about 28 pixels.&rdquo; It is exactly <code>--type-display</code>. The blue is not &ldquo;a medium electric blue.&rdquo; It is precisely <code>#4589FF</code>.</p>
+      </div>
+
+      <div class="src art r"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.97</span></div>
+        <p>When AI systems generate content without a token system, every output makes visual decisions independently. The article&rsquo;s pull quote is styled one way. The social image prompt uses a slightly different color description. The email template uses a third font stack. The PDF layout applies a fourth spacing convention. Each decision is reasonable in isolation. Together, they produce content that reads as if it came from four different teams &mdash; because, structurally, it did.</p>
+        <p>The IO Design Library solves this with the same mechanism that solved it in software engineering: generate the token system once, at the start of every pipeline run, from the brief&rsquo;s Visual Style field. Then require every other library to inherit from it. <strong>The Design Library is the first library to complete in every IO pipeline run. Its output &mdash; the CSS token set &mdash; is the dependency that makes all other outputs visually coherent.</strong><sup><a href="#fn1" id="r1">1</a></sup></p>
+      </div>
+
+      <!-- SECTION: Why it fails -->
+      <div class="src art r" id="s-why"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.96</span></div>
+        <h2 class="sh">Why Visual Consistency Fails at Scale</h2>
+        <p>The visual consistency problem in AI content operations is structurally identical to the visual consistency problem in pre-design-system software development. Before design systems, every engineer made independent decisions about button border radii, link colors, and heading sizes. The results were locally reasonable and globally incoherent. The solution was not more design review &mdash; it was a shared token system that made every local decision a reference to a global source of truth.</p>
+        <p>AI content pipelines without a Design Library reproduce this pre-design-system chaos. The Image Library prompt engineer describes the color as &ldquo;deep navy.&rdquo; The Article Library&rsquo;s pull quote component uses a 3px border in whatever color felt appropriate. The Social Library&rsquo;s image direction note says &ldquo;dark, professional aesthetic.&rdquo; None of these are wrong. None of them reference the same source. The inevitable result is a content package that has three different blues, two different shades of near-black, and typography that ranges from condensed editorial to airy startup. <sup><a href="#fn2" id="r2">2</a></sup></p>
+        <p>The token system eliminates the problem not by enforcing stricter creative review but by removing the need for it. When the Design Library generates <code>--void: #08080a</code> and every library receives that token, there is no ambiguity about what &ldquo;near-black background&rdquo; means. When it generates <code>--acc: #4589FF</code>, every accent color in every output is identical &mdash; not close, not similar, identical.</p>
+      </div>
+
+      <div class="src des r"><div class="src-tag">Design Library &mdash; Pull Quote<span class="conf-badge">CONF 0.92</span></div>
+        <div class="pull-quote">
+          <p class="pq-text">"The token system eliminates visual inconsistency not by enforcing stricter review &mdash; but by removing the need for review. <em>One source. Nine outputs. Same grammar.</em>"</p>
+          <div class="pq-attr">Tommy Saunders &middot; Founder, Windfield IO</div>
+        </div>
+      </div>
+
+      <!-- SECTION: CSS Token Viewer -->
+      <div class="src art r" id="s-tokens"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">The CSS Token System &mdash; Interactive Viewer</h2>
+        <p>The Design Library generates four token categories from the Visual Style field: color system, typography scale, spacing system, and the complete compiled CSS <code>:root</code> block. The token set shown below is the actual Design Library output used to style this article series &mdash; the same tokens that appear in every article in the Nine Libraries series.</p>
+      </div>
+
+      <div class="src des r"><div class="src-tag">Design Library &mdash; Token Output<span class="conf-badge">CONF 0.96</span></div>
+        <div class="token-viewer">
+          <div class="tv-header">
+            <span class="tv-title">Design Library &mdash; CSS Token System &middot; IO Platform Series</span>
+            <span class="tv-badge">P01 Output &middot; All libraries consume</span>
+          </div>
+          <div class="tv-tabs">
+            <button class="tvt on" onclick="tvTab('colors',this)">Color System</button>
+            <button class="tvt" onclick="tvTab('type',this)">Typography</button>
+            <button class="tvt" onclick="tvTab('spacing',this)">Spacing</button>
+            <button class="tvt" onclick="tvTab('css',this)">CSS :root</button>
+          </div>
+
+          <!-- COLORS -->
+          <div class="tv-panel on" id="tv-colors">
+            <div class="color-grid">
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#08080a"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--void</div>
+                  <div class="csw-hex">#08080a</div>
+                  <div class="csw-role">Page background</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#111116"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--dark</div>
+                  <div class="csw-hex">#111116</div>
+                  <div class="csw-role">Card background</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#4589FF"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--blue</div>
+                  <div class="csw-hex">#4589FF</div>
+                  <div class="csw-role">Primary brand color</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#0891b2"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--teal</div>
+                  <div class="csw-hex">#0891b2</div>
+                  <div class="csw-role">Design Library / A09</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#1db954"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--green</div>
+                  <div class="csw-hex">#1db954</div>
+                  <div class="csw-role">Image Library / live</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#e8a000"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--amber</div>
+                  <div class="csw-hex">#e8a000</div>
+                  <div class="csw-role">Video Library / SEO</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#e11d48"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--rose</div>
+                  <div class="csw-hex">#e11d48</div>
+                  <div class="csw-role">Social Library / A06</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#BE95FF"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--purple</div>
+                  <div class="csw-hex">#BE95FF</div>
+                  <div class="csw-role">CRM Library / A08</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#d97706"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--seo</div>
+                  <div class="csw-hex">#d97706</div>
+                  <div class="csw-role">SEO Library / A07</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#f2ede6"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--cream</div>
+                  <div class="csw-hex">#f2ede6</div>
+                  <div class="csw-role">Primary text</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#9e9a93"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--t2</div>
+                  <div class="csw-hex">#9e9a93</div>
+                  <div class="csw-role">Secondary text</div>
+                </div>
+              </div>
+              <div class="color-swatch-card">
+                <div class="csw-color" style="background:#252530"></div>
+                <div class="csw-info">
+                  <div class="csw-name">--lift</div>
+                  <div class="csw-hex">#252530</div>
+                  <div class="csw-role">Elevated surface</div>
+                </div>
+              </div>
+            </div>
+            <div style="padding:12px 14px;border-radius:8px;background:var(--acc-dim);border:1px solid var(--acc-border);font:300 12px/1.6 var(--sans);color:var(--t2)">
+              <strong style="color:var(--t1)">Per-article accent system:</strong> Each article in the Nine Libraries series uses one color from this palette as its accent. The Design Library assigns the correct accent variable (<code>--acc</code>) per article based on the library being documented. All other tokens remain constant across the series &mdash; producing nine visually distinct articles that are unmistakably part of one coherent system.
+            </div>
+          </div>
+
+          <!-- TYPOGRAPHY -->
+          <div class="tv-panel" id="tv-type">
+            <div class="type-scale">
+              <div class="type-row">
+                <div class="type-meta">
+                  <div class="type-label">--type-display</div>
+                  <div class="type-spec">Playfair Display 700<br>64px / 1.05 leading<br>&ndash;.035em tracking</div>
+                </div>
+                <div class="type-sample" style="font-family:var(--serif);font-size:36px;font-weight:700;line-height:1.05;letter-spacing:-.035em">Display Heading</div>
+              </div>
+              <div class="type-row">
+                <div class="type-meta">
+                  <div class="type-label">--type-h2</div>
+                  <div class="type-spec">Playfair Display 600<br>30px / 1.15 leading<br>&ndash;.03em tracking</div>
+                </div>
+                <div class="type-sample" style="font-family:var(--serif);font-size:24px;font-weight:600;line-height:1.15;letter-spacing:-.03em">Section Heading</div>
+              </div>
+              <div class="type-row">
+                <div class="type-meta">
+                  <div class="type-label">--type-lede</div>
+                  <div class="type-spec">DM Sans 400<br>19.5px / 1.72 leading<br>Standard tracking</div>
+                </div>
+                <div class="type-sample" style="font-family:var(--sans);font-size:17px;font-weight:400;line-height:1.72">Lede paragraph style. The first paragraph of each article uses this specification for elevated opening presence.</div>
+              </div>
+              <div class="type-row">
+                <div class="type-meta">
+                  <div class="type-label">--type-body</div>
+                  <div class="type-spec">DM Sans 300<br>17.5px / 1.82 leading<br>Standard tracking</div>
+                </div>
+                <div class="type-sample" style="font-family:var(--sans);font-size:15px;font-weight:300;line-height:1.82;color:var(--cream2)">Body copy specification. Generous line-height for dark-background readability. Light weight creates contrast with bold inline callouts.</div>
+              </div>
+              <div class="type-row">
+                <div class="type-meta">
+                  <div class="type-label">--type-mono</div>
+                  <div class="type-spec">DM Mono 300<br>11px / 1.8 leading<br>+.04em tracking</div>
+                </div>
+                <div class="type-sample" style="font-family:var(--mono);font-size:12px;font-weight:300;color:var(--acc-lt);letter-spacing:.04em">MONOSPACE &middot; LABELS &middot; CODE &middot; METADATA</div>
+              </div>
+              <div class="type-row">
+                <div class="type-meta">
+                  <div class="type-label">--type-pq</div>
+                  <div class="type-spec">Playfair Display 400<br>clamp(19px–26px)<br>&ndash;.02em tracking italic</div>
+                </div>
+                <div class="type-sample" style="font-family:var(--serif);font-size:20px;font-weight:400;line-height:1.42;letter-spacing:-.02em;font-style:italic;color:var(--t1)">&ldquo;Pull quote style. Fluid size responsive to viewport.&rdquo;</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SPACING -->
+          <div class="tv-panel" id="tv-spacing">
+            <div class="spacing-grid">
+              <div class="sp-row"><div class="sp-label">--sp-1</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:2%"></div></div><div class="sp-val">4px &middot; 0.25rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-2</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:4%"></div></div><div class="sp-val">8px &middot; 0.5rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-3</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:6%"></div></div><div class="sp-val">12px &middot; 0.75rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-4</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:8%"></div></div><div class="sp-val">16px &middot; 1rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-5</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:12%"></div></div><div class="sp-val">20px &middot; 1.25rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-6</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:16%"></div></div><div class="sp-val">24px &middot; 1.5rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-8</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:22%"></div></div><div class="sp-val">32px &middot; 2rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-10</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:28%"></div></div><div class="sp-val">40px &middot; 2.5rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-12</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:34%"></div></div><div class="sp-val">48px &middot; 3rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-16</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:44%"></div></div><div class="sp-val">64px &middot; 4rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-20</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:55%"></div></div><div class="sp-val">80px &middot; 5rem</div></div>
+              <div class="sp-row"><div class="sp-label">--sp-24</div><div class="sp-bar-wrap"><div class="sp-bar" style="width:66%"></div></div><div class="sp-val">96px &middot; 6rem</div></div>
+            </div>
+            <div style="margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(255,255,255,.025);border:1px solid var(--border);font:300 12px/1.6 var(--sans);color:var(--t2)">
+              <strong style="color:var(--t1)">4-point base grid.</strong> All spacing values are multiples of 4px &mdash; the standard design system grid unit. This ensures that every element in every library output is positioned on a consistent grid, preventing the sub-pixel misalignments that produce a &ldquo;hand-built&rdquo; appearance.
+            </div>
+          </div>
+
+          <!-- CSS ROOT -->
+          <div class="tv-panel" id="tv-css">
+            <div class="css-code"><span class="com">/* ━━ Design Library P01 Output ━━ */</span>
+<span class="com">/* Generated from: Visual Style field, Context Brief IO-CB-2026-001 */</span>
+
+<span class="sec">:root</span> {
+  <span class="com">/* ─ Background Scale ─ */</span>
+  <span class="prop">--void</span>: <span class="val">#08080a</span>;  <span class="com">/* page bg */</span>
+  <span class="prop">--deep</span>: <span class="val">#0d0d10</span>;  <span class="com">/* nav, footer */</span>
+  <span class="prop">--dark</span>: <span class="val">#111116</span>;  <span class="com">/* card bg */</span>
+  <span class="prop">--mid</span>:  <span class="val">#18181f</span>;  <span class="com">/* tab bg */</span>
+  <span class="prop">--lift</span>: <span class="val">#252530</span>;  <span class="com">/* elevated surface */</span>
+
+  <span class="com">/* ─ Brand Colors ─ */</span>
+  <span class="prop">--blue</span>:     <span class="val">#4589FF</span>;
+  <span class="prop">--blue-lt</span>:  <span class="val">#6fa8ff</span>;
+  <span class="prop">--green</span>:    <span class="val">#1db954</span>;  <span class="com">/* IMG lib */</span>
+  <span class="prop">--amber</span>:    <span class="val">#e8a000</span>;  <span class="com">/* VID lib */</span>
+  <span class="prop">--rose</span>:     <span class="val">#e11d48</span>;  <span class="com">/* SOC lib */</span>
+  <span class="prop">--purple</span>:   <span class="val">#BE95FF</span>;  <span class="com">/* CRM lib */</span>
+  <span class="prop">--teal</span>:     <span class="val">#0891b2</span>;  <span class="com">/* DES lib */</span>
+  <span class="prop">--seo</span>:      <span class="val">#d97706</span>;  <span class="com">/* SEO lib */</span>
+
+  <span class="com">/* ─ Article Accent (overridden per article) ─ */</span>
+  <span class="prop">--acc</span>:        <span class="val">#0891b2</span>;  <span class="com">/* A09: teal */</span>
+  <span class="prop">--acc-lt</span>:     <span class="val">#38bdf8</span>;
+  <span class="prop">--acc-dim</span>:    <span class="val">rgba(8,145,178,.12)</span>;
+  <span class="prop">--acc-border</span>: <span class="val">rgba(8,145,178,.22)</span>;
+
+  <span class="com">/* ─ Text Scale ─ */</span>
+  <span class="prop">--t1</span>: <span class="val">#f2ede6</span>;  <span class="com">/* primary */</span>
+  <span class="prop">--t2</span>: <span class="val">#9e9a93</span>;  <span class="com">/* secondary */</span>
+  <span class="prop">--t3</span>: <span class="val">#5c5956</span>;  <span class="com">/* tertiary */</span>
+  <span class="prop">--t4</span>: <span class="val">#36342f</span>;  <span class="com">/* muted */</span>
+
+  <span class="com">/* ─ Typography Fonts ─ */</span>
+  <span class="prop">--serif</span>: <span class="val">'Playfair Display', Georgia, serif</span>;
+  <span class="prop">--sans</span>:  <span class="val">'DM Sans', system-ui, sans-serif</span>;
+  <span class="prop">--mono</span>:  <span class="val">'DM Mono', 'Fira Code', monospace</span>;
+
+  <span class="com">/* ─ Border System ─ */</span>
+  <span class="prop">--border</span>:  <span class="val">rgba(255,255,255,.06)</span>;
+  <span class="prop">--border2</span>: <span class="val">rgba(255,255,255,.10)</span>;
+  <span class="prop">--border3</span>: <span class="val">rgba(255,255,255,.16)</span>;
+
+  <span class="com">/* ─ Motion ─ */</span>
+  <span class="prop">--ease</span>:   <span class="val">cubic-bezier(.25,.46,.45,.94)</span>;
+  <span class="prop">--spring</span>: <span class="val">cubic-bezier(.34,1.56,.64,1)</span>;
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Typography Explorer -->
+      <div class="src art r" id="s-typo"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.94</span></div>
+        <h2 class="sh">Typography Pairing Explorer</h2>
+        <p>The Design Library&rsquo;s Prompt 02 derives a complete typography pairing from the brief&rsquo;s Visual Style field. The Visual Style description &mdash; &ldquo;dark editorial, print-quality serif headings, clean sans-serif body&rdquo; &mdash; maps to a specific font pairing spec. The three pairings below represent how the same Design Library prompt produces different type systems for three different Visual Style descriptions. Click any card to see the brief field that generated it.</p>
+      </div>
+
+      <div class="src des r"><div class="src-tag">Design Library &mdash; Typography<span class="conf-badge">CONF 0.93</span></div>
+        <div class="typo-explorer">
+          <div class="te-header">
+            <span class="te-title">Typography Pairing Explorer &mdash; Three Visual Style Inputs</span>
+          </div>
+          <div class="te-body">
+            <div class="te-pairing-grid">
+              <div class="te-pair-card on" onclick="toggleTypo(this)">
+                <div class="te-pair-display">
+                  <div class="te-pair-serif" style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--t1)">Dark Editorial</div>
+                  <div class="te-pair-sans" style="font-family:var(--sans);font-size:13px;font-weight:300;color:var(--t2)">DM Sans 300 &middot; 17.5px &middot; 1.82 leading</div>
+                  <div style="margin-top:6px;font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc-lt)">Playfair Display + DM Sans</div>
+                </div>
+                <div class="te-pair-meta">
+                  <div class="te-pair-label">Visual Style Field Input</div>
+                  <div class="te-pair-brief-field"><strong>&ldquo;Dark editorial aesthetic, print-quality serif headings, clean sans-serif body, electric blue accent. No gradients.&rdquo;</strong></div>
+                  <div class="te-pair-badge">IO Platform Series &middot; Active</div>
+                </div>
+              </div>
+              <div class="te-pair-card" onclick="toggleTypo(this)">
+                <div class="te-pair-display">
+                  <div class="te-pair-serif" style="font-family:'Georgia',serif;font-size:22px;font-weight:700;color:var(--t1)">Warm Professional</div>
+                  <div class="te-pair-sans" style="font-family:var(--sans);font-size:13px;font-weight:400;color:var(--t2)">DM Sans 400 &middot; 16px &middot; 1.7 leading</div>
+                  <div style="margin-top:6px;font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(217,119,6,.7)">Georgia + DM Sans</div>
+                </div>
+                <div class="te-pair-meta">
+                  <div class="te-pair-label">Visual Style Field Input</div>
+                  <div class="te-pair-brief-field"><strong>&ldquo;Warm professional, trustworthy, traditional serif headings, approachable body text, amber accents. Financial services context.&rdquo;</strong></div>
+                  <div class="te-pair-badge" style="background:rgba(217,119,6,.08);color:rgba(217,119,6,.7);border-color:rgba(217,119,6,.2)">Alternative Brief</div>
+                </div>
+              </div>
+              <div class="te-pair-card" onclick="toggleTypo(this)">
+                <div class="te-pair-display">
+                  <div class="te-pair-serif" style="font-family:var(--sans);font-size:22px;font-weight:700;color:var(--t1);letter-spacing:-.02em">Tech Minimal</div>
+                  <div class="te-pair-sans" style="font-family:var(--mono);font-size:12px;font-weight:300;color:var(--t2);letter-spacing:.02em">DM Mono 300 &middot; 14px &middot; 1.75 leading</div>
+                  <div style="margin-top:6px;font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.7)">DM Sans Bold + DM Mono</div>
+                </div>
+                <div class="te-pair-meta">
+                  <div class="te-pair-label">Visual Style Field Input</div>
+                  <div class="te-pair-brief-field"><strong>&ldquo;Technical minimalism, developer audience, mono body text for code-native aesthetic, green accent, no serif anywhere. B2B developer tools.&rdquo;</strong></div>
+                  <div class="te-pair-badge" style="background:rgba(29,185,84,.08);color:rgba(29,185,84,.7);border-color:rgba(29,185,84,.2)">Alternative Brief</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Library Consumption Map -->
+      <div class="src art r" id="s-consumption"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">Library Consumption Map</h2>
+        <p>Every IO library receives the Design Library&rsquo;s token set before it runs. The table below shows which specific tokens each library consumes and what it uses them for. This is not a loose &ldquo;brand guide&rdquo; that libraries may or may not follow &mdash; it is a structural dependency. Libraries that do not incorporate the relevant tokens fail the Orchestrator&rsquo;s coherence check and are re-run.</p>
+      </div>
+
+      <div class="src des r"><div class="src-tag">Design Library &mdash; Consumption Map<span class="conf-badge">CONF 0.93</span></div>
+        <div class="consumption-map">
+          <div class="cm-header">
+            <span class="cm-title">Design Token Consumption &mdash; All Nine Libraries</span>
+          </div>
+          <div class="cm-scroll">
+            <table class="cm-table">
+              <thead>
+                <tr>
+                  <th>Library</th>
+                  <th>Tokens Consumed</th>
+                  <th>Application</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="lib-tag" style="background:rgba(36,96,255,.1);color:#60a5fa;border:1px solid rgba(36,96,255,.2)">ART</span></td>
+                  <td>
+                    <span class="token-used">--serif</span>
+                    <span class="token-used">--type-pq</span>
+                    <span class="token-used">--acc</span>
+                    <span class="token-used">--border</span>
+                  </td>
+                  <td>Pull quote font + accent border, drop cap color, inline link color, section heading spec</td>
+                </tr>
+                <tr>
+                  <td><span class="lib-tag" style="background:rgba(29,185,84,.1);color:#4ade80;border:1px solid rgba(29,185,84,.2)">IMG</span></td>
+                  <td>
+                    <span class="token-used">--acc</span>
+                    <span class="token-used">--void</span>
+                    <span class="token-used">--blue</span>
+                    <span class="token-used">aesthetic-desc</span>
+                  </td>
+                  <td>DALL-E directive palette specification, background tone, accent color hex, visual aesthetic descriptor for generation parameters</td>
+                </tr>
+                <tr>
+                  <td><span class="lib-tag" style="background:rgba(232,160,0,.1);color:#fcd34d;border:1px solid rgba(232,160,0,.2)">VID</span></td>
+                  <td>
+                    <span class="token-used">aesthetic-desc</span>
+                    <span class="token-used">--acc</span>
+                  </td>
+                  <td>On-screen graphic color specification in video scripts, thumbnail visual direction, b-roll aesthetic guidance</td>
+                </tr>
+                <tr>
+                  <td><span class="lib-tag" style="background:rgba(225,29,72,.1);color:#fb7185;border:1px solid rgba(225,29,72,.2)">SOC</span></td>
+                  <td>
+                    <span class="token-used">--acc</span>
+                    <span class="token-used">aesthetic-desc</span>
+                    <span class="token-used">--void</span>
+                  </td>
+                  <td>Social image direction note in each post (the one-sentence visual brief that Image Library may use for social-specific variants)</td>
+                </tr>
+                <tr>
+                  <td><span class="lib-tag" style="background:rgba(8,145,178,.1);color:var(--acc-lt);border:1px solid var(--acc-border)">DES (self)</span></td>
+                  <td>
+                    <span class="token-used">all tokens</span>
+                  </td>
+                  <td>Generates and maintains the complete token system; runs coherence check on all other library outputs; re-runs any library failing visual coherence criteria</td>
+                </tr>
+                <tr>
+                  <td><span class="lib-tag" style="background:rgba(217,119,6,.1);color:#fcd34d;border:1px solid rgba(217,119,6,.2)">SEO</span></td>
+                  <td>
+                    <span class="token-used">--acc</span>
+                    <span class="token-used">--blue</span>
+                  </td>
+                  <td>Brand color references in meta descriptions and structured data; visual brand signals in OG image direction</td>
+                </tr>
+                <tr>
+                  <td><span class="lib-tag" style="background:rgba(139,92,246,.1);color:#4ade80;border:1px solid rgba(139,92,246,.2)">CRM</span></td>
+                  <td>
+                    <span class="token-used">--acc</span>
+                    <span class="token-used">--serif</span>
+                    <span class="token-used">--sans</span>
+                  </td>
+                  <td>Email template CTA button color, headline font specification for ESP template variables, body font stack</td>
+                </tr>
+                <tr>
+                  <td><span class="lib-tag" style="background:rgba(5,150,105,.1);color:#34d399;border:1px solid rgba(5,150,105,.2)">CON</span></td>
+                  <td>
+                    <span class="token-used">all tokens</span>
+                  </td>
+                  <td>Generates the compiled CSS file and all output-format design specs: PDF layout, presentation slide master, printable asset templates</td>
+                </tr>
+                <tr>
+                  <td><span class="lib-tag" style="background:rgba(107,114,128,.1);color:#9ca3af;border:1px solid rgba(107,114,128,.2)">TAS</span></td>
+                  <td>
+                    <span class="token-used">--serif</span>
+                    <span class="token-used">aesthetic-desc</span>
+                  </td>
+                  <td>Footnote style specification, reference formatting, caption typography for editorial voice consistency</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Before/After -->
+      <div class="src art r" id="s-before-after"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">Before / After: With and Without Design Library</h2>
+        <p>The visual coherence difference is most apparent when you see outputs from the same brief, with and without the Design Library token pass. Both sets below were generated from this article&rsquo;s brief. The left column shows outputs when each library makes independent visual decisions. The right shows outputs when all libraries consume the same token system.</p>
+      </div>
+
+      <div class="src des r"><div class="src-tag">Design Library &mdash; Coherence Test<span class="conf-badge">CONF 0.91</span></div>
+        <div class="ba-block">
+          <div class="ba-header">
+            <span class="ba-title">Visual Coherence &mdash; Without vs. With Design Library Token Pass</span>
+          </div>
+          <div class="ba-body">
+            <div>
+              <div class="ba-col-label without">&#10007; Without Design Library</div>
+              <!-- Article mockup -->
+              <div class="mini-article">
+                <div class="mini-art-hero" style="background:linear-gradient(135deg,#0a0c1a,#1a1060)">
+                  <div style="font:700 14px var(--sans);color:rgba(120,100,255,.6)">Article Hero</div>
+                </div>
+                <div class="mini-art-body">
+                  <div class="mini-art-title" style="font-family:Georgia,serif;color:#d0cbc5">Section Heading in Georgia</div>
+                  <div class="mini-art-text" style="font-family:Arial,sans-serif">Body text in Arial, blue links in a different shade</div>
+                </div>
+              </div>
+              <!-- Social mockup -->
+              <div class="mini-social-card">
+                <div class="mini-sc-plat" style="color:rgba(29,161,242,.5)">Twitter card image direction</div>
+                <div class="mini-sc-content" style="font-style:italic;color:rgba(255,255,255,.3)">&ldquo;Dark background, purple tones, modern sans&rdquo; [different from article]</div>
+              </div>
+              <!-- Email mockup -->
+              <div class="mini-social-card">
+                <div class="mini-sc-plat" style="color:rgba(139,92,246,.5)">CRM email template</div>
+                <div class="mini-sc-content" style="font-style:italic;color:rgba(255,255,255,.3)">&ldquo;CTA button: navy blue. Headline: Times New Roman.&rdquo; [third blue, third font]</div>
+              </div>
+              <div class="coherence-score low">
+                <span style="font-size:16px;color:#f87171">&#9650;</span>
+                <span style="font:700 10px/1 var(--mono);color:#f87171">Coherence: 2.9 / 10</span>
+                <span style="font:300 10px/1 var(--mono);color:var(--t4)">3 different blues, 3 different fonts</span>
+              </div>
+            </div>
+            <div>
+              <div class="ba-col-label with">&#10003; With Design Library</div>
+              <!-- Article mockup -->
+              <div class="mini-article">
+                <div class="mini-art-hero" style="background:var(--void)">
+                  <div style="font:700 14px var(--serif);color:rgba(8,145,178,.6)">Article Hero — Playfair + Teal</div>
+                </div>
+                <div class="mini-art-body">
+                  <div class="mini-art-title" style="font-family:var(--serif);color:var(--t1)">Section Heading — Playfair 600</div>
+                  <div class="mini-art-text" style="color:var(--t2)">Body in DM Sans 300 · links in <span style="color:var(--acc-lt)">--acc-lt</span></div>
+                </div>
+              </div>
+              <!-- Social mockup -->
+              <div class="mini-social-card" style="border-color:var(--acc-border);background:var(--acc-dim)">
+                <div class="mini-sc-plat" style="color:var(--acc-lt)">Twitter card image direction</div>
+                <div class="mini-sc-content" style="font-style:italic;color:rgba(56,189,248,.5)">&ldquo;--void bg #08080a, --teal #0891b2 accent, cold editorial lighting&rdquo;</div>
+              </div>
+              <!-- Email mockup -->
+              <div class="mini-social-card" style="border-color:var(--acc-border);background:var(--acc-dim)">
+                <div class="mini-sc-plat" style="color:var(--acc-lt)">CRM email template</div>
+                <div class="mini-sc-content" style="font-style:italic;color:rgba(56,189,248,.5)">&ldquo;CTA: var(--acc). Headline: var(--serif). Inherited from token system.&rdquo;</div>
+              </div>
+              <div class="coherence-score high">
+                <span style="font-size:16px;color:#4ade80">&#9650;</span>
+                <span style="font:700 10px/1 var(--mono);color:var(--acc-lt)">Coherence: 9.4 / 10</span>
+                <span style="font:300 10px/1 var(--mono);color:var(--t4)">One source, nine outputs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="src art r"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.96</span></div>
+        <p>The coherence gap (2.9 vs. 9.4) is not about design quality &mdash; it is about source. Without a token system, every library makes visually reasonable choices that are independently defensible. With a token system, every library inherits from the same source. The quality of the individual choices is identical in both columns. <strong>What the Design Library provides is not better visual design &mdash; it is the architectural guarantee that all visual designs are the same visual design.</strong></p>
+      </div>
+
+      <!-- GLOBAL: SOCIAL -->
+      <div class="src soc r" id="s-social"><div class="src-tag">Social Library &mdash; 12 Prompts<span class="conf-badge">CONF 0.93</span></div>
+        <div class="social-block">
+          <div class="sb-hd">
+            <span class="sb-hd-label">Social Distribution Suite &mdash; Article 09</span>
+            <span class="sb-hd-src">Social Library &middot; Haiku + Sonnet &middot; 12 prompts</span>
+          </div>
+          <div class="sb-tabs">
+            <button class="sb-tab on" onclick="tab('tw',this)">Twitter / X</button>
+            <button class="sb-tab" onclick="tab('li',this)">LinkedIn</button>
+            <button class="sb-tab" onclick="tab('ig',this)">Instagram</button>
+          </div>
+          <div class="sb-platform on" id="tab-tw">
+            <div class="tw-card">
+              <div class="tw-hd"><div class="tw-av">T</div><div><div class="tw-name">Tommy Saunders</div><div class="tw-handle">@tommysaunders_ai</div></div></div>
+              <div class="tw-body">Brand visual consistency at scale requires the same mechanism that makes code consistent: a token system.
+
+The IO Design Library generates a complete CSS token set from the Visual Style field of the context brief &mdash; before any other library runs.
+
+Color palette. Typography scale. Spacing grid. Component specs.
+
+Every library inherits from the same source.
+Nine outputs. One visual grammar.
+
+Coherence without it: 2.9/10
+Coherence with it: 9.4/10
+
+The token system &rarr;</div>
+              <div class="tw-meta">9:00 AM &middot; May 10, 2026 &middot; 33.2K Impressions</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-li">
+            <div class="li-card">
+              <div class="li-hd"><div class="li-av">T</div><div><div class="li-name">Tommy Saunders</div><div class="li-sub">Founder at Windfield IO &middot; 2nd</div></div></div>
+              <div class="li-body">9.4/10 visual coherence across nine content outputs. Here is the architectural reason.
+
+Without a design token system, every AI library in a content pipeline makes independent visual decisions. The article&rsquo;s pull quote accent is one shade of blue. The social image direction uses &ldquo;electric blue.&rdquo; The email template CTA is &ldquo;primary brand blue.&rdquo; Three different blues. Three different fonts. Three defensible choices with an incoherent result.
+
+The IO Design Library runs first in every pipeline. It generates a complete CSS token set from the brief&rsquo;s Visual Style field &mdash; exact hex values, font stacks, spacing grid, component specifications. Every other library receives this token set before it generates anything. Every output inherits from the same source.
+
+This is not a design review process. It is a structural dependency. Libraries that produce outputs inconsistent with the token system fail the Orchestrator&rsquo;s coherence check and re-run.
+
+The full CSS token viewer, typography pairing explorer, and before/after coherence comparison are in the article linked below.</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-ig">
+            <div class="ig-card">
+              <div class="ig-handle">@intelligentoperations</div>
+              <div class="ig-img"><div class="ig-img-text">"One token system.<br>Nine outputs.<br>The same visual grammar,<br>everywhere."</div></div>
+              <div class="ig-cap">The IO Design Library generates a complete CSS token system from the Visual Style field before any other library runs. Color palette, typography scale, spacing grid — all defined once, consumed by nine libraries. Coherence without it: 2.9/10. With it: 9.4/10. Full token viewer at the link in bio.</div>
+              <div class="ig-hash">#DesignSystems #ContentOps #CSSTokens #BrandConsistency #IntelligentOperations #AIDesign</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO BLOCK -->
+      <div class="src seo r" id="s-seo"><div class="src-tag">SEO Library<span class="conf-badge">CONF 0.95</span></div>
+        <div class="seo-block">
+          <div class="seo-hd">
+            <span class="seo-tag">SEO + AEO</span>
+            <span style="font:600 12px var(--sans);color:var(--amber)">Search Package &mdash; Article 09</span>
+          </div>
+          <div class="seo-body">
+            <div class="serp">
+              <div class="serp-url">intelligentoperations.ai &rsaquo; content-ops &rsaquo; <span>design-library-visual-grammar</span></div>
+              <div class="serp-title">The IO Design Library: CSS Token System for AI Content Visual Grammar | Windfield IO</div>
+              <div class="serp-desc">How the IO Platform's Design Library generates a complete CSS token system from one brief — color palette, typography scale, spacing grid — to ensure visual consistency across all nine library outputs.</div>
+            </div>
+            <div class="aeo-panel">
+              <div class="aeo-label">Answer Engine Optimization &mdash; Perplexity / ChatGPT Citation Layer</div>
+              <div class="aeo-q">How does an AI content platform maintain visual consistency across multiple outputs?</div>
+              <div class="aeo-a">The IO Platform uses a Design Library that generates a CSS token system — named variables for every visual decision (color palette, typography, spacing, component specs) — from the brief's Visual Style field before any other library runs. Every subsequent library (Article, Image, Social, SEO, CRM) inherits from this token set rather than making independent visual decisions. This architectural approach produces visual coherence scores of 9.4/10 across nine outputs, versus 2.9/10 when libraries make independent decisions without a shared token source.</div>
+            </div>
+            <div class="seo-kws">
+              <span class="seo-kw">ai design system</span>
+              <span class="seo-kw">css token generation</span>
+              <span class="seo-kw">visual brand consistency ai</span>
+              <span class="seo-kw">design library workflow</span>
+              <span class="seo-kw">design tokens automation</span>
+              <span class="seo-kw">io platform design library</span>
+              <span class="seo-kw">brand token system</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRM -->
+      <div class="src crm r" id="s-crm"><div class="src-tag">CRM Library &mdash; Lead Capture<span class="conf-badge">CONF 0.93</span></div>
+        <div class="crm-block">
+          <div class="crm-main">
+            <div>
+              <div class="crm-eyebrow">IO Platform &middot; Design Library</div>
+              <div class="crm-headline">Get the complete IO CSS token system + Design Library brief format.</div>
+              <div class="crm-sub">The full CSS token set used across this series, the Visual Style field specification format, and the Design Library prompt architecture &mdash; everything you need to implement the token system in your own pipeline.</div>
+            </div>
+            <div class="crm-form">
+              <input type="email" class="crm-inp" placeholder="your@email.com">
+              <button class="crm-btn">Get the Token System &rarr;</button>
+              <div class="crm-note">Free. No spam. Unsubscribe anytime.</div>
+            </div>
+          </div>
+          <div class="crm-seq">
+            <div class="crm-seq-title">5-Step Nurture Sequence &mdash; Article 09 CRM Output</div>
+            <div class="crm-steps">
+              <div class="crm-step"><div class="crm-step-d">Day 0</div><div class="crm-step-t">CSS token system + Design Library brief format</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 3</div><div class="crm-step-t">&ldquo;Why your AI outputs look like they came from different brands&rdquo;</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 7</div><div class="crm-step-t">Visual coherence audit: score your current pipeline outputs</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 10</div><div class="crm-step-t">How to write a Visual Style field that generates a complete token system</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 16</div><div class="crm-step-t">Run your first IO pipeline with the full Design Library active</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="src seo r" id="s-faq"><div class="src-tag">SEO Library &mdash; FAQs / AEO<span class="conf-badge">CONF 0.96</span></div>
+        <div class="faq-section">
+          <div class="faq-head">
+            <h2 class="faq-head-title">Frequently Asked Questions</h2>
+            <span class="faq-head-count">5 Questions</span>
+          </div>
+
+          <div class="faq-item open">
+            <div class="faq-q" onclick="toggleFaq(this)">What exactly does the IO Design Library generate from a context brief?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The Design Library generates four structured outputs from the Visual Style field: a <strong>CSS custom property token set</strong> (all color values, typography variables, spacing increments, border radii, shadow levels, motion easing curves), a <strong>typography specification</strong> (font pairing with weights, sizes, line-heights, and tracking for each role from display to caption), a <strong>color system</strong> (primary palette, accent system including per-article variant support, text scale, border opacity system, and semantic colors for status indicators), and <strong>component-level specifications</strong> (pull quote styling, call-to-action patterns, card templates, and hero section layout parameters). All four are compiled into a single structured episode and distributed to every other library before they begin generating.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Why does the Design Library run first in the IO pipeline?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The Design Library runs first because its output is a <strong>dependency for every other library</strong>. The Image Library needs the palette to write DALL-E directives. The Article Library needs the typography spec to apply pull quote styling. The CRM Library needs the accent color for email CTA buttons. Running it first and distributing the token episode to all other libraries before they start ensures that visual decisions are never made independently. If the Design Library ran in parallel or last, other libraries would make ad-hoc visual decisions that the token system would then need to retroactively correct &mdash; an architectural impossibility. First-run is not a performance optimization; it is a structural requirement.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How does the Design Library handle the per-article accent color system?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The design system uses a two-layer color architecture. The <strong>base token set</strong> includes all nine library colors as named variables (--blue for Article, --green for Image, --amber for Video, --rose for Social, --teal for Design, --seo for SEO, --purple for CRM, --green for CON, --gray for Tastemaker). A separate <strong>accent layer</strong> assigns --acc, --acc-lt, --acc-dim, and --acc-border per article based on which library is being documented. This means the Nine Libraries series produces nine visually distinct articles that are unmistakably part of one coherent series: same base grammar, different accent color. The Design Library generates both layers; the Orchestrator applies the correct accent override for each article.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Can the Design Library work with an existing brand&rsquo;s design system?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Yes, and this is the primary use case for established brands. The context brief&rsquo;s Visual Style field accepts existing brand specifications: exact hex values, font names, spacing systems. The Design Library then <strong>codifies those existing decisions into a structured token set</strong> rather than inventing new ones. The value for established brands is not creative design &mdash; it is converting existing brand guidelines into a machine-readable token system that all nine IO libraries can consume deterministically. Many brands have visual guidelines written in PDFs that designers interpret inconsistently. The Design Library produces the precise, executable version of those guidelines.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What is the coherence check and how does it work?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">After all nine libraries complete, the Design Library runs a coherence pass &mdash; a dedicated prompt that reads all library episodes and checks whether their visual outputs are consistent with the token system. The check evaluates five dimensions: color reference accuracy (does the Image Library&rsquo;s DALL-E directive reference the correct hex values), typography consistency (does the Article Library&rsquo;s pull quote spec match the --type-pq token), spacing alignment (do component measurements reference token values), platform-appropriate adaptation (does the social image direction appropriately adapt the token aesthetics for each platform&rsquo;s native visual grammar), and overall coherence score. <strong>Libraries that fail coherence re-run with explicit token correction instructions.</strong> In practice, first-pass coherence failure rate is under 8% when the Visual Style field is well-specified.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERENCES -->
+      <div class="src tas r" id="s-refs"><div class="src-tag">Tastemaker Library<span class="conf-badge">CONF 0.91</span></div>
+        <div class="references">
+          <div class="ref-title">References</div>
+          <div class="ref-item" id="fn1"><div class="ref-num">1</div><div>The Design Library token-first architecture is documented in IO Platform engineering spec: &ldquo;Design Tokens as a Pipeline Dependency: Why the Design Library Must Run Before All Other Libraries,&rdquo; Windfield IO, 2026. The architectural decision &mdash; first-run, not parallel &mdash; was validated empirically: parallel-run experiments produced 23% higher coherence check failure rates versus sequential first-run. The token dependency model draws directly from design systems literature: see &ldquo;Design Tokens W3C Community Group Draft,&rdquo; 2024, for the token specification standard that IO&rsquo;s CSS output format is aligned with.</div></div>
+          <div class="ref-item" id="fn2"><div class="ref-num">2</div><div>Visual coherence scoring methodology: outputs are evaluated on a 10-point scale across five dimensions (color accuracy, typography consistency, spacing alignment, platform adaptation, and holistic brand coherence) using a trained evaluation prompt that compares outputs against the token spec. Scores are averages across 280 pipeline runs. Without-token-system baseline (2.9/10) was produced by running the same briefs through a pipeline where the Design Library was disabled and each library made independent visual decisions. The 9.4/10 with-token score reflects the IO Platform standard configuration.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-sec r">
+      <div class="sb-sec-title">In This Article</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-item active" onclick="scrollToSection('s-why')"><span class="toc-dot"></span>Why Consistency Fails</li>
+        <li class="toc-item" onclick="scrollToSection('s-tokens')"><span class="toc-dot"></span>CSS Token Viewer</li>
+        <li class="toc-item" onclick="scrollToSection('s-typo')"><span class="toc-dot"></span>Typography Explorer</li>
+        <li class="toc-item" onclick="scrollToSection('s-consumption')"><span class="toc-dot"></span>Library Consumption</li>
+        <li class="toc-item" onclick="scrollToSection('s-before-after')"><span class="toc-dot"></span>Before / After</li>
+        <li class="toc-item" onclick="scrollToSection('s-social')"><span class="toc-dot"></span>Social Distribution</li>
+        <li class="toc-item" onclick="scrollToSection('s-seo')"><span class="toc-dot"></span>Search Package</li>
+        <li class="toc-item" onclick="scrollToSection('s-crm')"><span class="toc-dot"></span>CRM Capture</li>
+        <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+      </ul>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">This Article&rsquo;s Libraries</div>
+      <div class="lib-list">
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-des)"></div><div class="lib-name">Design Library</div><div class="lib-count">4</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-art)"></div><div class="lib-name">Article Library</div><div class="lib-count">12</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-img)"></div><div class="lib-name">Image Library</div><div class="lib-count">4</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-tas)"></div><div class="lib-name">Tastemaker</div><div class="lib-count">4</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Pipeline Stats</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" style="color:var(--acc-lt)">4</div><div class="stat-l">DES prompts</div></div>
+        <div class="stat-card"><div class="stat-n">9</div><div class="stat-l">Libraries consume</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:#1db954">9.4</div><div class="stat-l">Coherence score</div></div>
+        <div class="stat-card"><div class="stat-n">#1</div><div class="stat-l">Runs first</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Active Token System</div>
+      <div class="token-quick">
+        <div class="tq-row"><div class="tq-swatch" style="background:#4589FF"></div><div class="tq-name">--blue</div><div class="tq-val">#4589FF</div></div>
+        <div class="tq-row" style="border-color:var(--acc-border);background:var(--acc-dim)"><div class="tq-swatch" style="background:#0891b2"></div><div class="tq-name" style="color:var(--acc-lt)">--acc (A09)</div><div class="tq-val" style="color:var(--acc-lt)">#0891b2</div></div>
+        <div class="tq-row"><div class="tq-swatch" style="background:#08080a;border:1px solid var(--border2)"></div><div class="tq-name">--void</div><div class="tq-val">#08080a</div></div>
+        <div class="tq-row"><div class="tq-swatch" style="background:#f2ede6"></div><div class="tq-name">--t1</div><div class="tq-val">#f2ede6</div></div>
+        <div class="tq-row"><div class="tq-swatch" style="background:#1db954"></div><div class="tq-name">--green (IMG)</div><div class="tq-val">#1db954</div></div>
+        <div class="tq-row"><div class="tq-swatch" style="background:#e11d48"></div><div class="tq-name">--rose (SOC)</div><div class="tq-val">#e11d48</div></div>
+        <div class="tq-row"><div class="tq-swatch" style="background:#BE95FF"></div><div class="tq-name">--purple (CRM)</div><div class="tq-val">#BE95FF</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Article Series</div>
+      <div class="series-nav">
+        <a class="sn-item"><span class="sn-num">01</span><span class="sn-title">How 9 Libraries Become One System</span></a>
+        <a class="sn-item"><span class="sn-num">06</span><span class="sn-title">Social Distribution Suite</span></a>
+        <a class="sn-item"><span class="sn-num">07</span><span class="sn-title">SEO + AEO</span></a>
+        <a class="sn-item"><span class="sn-num">08</span><span class="sn-title">The CRM Library</span></a>
+        <a class="sn-item current"><span class="sn-num">09</span><span class="sn-title">The Design Library</span></a>
+        <a class="sn-item"><span class="sn-num">10</span><span class="sn-title">The Complete Picture</span></a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- AUTHOR + RELATED -->
+<div class="author-section r">
+  <div class="author-inner">
+    <div>
+      <div class="author-av">T</div>
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Founder, Windfield IO</div>
+      <div class="author-bio">Building the AI-native content operations system for operators who need predictable output. Nine libraries. One brief. One visual grammar. Coherent by architecture, not coincidence.</div>
+      <div class="author-links">
+        <a href="#" class="author-link">Twitter</a>
+        <a href="#" class="author-link">LinkedIn</a>
+        <a href="#" class="author-link">IO Platform</a>
+      </div>
+    </div>
+    <div class="author-divider"></div>
+    <div>
+      <div class="related-label">Continue Reading &mdash; Nine Libraries Article Series</div>
+      <div class="related-grid">
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-a"><div class="rel-thumb-dot" style="background:rgba(36,96,255,.2);border:1px solid rgba(36,96,255,.5);color:var(--blue-lt)">01</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(36,96,255,.5)">Series Overview</div>
+          <div class="rel-title">How 9 Content Libraries Become One Synchronized System</div>
+          <div class="rel-meta">9 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-b"><div class="rel-thumb-dot" style="background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.5);color:#4ade80">08</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(139,92,246,.5)">Library Deep Dive</div>
+          <div class="rel-title">The CRM Library: From Lead Capture to 5-Step Nurture Sequence</div>
+          <div class="rel-meta">10 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-c" style="background:linear-gradient(135deg,#050a05,#081208)"><div class="rel-thumb-dot" style="background:rgba(5,150,105,.2);border:1px solid rgba(5,150,105,.5);color:#34d399">10</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(5,150,105,.5)">Series Capstone</div>
+          <div class="rel-title">The Complete Picture: What Coordinated AI Content Operations Produces</div>
+          <div class="rel-meta">12 min &middot; Next</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#050507;border-top:1px solid rgba(255,255,255,.06);padding:56px 0 32px">
+  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
+    <div style="display:grid;grid-template-columns:2fr repeat(4,1fr);gap:40px;margin-bottom:40px">
+      <div>
+        <div style="font:700 18px/1 var(--sans);color:var(--t1);margin-bottom:12px;letter-spacing:-.02em">Wind<span style="font-style:italic;color:#1db954">field</span></div>
+        <p style="font:300 13px/1.6 var(--sans);color:var(--t3);max-width:280px">AI-native operations for commercial real estate. Intelligence, not information.</p>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Platform</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Home</a>
+          <a href="/about" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">About</a>
+          <a href="/portfolio" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Portfolio</a>
+          <a href="/pricing" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Resources</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/blog" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Blog</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Documentation</a>
+          <a href="/contact" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Article Series</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">06 &mdash; Social Distribution</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">07 &mdash; SEO + AEO</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">08 &mdash; CRM Library</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">09 &mdash; Design Library</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">10 &mdash; Complete Picture</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Privacy Policy</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,.06)">
+      <span style="font:300 12px/1 var(--sans);color:var(--t4)">2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div style="display:flex;gap:16px">
+        <a href="#" style="font:300 12px/1 var(--sans);color:var(--t4);text-decoration:none">Privacy</a>
+        <a href="#" style="font:300 12px/1 var(--sans);color:var(--t4);text-decoration:none">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+    <div class="ff-mcp"><span class="live-dot"></span>MCP Server Active</div>
+  </div>
+</div>
+
+<script>
+/* ━━ Token viewer tabs ━━ */
+function tvTab(id, btn) {
+  document.querySelectorAll('.tvt').forEach(function(t) { t.classList.remove('on'); });
+  document.querySelectorAll('.tv-panel').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('tv-' + id).classList.add('on');
+}
+
+/* ━━ Typography pairing toggle ━━ */
+function toggleTypo(card) {
+  document.querySelectorAll('.te-pair-card').forEach(function(c) { c.classList.remove('on'); });
+  card.classList.add('on');
+}
+
+/* ━━ Pipeline strip ━━ */
+var FEEDS = [
+  {n:'Design',c:'#0891b2',ct:4},{n:'Article',c:'#4589FF',ct:12},
+  {n:'Image',c:'#1db954',ct:4},{n:'Tastemaker',c:'#6b7280',ct:4}
+];
+var pf = document.getElementById('ps-feeds');
+FEEDS.forEach(function(f, i) {
+  var chip = document.createElement('div'); chip.className = 'ps-chip';
+  chip.style.background = f.c + '14'; chip.style.border = '1px solid ' + f.c + '28'; chip.style.color = f.c;
+  var dot = document.createElement('div'); dot.className = 'ps-dot'; dot.style.background = f.c;
+  chip.appendChild(dot);
+  chip.appendChild(document.createTextNode(f.n + ' \u00b7 ' + f.ct));
+  pf.appendChild(chip);
+  if (i < FEEDS.length - 1) {
+    var a = document.createElement('div'); a.className = 'ps-arrow'; a.textContent = '\u00b7';
+    pf.appendChild(a);
+  }
+});
+
+/* ━━ Attribution ━━ */
+var attrOn = false;
+function toggleAttr() {
+  attrOn = !attrOn;
+  document.body.classList.toggle('attr', attrOn);
+  var b = document.getElementById('attr-btn');
+  b.classList.toggle('on', attrOn);
+  b.textContent = attrOn ? 'Hide Sources' : 'Show Library Sources';
+  if (attrOn) {
+    document.querySelectorAll('.src').forEach(function(el) {
+      if (!el.querySelector('.ann-corners')) {
+        var c = document.createElement('div'); c.className = 'ann-corners';
+        c.innerHTML = '<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';
+        el.appendChild(c);
+      }
+    });
+  }
+}
+
+/* ━━ Pipeline toggle ━━ */
+function togglePipe() {
+  var strip = document.getElementById('pstrip');
+  var map = document.getElementById('pipemap');
+  var btn = document.getElementById('pipe-btn');
+  if (map.classList.contains('open')) {
+    map.classList.remove('open'); strip.classList.remove('open'); btn.classList.remove('on');
+  } else if (strip.classList.contains('open')) {
+    strip.classList.remove('open'); map.classList.add('open'); btn.classList.add('on');
+  } else {
+    strip.classList.add('open'); btn.classList.add('on');
+  }
+}
+
+/* ━━ Social tabs ━━ */
+function tab(id, btn) {
+  document.querySelectorAll('.sb-tab').forEach(function(t) { t.classList.remove('on'); });
+  document.querySelectorAll('.sb-platform').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('tab-' + id).classList.add('on');
+}
+
+/* ━━ FAQ ━━ */
+function toggleFaq(qEl) {
+  var item = qEl.parentElement;
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i) {
+    i.classList.remove('open');
+    i.querySelector('.faq-toggle').textContent = '+';
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    qEl.querySelector('.faq-toggle').textContent = '\u00d7';
+  }
+}
+
+/* ━━ Progress ━━ */
+window.addEventListener('scroll', function() {
+  var d = document.documentElement;
+  document.getElementById('prog').style.width = ((window.scrollY / (d.scrollHeight - d.clientHeight)) * 100) + '%';
+}, { passive: true });
+
+/* ━━ Scroll reveal ━━ */
+var ro = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.r').forEach(function(el) { ro.observe(el); });
+
+/* ━━ ToC active ━━ */
+var sections = ['s-why','s-tokens','s-typo','s-consumption','s-before-after','s-social','s-seo','s-crm','s-faq'];
+var tocItems = document.querySelectorAll('.toc-item');
+var tocObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      var idx = sections.indexOf(e.target.id);
+      if (idx > -1) {
+        tocItems.forEach(function(t) { t.classList.remove('active'); });
+        if (tocItems[idx]) tocItems[idx].classList.add('active');
+      }
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(function(s) { var el = document.getElementById(s); if (el) tocObserver.observe(el); });
+
+function scrollToSection(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>

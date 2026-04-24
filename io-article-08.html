@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The CRM Library: From Lead Capture to 5-Step Nurture Sequence — Windfield IO</title>
+<meta name="description" content="How the IO CRM Library generates lead capture forms, subject lines, and a complete 5-email nurture sequence from one context brief — with open rate benchmarks and sequence architecture.">
+<meta name="keywords" content="ai email nurture sequence, crm content library, ai lead capture, email subject line optimization, 5 step nurture sequence, io platform crm library">
+<meta property="og:title" content="The CRM Library: From Lead Capture to 5-Step Nurture Sequence">
+<meta property="og:description" content="How the IO CRM Library generates a complete lead capture + 5-email nurture sequence from one context brief — with each email written for a specific conversion objective at the right point in the buyer journey.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-05-03">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"The CRM Library: From Lead Capture to 5-Step Nurture Sequence","description":"How the IO CRM Library generates lead capture forms and a complete 5-email nurture sequence from one context brief — each email written for a specific conversion objective at the right point in the buyer journey, with open rate and CTR benchmarks.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"Windfield IO"}},"publisher":{"@type":"Organization","name":"Windfield IO"},"datePublished":"2026-05-03","articleSection":"Library Deep Dive","keywords":["ai email nurture sequence","crm library","lead capture ai","email subject line optimization","5 step nurture","content to crm pipeline"],"wordCount":3200,"timeRequired":"PT10M","isPartOf":{"@type":"CreativeWorkSeries","name":"Nine Libraries Article Series","position":8}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What does the IO CRM Library generate from a context brief?","acceptedAnswer":{"@type":"Answer","text":"The IO CRM Library generates three outputs from the context brief: a lead capture module (form copy, CTA text, value proposition, and social proof line), a subject line set (5 tested subject line variants per email with predicted open rates), and a complete 5-email nurture sequence. Each email in the sequence has a specific conversion objective keyed to the buyer journey stage: Day 0 delivers the promised asset and establishes authority, Day 3 deepens the core argument, Day 7 provides an audit or diagnostic tool, Day 10 offers a live demonstration or case study, and Day 16 makes a direct offer or CTA to the next stage."}},
+{"@type":"Question","name":"How does the CRM Library personalize nurture emails without CRM data?","acceptedAnswer":{"@type":"Answer","text":"The CRM Library personalizes at the segment level rather than the individual level. The context brief's Audience Tier field (practitioner, manager, or executive) determines the language register, objection type, and conversion offer for each email. A practitioner-tier nurture sequence uses technical specificity and implementation detail; an executive-tier sequence uses business outcomes and strategic framing. This segment-level personalization produces 28-41% higher open rates than generic sequences without requiring individual CRM data, because segment-appropriate language is more relevant than name-merge personalization."}},
+{"@type":"Question","name":"What is the 5-step nurture sequence day structure?","acceptedAnswer":{"@type":"Answer","text":"Day 0: Asset delivery + authority establishment. The lead receives what was promised plus one piece of additional context that positions the brand as the expert source. Day 3: Core argument deepening. One structural claim from the content brief, supported with specific evidence, written at the reader's expertise level. Day 7: Diagnostic or audit tool. Actionable framework the reader can apply to their own situation immediately, creating hands-on engagement before Day 10. Day 10: Case study or live demonstration. Specific result achieved by someone in the reader's audience tier, with the mechanism explained. Day 16: Direct conversion offer. Specific next step (trial, demo, consultation) with explicit time-bounded reason to act."}},
+{"@type":"Question","name":"How does the CRM Library choose subject lines?","acceptedAnswer":{"@type":"Answer","text":"The CRM Library generates 5 subject line variants per email using different structural patterns: curiosity gap (withholding the answer), direct benefit (stating the outcome explicitly), social proof (citing a result or case), numbered list (quantifying the value), and challenge/question (posing the reader's own problem back at them). Each variant is scored for predicted open rate based on the audience tier and send timing. The highest-scoring variant is flagged as the primary recommendation, with the second-highest as the A/B test variant. Across 340 sequence runs, CRM Library subject lines average 31-44% open rates versus 18-22% for generic AI-written sequences."}},
+{"@type":"Question","name":"How does the CRM Library coordinate with other IO libraries?","acceptedAnswer":{"@type":"Answer","text":"The CRM Library reads the same context brief as every other library and runs in parallel. It references the Article Library's output by title and key argument (not content) for the Day 3 email, which links to the published article. It references the SEO Library's keyword architecture for the Day 7 audit tool framing. It receives the Social Library's subject line patterns as an input to ensure nurture email openers are consistent with the social post hooks. All coordination happens through the context brief and episode metadata, not through direct library-to-library communication."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Windfield IO","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Content Operations","item":"https://intelligentoperations.ai/content-ops"},
+{"@type":"ListItem","position":3,"name":"Nine Libraries Series","item":"https://intelligentoperations.ai/content-ops/series"},
+{"@type":"ListItem","position":4,"name":"The CRM Library","item":"https://intelligentoperations.ai/content-ops/crm-library-nurture-sequence"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#09090b;--deep:#111113;--dark:#141417;--mid:#1a1a1e;--lift:#1f1f24;
+  --cream:#fafafa;--cream2:#a1a1aa;--t1:#fafafa;--t2:#a1a1aa;--t3:#71717a;--t4:#52525b;
+  --blue:#4589FF;--blue-lt:#6fa8ff;--green:#1db954;--amber:#e8a000;--rose:#e11d48;
+  /* Article 08 accent: purple/violet — CRM and conversion */
+  --acc:#BE95FF;--acc-lt:#42BE65;--acc-dim:rgba(139,92,246,.13);--acc-border:rgba(139,92,246,.24);
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);--border3:rgba(255,255,255,.16);
+  --serif:'Playfair Display',Georgia,serif;--sans:'Inter',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.25,.46,.45,.94);--spring:cubic-bezier(.34,1.56,.64,1);
+  --c-art:#4589FF;--c-img:#1db954;--c-vid:#FF832B;--c-soc:#E85D4A;
+  --c-des:#0891b2;--c-seo:#d97706;--c-crm:#BE95FF;--c-con:#059669;--c-tas:#6b7280;
+  /* Day colors in sequence */
+  --d0:#34d399;--d3:#60a5fa;--d7:#f59e0b;--d10:#4ade80;--d16:#fb7185;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--void);color:var(--t1);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+/* ━━ ATTRIBUTION ━━ */
+.src{position:relative}
+.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}
+.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}
+.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-art);outline-offset:3px}
+body.attr .img{outline:1.5px solid var(--c-img);outline-offset:3px}
+body.attr .des{outline:1.5px solid var(--c-des);outline-offset:3px}
+body.attr .seo{outline:1.5px solid var(--c-seo);outline-offset:3px}
+body.attr .crm{outline:1.5px solid var(--c-crm);outline-offset:3px}
+body.attr .soc{outline:1.5px solid var(--c-soc);outline-offset:3px}
+body.attr .tas{outline:1.5px solid var(--c-tas);outline-offset:3px}
+.art .src-tag{background:var(--c-art);color:#fff}.img .src-tag{background:var(--c-img);color:#fff}
+.des .src-tag{background:var(--c-des);color:#fff}.seo .src-tag{background:var(--c-seo);color:#fff}
+.crm .src-tag{background:var(--c-crm);color:#fff}.soc .src-tag{background:var(--c-soc);color:#fff}
+.tas .src-tag{background:var(--c-tas);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-art)}body.attr .img .ann-c{border-color:var(--c-img)}
+body.attr .seo .ann-c{border-color:var(--c-seo)}body.attr .crm .ann-c{border-color:var(--c-crm)}
+body.attr .soc .ann-c{border-color:var(--c-soc)}body.attr .tas .ann-c{border-color:var(--c-tas)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--acc-lt);z-index:9999;width:0;transition:width .1s linear}
+
+/* ━━ NAV ━━ */
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center}
+.nav-logo{font-family:var(--sans);font-size:18px;font-weight:700;color:var(--t1);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}
+.nav-logo span{font-style:italic;color:#1db954}
+.nav-rule{width:1px;height:16px;background:var(--border2);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--ease)}
+.nbtn-ghost{background:none;border:1px solid var(--border2);color:var(--t3)}
+.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--t1);color:var(--void);border-color:var(--t1)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:#1db954;display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ━━ PIPELINE STRIP + MAP ━━ */
+#pstrip{background:var(--deep);border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .35s var(--ease)}
+#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}
+.ps-chip{padding:4px 10px;border-radius:4px;font:600 10px/1 var(--sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}
+.ps-arrow{font-size:10px;color:var(--t4);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--sans);color:#1db954;letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+#pipemap{background:var(--dark);border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .5s var(--ease)}
+#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.pm-title span{font-weight:300;color:var(--t3)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.5),transparent);animation:pms8 2s ease-in-out infinite;margin:10px 0}
+@keyframes pms8{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--sans);color:var(--t1)}
+.pm-node-sub{font:300 8px/1 var(--mono);color:var(--t3);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--t4);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:6px;text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--border)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}
+.pm-lib-name{font:700 7px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
+.pm-lib-count{font:300 8px/1 var(--mono);color:var(--t4);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--mono);color:var(--t3)}
+.pm-meta-n{font:700 11px/1 var(--mono);color:var(--t1)}
+
+/* ━━ HERO ━━ */
+.hero{background:var(--void);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(139,92,246,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(36,96,255,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:1024px){.nav-links-wrap{display:none!important}}@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t3)}
+.eye-divider{width:20px;height:1px;background:var(--t4)}
+.eye-series{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc-lt);opacity:.8}
+h1{font-family:var(--serif);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--t1);margin-bottom:24px}
+h1 em{font-style:italic;color:var(--acc-lt)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--t2);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--t1)}
+.h-role{font-size:11px;color:var(--t3)}
+.h-sep{width:1px;height:28px;background:var(--border2);margin:0 18px}
+.h-date{font-size:13px;color:var(--t3)}
+.h-read{font-size:13px;color:var(--t3);margin-left:14px}
+
+/* ━━ HERO VIZ — Article 08: 5-step email journey timeline ━━ */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#0b0614 0%,#10091e 55%,#090512 100%);
+  border-radius:16px 16px 0 0;border:1px solid rgba(139,92,246,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(139,92,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,.1) 0%,transparent 65%);animation:gp8 4s ease-in-out infinite}
+@keyframes gp8{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,.35) 30%,rgba(167,139,250,.6) 50%,rgba(139,92,246,.35) 70%,transparent);
+  animation:hvs8 5s ease-in-out infinite;opacity:.4}
+@keyframes hvs8{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+/* Timeline spine */
+.hv-spine{position:absolute;top:12%;bottom:12%;left:50%;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(139,92,246,.25) 15%,rgba(139,92,246,.25) 85%,transparent)}
+/* Email nodes along spine */
+.hv-email-node{position:absolute;left:50%;transform:translateX(-50%);z-index:10;
+  display:flex;align-items:center;width:300px;cursor:pointer;transition:opacity .2s}
+.hv-email-node.left{flex-direction:row-reverse;transform:translateX(-100%)}
+.hv-email-node.right{flex-direction:row;transform:translateX(0%)}
+.hv-email-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;border:2px solid;background:rgba(8,8,10,.8);transition:transform .2s var(--spring)}
+.hv-email-node:hover .hv-email-dot{transform:scale(1.4)}
+.hv-email-connector{flex-shrink:0;height:1px;width:20px}
+.hv-email-card{flex:1;padding:8px 10px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid;
+  transition:background .2s,border-color .2s}
+.hv-email-node:hover .hv-email-card{background:rgba(255,255,255,.07)}
+.hv-email-day{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.hv-email-subj{font:600 10px/1.3 var(--sans);color:var(--t2);margin-bottom:3px}
+.hv-email-meta{display:flex;align-items:center;gap:8px}
+.hv-email-stat{font:700 9px/1 var(--mono);letter-spacing:.05em}
+.hv-email-type{font:300 8px/1 var(--mono);color:var(--t4);letter-spacing:.05em}
+/* Open rate sparklines */
+.hv-open-bars{position:absolute;bottom:10%;left:8%;right:8%;display:flex;align-items:flex-end;gap:6px;height:60px}
+.hv-ob-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.hv-ob-bar{width:100%;border-radius:2px 2px 0 0;transition:height .5s var(--ease)}
+.hv-ob-label{font:700 7px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.hv-ob-val{font:700 9px/1 var(--mono)}
+.hv-badge8{position:absolute;top:14px;right:14px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(167,139,250,.22)}
+.hv-status8{position:absolute;top:14px;left:14px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(167,139,250,.25)}
+
+/* ━━ LAYOUT ━━ */
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}
+.sidebar{position:sticky;top:72px}
+
+/* ━━ DIRECT ANSWER BOX ━━ */
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;
+  background:linear-gradient(135deg,var(--acc-dim),rgba(139,92,246,.02));
+  border:1px solid var(--acc-border);border-left:3px solid var(--acc-lt);border-radius:10px}
+.dab-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc-lt);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dab-label::before{content:'\25B8'}
+.dab-q{font:600 15px/1.4 var(--sans);color:var(--t1);margin-bottom:10px}
+.dab-a{font:300 14px/1.72 var(--sans);color:var(--cream2)}
+.dab-a strong{font-weight:600;color:var(--t1)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}
+.dab-source{font:300 10px/1 var(--mono);color:var(--t4)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--acc-dim);color:rgba(139,92,246,.6);border:1px solid var(--acc-border)}
+
+/* ━━ TOC ━━ */
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--dark);border:1px solid var(--border2);border-radius:10px}
+.toc-inline-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--t3);cursor:pointer;text-decoration:none;transition:color .15s}
+.toc-inline-item:last-child{border-bottom:none}
+.toc-inline-item:hover{color:var(--t1)}
+.toc-n{font:700 9px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0;padding-top:2px}
+
+/* ━━ TYPOGRAPHY ━━ */
+.body p{font-size:17.5px;line-height:1.82;color:var(--cream2);font-weight:300;margin-bottom:28px}
+.body p strong{font-weight:600;color:var(--t1)}
+.body p a{color:var(--acc-lt);text-decoration:none;border-bottom:1px solid rgba(167,139,250,.3);transition:border-color .15s}
+.body p a:hover{border-bottom-color:var(--acc-lt)}
+.body p sup a{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--acc-dim);border:1px solid var(--acc-border);font:700 9px/1 var(--mono);color:var(--acc-lt);vertical-align:super;margin-left:2px;text-decoration:none;transition:all .15s}
+.body p sup a:hover{background:var(--acc);color:#fff}
+h2.sh{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--t1);margin:60px 0 20px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--t1)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--serif);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--acc-lt)}
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--dark);border-radius:10px;border:1px solid var(--border);border-left:3px solid var(--acc-lt);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--serif);font-size:150px;font-weight:700;color:var(--acc-dim);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--t1);position:relative;z-index:1;margin-bottom:14px}
+.pq-text em{font-style:italic;color:var(--acc-lt)}
+.pq-attr{font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--t3);position:relative;z-index:1}
+
+/* ━━ 5-EMAIL SEQUENCE INTERACTIVE VIEWER ━━ */
+.sequence-viewer{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--acc-border);background:var(--dark)}
+.sv-header{padding:14px 22px;border-bottom:1px solid var(--acc-border);display:flex;align-items:center;gap:12px;background:var(--acc-dim)}
+.sv-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.sv-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+/* Day selector strip */
+.sv-days{display:flex;background:var(--mid);border-bottom:1px solid var(--border);overflow-x:auto}
+.sv-days::-webkit-scrollbar{display:none}
+.sv-day-btn{padding:0;border:none;background:none;cursor:pointer;flex:1;min-width:80px;display:flex;flex-direction:column;align-items:center;padding:12px 8px;border-bottom:3px solid transparent;transition:all .15s;position:relative}
+.sv-day-btn.on .sv-day-dot{transform:scale(1.2);box-shadow:0 0 12px currentColor}
+.sv-day-dot{width:12px;height:12px;border-radius:50%;margin-bottom:5px;transition:all .15s;border:2px solid transparent}
+.sv-day-label{font:700 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin-bottom:3px}
+.sv-day-btn.on .sv-day-label{color:var(--t1)}
+.sv-day-obj{font:300 8px/1.3 var(--sans);color:var(--t4);text-align:center;max-width:80px}
+.sv-day-btn.on .sv-day-obj{color:var(--t2)}
+/* Email panel */
+.sv-panel{display:none;padding:24px}
+.sv-panel.on{display:block}
+/* Email client mockup */
+.email-mockup{max-width:560px;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--dark)}
+.em-toolbar{padding:8px 14px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.em-dot{width:10px;height:10px;border-radius:50%}
+.em-toolbar-label{font:300 9px/1 var(--mono);color:var(--t4);margin-left:8px}
+.em-header{padding:16px 20px;border-bottom:1px solid var(--border)}
+.em-from{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.em-from-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:13px;color:#fff;font-weight:700}
+.em-from-name{font:600 13px/1 var(--sans);color:var(--t1)}
+.em-from-addr{font:300 11px/1 var(--mono);color:var(--t4);margin-top:2px}
+.em-subject{font:600 16px/1.3 var(--sans);color:var(--t1);margin-bottom:4px}
+.em-meta{font:300 10px/1 var(--mono);color:var(--t4)}
+.em-body{padding:20px;font:300 14px/1.75 var(--sans);color:var(--t2);white-space:pre-line}
+.em-body strong{font-weight:600;color:var(--t1)}
+.em-body a{color:var(--acc-lt);text-decoration:none}
+.em-cta{margin:16px 20px 20px;display:flex;justify-content:flex-start}
+.em-cta-btn{padding:10px 22px;border-radius:6px;font:700 12px/1 var(--sans);color:#fff;border:none;cursor:pointer;letter-spacing:.04em}
+/* Subject line variants panel */
+.sv-subjects{margin-top:16px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.sv-subj-header{padding:9px 14px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.sv-subj-label{font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);flex:1}
+.sv-subj-badge{padding:2px 7px;border-radius:3px;font:700 7px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.sv-subj-list{display:flex;flex-direction:column;gap:0}
+.sv-subj-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);transition:background .15s;cursor:default}
+.sv-subj-row:last-child{border-bottom:none}
+.sv-subj-row:hover{background:rgba(255,255,255,.02)}
+.sv-subj-row.primary{background:var(--acc-dim)}
+.sv-subj-type{font:700 7px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--t4);width:72px;flex-shrink:0}
+.sv-subj-text{font:300 12px/1 var(--sans);color:var(--t2);flex:1}
+.sv-subj-row.primary .sv-subj-text{color:var(--t1)}
+.sv-subj-rate{font:700 10px/1 var(--mono);width:40px;text-align:right;flex-shrink:0}
+.sv-subj-rec{font:700 7px/1 var(--mono);letter-spacing:.08em;padding:1px 5px;border-radius:2px;background:rgba(29,185,84,.1);color:#4ade80;border:1px solid rgba(29,185,84,.2)}
+
+/* ━━ CRM ARCHITECTURE ━━ */
+.crm-arch{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.ca-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.ca-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.ca-body{padding:24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:640px){.ca-body{grid-template-columns:1fr}}
+.ca-output{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:all .2s}
+.ca-output:hover,.ca-output.on{border-color:var(--acc-border);background:var(--acc-dim)}
+.ca-output-icon{font-size:20px;margin-bottom:8px;display:block}
+.ca-output-title{font:700 12px/1 var(--sans);color:var(--t1);margin-bottom:5px}
+.ca-output-desc{font:300 11px/1.55 var(--sans);color:var(--t3)}
+.ca-output-prompt{font:700 8px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--acc-lt);margin-top:7px}
+/* Detail panel */
+.ca-detail{margin-top:16px;padding:16px 20px;border-radius:8px;background:var(--acc-dim);border:1px solid var(--acc-border);display:none}
+.ca-detail.show{display:block}
+.ca-detail-label{font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(139,92,246,.7);margin-bottom:10px}
+.ca-detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:640px){.ca-detail-grid{grid-template-columns:1fr 1fr}}
+.ca-cell{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.ca-cell-label{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.ca-cell-val{font:300 12px/1.55 var(--sans);color:var(--t2)}
+.ca-cell-val strong{font-weight:600;color:var(--t1)}
+
+/* ━━ PERSONALIZATION MATRIX ━━ */
+.persona-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.pb-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.pb-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.pb-scroll{overflow-x:auto}
+.pb-scroll::-webkit-scrollbar{height:2px}
+.pb-scroll::-webkit-scrollbar-thumb{background:var(--lift)}
+.pb-table{width:100%;border-collapse:collapse;min-width:600px}
+.pb-table th{padding:9px 14px;font:700 7.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);text-align:left;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap}
+.pb-table th:first-child{padding-left:20px}
+.pb-table td{padding:12px 14px;border-bottom:1px solid var(--border);font:300 12px/1.5 var(--sans);color:var(--t2);vertical-align:top}
+.pb-table td:first-child{padding-left:20px;font-weight:600;color:var(--t1)}
+.pb-table tr:last-child td{border-bottom:none}
+.pb-table tr:hover td{background:rgba(255,255,255,.015)}
+.tier-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:3px;font:700 8px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+
+/* ━━ BENCHMARK TABLE ━━ */
+.bench-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.bb-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.bb-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.bb-grid{padding:20px 24px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px}
+@media(max-width:700px){.bb-grid{grid-template-columns:1fr 1fr}}
+.bb-card{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
+.bb-day{font:700 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin-bottom:8px}
+.bb-open{font:700 28px/1 var(--mono);margin-bottom:4px}
+.bb-ctr{font:700 14px/1 var(--mono);margin-bottom:8px}
+.bb-ctr-label{font:300 9px/1 var(--mono);color:var(--t4)}
+.bb-bar-wrap{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-top:8px}
+.bb-bar{height:100%;border-radius:2px}
+.bb-generic{font:300 9px/1 var(--mono);color:var(--t4);margin-top:5px}
+
+/* ━━ SOCIAL / SEO / CRM / FAQ ━━ */
+.social-block{margin:52px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.sb-hd{padding:11px 18px;background:var(--dark);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sb-hd-label{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.sb-hd-src{font:normal 9px/1 var(--mono);color:var(--t4)}
+.sb-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--border)}
+.sb-tab{padding:10px 20px;font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--sans)}
+.sb-tab.on{color:var(--t1);border-bottom-color:var(--acc-lt)}
+.sb-platform{display:none;padding:20px 22px;background:var(--mid)}
+.sb-platform.on{display:block}
+.tw-card{background:#fff;border:1px solid #e1e8ed;border-radius:14px;padding:16px;max-width:500px}
+.tw-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tw-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#BE95FF,#4589FF);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:15px;color:#fff;font-weight:700}
+.tw-name{font:700 14px/1 'Helvetica Neue',sans-serif;color:#14171a}
+.tw-handle{font:400 13px/1 'Helvetica Neue',sans-serif;color:#657786}
+.tw-body{font:400 14px/1.6 'Helvetica Neue',sans-serif;color:#14171a;margin-bottom:12px}
+.tw-meta{font:400 12px/1 'Helvetica Neue',sans-serif;color:#657786}
+.li-card{background:#fff;border:1px solid #dce6f1;border-radius:10px;padding:16px;max-width:500px;font-family:'Helvetica Neue',Arial,sans-serif}
+.li-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.li-av{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#BE95FF,#4589FF);display:flex;align-items:center;justify-content:center;font:700 16px var(--serif);color:#fff}
+.li-name{font:600 14px/1 'Helvetica Neue',sans-serif;color:#000000e6}
+.li-sub{font:400 12px/1 'Helvetica Neue',sans-serif;color:#00000099}
+.li-body{font:400 14px/1.65 'Helvetica Neue',sans-serif;color:#000000cc}
+.ig-card{max-width:400px}
+.ig-handle{font:700 13px/1 var(--sans);color:var(--t1);margin-bottom:10px}
+.ig-img{height:240px;border-radius:6px;margin-bottom:12px;background:linear-gradient(135deg,#0b0614,#10091e);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ig-img::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(139,92,246,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.06) 1px,transparent 1px);background-size:22px 22px}
+.ig-img-text{position:relative;z-index:2;font-family:var(--serif);font-size:20px;font-style:italic;color:rgba(255,255,255,.8);text-align:center;max-width:260px;line-height:1.35}
+.ig-cap{font-size:13px;line-height:1.65;color:var(--t2)}
+.ig-hash{font-size:12px;color:var(--acc-lt);margin-top:8px}
+.seo-block{margin:48px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(217,119,6,.2);background:linear-gradient(135deg,rgba(217,119,6,.04),transparent)}
+.seo-hd{padding:11px 18px;border-bottom:1px solid rgba(217,119,6,.15);display:flex;align-items:center;gap:10px}
+.seo-tag{padding:3px 9px;border-radius:4px;font:700 9px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;background:rgba(217,119,6,.12);color:var(--amber);border:1px solid rgba(217,119,6,.2)}
+.seo-body{padding:18px 22px}
+.serp{background:#fff;border:1px solid #dfe1e5;border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.serp-url{font:normal 12px/1 'Roboto',Arial,sans-serif;color:#3c4043;margin-bottom:4px}
+.serp-title{font:400 18px/1.3 Arial,sans-serif;color:#1a0dab;margin-bottom:5px}
+.serp-desc{font:400 13px/1.55 Arial,sans-serif;color:#4d5156}
+.aeo-panel{background:linear-gradient(135deg,rgba(217,119,6,.04),transparent);border:1px solid rgba(217,119,6,.12);border-radius:8px;padding:16px 18px;margin-top:16px}
+.aeo-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(217,119,6,.6);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.aeo-label::before{content:'\25C8';font-size:9px}
+.aeo-q{font:600 13px/1.4 var(--sans);color:var(--t1);margin-bottom:6px}
+.aeo-a{font:300 12px/1.65 var(--sans);color:var(--t2)}
+.seo-kws{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.seo-kw{padding:4px 11px;border-radius:20px;font:500 11px/1 var(--sans);background:rgba(217,119,6,.08);color:#92600a;border:1px solid rgba(217,119,6,.15)}
+.crm-section{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--acc-border);background:linear-gradient(135deg,var(--dark) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-section::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}
+@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(139,92,246,.6);margin-bottom:10px}
+.crm-headline{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--t1);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--t3);line-height:1.65}
+.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:8px;font:300 14px var(--sans);color:var(--t1);outline:none;transition:border-color .15s}
+.crm-inp:focus{border-color:var(--acc-border)}
+.crm-inp::placeholder{color:var(--t4)}
+.crm-btn{padding:12px;background:var(--acc);border:none;border-radius:8px;font:700 13px var(--sans);color:#fff;cursor:pointer;transition:opacity .15s}
+.crm-btn:hover{opacity:.88}
+.crm-note{font-size:10px;color:var(--t4);text-align:center}
+.crm-seq-strip{padding:0 44px 28px;border-top:1px solid var(--border);position:relative;z-index:1}
+.crm-seq-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin:18px 0 12px}
+.crm-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:700px){.crm-steps{grid-template-columns:1fr 1fr}}
+.crm-step{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.crm-step-d{font:700 9px/1 var(--mono);color:rgba(139,92,246,.6);margin-bottom:5px}
+.crm-step-t{font:400 11px/1.4 var(--sans);color:var(--t2)}
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border2)}
+.faq-head-title{font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--t1)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.faq-item{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;transition:border-color .15s}
+.faq-item.open{border-color:var(--border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--sans);color:var(--t2);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--t1)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--acc-dim);border-color:var(--acc-border);color:var(--acc-lt)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--ease),padding .2s}
+.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--sans);color:var(--cream2)}
+.faq-a-inner strong{font-weight:600;color:var(--t1)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--mono);color:var(--t4)}
+.faq-schema-note::before{content:'\25C8';color:rgba(217,119,6,.4);font-size:8px}
+.references{margin-top:52px;padding-top:28px;border-top:1px solid var(--border)}
+.ref-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ref-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.ref-item{display:flex;gap:10px;margin-bottom:12px;font-size:12px;color:var(--t3);line-height:1.65}
+.ref-num{width:22px;height:22px;border-radius:50%;flex-shrink:0;background:var(--acc-dim);border:1px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 9px/1 var(--mono);color:var(--acc-lt);margin-top:1px}
+
+/* ━━ SIDEBAR ━━ */
+.sb-sec{margin-bottom:36px}
+.sb-sec-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}
+.toc-item:hover,.toc-item.active{color:var(--t1)}
+.toc-item.active{color:var(--acc-lt)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}
+.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:12px}
+.stat-n{font:700 22px/1 var(--mono);color:var(--t1);margin-bottom:3px}
+.stat-l{font-size:10px;color:var(--t3);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}
+.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--dark);border:1px solid var(--border);border-radius:7px}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lib-name{font:500 12px/1 var(--sans);color:var(--t1);flex:1}
+.lib-count{font:normal 10px/1 var(--mono);color:var(--t4)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--dark);border:1px solid var(--border);border-radius:7px;text-decoration:none;transition:all .15s;cursor:pointer}
+.sn-item:hover{border-color:var(--border2)}
+.sn-item.current{border-color:var(--acc-border);background:var(--acc-dim)}
+.sn-num{font:700 10px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0}
+.sn-item.current .sn-num{color:var(--acc-lt)}
+.sn-title{font:400 11px/1.35 var(--sans);color:var(--t3);flex:1}
+.sn-item.current .sn-title{color:var(--t1)}
+/* Day quick-list */
+.day-list{display:flex;flex-direction:column;gap:5px}
+.day-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:5px;border:1px solid var(--border);background:rgba(255,255,255,.02);cursor:pointer;transition:all .15s}
+.day-row:hover{border-color:var(--border2)}
+.day-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.day-label{font:700 9px/1 var(--mono);letter-spacing:.06em;color:var(--t4);width:36px;flex-shrink:0}
+.day-obj{font:300 10px/1.3 var(--sans);color:var(--t3);flex:1}
+.day-rate{font:700 9px/1 var(--mono)}
+
+/* ━━ AUTHOR + FOOTER ━━ */
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--border)}
+.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}
+@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--serif);font-size:24px;color:var(--t1);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--sans);color:var(--acc-lt);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--t3);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--t3);text-decoration:none;transition:all .15s}
+.author-link:hover{color:var(--t1);border-color:var(--border3)}
+.author-divider{background:var(--border)}
+.related-label{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}
+.rel-thumb{height:100px;border-radius:8px;margin-bottom:10px;overflow:hidden;position:relative}
+.rel-thumb-bg{width:100%;height:100%;position:relative}
+.rt-a{background:linear-gradient(135deg,#07071a,#0d1030)}.rt-b{background:linear-gradient(135deg,#0c0900,#140e00)}.rt-c{background:linear-gradient(135deg,#06100a,#051208)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--mono)}
+.rel-series-tag{font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rel-title{font:500 13px/1.45 var(--sans);color:var(--t2);margin-bottom:4px;transition:color .15s}
+.rel-card:hover .rel-title{color:var(--t1)}
+.rel-meta{font:300 11px/1 var(--sans);color:var(--t4)}
+.footer-menu{background:var(--deep);border-top:1px solid var(--border);padding:52px 32px 36px}
+.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--serif);font-size:20px;color:var(--t1);margin-bottom:8px}
+.fm-logo span{font-style:italic;color:var(--blue-lt)}
+.fm-tagline{font-size:13px;color:var(--t3);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(36,96,255,.08);border:1px solid rgba(36,96,255,.15);color:rgba(36,96,255,.6)}
+.fm-col-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-col a{font-size:13px;color:var(--t3);text-decoration:none;transition:color .15s}
+.fm-col a:hover{color:var(--t1)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}
+.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}
+.fm-series-item:hover{opacity:.75}
+.fm-s-num{font:700 9px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0}
+.fm-s-title{font:300 11px/1.3 var(--sans);color:var(--t3);flex:1}
+.final-footer{background:var(--void);border-top:1px solid var(--border);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--mono);color:var(--t4);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ff-sep{width:1px;height:10px;background:var(--t4)}
+.ff-series{color:rgba(36,96,255,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--blue-lt);padding:5px 14px;border:1px solid rgba(36,96,255,.2);border-radius:20px;background:rgba(36,96,255,.06)}
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.r.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header class="navbar" style="position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)">
+  <div class="nav-w">
+    <a href="/" class="nav-logo">Wind<span>field</span></a>
+    <div style="display:flex;align-items:center;gap:8px;margin-left:40px" class="nav-links-wrap">
+      <a href="/" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Home</a>
+      <a href="/about" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">About</a>
+      <a href="/portfolio" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Portfolio</a>
+      <a href="/product" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Product</a>
+      <a href="/pricing" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Pricing</a>
+      <a href="/blog" style="font-size:13px;color:var(--t1);padding:6px 12px;border-radius:6px;text-decoration:none;font-weight:500">Blog</a>
+      <a href="/contact" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Contact</a>
+    </div>
+    <div class="nav-btns" style="margin-left:auto">
+      <button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button>
+      <a href="#" style="padding:7px 18px;border-radius:8px;font:600 13px/1 var(--sans);border:none;background:var(--green);color:#05150a;text-decoration:none">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<div id="pstrip">
+  <div class="ps-inner">
+    <div class="ps-label">Pipeline &middot; A08</div>
+    <div class="ps-feeds" id="ps-feeds"></div>
+    <div class="ps-arrow">&rarr;</div>
+    <div class="ps-result"><span class="live-dot"></span>CRM Package &middot; 5 Emails &middot; ~30k Tokens &middot; 1m 44s</div>
+  </div>
+</div>
+
+<div id="pipemap">
+  <div class="pm-inner">
+    <div class="pm-title">ORCHESTRATION MAP <span>&mdash; Article 08 &middot; The CRM Library: From Lead Capture to 5-Step Nurture Sequence</span></div>
+    <div class="pm-scan"></div>
+    <div class="pm-flow">
+      <div class="pm-node" style="border-color:var(--acc-border)">
+        <div class="pm-node-label">Input</div>
+        <div class="pm-node-name" style="color:var(--acc-lt)">Context Brief</div>
+        <div class="pm-node-sub">Audience + Offer</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-libs">
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-crm)"></div><div class="pm-lib-name" style="color:var(--c-crm)">CRM</div><div class="pm-lib-count">5</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-art)"></div><div class="pm-lib-name" style="color:var(--c-art)">ART</div><div class="pm-lib-count">12</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-seo)"></div><div class="pm-lib-name" style="color:var(--c-seo)">SEO</div><div class="pm-lib-count">6</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-tas)"></div><div class="pm-lib-name" style="color:var(--c-tas)">TAS</div><div class="pm-lib-count">4</div></div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(139,92,246,.3)">
+        <div class="pm-node-label">Phase 3</div>
+        <div class="pm-node-name" style="color:#4ade80">Orchestrator</div>
+        <div class="pm-node-sub">4 episodes in</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.3)">
+        <div class="pm-node-label">Output</div>
+        <div class="pm-node-name" style="color:#4ade80">Full CRM Suite</div>
+        <div class="pm-node-sub">5 emails ready</div>
+      </div>
+    </div>
+    <div class="pm-meta-row">
+      <div class="pm-meta-item"><span class="pm-meta-n">4</span> Libraries</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">27</span> Prompts total</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">~30k</span> Tokens</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">1m 44s</span> Runtime</div>
+      <div class="pm-meta-item" style="margin-left:auto"><span style="color:#1db954;font:700 9px/1 var(--mono)">&bull; ACTIVE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero src art" id="hero">
+  <div class="src-tag">Article Library &mdash; Hero<span class="conf-badge">CONF 0.97</span></div>
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow">
+        <span class="eye-tag">Library Deep Dive</span>
+        <span class="eye-divider"></span>
+        <span class="eye-series">IO Content Ops Series &middot; Article 08</span>
+      </div>
+      <h1>The <em>CRM Library:</em> From Lead Capture to 5-Step Nurture Sequence</h1>
+      <p class="hero-deck">Most content pipelines stop at publication. IO&rsquo;s doesn&rsquo;t. The CRM Library generates a lead capture module and five complete nurture emails &mdash; each written for a specific conversion objective at the right buyer journey stage &mdash; from the same context brief that generated the article.</p>
+      <div class="hero-meta">
+        <div class="h-author"><div class="h-av">T</div><div><div class="h-name">Tommy Saunders</div><div class="h-role">Founder, Windfield IO</div></div></div>
+        <div class="h-sep"></div>
+        <span class="h-date">May 3, 2026</span>
+        <span class="h-read">&middot; 10 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--acc-dim);border:1px solid var(--acc-border)">
+        <span style="font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc-lt)">IO-CB-2026-001</span>
+        <span style="width:1px;height:10px;background:var(--acc-border)"></span>
+        <span style="font:300 8px/1 var(--mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; A08 &middot; MAY 2026</span>
+      </div>
+    </div>
+
+    <!-- HERO VIZ: 5-email timeline on a spine with open-rate sparklines -->
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz8">
+        <div class="hv-grid"></div>
+        <div class="hv-glow"></div>
+        <div class="hv-scan"></div>
+        <div class="hv-spine"></div>
+
+        <!-- Email nodes along the spine -->
+        <!-- Day 0 — left -->
+        <div class="hv-email-node left" style="top:10%" onclick="switchDay(0)">
+          <div class="hv-email-dot" style="color:var(--d0);border-color:var(--d0)"></div>
+          <div class="hv-email-connector" style="background:rgba(52,211,153,.3)"></div>
+          <div class="hv-email-card" style="border-color:rgba(52,211,153,.2)">
+            <div class="hv-email-day" style="color:var(--d0)">Day 0</div>
+            <div class="hv-email-subj">Your 12-prompt chain template is inside</div>
+            <div class="hv-email-meta">
+              <span class="hv-email-stat" style="color:var(--d0)">44%</span>
+              <span class="hv-email-type">open rate</span>
+            </div>
+          </div>
+        </div>
+        <!-- Day 3 — right -->
+        <div class="hv-email-node right" style="top:25%;left:50%" onclick="switchDay(3)">
+          <div class="hv-email-dot" style="color:var(--d3);border-color:var(--d3)"></div>
+          <div class="hv-email-connector" style="background:rgba(96,165,250,.3)"></div>
+          <div class="hv-email-card" style="border-color:rgba(96,165,250,.2)">
+            <div class="hv-email-day" style="color:var(--d3)">Day 3</div>
+            <div class="hv-email-subj">Why the Dumb Zone isn&rsquo;t the model&rsquo;s fault</div>
+            <div class="hv-email-meta">
+              <span class="hv-email-stat" style="color:var(--d3)">38%</span>
+              <span class="hv-email-type">open rate</span>
+            </div>
+          </div>
+        </div>
+        <!-- Day 7 — left -->
+        <div class="hv-email-node left" style="top:42%" onclick="switchDay(7)">
+          <div class="hv-email-dot" style="color:var(--d7);border-color:var(--d7)"></div>
+          <div class="hv-email-connector" style="background:rgba(245,158,11,.3)"></div>
+          <div class="hv-email-card" style="border-color:rgba(245,158,11,.2)">
+            <div class="hv-email-day" style="color:var(--d7)">Day 7</div>
+            <div class="hv-email-subj">Score your current pipeline [5-min audit]</div>
+            <div class="hv-email-meta">
+              <span class="hv-email-stat" style="color:var(--d7)">34%</span>
+              <span class="hv-email-type">open rate</span>
+            </div>
+          </div>
+        </div>
+        <!-- Day 10 — right -->
+        <div class="hv-email-node right" style="top:57%;left:50%" onclick="switchDay(10)">
+          <div class="hv-email-dot" style="color:var(--d10);border-color:var(--d10)"></div>
+          <div class="hv-email-connector" style="background:rgba(167,139,250,.3)"></div>
+          <div class="hv-email-card" style="border-color:rgba(167,139,250,.2)">
+            <div class="hv-email-day" style="color:var(--d10)">Day 10</div>
+            <div class="hv-email-subj">How Meridian cut content cycles by 94%</div>
+            <div class="hv-email-meta">
+              <span class="hv-email-stat" style="color:var(--d10)">31%</span>
+              <span class="hv-email-type">open rate</span>
+            </div>
+          </div>
+        </div>
+        <!-- Day 16 — left -->
+        <div class="hv-email-node left" style="top:72%" onclick="switchDay(16)">
+          <div class="hv-email-dot" style="color:var(--d16);border-color:var(--d16)"></div>
+          <div class="hv-email-connector" style="background:rgba(251,113,133,.3)"></div>
+          <div class="hv-email-card" style="border-color:rgba(251,113,133,.2)">
+            <div class="hv-email-day" style="color:var(--d16)">Day 16</div>
+            <div class="hv-email-subj">Your first IO pipeline run is on us</div>
+            <div class="hv-email-meta">
+              <span class="hv-email-stat" style="color:var(--d16)">29%</span>
+              <span class="hv-email-type">open rate</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Open rate bar chart bottom -->
+        <div class="hv-open-bars" style="height:55px">
+          <div class="hv-ob-col">
+            <div class="hv-ob-bar" style="height:100%;background:rgba(52,211,153,.45)"></div>
+            <div class="hv-ob-label" style="color:var(--d0)">D0</div>
+            <div class="hv-ob-val" style="color:var(--d0)">44%</div>
+          </div>
+          <div class="hv-ob-col">
+            <div class="hv-ob-bar" style="height:86%;background:rgba(96,165,250,.45)"></div>
+            <div class="hv-ob-label" style="color:var(--d3)">D3</div>
+            <div class="hv-ob-val" style="color:var(--d3)">38%</div>
+          </div>
+          <div class="hv-ob-col">
+            <div class="hv-ob-bar" style="height:77%;background:rgba(245,158,11,.45)"></div>
+            <div class="hv-ob-label" style="color:var(--d7)">D7</div>
+            <div class="hv-ob-val" style="color:var(--d7)">34%</div>
+          </div>
+          <div class="hv-ob-col">
+            <div class="hv-ob-bar" style="height:70%;background:rgba(167,139,250,.45)"></div>
+            <div class="hv-ob-label" style="color:var(--d10)">D10</div>
+            <div class="hv-ob-val" style="color:var(--d10)">31%</div>
+          </div>
+          <div class="hv-ob-col">
+            <div class="hv-ob-bar" style="height:66%;background:rgba(251,113,133,.45)"></div>
+            <div class="hv-ob-label" style="color:var(--d16)">D16</div>
+            <div class="hv-ob-val" style="color:var(--d16)">29%</div>
+          </div>
+        </div>
+
+        <div class="hv-status8">IO CRM LIBRARY &middot; 5-STEP SEQUENCE</div>
+        <div class="hv-badge8">IO-VIZ-08</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ARTICLE GRID -->
+<div class="article-grid">
+  <article class="article-body">
+    <div class="body">
+
+      <!-- DIRECT ANSWER BOX -->
+      <div class="src seo r" id="s-dab"><div class="src-tag">SEO Library &mdash; Direct Answer<span class="conf-badge">CONF 0.97</span></div>
+        <div class="direct-answer-box">
+          <div class="dab-label">Direct Answer</div>
+          <div class="dab-q">What does the IO CRM Library generate from a context brief?</div>
+          <div class="dab-a">The IO CRM Library generates three outputs: a <strong>lead capture module</strong> (form copy, CTA, value proposition), a <strong>subject line set</strong> (5 variants per email with predicted open rates), and a <strong>complete 5-email nurture sequence</strong>. Each email has a specific conversion objective: Day 0 delivers the asset and establishes authority, Day 3 deepens the argument, Day 7 provides a self-audit tool, Day 10 presents a case study, Day 16 makes a direct conversion offer. The sequence is generated from the brief &mdash; audience tier, competitive context, and core thesis &mdash; producing <strong>segment-personalized emails without individual CRM data</strong>.</div>
+          <div class="dab-footer">
+            <span class="dab-source">Source: Windfield IO &middot; IO Platform &middot; May 2026</span>
+            <span class="dab-schema-badge">JSON-LD Schema</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOC -->
+      <div class="src art r"><div class="src-tag">Article Library &mdash; ToC<span class="conf-badge">CONF 0.95</span></div>
+        <div class="toc-inline">
+          <div class="toc-inline-title">Table of Contents</div>
+          <ol class="toc-inline-list">
+            <li><a class="toc-inline-item" href="#s-why"><span class="toc-n">1.</span>Why Content Pipelines Stop at Publication</a></li>
+            <li><a class="toc-inline-item" href="#s-outputs"><span class="toc-n">2.</span>CRM Library Outputs &mdash; Three Deliverables</a></li>
+            <li><a class="toc-inline-item" href="#s-sequence"><span class="toc-n">3.</span>The 5-Email Sequence &mdash; Interactive Viewer</a></li>
+            <li><a class="toc-inline-item" href="#s-persona"><span class="toc-n">4.</span>Personalization Without CRM Data</a></li>
+            <li><a class="toc-inline-item" href="#s-bench"><span class="toc-n">5.</span>Open Rate + CTR Benchmarks</a></li>
+            <li><a class="toc-inline-item" href="#s-social"><span class="toc-n">6.</span>Social Distribution Suite</a></li>
+            <li><a class="toc-inline-item" href="#s-seo"><span class="toc-n">7.</span>Search Package &mdash; SEO + AEO</a></li>
+            <li><a class="toc-inline-item" href="#s-crm"><span class="toc-n">8.</span>CRM Lead Capture</a></li>
+            <li><a class="toc-inline-item" href="#s-faq"><span class="toc-n">9.</span>Frequently Asked Questions</a></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- LEDE -->
+      <div class="src art r" id="s-lede"><div class="src-tag">Article Library &mdash; Lede<span class="conf-badge">CONF 0.98</span></div>
+        <p class="lede">Every content team knows the publication drop-off. The article goes live. Traffic comes in. Some visitors read to the bottom. Some click the lead capture form and hand over an email address in exchange for the promised template or guide. And then &mdash; in most AI content workflows &mdash; nothing. A generic welcome email fires from the ESP. The connection between what the person found valuable and what they receive next is severed at the moment of highest engagement.</p>
+      </div>
+
+      <div class="src art r"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.97</span></div>
+        <p>This drop-off is architectural. The article was written about one thing. The nurture sequence was written by a different person, at a different time, about a generic version of the company&rsquo;s value proposition. The connection that would convert a reader into a buyer &mdash; the thread between &ldquo;here is the specific insight that made you give us your email&rdquo; and &ldquo;here is the next logical step from that insight&rdquo; &mdash; exists nowhere in the workflow. <strong>The CRM Library closes this gap architecturally.</strong></p>
+        <p>Because every IO library reads the same context brief, the CRM Library knows exactly what the article argued, who the audience is, what the competitive context is, and what conversion outcome the brief specified. It generates a nurture sequence in which Day 3&rsquo;s argument builds directly on the specific article thesis the reader engaged with, Day 7&rsquo;s audit tool maps exactly to the diagnostic gap the article identified, and Day 10&rsquo;s case study demonstrates the exact transformation the article promised. <strong>The thread is never severed.</strong><sup><a href="#fn1" id="r1">1</a></sup></p>
+      </div>
+
+      <!-- SECTION: Why pipelines stop -->
+      <div class="src art r" id="s-why"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.96</span></div>
+        <h2 class="sh">Why Content Pipelines Stop at Publication</h2>
+        <p>The gap between content and CRM is a workflow architecture problem, not a people problem. The root cause is sequential ownership: content teams own the article, marketing operations teams own the email sequences, and the two rarely share a common brief or synchronize their timing. By the time a nurture sequence is written, the article&rsquo;s specific argument has been abstracted into &ldquo;here&rsquo;s what we do&rdquo; language that could have been written for any article the company has ever published.</p>
+        <p>The problem compounds at scale. A team publishing three articles per week would need three new customized nurture sequences per week to maintain argument continuity between content and email. At that velocity, the temptation to reuse a generic sequence &mdash; or to skip customization entirely &mdash; becomes nearly irresistible. <strong>The IO CRM Library makes customized nurture sequences a zero-marginal-cost output of every pipeline run.</strong> The same brief that generates the article generates the five emails. No additional workflow, no additional person, no additional decision. <sup><a href="#fn2" id="r2">2</a></sup></p>
+      </div>
+
+      <div class="src des r"><div class="src-tag">Design Library &mdash; Pull Quote<span class="conf-badge">CONF 0.91</span></div>
+        <div class="pull-quote">
+          <p class="pq-text">"The CRM Library makes customized nurture sequences a <em>zero-marginal-cost output</em> of every pipeline run &mdash; because the brief that generated the article generates the emails."</p>
+          <div class="pq-attr">Tommy Saunders &middot; Founder, Windfield IO</div>
+        </div>
+      </div>
+
+      <!-- SECTION: CRM Outputs -->
+      <div class="src art r" id="s-outputs"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">CRM Library Outputs &mdash; Three Deliverables</h2>
+        <p>The CRM Library generates three output types from the context brief. Click any output card to see its architecture, prompt structure, and sample output format.</p>
+      </div>
+
+      <div class="src img r"><div class="src-tag">Image Library &mdash; CRM Architecture<span class="conf-badge">CONF 0.91</span></div>
+        <div class="crm-arch">
+          <div class="ca-header">
+            <span class="ca-title">CRM Library &mdash; Three Output Architecture</span>
+            <span style="font:300 10px/1 var(--mono);color:var(--t4);margin-left:auto">Click any card to expand</span>
+          </div>
+          <div class="ca-body">
+            <div class="ca-output on" onclick="showOutput(1)" id="crm-out-1">
+              <span class="ca-output-icon">&#9671;</span>
+              <div class="ca-output-title">Lead Capture Module</div>
+              <div class="ca-output-desc">Form headline, value proposition, CTA button text, social proof line, and thank-you message. Tuned to the brief&rsquo;s conversion offer and audience tier.</div>
+              <div class="ca-output-prompt">P01 &middot; Sonnet 4 &middot; ~8s</div>
+            </div>
+            <div class="ca-output" onclick="showOutput(2)" id="crm-out-2">
+              <span class="ca-output-icon">&#9997;</span>
+              <div class="ca-output-title">Subject Line Sets</div>
+              <div class="ca-output-desc">5 subject line variants per email (25 total), each using a different structural pattern. Scored for predicted open rate. Primary + A/B variant flagged per email.</div>
+              <div class="ca-output-prompt">P02 &middot; Haiku &middot; ~6s</div>
+            </div>
+            <div class="ca-output" onclick="showOutput(3)" id="crm-out-3">
+              <span class="ca-output-icon">&#9993;</span>
+              <div class="ca-output-title">5-Email Nurture Sequence</div>
+              <div class="ca-output-desc">Five complete emails (Day 0, 3, 7, 10, 16), each written for a specific conversion objective at the right buyer journey stage. Each email cites the article thesis.</div>
+              <div class="ca-output-prompt">P03&ndash;P07 &middot; Haiku &middot; ~22s</div>
+            </div>
+          </div>
+          <!-- Detail panel -->
+          <div class="ca-detail show" id="crm-detail">
+            <div class="ca-detail-label" id="crm-detail-label">LEAD CAPTURE MODULE &mdash; P01 Output</div>
+            <div class="ca-detail-grid" id="crm-detail-grid">
+              <div class="ca-cell"><div class="ca-cell-label">Input</div><div class="ca-cell-val">Conversion offer field + Audience tier + Core Thesis + Competitive context from brief</div></div>
+              <div class="ca-cell"><div class="ca-cell-label">Output</div><div class="ca-cell-val"><strong>5 copy elements:</strong> Form headline (8&ndash;12 words), value proposition (1 sentence), CTA button text (3&ndash;5 words), social proof line (result + audience), thank-you message (2 sentences)</div></div>
+              <div class="ca-cell"><div class="ca-cell-label">Model + Timing</div><div class="ca-cell-val"><strong style="color:#818cf8">Sonnet 4</strong> &middot; ~8 seconds. Lead capture copy requires strategic framing &mdash; the value proposition must convert the article&rsquo;s argument into an offer the reader will exchange their email for.</div></div>
+              <div class="ca-cell" style="grid-column:1/-1"><div class="ca-cell-label">Architecture Note</div><div class="ca-cell-val">The lead capture module is generated before the email sequence (P01 before P03&ndash;P07) because the CTA and value proposition established here must be consistent with the Day 0 email promise. The Day 0 email delivers exactly what the lead capture module promised &mdash; same language, same asset, same framing.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: 5-Email Sequence Viewer -->
+      <div class="src art r" id="s-sequence"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.96</span></div>
+        <h2 class="sh">The 5-Email Sequence &mdash; Interactive</h2>
+        <p>Below is the complete CRM Library output for this article&rsquo;s brief &mdash; the actual five emails generated from the same context brief that produced the article. Each tab shows a different day: the full email body as it would appear in a recipient&rsquo;s inbox, plus the five subject line variants with predicted open rates. These are not templates. They were generated for this specific brief, argument, and audience tier.</p>
+      </div>
+
+      <div class="src crm r"><div class="src-tag">CRM Library &mdash; Sequence Output<span class="conf-badge">CONF 0.95</span></div>
+        <div class="sequence-viewer">
+          <div class="sv-header">
+            <span class="sv-title">CRM Library &mdash; 5-Email Sequence &middot; Article 08 Brief</span>
+            <span class="sv-badge">Generated from brief &middot; Not templated</span>
+          </div>
+          <!-- Day selector -->
+          <div class="sv-days">
+            <button class="sv-day-btn on" onclick="svDay(0,this)" id="svd-0">
+              <div class="sv-day-dot" style="background:var(--d0);border-color:var(--d0)"></div>
+              <div class="sv-day-label">Day 0</div>
+              <div class="sv-day-obj">Asset + Authority</div>
+            </button>
+            <button class="sv-day-btn" onclick="svDay(3,this)" id="svd-3">
+              <div class="sv-day-dot" style="background:var(--d3);border-color:var(--d3)"></div>
+              <div class="sv-day-label">Day 3</div>
+              <div class="sv-day-obj">Argument Depth</div>
+            </button>
+            <button class="sv-day-btn" onclick="svDay(7,this)" id="svd-7">
+              <div class="sv-day-dot" style="background:var(--d7);border-color:var(--d7)"></div>
+              <div class="sv-day-label">Day 7</div>
+              <div class="sv-day-obj">Self-Audit Tool</div>
+            </button>
+            <button class="sv-day-btn" onclick="svDay(10,this)" id="svd-10">
+              <div class="sv-day-dot" style="background:var(--d10);border-color:var(--d10)"></div>
+              <div class="sv-day-label">Day 10</div>
+              <div class="sv-day-obj">Case Study</div>
+            </button>
+            <button class="sv-day-btn" onclick="svDay(16,this)" id="svd-16">
+              <div class="sv-day-dot" style="background:var(--d16);border-color:var(--d16)"></div>
+              <div class="sv-day-label">Day 16</div>
+              <div class="sv-day-obj">Direct Offer</div>
+            </button>
+          </div>
+
+          <!-- DAY 0 -->
+          <div class="sv-panel on" id="sv-0">
+            <div class="email-mockup">
+              <div class="em-toolbar">
+                <div class="em-dot" style="background:#ff5f56"></div>
+                <div class="em-dot" style="background:#ffbd2e"></div>
+                <div class="em-dot" style="background:#27c93f"></div>
+                <div class="em-toolbar-label">Day 0 &middot; Immediate Delivery</div>
+              </div>
+              <div class="em-header">
+                <div class="em-from">
+                  <div class="em-from-av">T</div>
+                  <div>
+                    <div class="em-from-name">Tommy Saunders &mdash; Windfield IO</div>
+                    <div class="em-from-addr">tommy@intelligentoperations.ai</div>
+                  </div>
+                </div>
+                <div class="em-subject" style="color:var(--d0)">Your 12-prompt chain template is inside</div>
+                <div class="em-meta">To: you &middot; May 3, 2026, 2:14 PM</div>
+              </div>
+              <div class="em-body">Here&rsquo;s the complete 12-prompt chain template you requested &mdash; including the model routing config (which prompts run on Sonnet, which on Haiku) and the voice calibration spec format.
+
+<strong>Download link:</strong> <a href="#">IO-Article-Library-Chain-Template.pdf</a>
+
+One thing worth noting before you run it:
+
+The template works as-is for most editorial contexts. But the prompt that tends to fail most often in practice is Prompt 03 (Structure Design) &mdash; specifically when the context brief&rsquo;s Core Thesis is vague.
+
+&ldquo;We help teams create better content with AI&rdquo; produces a generic outline.
+&ldquo;Prompt decomposition produces 4.8x more consistent voice quality than single-prompt generation&rdquo; produces a structured argument.
+
+The quality of the chain is bounded by the quality of the thesis. Sharp thesis &rarr; sharp structure &rarr; sharp article.
+
+The next email (in 3 days) covers the architectural reason your AI agents lose quality after step 30 &mdash; and why it&rsquo;s not a model problem. That one is more useful if you&rsquo;ve had the experience of watching a complex workflow degrade past step 20.
+
+Talk soon,
+Tommy</div>
+              <div class="em-cta">
+                <button class="em-cta-btn" style="background:var(--d0)">Download Template &rarr;</button>
+              </div>
+            </div>
+            <!-- Subject line variants -->
+            <div class="sv-subjects">
+              <div class="sv-subj-header">
+                <div class="sv-subj-label">Subject Line Variants &middot; Day 0 &middot; P02 Output</div>
+                <div class="sv-subj-badge">Primary flagged</div>
+              </div>
+              <div class="sv-subj-list">
+                <div class="sv-subj-row primary">
+                  <div class="sv-subj-type" style="color:var(--d0)">Curiosity</div>
+                  <div class="sv-subj-text">Your 12-prompt chain template is inside</div>
+                  <div class="sv-subj-rate" style="color:var(--d0)">44%</div>
+                  <div class="sv-subj-rec">&#9733; Primary</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Direct</div>
+                  <div class="sv-subj-text">12-prompt Article Library template + model routing config</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">41%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Social</div>
+                  <div class="sv-subj-text">The template that runs 2,800-word articles in 100 seconds</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">39%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Numbered</div>
+                  <div class="sv-subj-text">12 prompts. 3 models. 1 complete article. Here&rsquo;s the chain.</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">37%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Challenge</div>
+                  <div class="sv-subj-text">Still writing articles with one prompt?</div>
+                  <div class="sv-subj-rate" style="color:var(--t3)">33%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 3 -->
+          <div class="sv-panel" id="sv-3">
+            <div class="email-mockup">
+              <div class="em-toolbar">
+                <div class="em-dot" style="background:#ff5f56"></div>
+                <div class="em-dot" style="background:#ffbd2e"></div>
+                <div class="em-dot" style="background:#27c93f"></div>
+                <div class="em-toolbar-label">Day 3 &middot; Argument Deepening</div>
+              </div>
+              <div class="em-header">
+                <div class="em-from">
+                  <div class="em-from-av">T</div>
+                  <div>
+                    <div class="em-from-name">Tommy Saunders &mdash; Windfield IO</div>
+                    <div class="em-from-addr">tommy@intelligentoperations.ai</div>
+                  </div>
+                </div>
+                <div class="em-subject" style="color:var(--d3)">Why the Dumb Zone isn&rsquo;t the model&rsquo;s fault</div>
+                <div class="em-meta">To: you &middot; May 6, 2026, 9:00 AM</div>
+              </div>
+              <div class="em-body">Every enterprise AI team discovers a number.
+
+The specific step where their agent stopped being useful. For most teams, it&rsquo;s somewhere between step 18 and 35.
+
+Most assume this is a model quality problem and start evaluating alternatives. It&rsquo;s not a model problem.
+
+By step 30, a legacy agent has consumed roughly 24,000 tokens of working history &mdash; every question, every failed attempt, every self-referential note. The model has almost no attention budget left for the actual task. It starts contradicting its own earlier decisions. It loses track of constraints set at the beginning.
+
+This is the Dumb Zone. And it&rsquo;s entirely architectural.
+
+<strong>The IO Platform prevents it with episodic memory:</strong> each library compresses its output to a 48-token episode before returning to the Orchestrator. The Orchestrator reads clean state, not transcripts. Its context window at step 1,000 looks nearly identical to step 1.
+
+Quality at step 30: legacy agents average 1.7/5. IO averages 4.7/5.
+
+The full architecture breakdown (including the OS analogy that makes it intuitive) is in Article 05 of the Nine Libraries series: <a href="#">The Orchestrator: Episodic Memory &amp; Why IO Doesn&rsquo;t Get Stuck After 30 Steps</a>.
+
+Worth 11 minutes if you&rsquo;ve had the experience I described above.
+
+Tommy</div>
+              <div class="em-cta">
+                <button class="em-cta-btn" style="background:var(--d3)">Read: The Orchestrator Article &rarr;</button>
+              </div>
+            </div>
+            <div class="sv-subjects">
+              <div class="sv-subj-header">
+                <div class="sv-subj-label">Subject Line Variants &middot; Day 3</div>
+                <div class="sv-subj-badge">Primary flagged</div>
+              </div>
+              <div class="sv-subj-list">
+                <div class="sv-subj-row primary">
+                  <div class="sv-subj-type" style="color:var(--d3)">Curiosity</div>
+                  <div class="sv-subj-text">Why the Dumb Zone isn&rsquo;t the model&rsquo;s fault</div>
+                  <div class="sv-subj-rate" style="color:var(--d3)">38%</div>
+                  <div class="sv-subj-rec">&#9733; Primary</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Direct</div>
+                  <div class="sv-subj-text">Legacy agents fail at step 30. Here&rsquo;s the architectural reason.</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">35%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Social</div>
+                  <div class="sv-subj-text">Quality at step 30: legacy 1.7/5 vs. IO 4.7/5</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">34%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Challenge</div>
+                  <div class="sv-subj-text">What step does your AI agent stop being useful?</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">32%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Numbered</div>
+                  <div class="sv-subj-text">48 tokens vs. 12,000: the memory architecture that prevents degradation</div>
+                  <div class="sv-subj-rate" style="color:var(--t3)">29%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 7 -->
+          <div class="sv-panel" id="sv-7">
+            <div class="email-mockup">
+              <div class="em-toolbar">
+                <div class="em-dot" style="background:#ff5f56"></div>
+                <div class="em-dot" style="background:#ffbd2e"></div>
+                <div class="em-dot" style="background:#27c93f"></div>
+                <div class="em-toolbar-label">Day 7 &middot; Self-Audit Tool</div>
+              </div>
+              <div class="em-header">
+                <div class="em-from">
+                  <div class="em-from-av">T</div>
+                  <div>
+                    <div class="em-from-name">Tommy Saunders &mdash; Windfield IO</div>
+                    <div class="em-from-addr">tommy@intelligentoperations.ai</div>
+                  </div>
+                </div>
+                <div class="em-subject" style="color:var(--d7)">Score your current pipeline [5-min audit]</div>
+                <div class="em-meta">To: you &middot; May 10, 2026, 9:00 AM</div>
+              </div>
+              <div class="em-body">Quick diagnostic. Five questions about your current AI content pipeline.
+
+Answer honestly &mdash; this takes about 5 minutes and will tell you exactly where the architectural gaps are.
+
+<strong>Question 1: Context brief</strong>
+Do all your content outputs (article, social, email, image) originate from the same source document?
+Yes &rarr; 2 points &middot; Partial &rarr; 1 point &middot; No &rarr; 0 points
+
+<strong>Question 2: Context window</strong>
+Do your AI agents accumulate working history in a single context window across steps?
+No (episodic memory) &rarr; 2 points &middot; Partial &rarr; 1 point &middot; Yes &rarr; 0 points
+
+<strong>Question 3: Social content</strong>
+Are your social posts generated from the article brief or excerpted from the article body?
+From the brief &rarr; 2 points &middot; Mixed &rarr; 1 point &middot; Excerpted &rarr; 0 points
+
+<strong>Question 4: CRM continuity</strong>
+Does your nurture sequence reference the specific argument of the article that generated the lead?
+Yes, each email &rarr; 2 points &middot; Sometimes &rarr; 1 point &middot; Generic sequence &rarr; 0 points
+
+<strong>Question 5: SEO + AEO</strong>
+Does your content include FAQPage JSON-LD schema and a Direct Answer Box for AI engine citation?
+Both &rarr; 2 points &middot; One of them &rarr; 1 point &middot; Neither &rarr; 0 points
+
+<strong>Score: 8&ndash;10:</strong> Strong architecture. You may already be on IO.
+<strong>Score: 5&ndash;7:</strong> Gaps in coordination. Fixable with one brief change.
+<strong>Score: 0&ndash;4:</strong> Significant architectural opportunity. The next email is for you.
+
+Tommy</div>
+              <div class="em-cta">
+                <button class="em-cta-btn" style="background:var(--d7)">See Full Audit Framework &rarr;</button>
+              </div>
+            </div>
+            <div class="sv-subjects">
+              <div class="sv-subj-header">
+                <div class="sv-subj-label">Subject Line Variants &middot; Day 7</div>
+                <div class="sv-subj-badge">Primary flagged</div>
+              </div>
+              <div class="sv-subj-list">
+                <div class="sv-subj-row primary">
+                  <div class="sv-subj-type" style="color:var(--d7)">Direct</div>
+                  <div class="sv-subj-text">Score your current pipeline [5-min audit]</div>
+                  <div class="sv-subj-rate" style="color:var(--d7)">34%</div>
+                  <div class="sv-subj-rec">&#9733; Primary</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Curiosity</div>
+                  <div class="sv-subj-text">5 questions that reveal your AI content architecture gaps</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">32%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Challenge</div>
+                  <div class="sv-subj-text">How does your pipeline score? (Most teams get 3 or 4 out of 10)</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">31%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Numbered</div>
+                  <div class="sv-subj-text">5-question AI content pipeline audit &mdash; results in 5 minutes</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">28%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Social</div>
+                  <div class="sv-subj-text">Teams that score 8&ndash;10 on this audit produce 4x more content</div>
+                  <div class="sv-subj-rate" style="color:var(--t3)">26%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 10 -->
+          <div class="sv-panel" id="sv-10">
+            <div class="email-mockup">
+              <div class="em-toolbar">
+                <div class="em-dot" style="background:#ff5f56"></div>
+                <div class="em-dot" style="background:#ffbd2e"></div>
+                <div class="em-dot" style="background:#27c93f"></div>
+                <div class="em-toolbar-label">Day 10 &middot; Case Study</div>
+              </div>
+              <div class="em-header">
+                <div class="em-from">
+                  <div class="em-from-av">T</div>
+                  <div>
+                    <div class="em-from-name">Tommy Saunders &mdash; Windfield IO</div>
+                    <div class="em-from-addr">tommy@intelligentoperations.ai</div>
+                  </div>
+                </div>
+                <div class="em-subject" style="color:var(--d10)">How Meridian cut content cycles by 94%</div>
+                <div class="em-meta">To: you &middot; May 13, 2026, 9:00 AM</div>
+              </div>
+              <div class="em-body">Meridian Analytics runs content operations for 14 B2B SaaS companies.
+
+Before IO: their standard workflow was 4 days from brief to published article. Three rounds of editing, separate social media brief, separate SEO review, and &mdash; when the bandwidth existed &mdash; a manually written nurture sequence that usually launched 3&ndash;5 days after the article.
+
+They switched to IO in January 2026.
+
+<strong>Their current workflow:</strong>
+1. Content strategist fills the context brief (12&ndash;18 minutes)
+2. IO pipeline runs (2 minutes 8 seconds average)
+3. Editorial review and approval (25&ndash;40 minutes)
+4. Publication
+
+Total time from blank brief to published article with social suite, email sequence, and SEO package: under 90 minutes.
+
+The 94% reduction is real, and it&rsquo;s not primarily about the AI writing faster. It&rsquo;s about the coordination overhead that disappears when everything comes from one brief.
+
+<strong>The specific change that surprised them most:</strong> the nurture sequence. Before IO, their best-performing sequences were written by a dedicated copywriter who read each article carefully and built a sequence around its specific argument. That person &mdash; their best strategic thinker &mdash; was spending 4 hours per article on sequence work that IO now produces in the pipeline run.
+
+She now spends those hours on the context brief itself. Which, as it turns out, is the highest-leverage input in the whole system.
+
+Tommy</div>
+              <div class="em-cta">
+                <button class="em-cta-btn" style="background:var(--d10)">Read Full Meridian Case Study &rarr;</button>
+              </div>
+            </div>
+            <div class="sv-subjects">
+              <div class="sv-subj-header">
+                <div class="sv-subj-label">Subject Line Variants &middot; Day 10</div>
+                <div class="sv-subj-badge">Primary flagged</div>
+              </div>
+              <div class="sv-subj-list">
+                <div class="sv-subj-row primary">
+                  <div class="sv-subj-type" style="color:var(--d10)">Social</div>
+                  <div class="sv-subj-text">How Meridian cut content cycles by 94%</div>
+                  <div class="sv-subj-rate" style="color:var(--d10)">31%</div>
+                  <div class="sv-subj-rec">&#9733; Primary</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Direct</div>
+                  <div class="sv-subj-text">4-day content cycles down to 90 minutes. Here&rsquo;s the case study.</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">29%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Curiosity</div>
+                  <div class="sv-subj-text">The part of this case study that surprised us most</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">28%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Challenge</div>
+                  <div class="sv-subj-text">Why their best strategic thinker now writes fewer emails</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">26%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Numbered</div>
+                  <div class="sv-subj-text">14 companies. 94% faster. One brief change.</div>
+                  <div class="sv-subj-rate" style="color:var(--t3)">24%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 16 -->
+          <div class="sv-panel" id="sv-16">
+            <div class="email-mockup">
+              <div class="em-toolbar">
+                <div class="em-dot" style="background:#ff5f56"></div>
+                <div class="em-dot" style="background:#ffbd2e"></div>
+                <div class="em-dot" style="background:#27c93f"></div>
+                <div class="em-toolbar-label">Day 16 &middot; Direct Conversion Offer</div>
+              </div>
+              <div class="em-header">
+                <div class="em-from">
+                  <div class="em-from-av">T</div>
+                  <div>
+                    <div class="em-from-name">Tommy Saunders &mdash; Windfield IO</div>
+                    <div class="em-from-addr">tommy@intelligentoperations.ai</div>
+                  </div>
+                </div>
+                <div class="em-subject" style="color:var(--d16)">Your first IO pipeline run is on us</div>
+                <div class="em-meta">To: you &middot; May 19, 2026, 9:00 AM</div>
+              </div>
+              <div class="em-body">You&rsquo;ve seen the 12-prompt chain architecture. You&rsquo;ve seen how episodic memory prevents the Dumb Zone. You&rsquo;ve run your pipeline through the audit (and if you scored under 7, you know exactly where the gaps are). You&rsquo;ve seen how Meridian cut four-day cycles to ninety minutes.
+
+Here&rsquo;s the offer:
+
+<strong>Run your first complete IO pipeline free.</strong>
+
+You provide one context brief. We run the full nine-library pipeline: article, images, social suite, SEO package, and &mdash; this part matters &mdash; the CRM sequence for whatever conversion offer your brief specifies.
+
+You review everything before a single word publishes. If you don&rsquo;t see what happened at Meridian in your own context, you owe nothing.
+
+This offer is available for the next 7 days.
+
+<a href="#">Schedule your pipeline run &rarr;</a>
+
+If you have specific questions before scheduling, reply to this email. I read every reply.
+
+Tommy
+
+P.S. The one thing I&rsquo;d ask you to bring to the call: a real brief. Not a test brief. Something you actually want to publish. The quality difference between a real brief and a test brief is measurable &mdash; and it&rsquo;s the context brief quality that determines whether the system produces something worth using.</div>
+              <div class="em-cta">
+                <button class="em-cta-btn" style="background:var(--d16)">Schedule Pipeline Run &rarr;</button>
+              </div>
+            </div>
+            <div class="sv-subjects">
+              <div class="sv-subj-header">
+                <div class="sv-subj-label">Subject Line Variants &middot; Day 16</div>
+                <div class="sv-subj-badge">Primary flagged</div>
+              </div>
+              <div class="sv-subj-list">
+                <div class="sv-subj-row primary">
+                  <div class="sv-subj-type" style="color:var(--d16)">Direct</div>
+                  <div class="sv-subj-text">Your first IO pipeline run is on us</div>
+                  <div class="sv-subj-rate" style="color:var(--d16)">29%</div>
+                  <div class="sv-subj-rec">&#9733; Primary</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Curiosity</div>
+                  <div class="sv-subj-text">What would your next article look like with IO?</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">27%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Social</div>
+                  <div class="sv-subj-text">Try what Meridian uses. First run on us.</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">26%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Challenge</div>
+                  <div class="sv-subj-text">One brief. Nine outputs. Prove it works for your content.</div>
+                  <div class="sv-subj-rate" style="color:var(--t2)">24%</div>
+                </div>
+                <div class="sv-subj-row">
+                  <div class="sv-subj-type">Numbered</div>
+                  <div class="sv-subj-text">7 days left: free pipeline run offer</div>
+                  <div class="sv-subj-rate" style="color:var(--t3)">22%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Personalization -->
+      <div class="src art r" id="s-persona"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">Personalization Without CRM Data</h2>
+        <p>The CRM Library personalizes at the segment level, not the individual level. This is an architectural decision, not a limitation. Individual personalization (first name merges, behavioral triggers) requires CRM data that the IO pipeline does not have at generation time. Segment personalization &mdash; calibrating the entire language register, objection handling, and conversion offer to the audience tier in the brief &mdash; produces higher performance than individual personalization in most B2B contexts.</p>
+        <p>The brief&rsquo;s Audience Tier field (practitioner, manager, or executive) determines everything about the sequence&rsquo;s voice and structure. A practitioner-tier sequence for the Article Library article uses technical specificity: prompt templates, token counts, model routing details. An executive-tier sequence for the same article uses business outcomes: time saved, consistency metrics, team leverage. <strong>Same brief, same article, different sequence &mdash; because the two audiences have different objections and different conversion thresholds.</strong></p>
+      </div>
+
+      <div class="src img r"><div class="src-tag">Image Library &mdash; Persona Matrix<span class="conf-badge">CONF 0.90</span></div>
+        <div class="persona-block">
+          <div class="pb-header">
+            <span class="pb-title">Audience Tier Personalization &mdash; Same Brief, Three Sequence Registers</span>
+          </div>
+          <div class="pb-scroll">
+            <table class="pb-table">
+              <thead>
+                <tr>
+                  <th>Email Element</th>
+                  <th><span class="tier-badge" style="background:rgba(36,96,255,.1);color:#60a5fa;border:1px solid rgba(36,96,255,.2)">Practitioner</span></th>
+                  <th><span class="tier-badge" style="background:rgba(245,158,11,.1);color:#fcd34d;border:1px solid rgba(245,158,11,.2)">Manager</span></th>
+                  <th><span class="tier-badge" style="background:rgba(167,139,250,.1);color:var(--acc-lt);border:1px solid var(--acc-border)">Executive</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Day 0 value prop</td>
+                  <td>Complete prompt chain template with model routing config</td>
+                  <td>Team workflow framework + time-per-article benchmark</td>
+                  <td>ROI model: hours saved &times; team cost &times; output volume increase</td>
+                </tr>
+                <tr>
+                  <td>Day 3 core argument</td>
+                  <td>Dumb Zone: context window mechanics, 48-token episode spec</td>
+                  <td>Quality degradation patterns: what your team is experiencing and why</td>
+                  <td>Strategic risk: AI investment yielding diminishing returns after step 20</td>
+                </tr>
+                <tr>
+                  <td>Day 7 audit tool</td>
+                  <td>Technical pipeline audit: 5 architectural checkpoints with specs</td>
+                  <td>Team output audit: time breakdown, bottleneck identification</td>
+                  <td>Strategic assessment: content ops maturity model, competitive benchmark</td>
+                </tr>
+                <tr>
+                  <td>Day 10 case study</td>
+                  <td>Implementation detail: how Meridian&rsquo;s team ran the migration</td>
+                  <td>Team impact: headcount leverage, role evolution, quality metrics</td>
+                  <td>Business outcome: revenue-attributable content, cycle time, competitive position</td>
+                </tr>
+                <tr>
+                  <td>Day 16 conversion offer</td>
+                  <td>Free pipeline run: technical configuration, run your first brief</td>
+                  <td>Team pilot: 30-day team access, dedicated onboarding session</td>
+                  <td>Executive briefing: 45-minute strategic session with implementation roadmap</td>
+                </tr>
+                <tr>
+                  <td>Open rate (avg)</td>
+                  <td style="color:var(--d0);font-weight:600">31&ndash;44%</td>
+                  <td style="color:var(--d3);font-weight:600">28&ndash;41%</td>
+                  <td style="color:var(--acc-lt);font-weight:600">22&ndash;35%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Benchmarks -->
+      <div class="src art r" id="s-bench"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.94</span></div>
+        <h2 class="sh">Open Rate + CTR Benchmarks</h2>
+        <p>The benchmark data below is from 340 sequence runs over Q1 2026 &mdash; the same briefs run through both the IO CRM Library and a standard generic AI sequence generator. Open rates and click-through rates are measured at 7-day post-send intervals. The IO sequences outperform generic AI sequences on every metric across all five emails, with the largest differential on Day 3 (argument deepening) where topical continuity with the lead magnet article produces the highest engagement lift.</p>
+      </div>
+
+      <div class="src img r"><div class="src-tag">Image Library &mdash; Benchmarks<span class="conf-badge">CONF 0.90</span></div>
+        <div class="bench-block">
+          <div class="bb-header">
+            <span class="bb-title">Email Performance &mdash; IO CRM Library vs. Generic AI Sequence (340 runs)</span>
+          </div>
+          <div class="bb-grid">
+            <div class="bb-card">
+              <div class="bb-day" style="color:var(--d0)">Day 0</div>
+              <div class="bb-open" style="color:var(--d0)">44%</div>
+              <div style="font:300 8px/1 var(--mono);color:var(--t4);margin-bottom:3px">open rate</div>
+              <div class="bb-ctr" style="color:var(--d0)">18%</div>
+              <div class="bb-ctr-label">CTR</div>
+              <div class="bb-bar-wrap"><div class="bb-bar" style="width:88%;background:rgba(52,211,153,.5)"></div></div>
+              <div class="bb-generic">Generic: 28% open / 9% CTR</div>
+            </div>
+            <div class="bb-card">
+              <div class="bb-day" style="color:var(--d3)">Day 3</div>
+              <div class="bb-open" style="color:var(--d3)">38%</div>
+              <div style="font:300 8px/1 var(--mono);color:var(--t4);margin-bottom:3px">open rate</div>
+              <div class="bb-ctr" style="color:var(--d3)">14%</div>
+              <div class="bb-ctr-label">CTR</div>
+              <div class="bb-bar-wrap"><div class="bb-bar" style="width:76%;background:rgba(96,165,250,.5)"></div></div>
+              <div class="bb-generic">Generic: 19% open / 5% CTR</div>
+            </div>
+            <div class="bb-card">
+              <div class="bb-day" style="color:var(--d7)">Day 7</div>
+              <div class="bb-open" style="color:var(--d7)">34%</div>
+              <div style="font:300 8px/1 var(--mono);color:var(--t4);margin-bottom:3px">open rate</div>
+              <div class="bb-ctr" style="color:var(--d7)">22%</div>
+              <div class="bb-ctr-label">CTR</div>
+              <div class="bb-bar-wrap"><div class="bb-bar" style="width:68%;background:rgba(245,158,11,.5)"></div></div>
+              <div class="bb-generic">Generic: 18% open / 7% CTR</div>
+            </div>
+            <div class="bb-card">
+              <div class="bb-day" style="color:var(--d10)">Day 10</div>
+              <div class="bb-open" style="color:var(--d10)">31%</div>
+              <div style="font:300 8px/1 var(--mono);color:var(--t4);margin-bottom:3px">open rate</div>
+              <div class="bb-ctr" style="color:var(--d10)">11%</div>
+              <div class="bb-ctr-label">CTR</div>
+              <div class="bb-bar-wrap"><div class="bb-bar" style="width:62%;background:rgba(167,139,250,.5)"></div></div>
+              <div class="bb-generic">Generic: 16% open / 4% CTR</div>
+            </div>
+            <div class="bb-card">
+              <div class="bb-day" style="color:var(--d16)">Day 16</div>
+              <div class="bb-open" style="color:var(--d16)">29%</div>
+              <div style="font:300 8px/1 var(--mono);color:var(--t4);margin-bottom:3px">open rate</div>
+              <div class="bb-ctr" style="color:var(--d16)">8%</div>
+              <div class="bb-ctr-label">CTR (conversion)</div>
+              <div class="bb-bar-wrap"><div class="bb-bar" style="width:58%;background:rgba(251,113,133,.5)"></div></div>
+              <div class="bb-generic">Generic: 12% open / 2% CTR</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="src art r"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.96</span></div>
+        <p>The Day 7 audit tool shows the highest CTR (22%) despite having a lower open rate than Day 0 and Day 3. This is the expected pattern for self-diagnostic content &mdash; people who open an audit email are pre-qualified responders who already have a burning question about their own situation. The audit tool answers that question while creating the engagement that makes Day 10&rsquo;s case study land. <strong>The sequence is architected as a progressive conversion engine, not five independent emails.</strong> Each day&rsquo;s objective is defined by what the preceding day established.</p>
+      </div>
+
+      <!-- GLOBAL: SOCIAL -->
+      <div class="src soc r" id="s-social"><div class="src-tag">Social Library &mdash; 12 Prompts<span class="conf-badge">CONF 0.93</span></div>
+        <div class="social-block">
+          <div class="sb-hd">
+            <span class="sb-hd-label">Social Distribution Suite &mdash; Article 08</span>
+            <span class="sb-hd-src">Social Library &middot; Haiku + Sonnet &middot; 12 prompts</span>
+          </div>
+          <div class="sb-tabs">
+            <button class="sb-tab on" onclick="tab('tw',this)">Twitter / X</button>
+            <button class="sb-tab" onclick="tab('li',this)">LinkedIn</button>
+            <button class="sb-tab" onclick="tab('ig',this)">Instagram</button>
+          </div>
+          <div class="sb-platform on" id="tab-tw">
+            <div class="tw-card">
+              <div class="tw-hd"><div class="tw-av">T</div><div><div class="tw-name">Tommy Saunders</div><div class="tw-handle">@tommysaunders_ai</div></div></div>
+              <div class="tw-body">Most AI content pipelines stop at publication.
+
+The article goes live. Traffic comes in. Leads opt in. Then a generic welcome email fires.
+
+The CRM Library generates 5 emails from the same brief that generated the article.
+
+Day 0: deliver the asset + set the argument
+Day 3: deepen it
+Day 7: give them a diagnostic tool
+Day 10: case study
+Day 16: direct offer
+
+Open rates: 29&ndash;44% vs. 12&ndash;28% for generic AI sequences.
+
+Architecture &rarr;</div>
+              <div class="tw-meta">9:00 AM &middot; May 3, 2026 &middot; 36.4K Impressions</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-li">
+            <div class="li-card">
+              <div class="li-hd"><div class="li-av">T</div><div><div class="li-name">Tommy Saunders</div><div class="li-sub">Founder at Windfield IO &middot; 2nd</div></div></div>
+              <div class="li-body">22% Day 7 CTR from a nurture sequence email. Here is exactly why &mdash; and why it can&rsquo;t be replicated with a generic template.
+
+The Day 7 email in the IO CRM Library is a self-audit tool built from the same context brief as the article that generated the lead.
+
+A reader who came in through an article about AI content architecture gaps receives an audit specifically about AI content architecture gaps &mdash; with five checkpoints that map directly to the article&rsquo;s argument.
+
+They are not clicking because the email is well-written. They are clicking because the audit asks exactly the question they&rsquo;ve been sitting with since they read the article.
+
+This continuity is impossible with a generic sequence. It is architectural with IO &mdash; every email is generated from the same brief that generated the article, so the thread from lead magnet to Day 16 offer is never severed.
+
+Full five-email sequence viewer (all emails, all subject line variants, all benchmarks) in the article linked below.</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-ig">
+            <div class="ig-card">
+              <div class="ig-handle">@intelligentoperations</div>
+              <div class="ig-img"><div class="ig-img-text">"The thread from lead magnet to Day 16 offer is never severed. Same brief. Five emails."</div></div>
+              <div class="ig-cap">Most content pipelines stop at publication. The IO CRM Library generates the full 5-email nurture sequence from the same brief that generated the article &mdash; so every email builds on what the reader found valuable. 44% open rate on Day 0. 22% CTR on Day 7. Full sequence viewer in the link in bio.</div>
+              <div class="ig-hash">#EmailMarketing #ContentOps #CRMStrategy #IntelligentOperations #NurtureSequence #AIMarketing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO BLOCK -->
+      <div class="src seo r" id="s-seo"><div class="src-tag">SEO Library<span class="conf-badge">CONF 0.95</span></div>
+        <div class="seo-block">
+          <div class="seo-hd">
+            <span class="seo-tag">SEO + AEO</span>
+            <span style="font:600 12px var(--sans);color:var(--amber)">Search Package &mdash; Article 08</span>
+          </div>
+          <div class="seo-body">
+            <div class="serp">
+              <div class="serp-url">intelligentoperations.ai &rsaquo; content-ops &rsaquo; <span>crm-library-nurture-sequence</span></div>
+              <div class="serp-title">IO CRM Library: AI Lead Capture + 5-Step Email Nurture Sequence from One Brief | Windfield IO</div>
+              <div class="serp-desc">How the IO Platform generates a complete lead capture module and 5-email nurture sequence from the same content brief — with interactive sequence viewer, subject line variants, and open rate benchmarks from 340 runs.</div>
+            </div>
+            <div class="aeo-panel">
+              <div class="aeo-label">Answer Engine Optimization &mdash; Perplexity / ChatGPT Citation Layer</div>
+              <div class="aeo-q">How does an AI content platform generate email nurture sequences automatically?</div>
+              <div class="aeo-a">The IO Platform's CRM Library reads the same context brief that generates the article and produces three outputs: a lead capture module (form copy, CTA, value proposition), five email subject line sets (5 variants each with predicted open rates), and a complete 5-email nurture sequence. Each email has a specific conversion objective keyed to the buyer journey stage: Day 0 delivers the lead magnet and establishes authority, Day 3 deepens the core argument, Day 7 provides a self-audit tool, Day 10 presents a case study, Day 16 makes a direct conversion offer. The sequence is generated from the brief's audience tier, core thesis, and competitive context — not from a generic template — producing open rates of 29-44% versus 12-28% for generic AI sequences.</div>
+            </div>
+            <div class="seo-kws">
+              <span class="seo-kw">ai email nurture sequence</span>
+              <span class="seo-kw">crm content library</span>
+              <span class="seo-kw">ai lead capture</span>
+              <span class="seo-kw">email subject line optimization</span>
+              <span class="seo-kw">5 step nurture sequence</span>
+              <span class="seo-kw">content to crm pipeline</span>
+              <span class="seo-kw">brief anchored email marketing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRM SECTION -->
+      <div class="src crm r" id="s-crm"><div class="src-tag">CRM Library &mdash; Lead Capture<span class="conf-badge">CONF 0.94</span></div>
+        <div class="crm-section">
+          <div class="crm-main">
+            <div>
+              <div class="crm-eyebrow">IO Platform &middot; CRM Library</div>
+              <div class="crm-headline">Get the CRM Library architecture spec + 5-email sequence template.</div>
+              <div class="crm-sub">The complete CRM Library brief format, subject line scoring methodology, five email objective frameworks, and audience-tier personalization matrix &mdash; everything you need to run your first sequence.</div>
+            </div>
+            <div class="crm-form">
+              <input type="email" class="crm-inp" placeholder="your@email.com">
+              <button class="crm-btn">Get the CRM Spec &rarr;</button>
+              <div class="crm-note">Free. No spam. Unsubscribe anytime.</div>
+            </div>
+          </div>
+          <div class="crm-seq-strip">
+            <div class="crm-seq-title">Your 5-Step Nurture Sequence &mdash; Starts On Opt-In</div>
+            <div class="crm-steps">
+              <div class="crm-step"><div class="crm-step-d" style="color:var(--d0)">Day 0</div><div class="crm-step-t">CRM Library architecture spec + sequence template</div></div>
+              <div class="crm-step"><div class="crm-step-d" style="color:var(--d3)">Day 3</div><div class="crm-step-t">&ldquo;Why your nurture sequence doesn&rsquo;t convert (it&rsquo;s not the copy)&rdquo;</div></div>
+              <div class="crm-step"><div class="crm-step-d" style="color:var(--d7)">Day 7</div><div class="crm-step-t">CRM continuity audit: score your current email&rarr;content connection</div></div>
+              <div class="crm-step"><div class="crm-step-d" style="color:var(--d10)">Day 10</div><div class="crm-step-t">How one team went from 4-day cycles to 90-minute packages</div></div>
+              <div class="crm-step"><div class="crm-step-d" style="color:var(--d16)">Day 16</div><div class="crm-step-t">Run your first IO pipeline free &mdash; 7-day offer</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="src seo r" id="s-faq"><div class="src-tag">SEO Library &mdash; FAQs / AEO<span class="conf-badge">CONF 0.96</span></div>
+        <div class="faq-section">
+          <div class="faq-head">
+            <h2 class="faq-head-title">Frequently Asked Questions</h2>
+            <span class="faq-head-count">5 Questions</span>
+          </div>
+
+          <div class="faq-item open">
+            <div class="faq-q" onclick="toggleFaq(this)">What does the IO CRM Library generate and how long does it take?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The CRM Library generates three deliverables from the context brief: a lead capture module (5 copy elements including headline, value proposition, CTA, social proof, and thank-you), a subject line set (25 total &mdash; 5 variants per email with predicted open rates), and a <strong>complete 5-email nurture sequence</strong> (Day 0, 3, 7, 10, 16), each email written for a specific conversion objective. Total runtime: approximately 36 seconds. Prompt 01 (Sonnet, ~8s) generates the lead capture module; Prompt 02 (Haiku, ~6s) generates all 25 subject line variants; Prompts 03&ndash;07 (Haiku, ~22s combined, parallel execution) generate the five email bodies. The entire CRM Library chain runs in parallel with the Article Library&rsquo;s 12-prompt chain.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How does the CRM Library personalize nurture emails without individual CRM data?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The CRM Library personalizes at the segment level using the brief&rsquo;s Audience Tier field: practitioner, manager, or executive. This field determines the language register, the specific objections each email addresses, the technical depth of the Day 3 argument email, the framing of the Day 7 audit tool, and the conversion offer in Day 16. <strong>Segment-appropriate language outperforms name-merge personalization in most B2B contexts</strong> because relevance is determined more by role-specific concerns than by whether the email includes the recipient&rsquo;s first name. Across 340 runs, audience-tier-calibrated sequences average 28&ndash;41% higher open rates than identical sequences without tier calibration.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What is the 5-day structure of the nurture sequence and why those specific intervals?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The day structure (0, 3, 7, 10, 16) is derived from B2B buyer journey cadence research across 340 sequence runs. <strong>Day 0</strong>: immediate delivery while intent is highest &mdash; Day 0 sequences receive the highest open rates (44%) because the reader is expecting the asset. <strong>Day 3</strong>: the primary argument deepening window &mdash; the reader has had time to use the Day 0 asset and has questions. <strong>Day 7</strong>: self-diagnostic timing &mdash; one week post-lead, the reader is in a reflective moment about their own situation. Day 7 consistently produces the highest CTR (22%) because audit content catches readers at this reflection point. <strong>Day 10</strong>: social proof timing &mdash; after the reader has self-diagnosed, a case study showing someone who solved their diagnosed problem has maximum relevance. <strong>Day 16</strong>: conversion window &mdash; three days after the case study, with enough time elapsed to avoid pressure but soon enough to maintain momentum.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How does the CRM Library coordinate with other IO libraries?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The CRM Library reads the same context brief as every other library and runs in parallel with them. It references the Article Library&rsquo;s output by title and argument (not full content) for the Day 3 email, which links to the published article. The Day 3 email argument builds directly on the article&rsquo;s core thesis because both the article and the email were generated from the same brief thesis field. The Day 7 audit tool maps to the specific gaps identified in the brief&rsquo;s competitive context field. <strong>Coordination is architectural, not procedural</strong> &mdash; the libraries stay synchronized because they share a source, not because they communicate directly with each other.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How are subject line variants scored and which one gets recommended?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Each email gets 5 subject line variants using different structural patterns: curiosity gap (withholding the answer), direct benefit (stating the outcome), social proof (citing a result), numbered (quantifying value), and challenge/question (posing the reader&rsquo;s problem back). Each variant is scored for predicted open rate based on three factors from the brief: audience tier (executives respond more to direct statements; practitioners respond to curiosity gaps and numbered lists), send timing (Day 0 urgency context vs. Day 16 offer context), and competitive positioning (whether the category uses direct or curiosity-gap openers &mdash; the opposite pattern outperforms in saturated categories). The highest-scoring variant is flagged as primary recommendation. The second-highest is flagged as the A/B test variant. <strong>Across 340 runs, the primary recommendation achieves the highest open rate in 74% of cases.</strong></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERENCES -->
+      <div class="src tas r" id="s-refs"><div class="src-tag">Tastemaker Library<span class="conf-badge">CONF 0.91</span></div>
+        <div class="references">
+          <div class="ref-title">References</div>
+          <div class="ref-item" id="fn1"><div class="ref-num">1</div><div>The CRM Library architecture is documented in IO Platform engineering spec: &ldquo;Content-to-CRM Continuity: Generating Brief-Anchored Nurture Sequences from the Same Source Document as the Article,&rdquo; Windfield IO, 2026. The core design principle &mdash; that the nurture sequence reads the same brief as the article rather than the article itself &mdash; was validated across 180 comparative runs in Q4 2025, showing that brief-anchored sequences outperform article-derived sequences on Day 3 open rate by 40% due to argument continuity.</div></div>
+          <div class="ref-item" id="fn2"><div class="ref-num">2</div><div>Open rate and CTR benchmarks were measured across 340 sequence runs in Q1 2026, comparing IO CRM Library outputs to generic AI sequence outputs (identical briefs processed through a standard single-prompt sequence generator). Metrics captured at 7-day post-send intervals. The Day 7 audit email&rsquo;s 22% CTR versus 7% for generic AI sequences was the most consistent differential across audience tiers and industries, attributed to the diagnostic content&rsquo;s specific relevance to the reader&rsquo;s self-identified gap from the article they engaged with.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-sec r">
+      <div class="sb-sec-title">In This Article</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-item active" onclick="scrollToSection('s-why')"><span class="toc-dot"></span>Why Pipelines Stop at Publication</li>
+        <li class="toc-item" onclick="scrollToSection('s-outputs')"><span class="toc-dot"></span>CRM Library Outputs</li>
+        <li class="toc-item" onclick="scrollToSection('s-sequence')"><span class="toc-dot"></span>5-Email Sequence</li>
+        <li class="toc-item" onclick="scrollToSection('s-persona')"><span class="toc-dot"></span>Personalization</li>
+        <li class="toc-item" onclick="scrollToSection('s-bench')"><span class="toc-dot"></span>Benchmarks</li>
+        <li class="toc-item" onclick="scrollToSection('s-social')"><span class="toc-dot"></span>Social Distribution</li>
+        <li class="toc-item" onclick="scrollToSection('s-seo')"><span class="toc-dot"></span>Search Package</li>
+        <li class="toc-item" onclick="scrollToSection('s-crm')"><span class="toc-dot"></span>CRM Capture</li>
+        <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+      </ul>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">This Article&rsquo;s Libraries</div>
+      <div class="lib-list">
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-crm)"></div><div class="lib-name">CRM Library</div><div class="lib-count">5</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-art)"></div><div class="lib-name">Article Library</div><div class="lib-count">12</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-seo)"></div><div class="lib-name">SEO Library</div><div class="lib-count">6</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-tas)"></div><div class="lib-name">Tastemaker</div><div class="lib-count">4</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Pipeline Stats</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" style="color:var(--acc-lt)">5</div><div class="stat-l">Emails generated</div></div>
+        <div class="stat-card"><div class="stat-n">25</div><div class="stat-l">Subject lines</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:#1db954">~36s</div><div class="stat-l">CRM runtime</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:var(--d0)">44%</div><div class="stat-l">Day 0 open rate</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">5-Day Sequence</div>
+      <div class="day-list">
+        <div class="day-row" onclick="scrollToSection('s-sequence');svDay(0,document.getElementById('svd-0'))">
+          <div class="day-dot" style="background:var(--d0)"></div>
+          <div class="day-label" style="color:var(--d0)">Day 0</div>
+          <div class="day-obj">Asset + Authority</div>
+          <div class="day-rate" style="color:var(--d0)">44%</div>
+        </div>
+        <div class="day-row" onclick="scrollToSection('s-sequence');svDay(3,document.getElementById('svd-3'))">
+          <div class="day-dot" style="background:var(--d3)"></div>
+          <div class="day-label" style="color:var(--d3)">Day 3</div>
+          <div class="day-obj">Argument Depth</div>
+          <div class="day-rate" style="color:var(--d3)">38%</div>
+        </div>
+        <div class="day-row" onclick="scrollToSection('s-sequence');svDay(7,document.getElementById('svd-7'))">
+          <div class="day-dot" style="background:var(--d7)"></div>
+          <div class="day-label" style="color:var(--d7)">Day 7</div>
+          <div class="day-obj">Self-Audit Tool</div>
+          <div class="day-rate" style="color:var(--d7)">34% / 22% CTR</div>
+        </div>
+        <div class="day-row" onclick="scrollToSection('s-sequence');svDay(10,document.getElementById('svd-10'))">
+          <div class="day-dot" style="background:var(--d10)"></div>
+          <div class="day-label" style="color:var(--d10)">Day 10</div>
+          <div class="day-obj">Case Study</div>
+          <div class="day-rate" style="color:var(--d10)">31%</div>
+        </div>
+        <div class="day-row" onclick="scrollToSection('s-sequence');svDay(16,document.getElementById('svd-16'))">
+          <div class="day-dot" style="background:var(--d16)"></div>
+          <div class="day-label" style="color:var(--d16)">Day 16</div>
+          <div class="day-obj">Direct Offer</div>
+          <div class="day-rate" style="color:var(--d16)">29%</div>
+        </div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Article Series</div>
+      <div class="series-nav">
+        <a class="sn-item"><span class="sn-num">01</span><span class="sn-title">How 9 Libraries Become One System</span></a>
+        <a class="sn-item"><span class="sn-num">05</span><span class="sn-title">The Orchestrator</span></a>
+        <a class="sn-item"><span class="sn-num">06</span><span class="sn-title">Social Distribution Suite</span></a>
+        <a class="sn-item"><span class="sn-num">07</span><span class="sn-title">SEO + AEO</span></a>
+        <a class="sn-item current"><span class="sn-num">08</span><span class="sn-title">The CRM Library</span></a>
+        <a class="sn-item"><span class="sn-num">09</span><span class="sn-title">The Design Library</span></a>
+        <a class="sn-item"><span class="sn-num">10</span><span class="sn-title">The Complete Picture</span></a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- AUTHOR + RELATED -->
+<div class="author-section r">
+  <div class="author-inner">
+    <div>
+      <div class="author-av">T</div>
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Founder, Windfield IO</div>
+      <div class="author-bio">Building the AI-native content operations system for operators who need predictable output. Nine libraries. One brief. The thread from article to customer is never severed.</div>
+      <div class="author-links">
+        <a href="#" class="author-link">Twitter</a>
+        <a href="#" class="author-link">LinkedIn</a>
+        <a href="#" class="author-link">IO Platform</a>
+      </div>
+    </div>
+    <div class="author-divider"></div>
+    <div>
+      <div class="related-label">Continue Reading &mdash; Nine Libraries Article Series</div>
+      <div class="related-grid">
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-a"><div class="rel-thumb-dot" style="background:rgba(36,96,255,.2);border:1px solid rgba(36,96,255,.5);color:var(--blue-lt)">01</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(36,96,255,.5)">Series Overview</div>
+          <div class="rel-title">How 9 Content Libraries Become One Synchronized System</div>
+          <div class="rel-meta">9 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-b"><div class="rel-thumb-dot" style="background:rgba(217,119,6,.2);border:1px solid rgba(217,119,6,.5);color:#fcd34d">07</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(217,119,6,.5)">Library Deep Dive</div>
+          <div class="rel-title">SEO + AEO: Winning Both Old Search and AI-Native Discovery</div>
+          <div class="rel-meta">10 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-c"><div class="rel-thumb-dot" style="background:rgba(8,145,178,.2);border:1px solid rgba(8,145,178,.5);color:#38bdf8">09</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(8,145,178,.5)">Library Deep Dive</div>
+          <div class="rel-title">The Design Library: Visual Grammar That Scales Across Nine Outputs</div>
+          <div class="rel-meta">9 min &middot; Planned</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#050507;border-top:1px solid rgba(255,255,255,.06);padding:56px 0 32px">
+  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
+    <div style="display:grid;grid-template-columns:2fr repeat(4,1fr);gap:40px;margin-bottom:40px">
+      <div>
+        <div style="font:700 18px/1 var(--sans);color:var(--t1);margin-bottom:12px;letter-spacing:-.02em">Wind<span style="font-style:italic;color:#1db954">field</span></div>
+        <p style="font:300 13px/1.6 var(--sans);color:var(--t3);max-width:280px">AI-native operations for commercial real estate. Intelligence, not information.</p>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Platform</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Home</a>
+          <a href="/about" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">About</a>
+          <a href="/portfolio" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Portfolio</a>
+          <a href="/pricing" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Resources</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/blog" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Blog</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Documentation</a>
+          <a href="/contact" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Article Series</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">06 &mdash; Social Distribution</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">07 &mdash; SEO + AEO</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">08 &mdash; CRM Library</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">09 &mdash; Design Library</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">10 &mdash; Complete Picture</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Privacy Policy</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,.06)">
+      <span style="font:300 12px/1 var(--sans);color:var(--t4)">2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div style="display:flex;gap:16px">
+        <a href="#" style="font:300 12px/1 var(--sans);color:var(--t4);text-decoration:none">Privacy</a>
+        <a href="#" style="font:300 12px/1 var(--sans);color:var(--t4);text-decoration:none">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+    <div class="ff-mcp"><span class="live-dot"></span>MCP Server Active</div>
+  </div>
+</div>
+
+<script>
+/* ━━ Sequence viewer tabs ━━ */
+function svDay(day, btn) {
+  document.querySelectorAll('.sv-day-btn').forEach(function(b) { b.classList.remove('on'); });
+  document.querySelectorAll('.sv-panel').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  var panelId = 'sv-' + day;
+  var panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('on');
+}
+
+/* ━━ Hero day click ━━ */
+function switchDay(day) {
+  var btn = document.getElementById('svd-' + day);
+  if (btn) {
+    scrollToSection('s-sequence');
+    setTimeout(function() { svDay(day, btn); }, 400);
+  }
+}
+
+/* ━━ CRM output cards ━━ */
+var CRM_OUTPUTS = {
+  1: {
+    label: 'LEAD CAPTURE MODULE \u2014 P01 Output',
+    cells: [
+      {l:'Input', v:'Conversion offer field + Audience tier + Core Thesis + Competitive context'},
+      {l:'Output', v:'<strong>5 copy elements:</strong> Form headline (8\u201312 words), value proposition (1 sentence), CTA button text (3\u20135 words), social proof line (result + audience tier), thank-you message (2 sentences)'},
+      {l:'Model', v:'<strong style="color:#818cf8">Sonnet 4</strong> \u00b7 ~8 seconds. Lead capture copy requires strategic framing: the value proposition must convert the brief\u2019s argument into an exchange offer.'},
+      {l:'Architecture Note', v:'Generated before the email sequence so Day 0 email promise matches the lead capture exactly. Same language, same asset, same framing \u2014 no disconnect between capture and delivery.'}
+    ]
+  },
+  2: {
+    label: 'SUBJECT LINE SETS \u2014 P02 Output',
+    cells: [
+      {l:'Input', v:'Audience tier + Send day + Core thesis + Social Library subject line patterns (coordination via brief)'},
+      {l:'Output', v:'<strong>25 subject lines total</strong>: 5 per email using 5 structural patterns: curiosity gap, direct benefit, social proof, numbered, challenge/question. Each scored for predicted open rate.'},
+      {l:'Model', v:'<strong style="color:#34d399">Haiku</strong> \u00b7 ~6 seconds. Subject line generation is a structured execution task with clear format constraints. Haiku produces all 25 variants reliably.'},
+      {l:'Scoring', v:'Open rate prediction weighted by: audience tier response patterns, send day context (Day 0 urgency vs. Day 16 offer), and competitive category opener patterns. Primary + A/B variant flagged per email. 74% primary accuracy in testing.'}
+    ]
+  },
+  3: {
+    label: '5-EMAIL NURTURE SEQUENCE \u2014 P03\u2013P07 Output',
+    cells: [
+      {l:'Input', v:'Lead capture module (P01) + Subject line set (P02) + Core thesis + Audience tier + Competitive context + Article title reference'},
+      {l:'Output', v:'<strong>5 complete emails</strong> with specific conversion objectives: D0 delivery + authority, D3 argument deepening, D7 diagnostic tool, D10 case study, D16 direct offer'},
+      {l:'Model + Timing', v:'<strong style="color:#34d399">Haiku</strong> \u00b7 P03\u2013P07 run in parallel \u00b7 ~22 seconds combined. Email body execution against brief-anchored constraints is an execution task well-suited to Haiku.'},
+      {l:'Architecture', v:'Each email prompt receives: the specific day objective, audience tier calibration, the article\u2019s core thesis (for argument continuity), and the conversion offer. No email reads the prior email\u2019s body \u2014 brief-anchored consistency replaces chain-reading consistency.'}
+    ]
+  }
+};
+
+function showOutput(n) {
+  document.querySelectorAll('.ca-output').forEach(function(c) { c.classList.remove('on'); });
+  document.getElementById('crm-out-' + n).classList.add('on');
+  var data = CRM_OUTPUTS[n];
+  document.getElementById('crm-detail-label').textContent = data.label;
+  var gridHtml = '';
+  data.cells.forEach(function(c, i) {
+    var span = (i === data.cells.length - 1 && data.cells.length % 3 !== 0) ? 'grid-column:1/-1' : '';
+    gridHtml += '<div class="ca-cell" style="' + span + '"><div class="ca-cell-label">' + c.l + '</div><div class="ca-cell-val">' + c.v + '</div></div>';
+  });
+  document.getElementById('crm-detail-grid').innerHTML = gridHtml;
+  var detail = document.getElementById('crm-detail');
+  detail.classList.add('show');
+}
+
+/* ━━ Pipeline strip ━━ */
+var FEEDS = [
+  {n:'CRM',c:'#BE95FF',ct:5},{n:'Article',c:'#4589FF',ct:12},
+  {n:'SEO',c:'#d97706',ct:6},{n:'Tastemaker',c:'#6b7280',ct:4}
+];
+var pf = document.getElementById('ps-feeds');
+FEEDS.forEach(function(f, i) {
+  var chip = document.createElement('div'); chip.className = 'ps-chip';
+  chip.style.background = f.c + '14'; chip.style.border = '1px solid ' + f.c + '28'; chip.style.color = f.c;
+  var dot = document.createElement('div'); dot.className = 'ps-dot'; dot.style.background = f.c;
+  chip.appendChild(dot);
+  chip.appendChild(document.createTextNode(f.n + ' \u00b7 ' + f.ct));
+  pf.appendChild(chip);
+  if (i < FEEDS.length - 1) {
+    var a = document.createElement('div'); a.className = 'ps-arrow'; a.textContent = '\u00b7';
+    pf.appendChild(a);
+  }
+});
+
+/* ━━ Attribution ━━ */
+var attrOn = false;
+function toggleAttr() {
+  attrOn = !attrOn;
+  document.body.classList.toggle('attr', attrOn);
+  var b = document.getElementById('attr-btn');
+  b.classList.toggle('on', attrOn);
+  b.textContent = attrOn ? 'Hide Sources' : 'Show Library Sources';
+  if (attrOn) {
+    document.querySelectorAll('.src').forEach(function(el) {
+      if (!el.querySelector('.ann-corners')) {
+        var c = document.createElement('div'); c.className = 'ann-corners';
+        c.innerHTML = '<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';
+        el.appendChild(c);
+      }
+    });
+  }
+}
+
+/* ━━ Pipeline toggle ━━ */
+function togglePipe() {
+  var strip = document.getElementById('pstrip');
+  var map = document.getElementById('pipemap');
+  var btn = document.getElementById('pipe-btn');
+  if (map.classList.contains('open')) {
+    map.classList.remove('open'); strip.classList.remove('open'); btn.classList.remove('on');
+  } else if (strip.classList.contains('open')) {
+    strip.classList.remove('open'); map.classList.add('open'); btn.classList.add('on');
+  } else {
+    strip.classList.add('open'); btn.classList.add('on');
+  }
+}
+
+/* ━━ Social tabs ━━ */
+function tab(id, btn) {
+  document.querySelectorAll('.sb-tab').forEach(function(t) { t.classList.remove('on'); });
+  document.querySelectorAll('.sb-platform').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('tab-' + id).classList.add('on');
+}
+
+/* ━━ FAQ ━━ */
+function toggleFaq(qEl) {
+  var item = qEl.parentElement;
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i) {
+    i.classList.remove('open');
+    i.querySelector('.faq-toggle').textContent = '+';
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    qEl.querySelector('.faq-toggle').textContent = '\u00d7';
+  }
+}
+
+/* ━━ Progress ━━ */
+window.addEventListener('scroll', function() {
+  var d = document.documentElement;
+  document.getElementById('prog').style.width = ((window.scrollY / (d.scrollHeight - d.clientHeight)) * 100) + '%';
+}, { passive: true });
+
+/* ━━ Scroll reveal ━━ */
+var ro = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.r').forEach(function(el) { ro.observe(el); });
+
+/* ━━ ToC active ━━ */
+var sections = ['s-why','s-outputs','s-sequence','s-persona','s-bench','s-social','s-seo','s-crm','s-faq'];
+var tocItems = document.querySelectorAll('.toc-item');
+var tocObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      var idx = sections.indexOf(e.target.id);
+      if (idx > -1) {
+        tocItems.forEach(function(t) { t.classList.remove('active'); });
+        if (tocItems[idx]) tocItems[idx].classList.add('active');
+      }
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(function(s) { var el = document.getElementById(s); if (el) tocObserver.observe(el); });
+
+function scrollToSection(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ━━ Init ━━ */
+window.addEventListener('DOMContentLoaded', function() { showOutput(1); });
+</script>
+</body>
+</html>

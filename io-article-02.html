@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Context Brief: The One Document That Runs Your Entire Stack &mdash; Windfield IO</title>
+<meta name="description" content="Most operators think the context brief is a prompt. It is not — it is an architectural artifact. Nine fields that nine libraries read simultaneously.">
+<meta name="keywords" content="context brief template, AI content brief, prompt brief framework, IO Platform context brief">
+<meta property="og:title" content="The Context Brief: The One Document That Runs Your Entire Stack">
+<meta property="og:description" content="Most operators think the context brief is a prompt. It is not — it is an architectural artifact. Nine fields that nine libraries read simultaneously.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"The Context Brief: The One Document That Runs Your Entire Stack","description":"Most operators think the context brief is a prompt. It isn't — it's an architectural artifact, the single source of truth from which nine disciplines draw independently. Field-by-field breakdown, library interpretation matrix, and a filled example brief for a SaaS company expanding internationally.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"IntelligentOperations.ai"}},"publisher":{"@type":"Organization","name":"IntelligentOperations.ai"},"datePublished":"2026-03-22","articleSection":"System Design","keywords":["context brief template","AI content brief","prompt brief framework","content orchestration"],"wordCount":3100,"timeRequired":"PT8M","isPartOf":{"@type":"CreativeWorkSeries","name":"Nine Libraries Article Series","position":2}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is a Context Brief in the IO Platform?","acceptedAnswer":{"@type":"Answer","text":"A Context Brief is a single structured document — taking approximately two minutes to complete — that serves as the sole input for all nine IO libraries simultaneously. It contains brand identity, brand voice, core thesis, industry, primary and secondary audiences, competitive context, visual style direction, and SEO cluster. Every library reads from this one source, which guarantees strategic coherence by architecture rather than editorial review."}},
+{"@type":"Question","name":"How is a context brief different from a prompt?","acceptedAnswer":{"@type":"Answer","text":"A prompt is a one-to-one instruction to a single model for a single output. A context brief is an architectural artifact — a structured document that nine specialized libraries each read independently and interpret through the lens of their own discipline. The Article Library extracts voice and argument structure. The SEO Library extracts keyword clusters. The CRM Library extracts audience pain points for email subject lines. Same document, nine different extractions."}},
+{"@type":"Question","name":"What fields does the IO Platform context brief contain?","acceptedAnswer":{"@type":"Answer","text":"The IO context brief contains nine fields: Brand Identity (name, URL, description), Brand Voice (tone, register, what to avoid), Core Thesis (the single strategic argument), Industry & Category, Primary Audience, Secondary Audience, Competitive Context (who you're competing against and how you're different), Visual Style Direction, and SEO Cluster / Primary Keywords. Each field is read differently by each library."}},
+{"@type":"Question","name":"What happens if you write a weak context brief?","acceptedAnswer":{"@type":"Answer","text":"A weak context brief generates nine consistent mediocre outputs. Because every library reads the same brief, the quality of the input is fully visible in the quality of the output — undiluted by telephone-game briefing chains. A weak competitive context field produces social posts that don't differentiate, SEO copy that targets the wrong keywords, and CRM sequences that miss the actual audience pain point. The system amplifies brief quality in both directions."}},
+{"@type":"Question","name":"Can the same context brief be used across multiple content runs?","acceptedAnswer":{"@type":"Answer","text":"Yes. The context brief is designed to remain stable across multiple pipeline runs for the same campaign, brand, or content series. It is the brand's strategic DNA — not a per-article instruction. Individual article instructions (topic, angle, specific deliverables) are passed separately. The brief establishes the unchanging foundation; article-specific inputs establish the variable."}}
+]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"IntelligentOperations.ai","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Content Operations","item":"https://intelligentoperations.ai/content-ops"},
+{"@type":"ListItem","position":3,"name":"Nine Libraries Series","item":"https://intelligentoperations.ai/content-ops/series"},
+{"@type":"ListItem","position":4,"name":"The Context Brief","item":"https://intelligentoperations.ai/content-ops/context-brief"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+
+/* ================================================================
+   WINDFIELD IO — ARTICLE SERIES TEMPLATE
+   Design System Tokens + Full Article Page
+   ================================================================ */
+:root {
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --wf-brand: #1db954; --wf-brand-hover: #17a34a; --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b; --wf-bg-elevated: #111113; --wf-bg-sunken: #050507;
+  --wf-surface: #141417; --wf-surface-hover: #1a1a1e; --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa; --wf-fg-muted: #a1a1aa; --wf-fg-subtle: #71717a; --wf-fg-faint: #52525b;
+  --wf-border: #27272a; --wf-border-strong: #3f3f46; --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF; --wf-teal: #08BDBA; --wf-green: #42BE65; --wf-red: #E85D4A;
+  --wf-purple: #BE95FF; --wf-orange: #FF832B;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1); --wf-dur: 160ms;
+
+  /* Library node colors */
+  --lib-art: #4589FF; --lib-img: #1db954; --lib-vid: #FF832B;
+  --lib-soc: #E85D4A; --lib-des: #08BDBA; --lib-seo: #d97706;
+  --lib-crm: #BE95FF; --lib-con: #059669; --lib-tas: #6b7280;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+/* ================================================================
+   1. READING PROGRESS BAR
+   ================================================================ */
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:10000;width:0;transition:width 80ms linear;pointer-events:none}
+
+/* ================================================================
+   2. NAVBAR
+   ================================================================ */
+.navbar{position:sticky;top:0;z-index:500;background:rgba(9,9,11,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center}
+.nav-logo{font-family:var(--font-sans);font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-.02em;flex-shrink:0}
+.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-links{display:flex;align-items:center;gap:8px;margin-left:40px}
+.nav-link{font-size:13px;font-weight:400;color:var(--wf-fg-muted);padding:6px 12px;border-radius:var(--wf-r-sm);transition:color var(--wf-dur) var(--wf-ease)}
+.nav-link:hover,.nav-link.active{color:var(--wf-fg)}
+.nav-link.active{font-weight:500}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.nav-toggle{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--font-sans);letter-spacing:.04em;cursor:pointer;border:1px solid var(--wf-border);background:none;color:var(--wf-fg-subtle);transition:all var(--wf-dur) var(--wf-ease);display:flex;align-items:center;gap:6px}
+.nav-toggle:hover,.nav-toggle.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nav-toggle svg{width:12px;height:12px}
+.nav-cta{padding:7px 18px;border-radius:var(--wf-r-md);font:600 13px/1 var(--font-sans);cursor:pointer;border:none;background:var(--wf-brand);color:var(--wf-brand-fg);transition:background var(--wf-dur) var(--wf-ease)}
+.nav-cta:hover{background:var(--wf-brand-hover)}
+
+/* Mobile nav */
+.nav-hamburger{display:none;background:none;border:none;color:var(--wf-fg-muted);cursor:pointer;padding:4px}
+.nav-hamburger svg{width:20px;height:20px}
+@media(max-width:1024px){.nav-links{display:none}.nav-hamburger{display:block}}
+@media(max-width:768px){.nav-toggle{display:none}}
+
+/* ================================================================
+   PIPELINE STRIP
+   ================================================================ */
+#pipeline-strip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}
+#pipeline-strip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto;gap:12px}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);flex-shrink:0}
+.ps-feeds{display:flex;gap:5px;flex-shrink:0}
+.ps-chip{padding:4px 9px;border-radius:var(--wf-r-sm);font:600 9px/1 var(--font-sans);display:flex;align-items:center;gap:4px;flex-shrink:0;letter-spacing:.06em;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.ps-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ps-arrow{color:var(--wf-fg-faint);flex-shrink:0;display:flex;align-items:center}
+.ps-arrow svg{width:14px;height:14px}
+.ps-result{font:600 10px/1 var(--font-sans);color:var(--wf-brand);letter-spacing:.04em;flex-shrink:0;white-space:nowrap}
+@media(max-width:768px){.ps-result{display:none}}
+
+/* ================================================================
+   3. HERO
+   ================================================================ */
+.hero{position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-wrap{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.eye-tag{font:700 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-dot{width:4px;height:4px;border-radius:50%;background:var(--wf-fg-faint)}
+.eye-series{font:600 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+.hero h1{font-family:var(--font-sans);font-size:clamp(34px,5vw,58px);font-weight:700;line-height:1.08;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:17px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid rgba(255,255,255,.08);padding-top:20px;flex-wrap:wrap}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);display:flex;align-items:center;justify-content:center;font:700 14px/1 var(--font-sans);color:#fff;flex-shrink:0}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:rgba(255,255,255,.1);margin:0 18px}
+.h-date,.h-read{font-size:13px;color:var(--wf-fg-subtle)}
+.h-read{margin-left:14px}
+.hero-stamp{display:inline-flex;margin-top:20px;padding:4px 12px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);font:400 10px/1.4 var(--font-mono);color:var(--wf-fg-faint);letter-spacing:.06em}
+
+/* ── Hero Viz ── */
+.hero-viz{position:relative;height:500px;align-self:end}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);
+  border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.14) 0%,transparent 65%);animation:glow-pulse 4s ease-in-out infinite}
+@keyframes glow-pulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.15)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);
+  animation:scan-line 5s ease-in-out infinite;opacity:.4}
+@keyframes scan-line{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+
+/* Hub and spoke */
+.hub-spoke{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:320px;height:320px}
+.hub-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.3),rgba(29,185,84,.08));border:1.5px solid rgba(29,185,84,.5);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2}
+.hub-label{font:700 6px/1 var(--font-mono);letter-spacing:.12em;color:var(--wf-brand);text-transform:uppercase;text-align:center}
+.hub-sublabel{font:300 5px/1 var(--font-mono);color:rgba(29,185,84,.6);margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
+.spoke-node{position:absolute;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font:700 8px/1 var(--font-sans);letter-spacing:.06em;border:1px solid;z-index:2;transition:all .4s var(--wf-ease)}
+.spoke-node.glow{box-shadow:0 0 20px currentColor;transform:scale(1.2)}
+.spoke-line{position:absolute;top:50%;left:50%;transform-origin:0 0;height:1px;z-index:1;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0px,rgba(255,255,255,.08) 4px,transparent 4px,transparent 8px)}
+.spoke-line.active{background:repeating-linear-gradient(90deg,rgba(29,185,84,.4) 0px,rgba(29,185,84,.4) 4px,transparent 4px,transparent 8px)}
+
+.run-pipeline-btn{position:absolute;bottom:20px;right:20px;padding:8px 16px;border-radius:var(--wf-r-md);background:rgba(29,185,84,.12);border:1px solid rgba(29,185,84,.25);
+  font:600 11px/1 var(--font-sans);color:var(--wf-brand);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all var(--wf-dur) var(--wf-ease);z-index:3}
+.run-pipeline-btn:hover{background:rgba(29,185,84,.2);border-color:rgba(29,185,84,.4)}
+.run-pipeline-btn svg{width:12px;height:12px}
+
+@media(max-width:1024px){.hero-wrap{grid-template-columns:1fr;gap:40px}.hero-viz{height:380px;order:-1}.hviz-inner{right:0;height:380px}.hero-text{padding-bottom:48px}}
+@media(max-width:768px){.hero{padding:48px 0 0}.hero-viz{display:none}.h-sep{display:none;margin:8px 0}.hero-meta{flex-direction:column;align-items:flex-start;gap:10px}.h-read{margin-left:0}}
+
+/* ================================================================
+   4. ARTICLE LAYOUT
+   ================================================================ */
+.article-layout{max-width:1280px;margin:0 auto;padding:60px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:64px}
+@media(max-width:1024px){.article-layout{grid-template-columns:1fr;gap:40px}}
+
+/* ── Main Content ── */
+.article-main{min-width:0}
+
+/* Body text */
+.article-main p{font-size:17.5px;line-height:1.8;color:var(--wf-fg-muted);margin-bottom:24px}
+.article-main p strong{color:var(--wf-fg);font-weight:600}
+.article-main p a{color:var(--wf-blue);text-decoration:underline;text-underline-offset:3px;transition:color var(--wf-dur)}
+.article-main p a:hover{color:#6fa8ff}
+
+/* Headings */
+.article-main h2{font-family:var(--font-serif);font-size:30px;font-weight:700;color:var(--wf-fg);margin:56px 0 20px;line-height:1.25;letter-spacing:-.01em}
+.article-main h2:first-child{margin-top:0}
+.article-main h3{font-size:20px;font-weight:600;color:var(--wf-fg);margin:40px 0 16px}
+
+/* Drop cap */
+.drop-cap::first-letter{float:left;font-family:var(--font-serif);font-size:82px;line-height:.72;font-weight:700;color:var(--wf-blue);margin-right:12px;margin-top:8px}
+
+/* Footnote links */
+sup a{color:var(--wf-blue);font-size:11px;text-decoration:none;font-weight:600}
+sup a:hover{text-decoration:underline}
+
+/* ── Section IDs for scroll spy ── */
+[data-section]{scroll-margin-top:120px}
+
+/* ================================================================
+   4a. DIRECT ANSWER BOX
+   ================================================================ */
+.direct-answer{background:rgba(69,137,255,.06);border:1px solid rgba(69,137,255,.15);border-left:3px solid var(--wf-blue);border-radius:var(--wf-r-lg);padding:28px 32px;margin-bottom:40px}
+.da-label{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-blue);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.da-label svg{width:14px;height:14px}
+.da-question{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:12px;line-height:1.4}
+.da-answer{font-size:15px;line-height:1.7;color:var(--wf-fg-muted);margin-bottom:16px}
+.da-footer{display:flex;align-items:center;gap:8px;padding-top:14px;border-top:1px solid rgba(69,137,255,.1)}
+.da-badge{padding:3px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.1);font:600 9px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.06em}
+.da-source{font:300 11px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   4b. TABLE OF CONTENTS (inline)
+   ================================================================ */
+.toc-inline{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px 32px;margin-bottom:40px}
+.toc-inline-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:18px}
+.toc-inline ol{list-style:none;counter-reset:toc-c;display:grid;grid-template-columns:1fr 1fr;gap:6px 32px}
+.toc-inline li{counter-increment:toc-c}
+.toc-inline li a{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:var(--wf-r-sm);font-size:14px;color:var(--wf-fg-muted);transition:all var(--wf-dur) var(--wf-ease)}
+.toc-inline li a:hover{color:var(--wf-fg);background:rgba(255,255,255,.04)}
+.toc-inline li a::before{content:counter(toc-c,decimal-leading-zero);font:600 11px/1 var(--font-mono);color:var(--wf-fg-faint);width:24px;flex-shrink:0}
+@media(max-width:768px){.toc-inline ol{grid-template-columns:1fr}}
+
+/* ================================================================
+   4e/4i/4k. FIGURE CARDS
+   ================================================================ */
+.figure-card{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.figure-body{padding:32px;background:var(--wf-surface);min-height:200px;position:relative;overflow:hidden}
+.figure-caption{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border)}
+.fig-label{font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);flex-shrink:0}
+.fig-desc{font-size:12px;color:var(--wf-fg-subtle);flex:1}
+.fig-source{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint);margin-left:auto}
+
+/* Fig 01 hub-spoke horizontal */
+.fig01-flow{display:flex;align-items:center;justify-content:center;gap:0;padding:20px 0}
+.fig01-center{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,rgba(69,137,255,.2),rgba(69,137,255,.06));border:1.5px solid rgba(69,137,255,.4);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0;position:relative}
+.fig01-center-label{font:700 6px/1 var(--font-mono);color:var(--wf-blue);text-transform:uppercase;letter-spacing:.1em;text-align:center}
+.fig01-nodes{display:flex;flex-wrap:wrap;gap:8px;max-width:240px;justify-content:center}
+.fig01-node{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--font-sans);letter-spacing:.04em;border:1px solid}
+.fig01-connector{width:48px;height:1px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.1) 0px,rgba(255,255,255,.1) 4px,transparent 4px,transparent 8px);flex-shrink:0}
+
+/* Fig 02 Memory Context */
+.fig02-compare{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:20px 0}
+@media(max-width:600px){.fig02-compare{grid-template-columns:1fr}}
+.fig02-col{text-align:center}
+.fig02-label{font:700 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.fig02-bars{display:flex;align-items:flex-end;gap:3px;height:120px;justify-content:center}
+.fig02-bar{width:8px;border-radius:2px 2px 0 0;transition:height .3s}
+.fig02-status{margin-top:12px;font:700 10px/1 var(--font-mono);letter-spacing:.1em;padding:4px 10px;border-radius:var(--wf-r-sm);display:inline-block}
+
+/* Fig 03 Browser mockup */
+.fig03-browser{border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border)}
+.fig03-toolbar{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.fig03-dot{width:8px;height:8px;border-radius:50%}
+.fig03-urlbar{flex:1;margin-left:10px;padding:3px 10px;border-radius:4px;background:rgba(255,255,255,.05);font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.fig03-content{padding:20px;display:grid;grid-template-columns:180px 1fr;gap:16px;min-height:200px}
+.fig03-sidebar{display:flex;flex-direction:column;gap:8px}
+.fig03-sidebar-item{padding:6px 10px;border-radius:var(--wf-r-sm);font:500 10px/1 var(--font-sans);color:var(--wf-fg-subtle)}
+.fig03-sidebar-item.active{background:rgba(69,137,255,.1);color:var(--wf-blue)}
+.fig03-main{display:flex;flex-direction:column;gap:10px}
+.fig03-block{border-radius:var(--wf-r-sm);padding:12px;font:400 10px/1.4 var(--font-sans)}
+
+/* ================================================================
+   4g. PULL QUOTE
+   ================================================================ */
+.pull-quote{background:var(--wf-surface);border:1px solid var(--wf-border);border-left:3px solid var(--wf-blue);border-radius:var(--wf-r-lg);padding:32px 36px;margin:40px 0;position:relative}
+.pq-mark{font-family:var(--font-serif);font-size:72px;line-height:1;color:rgba(69,137,255,.15);position:absolute;top:12px;left:20px}
+.pq-text{font-family:var(--font-serif);font-size:22px;font-style:italic;line-height:1.55;color:var(--wf-fg);margin-bottom:16px;padding-left:20px}
+.pq-text span{color:var(--wf-blue)}
+.pq-attr{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);padding-left:20px}
+
+/* ================================================================
+   4h. PIPELINE DIAGRAM
+   ================================================================ */
+.pipeline-diagram{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.pd-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.pd-title{font:600 14px/1 var(--font-sans);color:var(--wf-fg)}
+.pd-badge{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.08);border:1px solid rgba(69,137,255,.15);font:500 10px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.04em}
+.pd-body{padding:32px 24px;background:var(--wf-surface)}
+.pd-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px;flex-wrap:wrap}
+.pd-node{padding:10px 16px;border-radius:var(--wf-r-md);border:1px solid var(--wf-border);background:rgba(255,255,255,.03);text-align:center;flex-shrink:0}
+.pd-node-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:3px}
+.pd-node-name{font:600 12px/1 var(--font-sans);color:var(--wf-fg)}
+.pd-arrow{width:36px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);flex-shrink:0}
+.pd-arrow svg{width:16px;height:16px}
+.pd-dispatch{position:relative;padding:10px 16px;border-radius:var(--wf-r-md);border:1px dashed rgba(69,137,255,.3);background:rgba(69,137,255,.04);text-align:center}
+.pd-dispatch-lines{display:flex;gap:2px;justify-content:center;margin-top:4px}
+.pd-dispatch-line{width:1px;height:12px;background:rgba(69,137,255,.3)}
+.pd-output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:600px){.pd-output-grid{grid-template-columns:1fr 1fr}}
+.pd-output-item{padding:10px 14px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.03);border:1px solid var(--wf-border);font:500 11px/1.3 var(--font-sans);color:var(--wf-fg-muted)}
+.pd-output-item strong{display:block;color:var(--wf-fg);font-weight:600;margin-bottom:2px;font-size:12px}
+
+/* ================================================================
+   4j. VIDEO BLOCK
+   ================================================================ */
+.video-block{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.video-player{position:relative;height:300px;background:linear-gradient(135deg,#0a0f14,#0e1a12);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.video-play{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;transition:all .3s var(--wf-ease)}
+.video-play svg{width:24px;height:24px;color:var(--wf-fg)}
+.video-player:hover .video-play{background:rgba(255,255,255,.15);transform:scale(1.08)}
+.video-overlay{position:absolute;bottom:16px;left:16px;right:16px;display:flex;align-items:flex-end;justify-content:space-between}
+.video-title{font:600 14px/1.3 var(--font-sans);color:var(--wf-fg)}
+.video-dur{font:500 11px/1 var(--font-mono);color:var(--wf-fg-subtle);background:rgba(0,0,0,.5);padding:4px 8px;border-radius:var(--wf-r-sm)}
+.video-footer{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border)}
+.video-angle{padding:3px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.1);font:600 9px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.06em}
+.video-desc{font-size:12px;color:var(--wf-fg-subtle);flex:1}
+.video-src{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   4l. SOCIAL BLOCK
+   ================================================================ */
+.social-block{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.social-tabs{display:flex;border-bottom:1px solid var(--wf-border);background:var(--wf-bg-elevated)}
+.social-tab{flex:1;padding:12px 16px;font:600 12px/1 var(--font-sans);color:var(--wf-fg-subtle);cursor:pointer;border:none;background:none;text-align:center;transition:all var(--wf-dur);border-bottom:2px solid transparent}
+.social-tab:hover{color:var(--wf-fg-muted)}
+.social-tab.active{color:var(--wf-fg);border-bottom-color:var(--wf-blue)}
+.social-panel{display:none;padding:24px;background:var(--wf-surface)}
+.social-panel.active{display:block}
+
+/* Twitter mockup */
+.tweet-card{background:#fff;border-radius:var(--wf-r-lg);padding:20px;max-width:500px;margin:0 auto}
+.tweet-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tweet-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA)}
+.tweet-name{font:700 14px/1.2 var(--font-sans);color:#0f1419}
+.tweet-handle{font:400 13px/1 var(--font-sans);color:#536471}
+.tweet-text{font:400 15px/1.5 var(--font-sans);color:#0f1419;margin-bottom:16px}
+.tweet-text b{color:#1d9bf0}
+.tweet-actions{display:flex;gap:40px}
+.tweet-action{font:400 12px/1 var(--font-sans);color:#536471;display:flex;align-items:center;gap:6px}
+.tweet-action svg{width:16px;height:16px}
+
+/* LinkedIn mockup */
+.linkedin-card{background:#fff;border-radius:var(--wf-r-lg);padding:20px;max-width:500px;margin:0 auto}
+.li-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.li-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);flex-shrink:0}
+.li-name{font:700 14px/1.2 var(--font-sans);color:#000}
+.li-title{font:400 12px/1.3 var(--font-sans);color:#666;margin-top:2px}
+.li-time{font:400 11px/1 var(--font-sans);color:#999;margin-top:2px}
+.li-text{font:400 14px/1.6 var(--font-sans);color:#333;margin-bottom:16px}
+.li-stats{display:flex;gap:20px;padding-top:12px;border-top:1px solid #e5e5e5}
+.li-stat{font:400 12px/1 var(--font-sans);color:#666}
+
+/* Instagram mockup */
+.insta-card{background:#1a1a2e;border-radius:var(--wf-r-lg);overflow:hidden;max-width:500px;margin:0 auto}
+.insta-visual{height:200px;background:linear-gradient(135deg,#0d1117,#1a1a2e,#0d1117);display:flex;align-items:center;justify-content:center;position:relative}
+.insta-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center}
+.insta-icon svg{width:24px;height:24px;color:#fff}
+.insta-caption{padding:16px;font:400 13px/1.5 var(--font-sans);color:#e0e0e0}
+.insta-caption strong{color:#fff}
+
+/* ================================================================
+   4m. SEO BLOCK
+   ================================================================ */
+.seo-block{background:rgba(255,131,43,.04);border:1px solid rgba(255,131,43,.15);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.seo-header{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid rgba(255,131,43,.1)}
+.seo-badge{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(255,131,43,.12);font:700 9px/1 var(--font-mono);color:var(--wf-orange);letter-spacing:.1em}
+.seo-title{font:600 14px/1 var(--font-sans);color:var(--wf-fg)}
+.seo-body{padding:24px}
+
+/* Google SERP mockup */
+.serp-card{background:#fff;border-radius:var(--wf-r-md);padding:20px;margin-bottom:20px}
+.serp-url{font:400 12px/1 var(--font-sans);color:#202124;margin-bottom:4px}
+.serp-url span{color:#5f6368}
+.serp-title{font:400 20px/1.3 var(--font-sans);color:#1a0dab;margin-bottom:6px;cursor:pointer}
+.serp-title:hover{text-decoration:underline}
+.serp-desc{font:400 14px/1.5 var(--font-sans);color:#4d5156}
+
+/* AEO panel */
+.aeo-panel{background:rgba(255,255,255,.04);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);padding:16px 20px;margin-bottom:16px}
+.aeo-label{font:700 9px/1 var(--font-mono);letter-spacing:.1em;color:var(--wf-orange);margin-bottom:10px;text-transform:uppercase}
+.aeo-question{font:600 15px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:8px}
+.aeo-answer{font:400 14px/1.6 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* Keyword pills */
+.keyword-pills{display:flex;flex-wrap:wrap;gap:6px}
+.keyword-pill{padding:4px 12px;border-radius:20px;background:rgba(255,131,43,.08);border:1px solid rgba(255,131,43,.15);font:500 11px/1 var(--font-sans);color:var(--wf-orange)}
+
+/* ================================================================
+   4n. CRM BLOCK
+   ================================================================ */
+.crm-block{border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0;position:relative}
+.crm-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(190,149,255,.06),rgba(190,149,255,.02));border:1px solid rgba(190,149,255,.15);border-radius:var(--wf-r-lg)}
+.crm-orb{position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(190,149,255,.12),transparent 70%);pointer-events:none}
+.crm-inner{position:relative;padding:40px 32px}
+.crm-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:40px}
+@media(max-width:768px){.crm-grid{grid-template-columns:1fr}}
+.crm-text .crm-eyebrow{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-purple);margin-bottom:12px}
+.crm-text h3{font:700 26px/1.2 var(--font-sans);color:var(--wf-fg);margin-bottom:12px;letter-spacing:-.02em}
+.crm-text p{font-size:15px;color:var(--wf-fg-muted);line-height:1.6}
+.crm-form{display:flex;flex-direction:column;gap:10px}
+.crm-input{padding:10px 14px;border-radius:var(--wf-r-md);border:1px solid var(--wf-border);background:rgba(255,255,255,.04);color:var(--wf-fg);font:400 14px/1 var(--font-sans);outline:none;transition:border-color var(--wf-dur)}
+.crm-input:focus{border-color:var(--wf-purple)}
+.crm-input::placeholder{color:var(--wf-fg-faint)}
+.crm-submit{padding:10px 20px;border-radius:var(--wf-r-md);border:none;background:var(--wf-purple);color:#fff;font:600 14px/1 var(--font-sans);cursor:pointer;transition:opacity var(--wf-dur)}
+.crm-submit:hover{opacity:.85}
+.crm-privacy{font:300 11px/1.4 var(--font-mono);color:var(--wf-fg-faint);margin-top:4px}
+
+/* Nurture sequence */
+.nurture-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:16px}
+.nurture-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:768px){.nurture-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.nurture-grid{grid-template-columns:1fr 1fr}}
+.nurture-card{padding:14px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border);text-align:center}
+.nurture-day{font:700 10px/1 var(--font-mono);color:var(--wf-purple);margin-bottom:6px;letter-spacing:.08em}
+.nurture-label{font:500 11px/1.3 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* ================================================================
+   4o. FAQ
+   ================================================================ */
+.faq-section{margin:56px 0 40px}
+.faq-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.faq-title{font:700 24px/1 var(--font-sans);color:var(--wf-fg);letter-spacing:-.02em}
+.faq-count{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.05);font:600 11px/1 var(--font-mono);color:var(--wf-fg-subtle)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-md);margin-bottom:8px;overflow:hidden;transition:border-color var(--wf-dur)}
+.faq-item.open{border-color:var(--wf-border-strong)}
+.faq-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;text-align:left}
+.faq-question{font:500 15px/1.4 var(--font-sans);color:var(--wf-fg)}
+.faq-icon{width:20px;height:20px;flex-shrink:0;color:var(--wf-fg-subtle);transition:transform .25s var(--wf-ease)}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease)}
+.faq-answer-inner{padding:0 20px 20px;font-size:14px;line-height:1.7;color:var(--wf-fg-muted)}
+
+/* ================================================================
+   4p. REFERENCES
+   ================================================================ */
+.references{margin-top:56px;padding-top:32px;border-top:1px solid var(--wf-border)}
+.ref-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:20px}
+.ref-list{display:flex;flex-direction:column;gap:14px}
+.ref-item{display:flex;gap:12px;align-items:flex-start}
+.ref-num{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font:700 10px/1 var(--font-mono);color:var(--wf-fg-subtle);flex-shrink:0}
+.ref-text{font:400 13px/1.5 var(--font-sans);color:var(--wf-fg-subtle)}
+.ref-text a{color:var(--wf-blue);text-decoration:underline;text-underline-offset:2px}
+
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
+.article-sidebar{position:relative}
+@media(max-width:1024px){.article-sidebar{order:-1}}
+.sidebar-sticky{position:sticky;top:80px;display:flex;flex-direction:column;gap:24px}
+
+/* Sidebar TOC */
+.stoc{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.stoc-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:16px}
+.stoc-list{display:flex;flex-direction:column;gap:2px}
+.stoc-link{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:var(--wf-r-sm);font:400 12px/1.3 var(--font-sans);color:var(--wf-fg-subtle);transition:all var(--wf-dur) var(--wf-ease);text-decoration:none}
+.stoc-link:hover{color:var(--wf-fg-muted);background:rgba(255,255,255,.03)}
+.stoc-link.active{color:var(--wf-fg);background:rgba(69,137,255,.08)}
+.stoc-dot{width:5px;height:5px;border-radius:50%;background:var(--wf-border-strong);flex-shrink:0;transition:background var(--wf-dur)}
+.stoc-link.active .stoc-dot{background:var(--wf-blue)}
+
+/* Sidebar stats */
+.sidebar-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sstat{padding:14px;border-radius:var(--wf-r-md);background:var(--wf-surface);border:1px solid var(--wf-border);text-align:center}
+.sstat-val{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:4px}
+.sstat-label{font:400 10px/1 var(--font-mono);color:var(--wf-fg-faint);text-transform:uppercase;letter-spacing:.08em}
+
+/* Sidebar libraries */
+.sidebar-libs{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.slib-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.slib-list{display:flex;flex-direction:column;gap:6px}
+.slib-item{display:flex;align-items:center;gap:10px;padding:5px 0}
+.slib-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.slib-name{font:400 12px/1 var(--font-sans);color:var(--wf-fg-muted);flex:1}
+.slib-count{font:500 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* Sidebar series nav */
+.sidebar-series{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.sseries-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.sseries-list{display:flex;flex-direction:column;gap:4px}
+.sseries-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--wf-r-sm);font:400 12px/1.3 var(--font-sans);color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.sseries-item:hover{background:rgba(255,255,255,.03);color:var(--wf-fg-muted)}
+.sseries-item.current{background:rgba(69,137,255,.08);color:var(--wf-blue);font-weight:500}
+.sseries-num{font:600 10px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.sseries-item.current .sseries-num{color:var(--wf-blue)}
+
+/* ================================================================
+   5. AUTHOR SECTION
+   ================================================================ */
+.author-section{max-width:1280px;margin:0 auto;padding:0 32px 80px}
+.author-inner{border-top:1px solid var(--wf-border);padding-top:48px;display:grid;grid-template-columns:320px 1px 1fr;gap:40px;align-items:start}
+@media(max-width:900px){.author-inner{grid-template-columns:1fr;gap:32px}.author-divider{display:none}}
+.author-card{display:flex;flex-direction:column;align-items:center;text-align:center}
+.author-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);display:flex;align-items:center;justify-content:center;font:700 28px/1 var(--font-sans);color:#fff;margin-bottom:16px}
+.author-name{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:4px}
+.author-role{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);margin-bottom:14px}
+.author-bio{font:300 13px/1.6 var(--font-sans);color:var(--wf-fg-muted);max-width:280px;margin-bottom:18px}
+.author-socials{display:flex;gap:10px}
+.author-social{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.author-social:hover{background:rgba(255,255,255,.08);color:var(--wf-fg)}
+.author-social svg{width:14px;height:14px}
+.author-divider{background:var(--wf-border);width:1px}
+
+/* Related articles */
+.related-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:20px}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:768px){.related-grid{grid-template-columns:1fr}}
+.related-card{border-radius:var(--wf-r-lg);overflow:hidden;border:1px solid var(--wf-border);transition:border-color var(--wf-dur);cursor:pointer}
+.related-card:hover{border-color:var(--wf-border-strong)}
+.related-thumb{height:100px;background:var(--wf-surface);position:relative;overflow:hidden}
+.related-thumb-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.related-thumb-pattern{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:20px 20px}
+.related-info{padding:14px}
+.related-tag{font:600 9px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wf-blue);margin-bottom:8px}
+.related-card-title{font:600 13px/1.3 var(--font-sans);color:var(--wf-fg);margin-bottom:8px}
+.related-meta{font:400 11px/1 var(--font-sans);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   6. FOOTER
+   ================================================================ */
+.footer{background:var(--wf-bg-sunken);border-top:1px solid var(--wf-border);padding:56px 0 32px}
+.footer-inner{max-width:1280px;margin:0 auto;padding:0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:40px;margin-bottom:40px}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}}
+.footer-brand{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:12px;letter-spacing:-.02em}
+.footer-brand span{font-style:italic;color:var(--wf-brand)}
+.footer-desc{font:300 13px/1.6 var(--font-sans);color:var(--wf-fg-subtle);max-width:280px}
+.footer-col-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:8px}
+.footer-link{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-link.active{color:var(--wf-blue)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--wf-border)}
+.footer-copy{font:300 12px/1 var(--font-sans);color:var(--wf-fg-faint)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{font:300 12px/1 var(--font-sans);color:var(--wf-fg-faint);transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg-subtle)}
+
+/* ================================================================
+   ANIMATIONS / SCROLL REVEAL
+   ================================================================ */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s var(--wf-ease),transform .6s var(--wf-ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+
+/* Article-specific styles */
+
+/* ━━ TOKENS ━━ */
+:root{
+  --void:var(--wf-bg);--deep:#0d0d10;--dark:#111116;--mid:#18181f;--panel:#1e1e28;--lift:#252530;
+  --cream:#f2ede6;--cream2:#e8e2d9;--t1:#f2ede6;--t2:#9e9a93;--t3:#5c5956;--t4:#36342f;
+  --blue:#4589FF;--blue-lt:#6fa8ff;--green:#1db954;--amber:#e8a000;--red:#e03030;
+  --purple:#8b5cf6;--teal:#0891b2;--rose:#e11d48;--olive:#d97706;
+  --border:rgba(242,237,230,.06);--border2:rgba(242,237,230,.1);--border3:rgba(242,237,230,.16);
+  --serif:"Playfair Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",'Fira Code',monospace;
+  --ease:cubic-bezier(.25,.46,.45,.94);--spring:cubic-bezier(.34,1.56,.64,1);
+  --c-art:#4589FF;--c-img:#1db954;--c-vid:#e8a000;--c-soc:#e11d48;
+  --c-des:#0891b2;--c-seo:#d97706;--c-crm:#8b5cf6;--c-con:#059669;--c-tas:#6b7280;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+/* ━━ ATTRIBUTION MODE ━━ */
+.src{position:relative}
+.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}
+.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}
+.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}
+body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-art);outline-offset:3px}
+body.attr .img{outline:1.5px solid var(--c-img);outline-offset:3px}
+body.attr .des{outline:1.5px solid var(--c-des);outline-offset:3px}
+body.attr .seo{outline:1.5px solid var(--c-seo);outline-offset:3px}
+body.attr .crm{outline:1.5px solid var(--c-crm);outline-offset:3px}
+body.attr .soc{outline:1.5px solid var(--c-soc);outline-offset:3px}
+body.attr .tas{outline:1.5px solid var(--c-tas);outline-offset:3px}
+.art .src-tag{background:var(--c-art);color:#fff}.img .src-tag{background:var(--c-img);color:#fff}
+.des .src-tag{background:var(--c-des);color:#fff}.seo .src-tag{background:var(--c-seo);color:#fff}
+.crm .src-tag{background:var(--c-crm);color:#fff}.soc .src-tag{background:var(--c-soc);color:#fff}
+.tas .src-tag{background:var(--c-tas);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-art)}body.attr .img .ann-c{border-color:var(--c-img)}
+body.attr .des .ann-c{border-color:var(--c-des)}body.attr .seo .ann-c{border-color:var(--c-seo)}
+body.attr .crm .ann-c{border-color:var(--c-crm)}body.attr .soc .ann-c{border-color:var(--c-soc)}
+body.attr .tas .ann-c{border-color:var(--c-tas)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+
+/* ━━ PROGRESS ━━ */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--wf-blue);z-index:9999;width:0;transition:width .1s linear}
+
+/* ━━ NAV ━━ */
+nav{position:sticky;top:0;z-index:500;background:rgba(8,8,10,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border-subtle);height:52px;display:flex;align-items:center}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center;gap:0}
+.nav-logo{font-family:var(--font-serif);font-size:18px;font-weight:700;color:var(--wf-fg);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}
+.nav-logo span{font-style:italic;color:var(--wf-blue)}
+.nav-rule{width:1px;height:16px;background:var(--wf-border);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--font-sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--ease)}
+.nbtn-ghost{background:none;border:1px solid var(--wf-border);color:var(--wf-fg-subtle)}
+.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--wf-brand);display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+/* ━━ PIPELINE STRIP ━━ */
+#pstrip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border-subtle);overflow:hidden;max-height:0;transition:max-height .35s var(--ease)}
+#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;gap:0;overflow-x:auto}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}
+.ps-chip{padding:4px 10px;border-radius:4px;font:600 10px/1 var(--font-sans);display:flex;align-items:center;gap:5px;flex-shrink:0;cursor:pointer;transition:opacity .15s;letter-spacing:.04em}
+.ps-chip:hover{opacity:.75}
+.ps-dot{width:5px;height:5px;border-radius:50%}
+.ps-arrow{font-size:10px;color:var(--wf-fg-faint);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--font-sans);color:var(--wf-brand);letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+/* ━━ PIPELINE MAP ━━ */
+#pipemap{background:var(--wf-surface);border-bottom:1px solid var(--wf-border-subtle);overflow:hidden;max-height:0;transition:max-height .5s var(--ease)}
+#pipemap.open{max-height:300px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:22px 32px}
+.pm-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.pm-title span{font-weight:300;color:var(--wf-fg-subtle)}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-flow::-webkit-scrollbar{height:2px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--wf-border);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--font-sans);color:var(--wf-fg)}
+.pm-node-sub{font:300 8px/1 var(--font-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:6px;text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}
+.pm-lib-name{font:700 7px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.pm-lib-count{font:300 8px/1 var(--font-mono);color:var(--wf-fg-faint);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--wf-border-subtle)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--font-mono);color:var(--wf-fg-subtle)}
+.pm-meta-n{font:700 11px/1 var(--font-mono);color:var(--wf-fg)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(36,96,255,.5),transparent);animation:scan2 2s ease-in-out infinite;margin:10px 0}
+@keyframes scan2{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+
+/* ━━ HERO ━━ */
+.hero{background:var(--wf-bg);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border-subtle)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 50% at 72% 35%,rgba(8,145,178,.06) 0%,transparent 65%),radial-gradient(ellipse 40% 60% at 15% 80%,rgba(36,96,255,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--wf-border-subtle) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border-subtle) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-divider{width:20px;height:1px;background:var(--wf-fg-faint)}
+.eye-series{font:600 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-teal);opacity:.8}
+h1{font-family:var(--font-serif);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+h1 em{font-style:italic;color:#38bdf8}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--wf-border);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--wf-teal),var(--wf-blue));display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:var(--wf-border);margin:0 18px}
+.h-date{font-size:13px;color:var(--wf-fg-subtle)}
+.h-read{font-size:13px;color:var(--wf-fg-subtle);margin-left:14px}
+/* ━━ HERO VIZ — Article 02: Document-being-read ━━ */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;background:linear-gradient(160deg,#080a14 0%,#060c18 60%,#06080f 100%);border-radius:16px 16px 0 0;border:1px solid rgba(8,145,178,.12);border-bottom:none;overflow:hidden;cursor:crosshair}
+.hv-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(8,145,178,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(8,145,178,.04) 1px,transparent 1px);background-size:32px 32px}
+.hv-glow{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(8,145,178,.12) 0%,transparent 65%);animation:gpulse2 4s ease-in-out infinite}
+@keyframes gpulse2{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(8,145,178,.4) 30%,rgba(56,189,248,.7) 50%,rgba(8,145,178,.4) 70%,transparent);animation:scan 5.5s ease-in-out infinite;opacity:.5}
+@keyframes scan{0%{top:8%;opacity:0}8%{opacity:.5}92%{opacity:.25}100%{top:92%;opacity:0}}
+
+/* Document card in center */
+.hv-doc{
+  position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);
+  width:140px;background:rgba(8,145,178,.06);border:1px solid rgba(8,145,178,.4);
+  border-radius:8px;padding:10px 12px;z-index:10;
+  box-shadow:0 0 40px rgba(8,145,178,.2),inset 0 0 20px rgba(8,145,178,.05);
+  cursor:pointer;transition:box-shadow .2s,border-color .2s;
+}
+.hv-doc:hover{box-shadow:0 0 60px rgba(8,145,178,.35);border-color:rgba(8,145,178,.7)}
+.hv-doc-head{font:700 7px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(56,189,248,.6);margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.hv-doc-head::before{content:'◈';font-size:8px}
+.hv-field{height:5px;border-radius:2px;margin-bottom:5px;position:relative;overflow:hidden}
+.hv-field::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:fieldshine 3s ease-in-out infinite;transform:translateX(-100%)}
+.hv-field.active::after{animation:fieldshine 1s ease-in-out 1}
+@keyframes fieldshine{0%{transform:translateX(-100%);opacity:0}50%{opacity:1}100%{transform:translateX(100%);opacity:0}}
+
+/* Library reader nodes around the document */
+.hv-reader{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:5px;z-index:10;cursor:pointer}
+.hv-r-circle{border-radius:8px;display:flex;align-items:center;justify-content:center;font:700 8px/1 var(--font-mono);letter-spacing:.07em;text-transform:uppercase;transition:transform .2s var(--spring)}
+.hv-r-circle:hover{transform:scale(1.15)}
+.hv-r-label{font:600 7px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:rgba(242,237,230,.22);white-space:nowrap}
+.hv-svg2{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.hv-readout{position:absolute;bottom:16px;left:16px;font:300 8px/1.8 var(--font-mono);color:rgba(56,189,248,.3);letter-spacing:.06em}
+.hv-badge{position:absolute;top:14px;right:14px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(56,189,248,.25)}
+/* Field scan beam - highlights active reading field */
+.hv-field-beam{
+  position:absolute;left:0;right:0;height:2px;pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(56,189,248,.6),transparent);
+  transition:opacity .3s;
+}
+.hv-field-beam.on{opacity:1}
+
+/* ━━ ARTICLE LAYOUT ━━ */
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}
+.sidebar{position:sticky;top:72px}
+
+/* ━━ DIRECT ANSWER BOX ━━ */
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;background:linear-gradient(135deg,rgba(8,145,178,.05),rgba(8,145,178,.02));border:1px solid rgba(8,145,178,.18);border-left:3px solid var(--wf-teal);border-radius:10px;position:relative;overflow:hidden}
+.dab-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:#38bdf8;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dab-label::before{content:'▸';font-size:9px}
+.dab-q{font:600 15px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:10px;letter-spacing:-.01em}
+.dab-a{font:300 14px/1.72 var(--font-sans);color:var(--cream2)}
+.dab-a strong{font-weight:600;color:var(--wf-fg)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}
+.dab-source{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(8,145,178,.08);color:rgba(8,145,178,.5);border:1px solid rgba(8,145,178,.15)}
+
+/* ━━ TOC INLINE ━━ */
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:10px}
+.toc-inline-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--wf-border-subtle);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;text-decoration:none;transition:color .15s}
+.toc-inline-item:last-child{border-bottom:none}
+.toc-inline-item:hover{color:var(--wf-fg)}
+.toc-n{font:700 9px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0;padding-top:2px}
+
+/* ━━ TYPOGRAPHY ━━ */
+.body p{font-size:17.5px;line-height:1.82;color:var(--cream2);font-weight:300;margin-bottom:28px}
+.body p strong{font-weight:600;color:var(--wf-fg)}
+.body p a{color:#38bdf8;text-decoration:none;border-bottom:1px solid rgba(56,189,248,.3);transition:border-color .15s}
+.body p a:hover{border-bottom-color:#38bdf8}
+.body p sup a{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:rgba(8,145,178,.15);border:1px solid rgba(8,145,178,.3);font:700 9px/1 var(--font-mono);color:#38bdf8;vertical-align:super;margin-left:2px;text-decoration:none;transition:all .15s}
+.body p sup a:hover{background:var(--wf-teal);color:#fff;border:none}
+h2.sh{font-family:var(--font-serif);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--wf-fg);margin:60px 0 20px}
+h3.sh3{font:700 11px/1 var(--font-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin:40px 0 14px}
+.lede{font-size:19.5px !important;line-height:1.72 !important;color:var(--wf-fg) !important;font-weight:400 !important;margin-bottom:32px !important}
+.lede::first-letter{font-family:var(--font-serif);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:#38bdf8}
+
+/* ━━ ANNOTATED BRIEF UI ━━ */
+.annotated-brief{
+  margin:52px 0;border-radius:12px;overflow:hidden;
+  border:1px solid rgba(8,145,178,.18);
+  background:linear-gradient(160deg,#07080f 0%,#090b14 100%);
+}
+.ab-header{
+  padding:14px 22px;border-bottom:1px solid rgba(8,145,178,.12);
+  display:flex;align-items:center;gap:12px;
+}
+.ab-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.ab-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--font-mono);background:rgba(8,145,178,.1);color:#38bdf8;border:1px solid rgba(8,145,178,.2)}
+.ab-mode-toggle{
+  margin-left:auto;display:flex;gap:6px;
+}
+.abt-btn{
+  padding:4px 10px;border-radius:4px;font:700 8px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;border:none;background:rgba(255,255,255,.04);color:var(--wf-fg-subtle);border:1px solid var(--wf-border-subtle);
+  transition:all .15s;
+}
+.abt-btn.on{background:rgba(8,145,178,.12);color:#38bdf8;border-color:rgba(8,145,178,.25)}
+.ab-body{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:760px){.ab-body{grid-template-columns:1fr}}
+.ab-fields{padding:20px 24px;border-right:1px solid rgba(8,145,178,.08)}
+.ab-panel{padding:20px 24px;background:rgba(0,0,0,.2)}
+/* Individual field rows */
+.brief-field{
+  margin-bottom:12px;border-radius:8px;border:1px solid var(--wf-border-subtle);
+  overflow:hidden;cursor:pointer;transition:border-color .15s;
+}
+.brief-field:hover,.brief-field.active{border-color:rgba(8,145,178,.35)}
+.brief-field.active{background:rgba(8,145,178,.04)}
+.bf-label{
+  padding:8px 12px 5px;
+  font:700 8px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.bf-label-text{display:flex;align-items:center;gap:6px}
+.bf-num{font:700 7px/1 var(--font-mono);color:var(--wf-fg-subtle);background:rgba(255,255,255,.05);padding:2px 5px;border-radius:2px}
+.bf-libs{display:flex;gap:3px}
+.bf-lib-dot{width:6px;height:6px;border-radius:50%}
+.bf-value{
+  padding:0 12px 10px;font:300 12px/1.6 var(--font-sans);color:var(--wf-fg-muted);
+}
+.bf-value.empty{color:var(--wf-fg-faint);font-style:italic;font-size:11px}
+/* Panel when field is active */
+.ab-panel-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:200px;gap:8px}
+.app-icon{font-size:28px;opacity:.2}
+.app-text{font:300 12px/1.5 var(--font-mono);color:var(--wf-fg-faint);text-align:center}
+.field-detail{display:none}
+.field-detail.show{display:block}
+.fd-field-name{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:#38bdf8;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(8,145,178,.12)}
+.fd-interp{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.fd-interp-row{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:6px;background:rgba(255,255,255,.02);border:1px solid var(--wf-border-subtle)}
+.fd-lib-badge{
+  padding:2px 7px;border-radius:3px;font:700 7px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;
+  flex-shrink:0;margin-top:1px;
+}
+.fd-interp-text{font:300 12px/1.6 var(--font-sans);color:var(--wf-fg-muted)}
+.fd-interp-text strong{font-weight:600;color:var(--wf-fg)}
+.fd-quality-hint{
+  padding:10px 12px;border-radius:6px;background:rgba(232,160,0,.05);
+  border:1px solid rgba(232,160,0,.15);margin-top:12px;
+}
+.fdq-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(232,160,0,.7);margin-bottom:4px}
+.fdq-text{font:300 11px/1.6 var(--font-sans);color:var(--wf-fg-subtle)}
+
+/* ━━ FIELD INTERPRETATION MATRIX ━━ */
+.interp-matrix{
+  margin:52px 0;border-radius:12px;overflow:hidden;
+  border:1px solid rgba(8,145,178,.15);
+  background:var(--wf-surface);
+}
+.im-header{padding:14px 20px;border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.3)}
+.im-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.im-subtitle{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.im-example-field{padding:12px 20px;border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;gap:10px;background:rgba(8,145,178,.03)}
+.im-field-label{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:#38bdf8}
+.im-field-value{font:300 12px/1 var(--font-mono);color:var(--wf-fg-muted);flex:1}
+.im-scroll{overflow-x:auto}
+.im-scroll::-webkit-scrollbar{height:2px}
+.im-scroll::-webkit-scrollbar-thumb{background:var(--lift)}
+.im-table{width:100%;border-collapse:collapse;min-width:600px}
+.im-table th{padding:10px 14px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);text-align:left;border-bottom:1px solid var(--wf-border-subtle);white-space:nowrap;background:rgba(255,255,255,.02)}
+.im-table th:first-child{padding-left:20px}
+.im-table td{padding:12px 14px;border-bottom:1px solid var(--wf-border-subtle);vertical-align:top}
+.im-table td:first-child{padding-left:20px}
+.im-table tr:last-child td{border-bottom:none}
+.im-table tr:hover td{background:rgba(255,255,255,.015)}
+.im-lib-cell{display:flex;align-items:center;gap:8px}
+.im-lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.im-lib-name{font:600 12px/1 var(--font-sans);color:var(--wf-fg)}
+.im-extraction{font:300 12px/1.6 var(--font-sans);color:var(--wf-fg-muted)}
+.im-extraction strong{font-weight:600;color:var(--wf-fg)}
+.im-output{font:300 11px/1.5 var(--font-mono);color:var(--wf-fg-subtle);margin-top:4px}
+
+/* ━━ FILLED EXAMPLE BRIEF ━━ */
+.example-brief{
+  margin:52px 0;border-radius:12px;overflow:hidden;
+  border:1px solid rgba(36,96,255,.15);
+  background:var(--wf-surface);
+}
+.eb-header{
+  padding:16px 22px;border-bottom:1px solid rgba(36,96,255,.1);
+  display:flex;align-items:center;gap:12px;
+  background:rgba(36,96,255,.03);
+}
+.eb-eyebrow{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(36,96,255,.6)}
+.eb-title{font-family:var(--font-serif);font-size:18px;font-weight:600;color:var(--wf-fg);margin-left:auto}
+.eb-badge{padding:3px 10px;border-radius:20px;font:700 9px/1 var(--font-mono);letter-spacing:.08em;background:rgba(36,96,255,.1);color:var(--wf-blue);border:1px solid rgba(36,96,255,.2)}
+.eb-body{padding:24px}
+.eb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.eb-field{
+  background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);
+  border-radius:8px;padding:14px 16px;
+}
+.eb-field.full{grid-column:1/-1}
+.ebf-label{font:700 8px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.ebf-lib-tags{display:flex;gap:3px;margin-left:auto}
+.ebf-dot{width:5px;height:5px;border-radius:50%}
+.ebf-value{font:400 13px/1.6 var(--font-sans);color:var(--wf-fg-muted)}
+.ebf-value strong{font-weight:600;color:var(--wf-fg)}
+.ebf-note{font:300 10px/1.5 var(--font-mono);color:var(--wf-fg-faint);margin-top:5px;padding-top:5px;border-top:1px solid var(--wf-border-subtle)}
+/* Filled quality indicator */
+.eb-quality{
+  display:flex;align-items:center;gap:16px;
+  padding:12px 16px;border-top:1px solid var(--wf-border-subtle);
+  background:rgba(29,185,84,.03);
+}
+.ebq-label{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.6)}
+.ebq-score{display:flex;gap:3px}
+.ebq-dot-fill{width:8px;height:8px;border-radius:50%;background:var(--wf-brand)}
+.ebq-dot-empty{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1)}
+.ebq-text{font:300 11px/1 var(--font-sans);color:var(--wf-fg-subtle);margin-left:4px}
+
+/* ━━ GOOD VS WEAK COMPARISON ━━ */
+.compare-block{
+  margin:52px 0;border-radius:12px;overflow:hidden;
+  border:1px solid var(--wf-border);background:var(--wf-surface);
+}
+.cb-header{padding:14px 20px;border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;gap:10px}
+.cb-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.compare-col{padding:20px 24px}
+.compare-col-head{
+  display:flex;align-items:center;gap:8px;margin-bottom:16px;
+  padding:7px 12px;border-radius:6px;font:700 10px/1 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;
+}
+.compare-col-head.weak{background:rgba(224,48,48,.08);color:#f87171;border:1px solid rgba(224,48,48,.15)}
+.compare-col-head.strong{background:rgba(29,185,84,.08);color:#4ade80;border:1px solid rgba(29,185,84,.15)}
+.compare-divider{width:1px;background:var(--wf-border-subtle);margin:20px 0}
+.cmp-row{margin-bottom:14px}
+.cmp-field-name{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.cmp-value{
+  padding:8px 12px;border-radius:6px;font:300 12px/1.6 var(--font-sans);
+}
+.cmp-value.weak-val{background:rgba(224,48,48,.05);border:1px solid rgba(224,48,48,.1);color:var(--wf-fg-subtle)}
+.cmp-value.strong-val{background:rgba(29,185,84,.04);border:1px solid rgba(29,185,84,.1);color:var(--wf-fg-muted)}
+.cmp-value strong{font-weight:600;color:var(--wf-fg)}
+.cmp-impact{font:300 10px/1.4 var(--font-mono);color:var(--wf-fg-faint);margin-top:3px;display:flex;align-items:center;gap:4px}
+
+/* ━━ PULL QUOTE ━━ */
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--wf-surface);border-radius:10px;border:1px solid var(--wf-border-subtle);border-left:3px solid var(--wf-teal);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--font-serif);font-size:150px;font-weight:700;color:rgba(8,145,178,.1);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--font-serif);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--wf-fg);position:relative;z-index:1;margin-bottom:14px}
+.pq-text em{font-style:italic;color:#38bdf8}
+.pq-attr{font:600 11px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);position:relative;z-index:1}
+
+/* ━━ SOCIAL BLOCK ━━ */
+.social-block{margin:52px 0;border-radius:10px;overflow:hidden;border:1px solid var(--wf-border-subtle)}
+.sb-hd{padding:11px 18px;background:var(--wf-surface);border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;justify-content:space-between}
+.sb-hd-label{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.sb-hd-src{font:normal 9px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.sb-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--wf-border-subtle)}
+.sb-tab{padding:10px 20px;font:600 11px/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--font-sans)}
+.sb-tab.on{color:var(--wf-fg);border-bottom-color:var(--wf-teal)}
+.sb-platform{display:none;padding:20px 22px;background:var(--mid)}
+.sb-platform.on{display:block}
+.tw-card{background:#fff;border:1px solid #e1e8ed;border-radius:14px;padding:16px;max-width:500px}
+.tw-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tw-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--wf-teal),var(--wf-blue));display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:15px;color:#fff;font-weight:700}
+.tw-name{font:700 14px/1 'Helvetica Neue',sans-serif;color:#14171a}
+.tw-handle{font:400 13px/1 'Helvetica Neue',sans-serif;color:#657786}
+.tw-body{font:400 14px/1.6 'Helvetica Neue',sans-serif;color:#14171a;margin-bottom:12px}
+.tw-meta{font:400 12px/1 'Helvetica Neue',sans-serif;color:#657786}
+.li-card{background:#fff;border:1px solid #dce6f1;border-radius:10px;padding:16px;max-width:500px;font-family:'Helvetica Neue',Arial,sans-serif}
+.li-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.li-av{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--wf-teal),var(--wf-blue));display:flex;align-items:center;justify-content:center;font:700 16px var(--font-serif);color:#fff}
+.li-name{font:600 14px/1 'Helvetica Neue',sans-serif;color:#000000e6}
+.li-sub{font:400 12px/1 'Helvetica Neue',sans-serif;color:#00000099}
+.li-body{font:400 14px/1.65 'Helvetica Neue',sans-serif;color:#000000cc}
+.ig-card{max-width:400px}
+.ig-handle{font:700 13px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:10px}
+.ig-img{height:240px;border-radius:6px;margin-bottom:12px;background:linear-gradient(135deg,#06080f,#090c18);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ig-img::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(8,145,178,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(8,145,178,.06) 1px,transparent 1px);background-size:22px 22px}
+.ig-img-text{position:relative;z-index:2;font-family:var(--font-serif);font-size:22px;font-style:italic;color:rgba(242,237,230,.8);text-align:center;max-width:260px;line-height:1.3}
+.ig-cap{font-size:13px;line-height:1.65;color:var(--wf-fg-muted)}
+.ig-hash{font-size:12px;color:#38bdf8;margin-top:8px}
+
+/* ━━ SEO BLOCK ━━ */
+.seo-block{margin:48px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(217,119,6,.2);background:linear-gradient(135deg,rgba(217,119,6,.04),transparent)}
+.seo-hd{padding:11px 18px;border-bottom:1px solid rgba(217,119,6,.15);display:flex;align-items:center;gap:10px}
+.seo-tag{padding:3px 9px;border-radius:4px;font:700 9px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;background:rgba(217,119,6,.12);color:var(--wf-orange);border:1px solid rgba(217,119,6,.2)}
+.seo-body{padding:18px 22px}
+.serp{background:#fff;border:1px solid #dfe1e5;border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.serp-url{font:normal 12px/1 'Roboto',Arial,sans-serif;color:#3c4043;margin-bottom:4px}
+.serp-title{font:400 18px/1.3 Arial,sans-serif;color:#1a0dab;cursor:pointer;margin-bottom:5px}
+.serp-title:hover{text-decoration:underline}
+.serp-desc{font:400 13px/1.55 Arial,sans-serif;color:#4d5156}
+.aeo-panel{background:linear-gradient(135deg,rgba(217,119,6,.04),transparent);border:1px solid rgba(217,119,6,.12);border-radius:8px;padding:16px 18px;margin-top:16px}
+.aeo-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(217,119,6,.6);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.aeo-label::before{content:'◈';font-size:9px}
+.aeo-q{font:600 13px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:6px}
+.aeo-a{font:300 12px/1.65 var(--font-sans);color:var(--wf-fg-muted)}
+.seo-kws{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.seo-kw{padding:4px 11px;border-radius:20px;font:500 11px/1 var(--font-sans);background:rgba(217,119,6,.08);color:#92600a;border:1px solid rgba(217,119,6,.15)}
+
+/* ━━ CRM ━━ */
+.crm-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid rgba(139,92,246,.2);background:linear-gradient(135deg,var(--wf-surface) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-block::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}
+@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(139,92,246,.6);margin-bottom:10px}
+.crm-headline{font-family:var(--font-serif);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--wf-fg);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--wf-fg-subtle);line-height:1.65}
+.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--wf-border);border-radius:8px;font:300 14px var(--font-sans);color:var(--wf-fg);outline:none;transition:border-color .15s}
+.crm-inp:focus{border-color:rgba(139,92,246,.5)}
+.crm-inp::placeholder{color:var(--wf-fg-faint)}
+.crm-btn{padding:12px;background:var(--wf-purple);border:none;border-radius:8px;font:700 13px var(--font-sans);color:#fff;cursor:pointer;transition:opacity .15s}
+.crm-btn:hover{opacity:.88}
+.crm-note{font-size:10px;color:var(--wf-fg-faint);text-align:center}
+.crm-seq{padding:0 44px 28px;border-top:1px solid var(--wf-border-subtle);position:relative;z-index:1}
+.crm-seq-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin:18px 0 12px}
+.crm-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:700px){.crm-steps{grid-template-columns:1fr 1fr}}
+.crm-step{background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);border-radius:7px;padding:10px 12px}
+.crm-step-d{font:700 9px/1 var(--font-mono);color:rgba(139,92,246,.6);margin-bottom:5px;letter-spacing:.05em}
+.crm-step-t{font:400 11px/1.4 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* ━━ FAQ ━━ */
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--wf-border)}
+.faq-head-title{font-family:var(--font-serif);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--wf-fg)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--font-mono);background:rgba(217,119,6,.1);color:var(--wf-orange);border:1px solid rgba(217,119,6,.2)}
+.faq-item{border:1px solid var(--wf-border-subtle);border-radius:8px;overflow:hidden;margin-bottom:8px;transition:border-color .15s}
+.faq-item.open{border-color:var(--wf-border)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--font-sans);color:var(--wf-fg-muted);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--wf-fg)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wf-fg-subtle);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:rgba(8,145,178,.1);border-color:rgba(8,145,178,.3);color:#38bdf8}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--ease),padding .2s}
+.faq-item.open .faq-a{max-height:400px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--font-sans);color:var(--cream2)}
+.faq-a-inner strong{font-weight:600;color:var(--wf-fg)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.faq-schema-note::before{content:'◈';color:rgba(217,119,6,.4);font-size:8px}
+
+/* ━━ REFERENCES ━━ */
+.references{margin-top:52px;padding-top:28px;border-top:1px solid var(--wf-border-subtle)}
+.ref-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ref-title::after{content:'';flex:1;height:1px;background:var(--wf-border-subtle)}
+.ref-item{display:flex;gap:10px;margin-bottom:12px;font-size:12px;color:var(--wf-fg-subtle);line-height:1.65}
+.ref-num{width:22px;height:22px;border-radius:50%;flex-shrink:0;background:rgba(8,145,178,.1);border:1px solid rgba(8,145,178,.2);display:flex;align-items:center;justify-content:center;font:700 9px/1 var(--font-mono);color:#38bdf8;margin-top:1px}
+
+/* ━━ SIDEBAR ━━ */
+.sb-sec{margin-bottom:36px}
+.sb-sec-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border-subtle)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--wf-border-subtle);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}
+.toc-item:hover,.toc-item.active{color:var(--wf-fg)}
+.toc-item.active{color:#38bdf8}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}
+.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--wf-surface);border:1px solid var(--wf-border-subtle);border-radius:8px;padding:12px}
+.stat-n{font:700 22px/1 var(--font-mono);color:var(--wf-fg);margin-bottom:3px}
+.stat-l{font-size:10px;color:var(--wf-fg-subtle);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}
+.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wf-surface);border:1px solid var(--wf-border-subtle);border-radius:7px;cursor:pointer;transition:all .15s}
+.lib-item:hover{border-color:var(--wf-border)}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lib-name{font:500 12px/1 var(--font-sans);color:var(--wf-fg);flex:1}
+.lib-count{font:normal 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--wf-surface);border:1px solid var(--wf-border-subtle);border-radius:7px;text-decoration:none;transition:all .15s;cursor:pointer}
+.sn-item:hover{border-color:var(--wf-border)}
+.sn-item.current{border-color:rgba(8,145,178,.3);background:rgba(8,145,178,.05)}
+.sn-num{font:700 10px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.sn-item.current .sn-num{color:#38bdf8}
+.sn-title{font:400 11px/1.35 var(--font-sans);color:var(--wf-fg-subtle);flex:1}
+.sn-item.current .sn-title{color:var(--wf-fg)}
+
+/* ━━ AUTHOR + RELATED ━━ */
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--wf-border-subtle)}
+.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}
+@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--wf-teal),var(--wf-blue));display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--font-serif);font-size:24px;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--font-sans);color:#38bdf8;letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--wf-fg-subtle);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--wf-border);color:var(--wf-fg-subtle);text-decoration:none;transition:all .15s}
+.author-link:hover{color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.author-divider{background:var(--wf-border-subtle)}
+.related-label{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}
+.rel-thumb{height:100px;border-radius:8px;margin-bottom:10px;overflow:hidden;position:relative}
+.rel-thumb-bg{width:100%;height:100%;position:relative}
+.rt-01{background:linear-gradient(135deg,#07071a,#0d1030)}
+.rt-03{background:linear-gradient(135deg,#071207,#0d2010)}
+.rt-05{background:linear-gradient(135deg,#070712,#0d0d24)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--font-mono);letter-spacing:.05em;text-transform:uppercase}
+.rel-series-tag{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rel-title{font:500 13px/1.45 var(--font-sans);color:var(--wf-fg-muted);margin-bottom:4px;transition:color .15s}
+.rel-card:hover .rel-title{color:var(--wf-fg)}
+.rel-meta{font:300 11px/1 var(--font-sans);color:var(--wf-fg-faint)}
+
+/* ━━ FOOTER ━━ */
+.footer-menu{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border-subtle);padding:52px 32px 36px}
+.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--wf-border-subtle)}
+@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--font-serif);font-size:20px;color:var(--wf-fg);margin-bottom:8px}
+.fm-logo span{font-style:italic;color:var(--wf-blue)}
+.fm-tagline{font-size:13px;color:var(--wf-fg-subtle);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(36,96,255,.08);border:1px solid rgba(36,96,255,.15);color:rgba(36,96,255,.6)}
+.fm-col-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-col a{font-size:13px;color:var(--wf-fg-subtle);text-decoration:none;transition:color .15s}
+.fm-col a:hover{color:var(--wf-fg)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}
+.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}
+.fm-series-item:hover{opacity:.75}
+.fm-s-num{font:700 9px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.fm-s-title{font:300 11px/1.3 var(--font-sans);color:var(--wf-fg-subtle);flex:1}
+.final-footer{background:var(--wf-bg);border-top:1px solid var(--wf-border-subtle);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--font-mono);color:var(--wf-fg-faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ff-sep{width:1px;height:10px;background:var(--wf-fg-faint)}
+.ff-series{color:rgba(36,96,255,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-blue);padding:5px 14px;border:1px solid rgba(36,96,255,.2);border-radius:20px;background:rgba(36,96,255,.06)}
+
+/* ━━ SCROLL REVEAL ━━ */
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.r.in{opacity:1;transform:none}
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- ═══ NAV ═══ -->
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Wind<span>field</span></a>
+    <nav class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/about" class="nav-link">About</a>
+      <a href="/portfolio" class="nav-link">Portfolio</a>
+      <a href="/product" class="nav-link">Product</a>
+      <a href="/pricing" class="nav-link">Pricing</a>
+      <a href="/blog" class="nav-link active">Blog</a>
+      <a href="/contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <button class="nav-toggle" id="pipeline-toggle" onclick="togglePipeline()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Pipeline Map
+      </button>
+      <a href="#" class="nav-cta">Get Started</a>
+      <button class="nav-hamburger" onclick="this.closest('.navbar').classList.toggle('mobile-open')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ PIPELINE STRIP ═══ -->
+<div id="pstrip">
+  <div class="ps-inner">
+    <div class="ps-label">Pipeline · A02</div>
+    <div class="ps-feeds" id="ps-feeds"></div>
+    <div class="ps-arrow">→</div>
+    <div class="ps-result"><span class="live-dot"></span>Complete Article · 5 Libraries · ~32k Tokens · 2m 58s</div>
+  </div>
+</div>
+
+<!-- ═══ PIPELINE MAP ═══ -->
+<div id="pipemap">
+  <div class="pm-inner">
+    <div class="pm-title">ORCHESTRATION MAP <span>— Article 02 · The Context Brief: The One Document That Runs Your Entire Stack</span></div>
+    <div class="pm-scan"></div>
+    <div class="pm-flow">
+      <div class="pm-node" style="border-color:rgba(8,145,178,.3)">
+        <div class="pm-node-label">Input</div>
+        <div class="pm-node-name" style="color:#38bdf8">Context Brief</div>
+        <div class="pm-node-sub">~2 min fill</div>
+      </div>
+      <div class="pm-arr">→</div>
+      <div class="pm-libs">
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-art)"></div><div class="pm-lib-name" style="color:var(--c-art)">ART</div><div class="pm-lib-count">14</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-img)"></div><div class="pm-lib-name" style="color:var(--c-img)">IMG</div><div class="pm-lib-count">3</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-des)"></div><div class="pm-lib-name" style="color:var(--c-des)">DES</div><div class="pm-lib-count">4</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-seo)"></div><div class="pm-lib-name" style="color:var(--c-seo)">SEO</div><div class="pm-lib-count">6</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-crm)"></div><div class="pm-lib-name" style="color:var(--c-crm)">CRM</div><div class="pm-lib-count">5</div></div>
+      </div>
+      <div class="pm-arr">→</div>
+      <div class="pm-node" style="border-color:rgba(139,92,246,.3)">
+        <div class="pm-node-label">Phase 3</div>
+        <div class="pm-node-name" style="color:#4ade80">Orchestrator</div>
+        <div class="pm-node-sub">5 episodes in</div>
+      </div>
+      <div class="pm-arr">→</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.3)">
+        <div class="pm-node-label">Output</div>
+        <div class="pm-node-name" style="color:#4ade80">Full Package</div>
+        <div class="pm-node-sub">&lt; 3 minutes</div>
+      </div>
+    </div>
+    <div class="pm-meta-row">
+      <div class="pm-meta-item"><span class="pm-meta-n">5</span> Libraries</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">32</span> Prompts total</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">~32k</span> Tokens</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">2m 58s</span> Runtime</div>
+      <div class="pm-meta-item" style="margin-left:auto"><span style="color:var(--wf-brand);font:700 9px/1 var(--font-mono)">● ACTIVE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero src art" id="hero">
+  
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow">
+        <span class="eye-tag">System Design</span>
+        <span class="eye-divider"></span>
+        <span class="eye-series">IO Content Ops Series · Article 02</span>
+      </div>
+      <h1>The <em>Context Brief:</em> The One Document That Runs Your Entire Stack</h1>
+      <p class="hero-deck">Most operators think the context brief is a prompt. It isn't. It's an architectural artifact — the single source of truth from which nine disciplines draw independently. Field-by-field: what each input does, and how libraries interpret it differently.</p>
+      <div class="hero-meta">
+        <div class="h-author">
+          <div class="h-av">T</div>
+          <div>
+            <div class="h-name">Tommy Saunders</div>
+            <div class="h-role">Founder, IntelligentOperations.ai</div>
+          </div>
+        </div>
+        <div class="h-sep"></div>
+        <span class="h-date">March 22, 2026</span>
+        <span class="h-read">· 8 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:rgba(8,145,178,.08);border:1px solid rgba(8,145,178,.2)">
+        <span style="font:700 8px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:#38bdf8">IO-CB-2026-001</span>
+        <span style="width:1px;height:10px;background:rgba(8,145,178,.3)"></span>
+        <span style="font:300 8px/1 var(--font-mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN · A02 · MARCH 2026</span>
+      </div>
+    </div>
+
+    <!-- ═══ ARTICLE 02 HERO VIZ: Document being read by libraries ═══ -->
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz">
+        <div class="hv-grid"></div>
+        <div class="hv-glow"></div>
+        <div class="hv-scan"></div>
+
+        <!-- Central: the Brief Document -->
+        <div class="hv-doc" id="hv-doc" onclick="scanDocument()">
+          <div class="hv-doc-head">CONTEXT BRIEF</div>
+          <!-- 9 fields as colored bars -->
+          <div class="hv-field" style="background:rgba(36,96,255,.35);width:100%" id="hf-brand"></div>
+          <div class="hv-field" style="background:rgba(36,96,255,.28);width:85%" id="hf-voice"></div>
+          <div class="hv-field" style="background:rgba(8,145,178,.35);width:100%" id="hf-thesis"></div>
+          <div class="hv-field" style="background:rgba(8,145,178,.25);width:70%" id="hf-industry"></div>
+          <div class="hv-field" style="background:rgba(29,185,84,.3);width:90%" id="hf-audience"></div>
+          <div class="hv-field" style="background:rgba(225,29,72,.28);width:75%" id="hf-competitive"></div>
+          <div class="hv-field" style="background:rgba(217,119,6,.3);width:85%" id="hf-visual"></div>
+          <div class="hv-field" style="background:rgba(217,119,6,.22);width:60%" id="hf-seo"></div>
+          <div class="hv-field" style="background:rgba(139,92,246,.3);width:80%" id="hf-crm"></div>
+          <div style="margin-top:8px;font:300 7px/1.4 var(--font-mono);color:rgba(56,189,248,.35);letter-spacing:.06em">9 FIELDS · CLICK TO SCAN</div>
+        </div>
+
+        <!-- 5 Library reader nodes -->
+        <div class="hv-reader" style="top:15%;left:20%">
+          <div class="hv-r-circle" style="width:44px;height:44px;background:rgba(36,96,255,.14);border:1.5px solid rgba(36,96,255,.48);color:var(--wf-blue)">ART</div>
+          <div class="hv-r-label">Article · 14</div>
+        </div>
+        <div class="hv-reader" style="top:12%;left:62%">
+          <div class="hv-r-circle" style="width:40px;height:40px;background:rgba(29,185,84,.12);border:1.5px solid rgba(29,185,84,.45);color:#4ade80">IMG</div>
+          <div class="hv-r-label">Image · 3</div>
+        </div>
+        <div class="hv-reader" style="top:50%;left:85%">
+          <div class="hv-r-circle" style="width:40px;height:40px;background:rgba(8,145,178,.12);border:1.5px solid rgba(8,145,178,.45);color:#38bdf8">DES</div>
+          <div class="hv-r-label">Design · 4</div>
+        </div>
+        <div class="hv-reader" style="top:80%;left:68%">
+          <div class="hv-r-circle" style="width:38px;height:38px;background:rgba(217,119,6,.12);border:1px solid rgba(217,119,6,.4);color:#fcd34d">SEO</div>
+          <div class="hv-r-label">SEO · 6</div>
+        </div>
+        <div class="hv-reader" style="top:78%;left:22%">
+          <div class="hv-r-circle" style="width:38px;height:38px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.4);color:#4ade80">CRM</div>
+          <div class="hv-r-label">CRM · 5</div>
+        </div>
+
+        <!-- SVG reading beams -->
+        <svg class="hv-svg2" viewBox="0 0 380 520" preserveAspectRatio="none">
+          <defs>
+            <filter id="fg2"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <!-- Static faint lines -->
+          <g stroke-width=".7" fill="none" opacity="0.15">
+            <line x1="190" y1="218" x2="76" y2="78"/><line x1="190" y1="218" x2="236" y2="62"/>
+            <line x1="190" y1="218" x2="323" y2="260"/><line x1="190" y1="218" x2="258" y2="416"/>
+            <line x1="190" y1="218" x2="84" y2="406"/>
+          </g>
+          <!-- Animated reading lines -->
+          <g id="reading-lines" stroke-width="1.2" fill="none" filter="url(#fg2)">
+            <line x1="190" y1="218" x2="76" y2="78" stroke="#4589FF" opacity="0" stroke-dasharray="6 4" id="rl-art">
+              <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.5s" repeatCount="indefinite"/>
+            </line>
+            <line x1="190" y1="218" x2="236" y2="62" stroke="#1db954" opacity="0" stroke-dasharray="6 4" id="rl-img">
+              <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2s" repeatCount="indefinite"/>
+            </line>
+            <line x1="190" y1="218" x2="323" y2="260" stroke="#0891b2" opacity="0" stroke-dasharray="6 4" id="rl-des">
+              <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.8s" repeatCount="indefinite"/>
+            </line>
+            <line x1="190" y1="218" x2="258" y2="416" stroke="#d97706" opacity="0" stroke-dasharray="6 4" id="rl-seo">
+              <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.2s" repeatCount="indefinite"/>
+            </line>
+            <line x1="190" y1="218" x2="84" y2="406" stroke="#8b5cf6" opacity="0" stroke-dasharray="6 4" id="rl-crm">
+              <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.9s" repeatCount="indefinite"/>
+            </line>
+          </g>
+        </svg>
+
+        <!-- Annotation bbox around document -->
+        <div style="position:absolute;top:35%;left:31%;width:38%;height:28%;border:1px solid rgba(8,145,178,.4);pointer-events:none">
+          <span style="position:absolute;width:8px;height:8px;top:-1px;left:-1px;border-top:1.5px solid var(--wf-teal);border-left:1.5px solid var(--wf-teal)"></span>
+          <span style="position:absolute;width:8px;height:8px;top:-1px;right:-1px;border-top:1.5px solid var(--wf-teal);border-right:1.5px solid var(--wf-teal)"></span>
+          <span style="position:absolute;width:8px;height:8px;bottom:-1px;left:-1px;border-bottom:1.5px solid var(--wf-teal);border-left:1.5px solid var(--wf-teal)"></span>
+          <span style="position:absolute;width:8px;height:8px;bottom:-1px;right:-1px;border-bottom:1.5px solid var(--wf-teal);border-right:1.5px solid var(--wf-teal)"></span>
+          <div style="position:absolute;top:-17px;left:0;font:700 7.5px/1 var(--font-mono);letter-spacing:.09em;text-transform:uppercase;color:#38bdf8;background:rgba(0,0,0,.8);padding:2px 6px;border-radius:2px;white-space:nowrap">Context Brief — Single Source</div>
+          <div style="position:absolute;bottom:-14px;right:0;font:300 7px/1 var(--font-mono);color:rgba(56,189,248,.4)">9 FIELDS · READ BY 5 LIBRARIES</div>
+        </div>
+
+        <div class="hv-readout" id="hv-status2">CONTEXT BRIEF · 5 LIBRARIES READING<br>PARALLEL EXTRACTION · ALL FIELDS ACTIVE<br>IO-ORCH v2.0 · DOCUMENT MODE</div>
+        <div class="hv-badge">IO-VIZ-02</div>
+        <div style="position:absolute;bottom:20px;right:20px;z-index:20;padding:7px 16px;border-radius:20px;background:rgba(8,145,178,.12);border:1px solid rgba(8,145,178,.35);color:#38bdf8;font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="scanDocument()">
+          <span style="width:5px;height:5px;border-radius:50%;background:#38bdf8"></span>Scan Brief
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ ARTICLE ═══ -->
+<div class="article-grid">
+
+  <!-- MAIN BODY -->
+  <article class="article-body">
+    <div class="body">
+
+      <!-- DIRECT ANSWER BOX (AEO) -->
+      <div id="s-dab">
+        <div class="direct-answer-box">
+          <div class="dab-label">Direct Answer</div>
+          <div class="dab-q">What is the IO Platform Context Brief and how does it work?</div>
+          <div class="dab-a">The IO Platform Context Brief is a structured, nine-field document that serves as the sole input for all five-to-nine specialized content libraries. It is <strong>not a prompt</strong> — it is an architectural artifact that each library reads independently and interprets through its own discipline. The Article Library extracts voice and argument. The SEO Library extracts keyword clusters. The CRM Library extracts audience pain points for subject lines. Same document, multiple simultaneous extractions. The brief takes approximately <strong>two minutes to complete</strong> and remains stable across all pipeline runs for the same campaign.</div>
+          <div class="dab-footer">
+            <span class="dab-source">Source: IntelligentOperations.ai · IO Platform · March 2026</span>
+            <span class="dab-schema-badge">JSON-LD Schema</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE OF CONTENTS -->
+      <div>
+        <div class="toc-inline">
+          <div class="toc-inline-title">Table of Contents</div>
+          <ol class="toc-inline-list">
+            <li><a class="toc-inline-item" href="#s-what"><span class="toc-n">1.</span>What the Context Brief Actually Is</a></li>
+            <li><a class="toc-inline-item" href="#s-annotated"><span class="toc-n">2.</span>Annotated Brief UI — All 9 Fields</a></li>
+            <li><a class="toc-inline-item" href="#s-matrix"><span class="toc-n">3.</span>Field Interpretation Matrix</a></li>
+            <li><a class="toc-inline-item" href="#s-example"><span class="toc-n">4.</span>Filled Example Brief — Meridian Analytics (SaaS)</a></li>
+            <li><a class="toc-inline-item" href="#s-compare"><span class="toc-n">5.</span>Good vs. Weak Brief Comparison</a></li>
+            <li><a class="toc-inline-item" href="#s-social"><span class="toc-n">6.</span>Social Distribution Suite</a></li>
+            <li><a class="toc-inline-item" href="#s-seo"><span class="toc-n">7.</span>Search Package — SEO + AEO</a></li>
+            <li><a class="toc-inline-item" href="#s-crm"><span class="toc-n">8.</span>CRM Lead Capture + Nurture Sequence</a></li>
+            <li><a class="toc-inline-item" href="#s-faq"><span class="toc-n">9.</span>Frequently Asked Questions</a></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- LEDE -->
+      <div id="s-lede">
+        <p class="lede">The most common mistake operators make when setting up the IO Platform isn't choosing the wrong libraries or misconfiguring the Orchestrator. It's treating the Context Brief as a prompt. Filling it out like they're writing a ChatGPT instruction. Keeping it vague because they assume the AI will fill in the gaps.</p>
+      </div>
+
+      <div>
+        <p>It won't. And unlike a prompt — where vagueness produces a mediocre single output — a vague context brief produces nine mediocre outputs, all consistently mediocre in the exact same direction, simultaneously. <strong>The system amplifies brief quality. In both directions.</strong></p>
+        <p>The Context Brief is the single document that every library reads from before it does anything. It's not an instruction. It's a constitutional document. The architecture of your content operation, encoded in nine fields. Understanding what each field does — and critically, how different libraries interpret the same field differently — is the difference between a system that hums and one that produces expensive, coordinated mediocrity.</p>
+      </div>
+
+      <!-- ═══ SECTION 1: What it Actually Is ═══ -->
+      <div id="s-what">
+        <h2 class="sh">What the Context Brief Actually Is</h2>
+        <p>A prompt tells a model what to do next. A context brief tells nine specialized libraries what world they're operating in. The distinction matters enormously because the two documents produce fundamentally different kinds of AI behavior.</p>
+        <p>When you write a prompt, the model reads it once and executes. When you fill a context brief, each library reads the entire document and extracts whatever is relevant to its specific discipline. The Article Library reads the brand voice field and derives a register — formal or conversational, technical or accessible, direct or discursive. The CRM Library reads the same brand voice field and derives a subject line register — whether to be pithy or detailed, whether exclamation marks are on-brand, whether to use the founder's first name or the company name in the from-field. <sup><a href="#fn1" id="r1">1</a></sup></p>
+        <p>This is why changing one field in the context brief changes outputs across all libraries — and why getting a field right has compounding returns. <strong>The brief is not a prompt. It's the DNA of your content operation.</strong></p>
+      </div>
+
+      <!-- PULL QUOTE -->
+      <div>
+        <div class="pull-quote">
+          <p class="pq-text">"The brief is not a prompt. It's the <em>constitutional document</em> of your content operation — nine fields that nine disciplines read simultaneously and interpret through their own lens."</p>
+          <div class="pq-attr">Tommy Saunders · Founder, IntelligentOperations.ai</div>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION 2: ANNOTATED BRIEF UI ═══ -->
+      <div id="s-annotated">
+        <h2 class="sh">Annotated Brief — All 9 Fields</h2>
+        <p>Click any field in the brief to see which libraries read it, what they extract from it, and the quality signal that separates a strong input from a weak one.</p>
+
+        <div class="annotated-brief">
+          <div class="ab-header">
+            <span class="ab-title">Context Brief — Field Annotation Mode</span>
+            <span class="ab-badge">9 Fields Active</span>
+            <div class="ab-mode-toggle">
+              <button class="abt-btn on" id="btn-fields" onclick="setMode('fields')">Fields</button>
+              <button class="abt-btn" id="btn-libs" onclick="setMode('libs')">Libraries</button>
+            </div>
+          </div>
+          <div class="ab-body">
+            <!-- LEFT: Fields -->
+            <div class="ab-fields">
+              <div style="font:700 8px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px">Click a field to annotate ↓</div>
+
+              <div class="brief-field" data-field="brand" onclick="activateField('brand')">
+                <div class="bf-label">
+                  <div class="bf-label-text"><span class="bf-num">01</span> Brand Identity</div>
+                  <div class="bf-libs">
+                    <div class="bf-lib-dot" style="background:var(--c-art)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-img)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-des)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-seo)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-crm)"></div>
+                  </div>
+                </div>
+                <div class="bf-value">IntelligentOperations.ai · IO Platform</div>
+              </div>
+
+              <div class="brief-field" data-field="voice" onclick="activateField('voice')">
+                <div class="bf-label">
+                  <div class="bf-label-text"><span class="bf-num">02</span> Brand Voice</div>
+                  <div class="bf-libs">
+                    <div class="bf-lib-dot" style="background:var(--c-art)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-crm)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-soc)" style="display:none"></div>
+                  </div>
+                </div>
+                <div class="bf-value">Systems-minded. Precise. Operator-first. No hype. Never says "leverage" or "unlock".</div>
+              </div>
+
+              <div class="brief-field" data-field="thesis" onclick="activateField('thesis')">
+                <div class="bf-label">
+                  <div class="bf-label-text"><span class="bf-num">03</span> Core Thesis</div>
+                  <div class="bf-libs">
+                    <div class="bf-lib-dot" style="background:var(--c-art)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-des)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-seo)"></div>
+                  </div>
+                </div>
+                <div class="bf-value">One context brief → nine parallel libraries → complete coherent package in &lt;4 min. Speed is a side effect. Coherence is the architecture.</div>
+              </div>
+
+              <div class="brief-field" data-field="audience" onclick="activateField('audience')">
+                <div class="bf-label">
+                  <div class="bf-label-text"><span class="bf-num">04</span> Primary Audience</div>
+                  <div class="bf-libs">
+                    <div class="bf-lib-dot" style="background:var(--c-art)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-crm)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-seo)"></div>
+                  </div>
+                </div>
+                <div class="bf-value">Content operators, marketing directors, agency founders deploying AI at scale</div>
+              </div>
+
+              <div class="brief-field" data-field="secondary" onclick="activateField('secondary')">
+                <div class="bf-label">
+                  <div class="bf-label-text"><span class="bf-num">05</span> Secondary Audience</div>
+                  <div class="bf-libs">
+                    <div class="bf-lib-dot" style="background:var(--c-art)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-seo)"></div>
+                  </div>
+                </div>
+                <div class="bf-value">Technical founders and AI engineers exploring production-grade orchestration</div>
+              </div>
+
+              <div class="brief-field" data-field="competitive" onclick="activateField('competitive')">
+                <div class="bf-label">
+                  <div class="bf-label-text"><span class="bf-num">06</span> Competitive Context</div>
+                  <div class="bf-libs">
+                    <div class="bf-lib-dot" style="background:var(--c-art)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-seo)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-crm)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-des)"></div>
+                  </div>
+                </div>
+                <div class="bf-value">Against Jasper, Copy.ai, Notion AI (single-library). Differentiated by: orchestration, episodic memory, parallel dispatch, structural coherence.</div>
+              </div>
+
+              <div class="brief-field" data-field="visual" onclick="activateField('visual')">
+                <div class="bf-label">
+                  <div class="bf-label-text"><span class="bf-num">07</span> Visual Style</div>
+                  <div class="bf-libs">
+                    <div class="bf-lib-dot" style="background:var(--c-img)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-des)"></div>
+                  </div>
+                </div>
+                <div class="bf-value">Dark editorial. Playfair + DM Sans. Electric blue primary. Animated network art. Precision over decoration.</div>
+              </div>
+
+              <div class="brief-field" data-field="seofield" onclick="activateField('seofield')">
+                <div class="bf-label">
+                  <div class="bf-label-text"><span class="bf-num">08</span> SEO Cluster</div>
+                  <div class="bf-libs">
+                    <div class="bf-lib-dot" style="background:var(--c-seo)"></div>
+                    <div class="bf-lib-dot" style="background:var(--c-art)"></div>
+                  </div>
+                </div>
+                <div class="bf-value">ai content operations · content orchestration system · prompt library workflow · swarm-native AI · context brief AI</div>
+              </div>
+
+              <div class="brief-field" data-field="crm" onclick="activateField('crm')">
+                <div class="bf-label">
+                  <div class="bf-label-text"><span class="bf-num">09</span> CRM Trigger</div>
+                  <div class="bf-libs">
+                    <div class="bf-lib-dot" style="background:var(--c-crm)"></div>
+                  </div>
+                </div>
+                <div class="bf-value">Context Brief template download → 5-step nurture. Audience: operator who has read the article, understands the concept, not yet committed.</div>
+              </div>
+            </div>
+
+            <!-- RIGHT: Annotation panel -->
+            <div class="ab-panel" id="ab-panel">
+              <div class="ab-panel-placeholder" id="ab-placeholder">
+                <div class="app-icon">◈</div>
+                <div class="app-text">Select a field<br>to see library annotations</div>
+              </div>
+
+              <!-- Field details - hidden until activated -->
+              <div class="field-detail" id="fd-brand">
+                <div class="fd-field-name">01 · Brand Identity — How Libraries Read It</div>
+                <div class="fd-interp">
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(36,96,255,.12);color:var(--wf-blue);border:1px solid rgba(36,96,255,.2)">ART</div><div class="fd-interp-text">Extracts the <strong>entity name</strong> for consistent attribution throughout article body and bylines. Sets the namespace for all references.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(29,185,84,.1);color:#4ade80;border:1px solid rgba(29,185,84,.2)">IMG</div><div class="fd-interp-text">Derives <strong>visual brand anchor</strong> — the primary entity whose aesthetic vocabulary informs all generated image concepts.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(8,145,178,.1);color:#38bdf8;border:1px solid rgba(8,145,178,.2)">DES</div><div class="fd-interp-text">Creates the <strong>brand namespace</strong> for all CSS tokens and design system exports. Determines variable prefixing conventions.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(217,119,6,.1);color:#fcd34d;border:1px solid rgba(217,119,6,.2)">SEO</div><div class="fd-interp-text">Seeds the <strong>entity recognition layer</strong> — establishes which entity name variations to target in structured data and title tags.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(139,92,246,.1);color:#4ade80;border:1px solid rgba(139,92,246,.2)">CRM</div><div class="fd-interp-text">Sets the <strong>sender identity</strong> — from-name and from-domain in email sequences, determines formality of self-reference.</div></div>
+                </div>
+                <div class="fd-quality-hint"><div class="fdq-label">Quality Signal</div><div class="fdq-text">Include the URL. SEO and CRM libraries use it for canonical links, backlink anchor text, and email footer attribution.</div></div>
+              </div>
+
+              <div class="field-detail" id="fd-voice">
+                <div class="fd-field-name">02 · Brand Voice — How Libraries Read It</div>
+                <div class="fd-interp">
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(36,96,255,.12);color:var(--wf-blue);border:1px solid rgba(36,96,255,.2)">ART</div><div class="fd-interp-text">Derives the <strong>prose register</strong> — sentence length distribution, vocabulary tier, use of technical jargon, paragraph rhythm, use of rhetorical questions.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(139,92,246,.1);color:#4ade80;border:1px solid rgba(139,92,246,.2)">CRM</div><div class="fd-interp-text">Derives <strong>subject line personality</strong> — whether to be cryptic or explicit, whether the founder's first name adds warmth or feels out of register, punctuation conventions.</div></div>
+                </div>
+                <div class="fd-quality-hint"><div class="fdq-label">Quality Signal</div><div class="fdq-text">Include what to <em>avoid</em>. "Never says leverage or unlock" is more useful than "professional and approachable." Negative constraints outperform positive ones.</div></div>
+              </div>
+
+              <div class="field-detail" id="fd-thesis">
+                <div class="fd-field-name">03 · Core Thesis — How Libraries Read It</div>
+                <div class="fd-interp">
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(36,96,255,.12);color:var(--wf-blue);border:1px solid rgba(36,96,255,.2)">ART</div><div class="fd-interp-text">This becomes the <strong>strategic spine</strong> of the article — the argument every section must advance, the claim the lede frames, the conclusion that closes.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(8,145,178,.1);color:#38bdf8;border:1px solid rgba(8,145,178,.2)">DES</div><div class="fd-interp-text">Informs the <strong>pull quote selection</strong> — the thesis often becomes the pull quote directly, or its most quotable sub-claim does.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(217,119,6,.1);color:#fcd34d;border:1px solid rgba(217,119,6,.2)">SEO</div><div class="fd-interp-text">The thesis is the <strong>primary AEO target</strong> — structured as a direct answer to the implied question in the article's title.</div></div>
+                </div>
+                <div class="fd-quality-hint"><div class="fdq-label">Quality Signal</div><div class="fdq-text">One sentence. One claim. Falsifiable. "Content operations can be AI-native" is weak. "One brief → nine parallel libraries → coherent package in &lt;4 min" is strong.</div></div>
+              </div>
+
+              <div class="field-detail" id="fd-audience">
+                <div class="fd-field-name">04 · Primary Audience — How Libraries Read It</div>
+                <div class="fd-interp">
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(36,96,255,.12);color:var(--wf-blue);border:1px solid rgba(36,96,255,.2)">ART</div><div class="fd-interp-text">Sets the <strong>assumed knowledge baseline</strong> — what the reader already knows determines what needs explaining, what can be stated without definition, and what vocabulary is native vs. learned.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(139,92,246,.1);color:#4ade80;border:1px solid rgba(139,92,246,.2)">CRM</div><div class="fd-interp-text">Determines the <strong>pain point frame</strong> for email sequences — a marketing director's pain is team coordination; an agency founder's pain is client margin; a content operator's pain is brand consistency at scale.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(217,119,6,.1);color:#fcd34d;border:1px solid rgba(217,119,6,.2)">SEO</div><div class="fd-interp-text">Shapes <strong>intent classification</strong> — the audience's role informs which query types to target (informational vs. navigational vs. commercial).</div></div>
+                </div>
+                <div class="fd-quality-hint"><div class="fdq-label">Quality Signal</div><div class="fdq-text">Include the decision-making context. "Marketing director at a 50-person SaaS company who owns the content team and reports to the CMO" beats "marketing professionals."</div></div>
+              </div>
+
+              <div class="field-detail" id="fd-secondary">
+                <div class="fd-field-name">05 · Secondary Audience — How Libraries Read It</div>
+                <div class="fd-interp">
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(36,96,255,.12);color:var(--wf-blue);border:1px solid rgba(36,96,255,.2)">ART</div><div class="fd-interp-text">The secondary audience determines <strong>depth of technical sections</strong> — the article can go deeper on episodic memory architecture knowing technical founders will read and share it, even if the primary audience won't follow every detail.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(217,119,6,.1);color:#fcd34d;border:1px solid rgba(217,119,6,.2)">SEO</div><div class="fd-interp-text">The secondary audience expands the <strong>long-tail keyword space</strong> — technical readers search for different terms than operators, enabling keyword cluster expansion without losing topical coherence.</div></div>
+                </div>
+                <div class="fd-quality-hint"><div class="fdq-label">Quality Signal</div><div class="fdq-text">Describe why the secondary audience reads your content even though it wasn't written primarily for them. This context is more useful than the persona alone.</div></div>
+              </div>
+
+              <div class="field-detail" id="fd-competitive">
+                <div class="fd-field-name">06 · Competitive Context — How Libraries Read It</div>
+                <div class="fd-interp">
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(36,96,255,.12);color:var(--wf-blue);border:1px solid rgba(36,96,255,.2)">ART</div><div class="fd-interp-text">Informs <strong>differentiation language</strong> in the article body — the article writes <em>against</em> the competitor category, not the specific brands, using structural arguments rather than name comparisons.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(217,119,6,.1);color:#fcd34d;border:1px solid rgba(217,119,6,.2)">SEO</div><div class="fd-interp-text">Drives <strong>keyword gap analysis</strong> — the library identifies which terms competitors rank for but haven't addressed with structural depth, enabling IO content to capture the under-served portion of the SERP.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(139,92,246,.1);color:#4ade80;border:1px solid rgba(139,92,246,.2)">CRM</div><div class="fd-interp-text">Shapes <strong>objection handling</strong> in the nurture sequence — Day 3 and Day 8 emails address the implicit objection "I already use Jasper" by articulating the architectural difference without naming the competitor in the subject line.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(8,145,178,.1);color:#38bdf8;border:1px solid rgba(8,145,178,.2)">DES</div><div class="fd-interp-text">Informs <strong>visual differentiation</strong> — the Design Library derives a visual register explicitly distinct from competitor aesthetics. If Jasper is blue-gradient-on-white, IO is dark-editorial.</div></div>
+                </div>
+                <div class="fd-quality-hint"><div class="fdq-label">Quality Signal</div><div class="fdq-text">Name the competitors and articulate the specific structural difference — not "we're better" but "they do X architecturally, we do Y architecturally, here's why that matters for the buyer."</div></div>
+              </div>
+
+              <div class="field-detail" id="fd-visual">
+                <div class="fd-field-name">07 · Visual Style — How Libraries Read It</div>
+                <div class="fd-interp">
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(29,185,84,.1);color:#4ade80;border:1px solid rgba(29,185,84,.2)">IMG</div><div class="fd-interp-text">Generates <strong>DALL-E style directive</strong> — translates the natural language description into structured image generation parameters: lighting, palette, composition, texture, reference aesthetic.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(8,145,178,.1);color:#38bdf8;border:1px solid rgba(8,145,178,.2)">DES</div><div class="fd-interp-text">Derives the <strong>complete CSS token set</strong> — color variables, font pairings, spacing scale, border-radius conventions, shadow system — from the natural language style descriptor.</div></div>
+                </div>
+                <div class="fd-quality-hint"><div class="fdq-label">Quality Signal</div><div class="fdq-text">Reference a specific aesthetic vocabulary: "like Vercel's documentation meets Bloomberg Businessweek" gives both libraries a precise target. "Modern and clean" gives them nothing.</div></div>
+              </div>
+
+              <div class="field-detail" id="fd-seofield">
+                <div class="fd-field-name">08 · SEO Cluster — How Libraries Read It</div>
+                <div class="fd-interp">
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(217,119,6,.1);color:#fcd34d;border:1px solid rgba(217,119,6,.2)">SEO</div><div class="fd-interp-text">The cluster seeds the <strong>full keyword architecture</strong> — from the 3 primary terms, the library generates 12–18 long-tail variants, entity mentions, and AEO-targeted question formulations.</div></div>
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(36,96,255,.12);color:var(--wf-blue);border:1px solid rgba(36,96,255,.2)">ART</div><div class="fd-interp-text">The primary keyword becomes the <strong>semantic spine</strong> of the article — it determines which concepts get definitional treatment versus assumed knowledge. The article "teaches" the keyword space through content structure.</div></div>
+                </div>
+                <div class="fd-quality-hint"><div class="fdq-label">Quality Signal</div><div class="fdq-text">Provide 3–5 seed terms, not an exhaustive list. The SEO Library will expand them. Providing 30 terms gives the library nothing to expand from.</div></div>
+              </div>
+
+              <div class="field-detail" id="fd-crm">
+                <div class="fd-field-name">09 · CRM Trigger — How Libraries Read It</div>
+                <div class="fd-interp">
+                  <div class="fd-interp-row"><div class="fd-lib-badge" style="background:rgba(139,92,246,.1);color:#4ade80;border:1px solid rgba(139,92,246,.2)">CRM</div><div class="fd-interp-text">The trigger defines the <strong>conversion hypothesis</strong> — what the reader wants badly enough to exchange an email address for, and what sequence of value exchanges moves them toward a demo request. The entire 5-step nurture is architected around this one insight.</div></div>
+                </div>
+                <div class="fd-quality-hint"><div class="fdq-label">Quality Signal</div><div class="fdq-text">Describe the reader's state of mind when they reach the capture form. "They've read 70% of the article and understand the concept but haven't seen it work yet" produces a much better sequence than "they're interested in our product."</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION 3: FIELD INTERPRETATION MATRIX ═══ -->
+      <div id="s-matrix">
+        <h2 class="sh">Field Interpretation Matrix</h2>
+        <p>The same field — read simultaneously by five different libraries — produces five structurally different extractions. This is not redundancy. It is the mechanism by which one document generates coherent content across nine disciplines. The example below shows the <strong>Competitive Context field</strong> as read by each library.</p>
+      </div>
+
+      <div>
+        <div class="interp-matrix">
+          <div class="im-header">
+            <span class="im-title">Competitive Context Field</span>
+            <span style="font-size:10px;color:var(--wf-fg-faint);font-family:var(--font-mono);font-weight:300;margin-left:auto">Same field · 4 different library extractions</span>
+          </div>
+          <div class="im-example-field">
+            <span class="im-field-label">Field 06 Value</span>
+            <span class="im-field-value">"Against Jasper, Copy.ai, Notion AI (single-library tools). Differentiated by: orchestration, episodic memory, parallel dispatch, structural coherence. They solve generation. We solve coordination."</span>
+          </div>
+          <div class="im-scroll">
+            <table class="im-table">
+              <thead>
+                <tr>
+                  <th>Library</th>
+                  <th>What It Extracts</th>
+                  <th>What It Produces</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="im-lib-cell"><div class="im-lib-swatch" style="background:var(--c-art)"></div><span class="im-lib-name">Article Library</span></div></td>
+                  <td><div class="im-extraction">Extracts the <strong>structural argument frame</strong>: "They solve generation. We solve coordination." This becomes the article's central differentiation claim — cited in the lede, elaborated in the body, closed in the conclusion.</div></td>
+                  <td><div class="im-output">Body copy: "The question is not whether AI can generate content — it clearly can. The question is whether it can coordinate."</div></td>
+                </tr>
+                <tr>
+                  <td><div class="im-lib-cell"><div class="im-lib-swatch" style="background:var(--c-seo)"></div><span class="im-lib-name">SEO Library</span></div></td>
+                  <td><div class="im-extraction">Extracts <strong>keyword gap opportunity</strong>: Jasper and Copy.ai rank strongly for "AI writing tool" but weakly for "content orchestration" and "multi-agent content system" — high-intent terms with lower competition.</div></td>
+                  <td><div class="im-output">Keyword targets: "content orchestration system" (KD 18), "multi-agent content workflow" (KD 12), "AI content coordination" (KD 9)</div></td>
+                </tr>
+                <tr>
+                  <td><div class="im-lib-cell"><div class="im-lib-swatch" style="background:var(--c-crm)"></div><span class="im-lib-name">CRM Library</span></div></td>
+                  <td><div class="im-extraction">Extracts the <strong>objection to handle</strong>: "I already use Jasper/Notion AI." Day 3 email addresses this directly as a category distinction, not a product comparison — "Jasper writes for you. IO coordinates for you. Different job."</div></td>
+                  <td><div class="im-output">Day 3 subject line: "You probably already have a writing tool. That's not the problem." (avoids naming competitor in subject)</div></td>
+                </tr>
+                <tr>
+                  <td><div class="im-lib-cell"><div class="im-lib-swatch" style="background:var(--c-des)"></div><span class="im-lib-name">Design Library</span></div></td>
+                  <td><div class="im-extraction">Extracts <strong>visual anti-pattern</strong>: Jasper and Copy.ai both use bright blue-on-white, gradient-heavy, rounded-corner-heavy aesthetics. IO's design system is explicitly dark, editorial, precise — visually positioned in a different category.</div></td>
+                  <td><div class="im-output">CSS tokens: `--void:var(--wf-bg)` background, `--serif:"Playfair Display"` display font. Anti-pattern: no gradients on white, no rounded hero containers.</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p>Notice that none of these libraries coordinated with each other. The Article Library didn't tell the CRM Library what objection to handle. The Design Library didn't ask the SEO Library what competitors look like. <strong>Coherence emerges from the shared input, not from inter-library communication.</strong> This is the architectural guarantee — and it's only possible because every library reads the same document.</p>
+      </div>
+
+      <!-- ═══ SECTION 4: FILLED EXAMPLE BRIEF ═══ -->
+      <div id="s-example">
+        <h2 class="sh">Filled Example Brief — Meridian Analytics</h2>
+        <p>The brief below is filled for a real use case: a US-based B2B analytics SaaS company expanding into the European market. GDPR compliance is a differentiator. Competitors include Tableau, Looker, and Metabase. The company is moving upmarket from SMB to mid-market. <strong>Every field is filled at the quality level required to produce strong outputs across all five deployed libraries.</strong> <sup><a href="#fn2" id="r2">2</a></sup></p>
+      </div>
+
+      <div>
+        <div class="example-brief">
+          <div class="eb-header">
+            <div>
+              <div class="eb-eyebrow">Filled Context Brief · SaaS Example</div>
+              <div style="font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint);margin-top:3px">European Market Expansion · B2B Analytics · Mid-Market Move</div>
+            </div>
+            <div class="eb-title">Meridian Analytics</div>
+            <div class="eb-badge">Quality Score: 9/10</div>
+          </div>
+          <div class="eb-body">
+            <div class="eb-grid">
+              <div class="eb-field">
+                <div class="ebf-label">01 Brand Identity
+                  <div class="ebf-lib-tags"><div class="ebf-dot" style="background:var(--c-art)"></div><div class="ebf-dot" style="background:var(--c-img)"></div><div class="ebf-dot" style="background:var(--c-des)"></div><div class="ebf-dot" style="background:var(--c-seo)"></div><div class="ebf-dot" style="background:var(--c-crm)"></div></div>
+                </div>
+                <div class="ebf-value"><strong>Meridian Analytics</strong> — meridiananalytics.io — B2B business intelligence platform. Bootstrapped, profitable. 40-person team, based in Austin TX.</div>
+                <div class="ebf-note">URL included ✓ · Company size provides scale context ✓</div>
+              </div>
+              <div class="eb-field">
+                <div class="ebf-label">02 Brand Voice
+                  <div class="ebf-lib-tags"><div class="ebf-dot" style="background:var(--c-art)"></div><div class="ebf-dot" style="background:var(--c-crm)"></div></div>
+                </div>
+                <div class="ebf-value">Direct. Data-first. Earns trust through specificity, not authority. Never says "enterprise-grade" or "powerful." Uses numbers instead of adjectives. Talks to practitioners, not procurement.</div>
+                <div class="ebf-note">Negative constraints included ✓ · Target reader identified ✓</div>
+              </div>
+              <div class="eb-field full">
+                <div class="ebf-label">03 Core Thesis
+                  <div class="ebf-lib-tags"><div class="ebf-dot" style="background:var(--c-art)"></div><div class="ebf-dot" style="background:var(--c-des)"></div><div class="ebf-dot" style="background:var(--c-seo)"></div></div>
+                </div>
+                <div class="ebf-value"><strong>"European analytics buyers aren't switching tools. They're switching to GDPR-native tools — and the platforms built in the US aren't GDPR-native, they're GDPR-compliant. Meridian was built for Europe first."</strong></div>
+                <div class="ebf-note">One sentence ✓ · Falsifiable structural claim ✓ · Competitive frame built in ✓</div>
+              </div>
+              <div class="eb-field">
+                <div class="ebf-label">04 Industry & Category
+                  <div class="ebf-lib-tags"><div class="ebf-dot" style="background:var(--c-seo)"></div><div class="ebf-dot" style="background:var(--c-art)"></div></div>
+                </div>
+                <div class="ebf-value">B2B SaaS · Business Intelligence & Analytics · SMB → Mid-Market transition · European market expansion (Germany, UK, Netherlands priority)</div>
+              </div>
+              <div class="eb-field">
+                <div class="ebf-label">05 Primary Audience
+                  <div class="ebf-lib-tags"><div class="ebf-dot" style="background:var(--c-art)"></div><div class="ebf-dot" style="background:var(--c-crm)"></div><div class="ebf-dot" style="background:var(--c-seo)"></div></div>
+                </div>
+                <div class="ebf-value">Head of Data / Data Director at European mid-market companies (100–500 employees). Bought Tableau or Looker, struggling with GDPR compliance costs and data residency requirements. Reports to CFO. Has failed a DPA audit in the past 18 months.</div>
+                <div class="ebf-note">Decision context included ✓ · Pain point specific ✓ · Org structure noted ✓</div>
+              </div>
+              <div class="eb-field">
+                <div class="ebf-label">06 Secondary Audience
+                  <div class="ebf-lib-tags"><div class="ebf-dot" style="background:var(--c-art)"></div><div class="ebf-dot" style="background:var(--c-seo)"></div></div>
+                </div>
+                <div class="ebf-value">EU-based IT Managers and Legal/Compliance officers who influence or veto analytics tooling decisions. They want evidence of data residency and processing agreements, not feature comparisons.</div>
+              </div>
+              <div class="eb-field full">
+                <div class="ebf-label">07 Competitive Context
+                  <div class="ebf-lib-tags"><div class="ebf-dot" style="background:var(--c-art)"></div><div class="ebf-dot" style="background:var(--c-seo)"></div><div class="ebf-dot" style="background:var(--c-crm)"></div><div class="ebf-dot" style="background:var(--c-des)"></div></div>
+                </div>
+                <div class="ebf-value">Against <strong>Tableau</strong> (GDPR-compliant but data processed on US servers, DPA agreements required), <strong>Looker</strong> (Google-owned, data residency opacity), <strong>Metabase</strong> (open source but requires EU hosting setup by customer). Meridian: data residency in EU by default, no US sub-processors, built-in DPA generation. Key differentiator: compliance is the product, not a bolt-on feature.</div>
+                <div class="ebf-note">Specific competitor names ✓ · Structural differentiation (not "we're better") ✓ · Buyer-language used ✓</div>
+              </div>
+              <div class="eb-field">
+                <div class="ebf-label">08 Visual Style
+                  <div class="ebf-lib-tags"><div class="ebf-dot" style="background:var(--c-img)"></div><div class="ebf-dot" style="background:var(--c-des)"></div></div>
+                </div>
+                <div class="ebf-value">Clean but not corporate. Think Notion's documentation meets a German engineering magazine. Dark-mode optional. Helvetica-adjacent type. Navy and slate primary palette. No stock photos — data visualizations and architecture diagrams only.</div>
+                <div class="ebf-note">Reference aesthetic named ✓ · Anti-pattern specified ✓</div>
+              </div>
+              <div class="eb-field">
+                <div class="ebf-label">09 SEO Cluster
+                  <div class="ebf-lib-tags"><div class="ebf-dot" style="background:var(--c-seo)"></div><div class="ebf-dot" style="background:var(--c-art)"></div></div>
+                </div>
+                <div class="ebf-value">GDPR analytics platform · EU data residency BI · GDPR compliant business intelligence · Tableau alternative Europe · analytics GDPR compliance</div>
+                <div class="ebf-note">3–5 seed terms ✓ · Intent-specific (not just category terms) ✓</div>
+              </div>
+            </div>
+          </div>
+          <div class="eb-quality">
+            <div class="ebq-label">Brief Quality Score</div>
+            <div class="ebq-score">
+              <div class="ebq-dot-fill"></div><div class="ebq-dot-fill"></div><div class="ebq-dot-fill"></div>
+              <div class="ebq-dot-fill"></div><div class="ebq-dot-fill"></div><div class="ebq-dot-fill"></div>
+              <div class="ebq-dot-fill"></div><div class="ebq-dot-fill"></div><div class="ebq-dot-fill"></div>
+              <div class="ebq-dot-empty"></div>
+            </div>
+            <div class="ebq-text">9/10 — Missing: CRM trigger field not shown above. All other fields meet quality thresholds for strong multi-library output.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION 5: GOOD VS WEAK ═══ -->
+      <div id="s-compare">
+        <h2 class="sh">Good Brief vs. Weak Brief</h2>
+        <p>Every field has a quality floor. Below that floor, the library makes assumptions. Above it, the library executes. The difference between a strong and weak brief is often a single sentence per field — but that sentence compounds across nine libraries.</p>
+
+        <div class="compare-block">
+          <div class="cb-header">
+            <span class="cb-title">Field-by-Field Comparison · Same Company, Different Brief Quality</span>
+          </div>
+          <div class="compare-grid">
+            <!-- Weak column -->
+            <div class="compare-col">
+              <div class="compare-col-head weak">✗ Weak Brief</div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Brand Voice</div>
+                <div class="cmp-value weak-val">Professional and approachable. Friendly but authoritative.</div>
+                <div class="cmp-impact">→ Article Library defaults to generic B2B register. CRM sequences sound like every SaaS email ever sent.</div>
+              </div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Core Thesis</div>
+                <div class="cmp-value weak-val">We help European companies with analytics and GDPR compliance.</div>
+                <div class="cmp-impact">→ SEO Library builds a generic category page. No unique claim to anchor AEO positioning.</div>
+              </div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Primary Audience</div>
+                <div class="cmp-value weak-val">European B2B companies that need analytics.</div>
+                <div class="cmp-impact">→ CRM Library writes a generic pain-point email. No specific objection to handle. Open rate drops ~40%.</div>
+              </div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Competitive Context</div>
+                <div class="cmp-value weak-val">We're better than Tableau and Looker for European companies.</div>
+                <div class="cmp-impact">→ Article Library writes a feature comparison. SEO targets "Tableau vs Looker" — keywords owned by neither competitor and not winning for Meridian.</div>
+              </div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Visual Style</div>
+                <div class="cmp-value weak-val">Modern, clean, and professional.</div>
+                <div class="cmp-impact">→ Design Library produces a visual system identical to 80% of B2B SaaS websites. No differentiation.</div>
+              </div>
+            </div>
+            <!-- Divider -->
+            <div class="compare-divider"></div>
+            <!-- Strong column -->
+            <div class="compare-col">
+              <div class="compare-col-head strong">✓ Strong Brief</div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Brand Voice</div>
+                <div class="cmp-value strong-val">Direct. Data-first. <strong>Never says "enterprise-grade" or "powerful."</strong> Uses numbers instead of adjectives. Talks to practitioners, not procurement.</div>
+                <div class="cmp-impact">→ Article Library writes sentences like "4 of 7 European data directors we surveyed had failed a DPA audit." CRM sequences have specific subject lines.</div>
+              </div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Core Thesis</div>
+                <div class="cmp-value strong-val"><strong>"GDPR-compliant vs. GDPR-native."</strong> US platforms retrofitted compliance. Meridian built for EU data residency first.</div>
+                <div class="cmp-impact">→ SEO Library targets "GDPR native analytics" — low competition, high intent, no incumbent. AEO direct answer slots available.</div>
+              </div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Primary Audience</div>
+                <div class="cmp-value strong-val">Head of Data at 100–500 person EU company. <strong>Has failed a DPA audit in the past 18 months.</strong> Bought Tableau, struggling with data residency.</div>
+                <div class="cmp-impact">→ CRM Day 2 subject: "Your DPA audit failed. Here's the one configuration change that would have prevented it." Open rate benchmarks: 38–42%.</div>
+              </div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Competitive Context</div>
+                <div class="cmp-value strong-val">Tableau: GDPR-compliant but US servers. <strong>Structural difference: compliance as bolt-on vs. compliance as architecture.</strong> Metabase: requires EU hosting by customer.</div>
+                <div class="cmp-impact">→ Article never mentions competitors by name. Structural argument does the work. SEO targets "analytics data residency EU" — currently unclaimed.</div>
+              </div>
+              <div class="cmp-row">
+                <div class="cmp-field-name">Visual Style</div>
+                <div class="cmp-value strong-val"><strong>Notion documentation meets a German engineering magazine.</strong> Navy + slate. Data visualizations only, no stock photos. Anti-pattern: no hero gradients.</div>
+                <div class="cmp-impact">→ Design Library produces a token set structurally unlike every Tableau/Looker white-label. Immediate visual differentiation on first impression.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ GLOBAL: SOCIAL ═══ -->
+      <div id="s-social">
+        <div class="social-block">
+          <div class="sb-hd">
+            <span class="sb-hd-label">Social Distribution Suite — Article 02</span>
+            <span class="sb-hd-src">Social Library · Haiku + Sonnet · 6 prompts</span>
+          </div>
+          <div class="sb-tabs">
+            <button class="sb-tab on" onclick="tab('tw',this)">Twitter / X</button>
+            <button class="sb-tab" onclick="tab('li',this)">LinkedIn</button>
+            <button class="sb-tab" onclick="tab('ig',this)">Instagram</button>
+          </div>
+          <div class="sb-platform on" id="tab-tw">
+            <div class="tw-card">
+              <div class="tw-hd"><div class="tw-av">T</div><div><div class="tw-name">Tommy Saunders</div><div class="tw-handle">@tommysaunders_ai</div></div></div>
+              <div class="tw-body">Most people treat the context brief like a prompt.<br><br>It isn't. It's a constitutional document.<br><br>The same "Competitive Context" field gets read by:<br>→ Article Library: writes your structural argument<br>→ SEO Library: finds their keyword gaps<br>→ CRM Library: handles their objection in email 3<br>→ Design Library: builds a visual system that looks nothing like them<br><br>One field. Four different extractions. Zero inter-library communication.</div>
+              <div class="tw-meta">9:00 AM · Mar 22, 2026 · 22.4K Impressions</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-li">
+            <div class="li-card">
+              <div class="li-hd"><div class="li-av">T</div><div><div class="li-name">Tommy Saunders</div><div class="li-sub">Founder at IntelligentOperations.ai · 2nd</div></div></div>
+              <div class="li-body">The most common IO Platform setup mistake isn't technical.<br><br>It's treating the Context Brief like a prompt.<br><br>A prompt is a one-to-one instruction. A context brief is an architectural artifact — nine fields that nine libraries each read independently and interpret through their own discipline.<br><br>Write "professional and approachable" in the Brand Voice field, and every library defaults to generic B2B register. Every email sounds like every other SaaS email. Every article reads like a category overview.<br><br>Write "direct, data-first, never says 'enterprise-grade' or 'powerful', uses numbers instead of adjectives" — and everything downstream changes.<br><br>The brief is not a prompt. It's the DNA of your content operation.<br><br>Full field-by-field breakdown + a filled example brief for a European SaaS expansion. Link in comments.</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-ig">
+            <div class="ig-card">
+              <div class="ig-handle">@intelligentoperations</div>
+              <div class="ig-img"><div class="ig-img-text">"The brief is not<br>a prompt. It's the<br>constitutional document<br>of your content<br>operation."</div></div>
+              <div class="ig-cap">Nine fields. Five libraries. One document that never changes between runs. The IO Platform Context Brief — field-by-field annotation, library interpretation matrix, and a fully filled example for a SaaS company expanding internationally. Read the full breakdown at the link in bio.</div>
+              <div class="ig-hash">#ContentOps #AIMarketing #IntelligentOperations #ContextBrief #ContentStrategy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ GLOBAL: SEARCH PACKAGE ═══ -->
+      <div id="s-seo">
+        <div class="seo-block">
+          <div class="seo-hd">
+            <span class="seo-tag">SEO + AEO</span>
+            <span style="font:600 12px var(--font-sans);color:var(--wf-orange)">Search Package — Article 02</span>
+          </div>
+          <div class="seo-body">
+            <div class="serp">
+              <div class="serp-url">intelligentoperations.ai › content-ops › <span>context-brief-io-platform</span></div>
+              <div class="serp-title">The IO Platform Context Brief: Field-by-Field Breakdown | IntelligentOperations.ai</div>
+              <div class="serp-desc">Most operators think the context brief is a prompt. It isn't — it's an architectural artifact. Field-by-field annotation, library interpretation matrix, and a filled example brief for a SaaS company expanding internationally.</div>
+            </div>
+            <div class="aeo-panel">
+              <div class="aeo-label">Answer Engine Optimization — Perplexity / ChatGPT Citation Layer</div>
+              <div class="aeo-q">What is the IO Platform Context Brief and what fields does it contain?</div>
+              <div class="aeo-a">The IO Platform Context Brief is a nine-field structured document that serves as the sole input for all IO content libraries. Fields include: Brand Identity, Brand Voice, Core Thesis, Industry & Category, Primary Audience, Secondary Audience, Competitive Context, Visual Style Direction, and SEO Cluster. Each field is read simultaneously by multiple libraries — for example, the Competitive Context field is read by the Article Library (for structural differentiation arguments), the SEO Library (for keyword gap analysis), the CRM Library (for objection handling in email sequences), and the Design Library (for visual differentiation). The brief is not a prompt — it is an architectural artifact that takes approximately two minutes to complete and remains stable across pipeline runs.</div>
+            </div>
+            <div class="seo-kws">
+              <span class="seo-kw">context brief template</span>
+              <span class="seo-kw">AI content brief</span>
+              <span class="seo-kw">context brief AI</span>
+              <span class="seo-kw">prompt brief framework</span>
+              <span class="seo-kw">IO Platform context brief</span>
+              <span class="seo-kw">content brief vs prompt</span>
+              <span class="seo-kw">AI content architecture</span>
+              <span class="seo-kw">nine field content brief</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ GLOBAL: CRM ═══ -->
+      <div id="s-crm">
+        <div class="crm-block">
+          <div class="crm-main">
+            <div>
+              <div class="crm-eyebrow">IO Platform · Context Brief Template</div>
+              <div class="crm-headline">Download the exact Context Brief template with all 9 fields annotated.</div>
+              <div class="crm-sub">The template includes field definitions, quality examples, and the anti-patterns that break multi-library output. 2,400 operators already running it.</div>
+            </div>
+            <div class="crm-form">
+              <input type="email" class="crm-inp" placeholder="your@email.com">
+              <button class="crm-btn">Get the Template →</button>
+              <div class="crm-note">Free. No spam. Unsubscribe anytime.</div>
+            </div>
+          </div>
+          <div class="crm-seq">
+            <div class="crm-seq-title">5-Step Nurture Sequence — Article 02 CRM Output</div>
+            <div class="crm-steps">
+              <div class="crm-step"><div class="crm-step-d">Day 0</div><div class="crm-step-t">Template + field annotation guide delivered</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 3</div><div class="crm-step-t">"You probably already have a writing tool. That's not the problem."</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 7</div><div class="crm-step-t">Industry-specific brief example for your category</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 10</div><div class="crm-step-t">Live brief review: 20-min session to fill your first brief together</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 16</div><div class="crm-step-t">Your first brief is the hard part. After that, it runs itself.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ GLOBAL: FAQs ═══ -->
+      <div id="s-faq">
+        <div class="faq-section">
+          <div class="faq-head">
+            <h2 class="faq-head-title">Frequently Asked Questions</h2>
+            <span class="faq-head-count">5 Questions</span>
+          </div>
+
+          <div class="faq-item open">
+            <div class="faq-q" onclick="toggleFaq(this)">What is the IO Platform Context Brief and how is it different from a prompt?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">A prompt is a one-to-one instruction to a single model for a single output. A Context Brief is an <strong>architectural artifact</strong> — a structured nine-field document that each of IO's specialized libraries reads independently and interprets through its own discipline. The Article Library extracts voice and argument structure. The SEO Library extracts keyword clusters and entity targets. The CRM Library extracts audience pain points for subject line calibration. Same document, simultaneous but different extractions from each library. The brief is not rewritten between runs — it is the stable DNA of your content operation, while article-specific inputs (topic, angle) vary per run.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What are the nine fields in the IO Context Brief?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The nine fields are: <strong>Brand Identity</strong> (name, URL, company description), <strong>Brand Voice</strong> (tone, register, negative constraints), <strong>Core Thesis</strong> (one sentence, falsifiable strategic claim), <strong>Industry & Category</strong>, <strong>Primary Audience</strong> (include decision context and pain point), <strong>Secondary Audience</strong>, <strong>Competitive Context</strong> (structural differentiation, not "we're better"), <strong>Visual Style Direction</strong> (reference aesthetic and anti-patterns), and <strong>SEO Cluster</strong> (3–5 seed terms, not an exhaustive list). Each field should be filled at a quality level sufficient for each reading library to make consequential decisions without making assumptions.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How long does filling the Context Brief take?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Approximately <strong>two minutes</strong> once you understand what each field requires. The first brief takes longer — typically 15–20 minutes — because you're making strategic decisions, not just filling in blanks. Specifically: what is your actual thesis (not your tagline)? What does your competitive context look like architecturally rather than feature-by-feature? These are hard questions that produce compounding value once answered. After the first brief, subsequent runs take two minutes because the brief rarely changes — only article-specific inputs vary per run.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What happens if the Competitive Context field is left vague?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">If the Competitive Context field is vague or absent, each library makes its own assumption — and those assumptions won't be coordinated. The Article Library might write a generic "AI is changing content" piece. The SEO Library targets high-competition category terms. The CRM Library writes a generic pain-point email. The Design Library produces a visual system identical to 80% of the category. <strong>The brief amplifies quality in both directions</strong> — a strong competitive context field produces structurally differentiated outputs across all five active libraries. A weak one produces coordinated mediocrity.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Can the same Context Brief be used for multiple content runs?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Yes — and this is by design. The Context Brief is the stable strategic foundation; article-specific inputs (topic, section angle, deliverable specifications) are passed separately per run. The brief remains the same for as long as your brand strategy, competitive positioning, and audience remain consistent. You'd update the brief if you pivot to a new market, shift brand voice, or move upmarket — not when you write a new article. <strong>The brief is the brand's strategic DNA, not a per-article instruction.</strong> Most IO operators update their brief 2–4 times per year.</div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ REFERENCES ═══ -->
+      <div id="s-refs">
+        <div class="references">
+          <div class="ref-title">References</div>
+          <div class="ref-item" id="fn1">
+            <div class="ref-num">1</div>
+            <div>The distinction between "reading a field" and "executing a prompt" is documented in the IO Platform architecture spec: "Context as Constitutional Document — How Swarm-Native Libraries Derive Discipline-Specific Instructions from Shared Inputs," IntelligentOperations.ai, 2026. The core observation is that specialized libraries derive value from the same field precisely because they ask different questions of it — a phenomenon impossible in single-library prompt systems.</div>
+          </div>
+          <div class="ref-item" id="fn2">
+            <div class="ref-num">2</div>
+            <div>Meridian Analytics is a composite example constructed from real context briefs submitted by IO Platform operators in the EMEA market during Q1 2026. All identifying information has been changed. The "GDPR-native vs. GDPR-compliant" positioning construct is original to this example and represents a structural differentiation pattern observed across multiple European B2B SaaS operators. The output quality differential between weak and strong brief inputs is documented in IO Platform internal research across 340 pipeline runs.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /body -->
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-sec r">
+      <div class="sb-sec-title">In This Article</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-item active" onclick="scrollToSection('s-what')"><span class="toc-dot"></span>What the Brief Actually Is</li>
+        <li class="toc-item" onclick="scrollToSection('s-annotated')"><span class="toc-dot"></span>Annotated Brief UI</li>
+        <li class="toc-item" onclick="scrollToSection('s-matrix')"><span class="toc-dot"></span>Field Interpretation Matrix</li>
+        <li class="toc-item" onclick="scrollToSection('s-example')"><span class="toc-dot"></span>Filled Brief · SaaS Example</li>
+        <li class="toc-item" onclick="scrollToSection('s-compare')"><span class="toc-dot"></span>Good vs. Weak Brief</li>
+        <li class="toc-item" onclick="scrollToSection('s-social')"><span class="toc-dot"></span>Social Distribution</li>
+        <li class="toc-item" onclick="scrollToSection('s-seo')"><span class="toc-dot"></span>Search Package</li>
+        <li class="toc-item" onclick="scrollToSection('s-crm')"><span class="toc-dot"></span>CRM Lead Capture</li>
+        <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+      </ul>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">This Article's Libraries</div>
+      <div class="lib-list">
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-art)"></div><div class="lib-name">Article Library</div><div class="lib-count">14</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-img)"></div><div class="lib-name">Image Library</div><div class="lib-count">3</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-des)"></div><div class="lib-name">Design Library</div><div class="lib-count">4</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-seo)"></div><div class="lib-name">SEO Library</div><div class="lib-count">6</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-crm)"></div><div class="lib-name">CRM Library</div><div class="lib-count">5</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Pipeline Stats</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" style="color:#38bdf8">5</div><div class="stat-l">Libraries</div></div>
+        <div class="stat-card"><div class="stat-n">~32k</div><div class="stat-l">Tokens</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">2:58</div><div class="stat-l">Runtime</div></div>
+        <div class="stat-card"><div class="stat-n">9</div><div class="stat-l">Brief fields</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Article Series</div>
+      <div class="series-nav">
+        <a class="sn-item"><span class="sn-num">01</span><span class="sn-title">How 9 Libraries Become One System</span></a>
+        <a class="sn-item current"><span class="sn-num">02</span><span class="sn-title">The Context Brief</span></a>
+        <a class="sn-item"><span class="sn-num">03</span><span class="sn-title">Inside the Article Library</span></a>
+        <a class="sn-item"><span class="sn-num">04</span><span class="sn-title">Image + Video Libraries</span></a>
+        <a class="sn-item"><span class="sn-num">05</span><span class="sn-title">The Orchestrator</span></a>
+        <a class="sn-item"><span class="sn-num">06</span><span class="sn-title">Social Distribution Suite</span></a>
+        <a class="sn-item"><span class="sn-num">07</span><span class="sn-title">SEO + AEO</span></a>
+        <a class="sn-item"><span class="sn-num">08</span><span class="sn-title">The CRM Library</span></a>
+        <a class="sn-item"><span class="sn-num">09</span><span class="sn-title">The Design Library</span></a>
+        <a class="sn-item"><span class="sn-num">10</span><span class="sn-title">The Complete Picture</span></a>
+      </div>
+    </div>
+  </aside>
+</div><!-- /article-grid -->
+
+<!-- ═══ AUTHOR + RELATED ═══ -->
+<div class="author-section r">
+  <div class="author-inner">
+    <div>
+      <div class="author-av">T</div>
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Founder, IntelligentOperations.ai</div>
+      <div class="author-bio">Building the AI-native content operations system for business operators who need predictable output, not AI experiments. IntelligentOperations.ai runs 9 content libraries from a single brief — coherent by architecture.</div>
+      <div class="author-links">
+        <a href="#" class="author-link">Twitter</a>
+        <a href="#" class="author-link">LinkedIn</a>
+        <a href="#" class="author-link">IO Platform</a>
+      </div>
+    </div>
+    <div class="author-divider"></div>
+    <div>
+      <div class="related-label">Continue Reading — Nine Libraries Article Series</div>
+      <div class="related-grid">
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-01"><div class="rel-thumb-dot" style="background:rgba(36,96,255,.2);border:1px solid rgba(36,96,255,.5);color:var(--wf-blue)">01</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(36,96,255,.5)">Series Overview</div>
+          <div class="rel-title">How 9 Content Libraries Become One Synchronized System</div>
+          <div class="rel-meta">9 min · Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-03"><div class="rel-thumb-dot" style="background:rgba(29,185,84,.2);border:1px solid rgba(29,185,84,.5);color:#4ade80">03</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(29,185,84,.5)">Library Deep Dive</div>
+          <div class="rel-title">Inside the Article Library: How the Writing Engine Produces Long-Form at Scale</div>
+          <div class="rel-meta">10 min · Planned</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-05"><div class="rel-thumb-dot" style="background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.5);color:#4ade80">05</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(139,92,246,.5)">Architecture</div>
+          <div class="rel-title">The Orchestrator: Episodic Memory & Why IO Doesn't Get Stuck After 30 Steps</div>
+          <div class="rel-meta">11 min · Planned</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER MENU ═══ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Wind<span>field</span></div>
+        <p class="footer-desc">AI-native operations for commercial real estate. Intelligence, not information.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Home</a>
+          <a href="#" class="footer-link">About</a>
+          <a href="#" class="footer-link">Portfolio</a>
+          <a href="#" class="footer-link">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">Documentation</a>
+          <a href="#" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Article Series</div>
+        <div class="footer-links">
+          <a href="io-article-01.html" class="footer-link">01 &mdash; 9 Content Libraries</a>
+          <a href="io-article-02.html" class="footer-link active">02 &mdash; Context Brief Spec</a>
+          <a href="io-article-03.html" class="footer-link">03 &mdash; Article Library</a>
+          <a href="io-article-04.html" class="footer-link">04 &mdash; Visual Pipeline</a>
+          <a href="io-article-05.html" class="footer-link">05 &mdash; The Orchestrator</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ FINAL FOOTER ═══ -->
+
+</div>
+
+<script>
+/* ━━ Pipeline Strip ━━ */
+var FEEDS=[
+  {n:'Article',c:'#4589FF',ct:14},{n:'Image',c:'#1db954',ct:3},
+  {n:'Design',c:'#0891b2',ct:4},{n:'SEO',c:'#d97706',ct:6},{n:'CRM',c:'#8b5cf6',ct:5}
+];
+var pf=document.getElementById('ps-feeds');
+FEEDS.forEach(function(f,i){
+  var chip=document.createElement('div');
+  chip.className='ps-chip';
+  chip.style.background=f.c+'14';
+  chip.style.border='1px solid '+f.c+'28';
+  chip.style.color=f.c;
+  var dot=document.createElement('div');dot.className='ps-dot';dot.style.background=f.c;
+  chip.appendChild(dot);
+  chip.appendChild(document.createTextNode(f.n+' \u00b7 '+f.ct));
+  pf.appendChild(chip);
+  if(i<FEEDS.length-1){var a=document.createElement('div');a.className='ps-arrow';a.textContent='\u00b7';pf.appendChild(a);}
+});
+
+/* ━━ Attribution ━━ */
+let attrOn=false;
+function toggleAttr(){
+  attrOn=!attrOn;
+  document.body.classList.toggle('attr',attrOn);
+  const b=document.getElementById('attr-btn');
+  b.classList.toggle('on',attrOn);
+  b.textContent=attrOn?'Hide Sources':'Show Library Sources';
+  if(attrOn){
+    document.querySelectorAll('.src').forEach(el=>{
+      if(!el.querySelector('.ann-corners')){
+        const c=document.createElement('div');c.className='ann-corners';
+        c.innerHTML='<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';
+        el.appendChild(c);
+      }
+    });
+  }
+}
+
+/* ━━ Pipeline toggle ━━ */
+function togglePipe(){
+  const strip=document.getElementById('pstrip');
+  const map=document.getElementById('pipemap');
+  const btn=document.getElementById('pipe-btn');
+  if(map.classList.contains('open')){map.classList.remove('open');strip.classList.remove('open');btn.classList.remove('on');}
+  else if(strip.classList.contains('open')){strip.classList.remove('open');map.classList.add('open');btn.classList.add('on');}
+  else{strip.classList.add('open');btn.classList.add('on');}
+}
+
+/* ━━ Hero Viz: Scan Document animation ━━ */
+const FIELD_IDS=['hf-brand','hf-voice','hf-thesis','hf-industry','hf-audience','hf-competitive','hf-visual','hf-seo','hf-crm'];
+const READER_LINES=['rl-art','rl-img','rl-des','rl-seo','rl-crm'];
+let scanning=false;
+function scanDocument(){
+  if(scanning) return;
+  scanning=true;
+  const statusEl=document.getElementById('hv-status2');
+  statusEl.innerHTML='SCANNING CONTEXT BRIEF...<br>EXTRACTING FIELD CONTENTS<br>DISPATCHING TO 5 LIBRARIES';
+
+  // Activate all reading beams
+  READER_LINES.forEach((id,i)=>{
+    setTimeout(()=>{
+      const el=document.getElementById(id);
+      if(el) el.setAttribute('opacity','0.7');
+    },i*150);
+  });
+
+  // Scan through each field
+  FIELD_IDS.forEach((id,i)=>{
+    setTimeout(()=>{
+      const el=document.getElementById(id);
+      if(el && el.style.background){
+        el.style.opacity='1';
+        el.style.filter='brightness(2.5)';
+        setTimeout(function(){el.style.filter='brightness(1)';},400);
+      }
+    },500+i*300);
+  });
+
+  // Complete
+  setTimeout(()=>{
+    statusEl.innerHTML='5 LIBRARIES \u00b7 READING COMPLETE<br>ALL FIELDS EXTRACTED \u00b7 9/9<br>READY FOR DISPATCH';
+    READER_LINES.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.setAttribute('opacity','0.55');
+    });
+    setTimeout(()=>{
+      statusEl.innerHTML='CONTEXT BRIEF \u00b7 5 LIBRARIES READING<br>PARALLEL EXTRACTION \u00b7 ALL FIELDS ACTIVE<br>IO-ORCH v2.0 \u00b7 DOCUMENT MODE';
+      scanning=false;
+    },2000);
+  },500+FIELD_IDS.length*300+500);
+}
+
+// Auto-start soft animation after load
+setTimeout(()=>{
+  READER_LINES.forEach((id,i)=>{
+    setTimeout(()=>{
+      const el=document.getElementById(id);
+      if(el) el.setAttribute('opacity','0.45');
+    },i*200);
+  });
+},800);
+
+/* ━━ Annotated Brief: Field activation ━━ */
+let activeField=null;
+function activateField(fieldId){
+  // Deactivate all
+  document.querySelectorAll('.brief-field').forEach(f=>f.classList.remove('active'));
+  document.querySelectorAll('.field-detail').forEach(d=>d.classList.remove('show'));
+  document.getElementById('ab-placeholder').style.display='none';
+  // Activate selected
+  const fieldEl=document.querySelector(`[data-field="${fieldId}"]`);
+  if(fieldEl) fieldEl.classList.add('active');
+  const detailEl=document.getElementById(`fd-${fieldId}`);
+  if(detailEl){detailEl.classList.add('show');activeField=fieldId;}
+}
+// Auto-activate first field
+setTimeout(()=>activateField('competitive'),600);
+
+/* ━━ Brief mode toggle ━━ */
+function setMode(mode){
+  document.getElementById('btn-fields').classList.toggle('on',mode==='fields');
+  document.getElementById('btn-libs').classList.toggle('on',mode==='libs');
+}
+
+/* ━━ Social tabs ━━ */
+function tab(id,btn){
+  document.querySelectorAll('.sb-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.sb-platform').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('tab-'+id).classList.add('on');
+}
+
+/* ━━ FAQ ━━ */
+function toggleFaq(qEl){
+  var item=qEl.parentElement;
+  var wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i){
+    i.classList.remove('open');
+    i.querySelector('.faq-toggle').textContent='+';
+  });
+  if(!wasOpen){
+    item.classList.add('open');
+    qEl.querySelector('.faq-toggle').textContent='\u00d7';
+  }
+}
+
+/* ━━ Progress ━━ */
+window.addEventListener('scroll',()=>{
+  const d=document.documentElement;
+  document.getElementById('prog').style.width=((window.scrollY/(d.scrollHeight-d.clientHeight))*100)+'%';
+},{passive:true});
+
+/* ━━ Scroll reveal ━━ */
+const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.05,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.r').forEach(el=>ro.observe(el));
+
+/* ━━ ToC active ━━ */
+const sections = ['s-what','s-annotated','s-matrix','s-example','s-compare','s-social','s-seo','s-crm','s-faq'];
+const tocItems = document.querySelectorAll('.toc-item');
+const tocObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      var idx = sections.indexOf(e.target.id);
+      if (idx > -1) {
+        tocItems.forEach(function(t) { t.classList.remove('active'); });
+        if (tocItems[idx]) tocItems[idx].classList.add('active');
+      }
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(function(s) {
+  var el = document.getElementById(s);
+  if (el) tocObserver.observe(el);
+});
+
+function scrollToSection(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Orchestrator: Episodic Memory &amp; Why IO Doesn&amp;#39;t Get Stuck After 30 Steps &mdash; Windfield IO</title>
+<meta name="description" content="Episodic memory, context window management, and the architectural innovation that lets IO scale to 1,000 steps without degradation.">
+<meta name="keywords" content="episodic memory ai, ai orchestrator architecture, swarm native ai, context window management">
+<meta property="og:title" content="The Orchestrator: Episodic Memory &amp; Why IO Doesn&amp;#39;t Get Stuck After 30 Steps">
+<meta property="og:description" content="Episodic memory, context window management, and the architectural innovation that lets IO scale to 1,000 steps without degradation.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"The Orchestrator: Episodic Memory & Why IO Doesn't Get Stuck After 30 Steps","description":"Episodic memory, context window management, and the architectural innovation that lets IO scale to 1,000+ steps without quality degradation — while legacy agents fail around step 30.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"IntelligentOperations.ai"}},"publisher":{"@type":"Organization","name":"IntelligentOperations.ai"},"datePublished":"2026-04-12","articleSection":"Architecture","keywords":["episodic memory ai","orchestrator architecture","swarm native ai","context window management","dumb zone"],"wordCount":3300,"timeRequired":"PT11M","isPartOf":{"@type":"CreativeWorkSeries","name":"Nine Libraries Article Series","position":5}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is episodic memory in AI agent systems?","acceptedAnswer":{"@type":"Answer","text":"Episodic memory is an architectural pattern where an AI agent compresses each completed task into a minimal structured summary — called an episode — rather than retaining the full working transcript. In the IO Platform, each library returns a 48-token JSON object describing what it produced, not how it got there. The Orchestrator reads only these episode summaries, keeping its context window virtually flat regardless of how many steps have been completed. This enables stable performance past 1,000 steps where legacy architectures degrade around step 30."}},
+{"@type":"Question","name":"What is the Dumb Zone in AI agents?","acceptedAnswer":{"@type":"Answer","text":"The Dumb Zone is the performance degradation threshold that occurs when a legacy AI agent's context window fills with accumulated working notes, failed attempts, and prior outputs. As the context window approaches capacity, the model must compress or drop earlier content to fit new inputs — degrading reasoning quality. For most legacy architectures this happens around step 20–30, producing outputs that are noticeably less coherent than the agent's initial work. The IO Platform avoids the Dumb Zone entirely through episodic memory: libraries compress outputs into 48-token episodes, so the Orchestrator's context window never accumulates."}},
+{"@type":"Question","name":"How does the IO Orchestrator coordinate nine libraries without running them?","acceptedAnswer":{"@type":"Answer","text":"The IO Orchestrator dispatches all nine libraries simultaneously by sending each one the context brief plus their specific task parameters. Each library executes in an isolated worker thread, completes its full prompt chain, and returns a compressed episode object to the Orchestrator. The Orchestrator never reads the library's working transcript — only the structured episode. This means the Orchestrator's context window at step 500 contains exactly nine episode summaries, not 500 steps of accumulated content. Coherence between outputs is guaranteed by the shared input (the context brief), not by inter-library communication."}},
+{"@type":"Question","name":"What is an episode in the IO Platform architecture?","acceptedAnswer":{"@type":"Answer","text":"An episode is a compressed state delta — a structured JSON object of approximately 48 tokens — that each library returns to the Orchestrator when its task is complete. An episode contains: library identifier, completion status, a summary of deliverables produced, quality scores, token usage, and any flags the Orchestrator needs for assembly decisions. An episode contains no working notes, no failed prompt attempts, and no internal reasoning. It is the minimum information the Orchestrator needs to assemble a complete package — and nothing more."}},
+{"@type":"Question","name":"How is the IO architecture different from LangChain or AutoGPT?","acceptedAnswer":{"@type":"Answer","text":"LangChain and AutoGPT are single-agent architectures: one agent accumulates context across all steps, producing a single growing context window that degrades as it fills. The IO Platform is a swarm-native architecture: nine specialized libraries execute in isolation simultaneously, each with a scoped context window, returning compressed episodes to a coordinating Orchestrator. The Orchestrator never accumulates working content — it manages only assembly decisions from episode summaries. This architectural difference enables IO to complete complex multi-library content packages in under 4 minutes with quality that single-agent systems cannot sustain past step 30."}}
+]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"IntelligentOperations.ai","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Content Operations","item":"https://intelligentoperations.ai/content-ops"},
+{"@type":"ListItem","position":3,"name":"Nine Libraries Series","item":"https://intelligentoperations.ai/content-ops/series"},
+{"@type":"ListItem","position":4,"name":"The Orchestrator","item":"https://intelligentoperations.ai/content-ops/orchestrator-episodic-memory"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+
+/* ================================================================
+   WINDFIELD IO — ARTICLE SERIES TEMPLATE
+   Design System Tokens + Full Article Page
+   ================================================================ */
+:root {
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --wf-brand: #1db954; --wf-brand-hover: #17a34a; --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b; --wf-bg-elevated: #111113; --wf-bg-sunken: #050507;
+  --wf-surface: #141417; --wf-surface-hover: #1a1a1e; --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa; --wf-fg-muted: #a1a1aa; --wf-fg-subtle: #71717a; --wf-fg-faint: #52525b;
+  --wf-border: #27272a; --wf-border-strong: #3f3f46; --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF; --wf-teal: #08BDBA; --wf-green: #42BE65; --wf-red: #E85D4A;
+  --wf-purple: #BE95FF; --wf-orange: #FF832B;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1); --wf-dur: 160ms;
+
+  /* Library node colors */
+  --lib-art: #4589FF; --lib-img: #1db954; --lib-vid: #FF832B;
+  --lib-soc: #E85D4A; --lib-des: #08BDBA; --lib-seo: #d97706;
+  --lib-crm: #BE95FF; --lib-con: #059669; --lib-tas: #6b7280;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+/* ================================================================
+   1. READING PROGRESS BAR
+   ================================================================ */
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:10000;width:0;transition:width 80ms linear;pointer-events:none}
+
+/* ================================================================
+   2. NAVBAR
+   ================================================================ */
+.navbar{position:sticky;top:0;z-index:500;background:rgba(9,9,11,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center}
+.nav-logo{font-family:var(--font-sans);font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-.02em;flex-shrink:0}
+.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-links{display:flex;align-items:center;gap:8px;margin-left:40px}
+.nav-link{font-size:13px;font-weight:400;color:var(--wf-fg-muted);padding:6px 12px;border-radius:var(--wf-r-sm);transition:color var(--wf-dur) var(--wf-ease)}
+.nav-link:hover,.nav-link.active{color:var(--wf-fg)}
+.nav-link.active{font-weight:500}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.nav-toggle{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--font-sans);letter-spacing:.04em;cursor:pointer;border:1px solid var(--wf-border);background:none;color:var(--wf-fg-subtle);transition:all var(--wf-dur) var(--wf-ease);display:flex;align-items:center;gap:6px}
+.nav-toggle:hover,.nav-toggle.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nav-toggle svg{width:12px;height:12px}
+.nav-cta{padding:7px 18px;border-radius:var(--wf-r-md);font:600 13px/1 var(--font-sans);cursor:pointer;border:none;background:var(--wf-brand);color:var(--wf-brand-fg);transition:background var(--wf-dur) var(--wf-ease)}
+.nav-cta:hover{background:var(--wf-brand-hover)}
+
+/* Mobile nav */
+.nav-hamburger{display:none;background:none;border:none;color:var(--wf-fg-muted);cursor:pointer;padding:4px}
+.nav-hamburger svg{width:20px;height:20px}
+@media(max-width:1024px){.nav-links{display:none}.nav-hamburger{display:block}}
+@media(max-width:768px){.nav-toggle{display:none}}
+
+/* ================================================================
+   PIPELINE STRIP
+   ================================================================ */
+#pipeline-strip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}
+#pipeline-strip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto;gap:12px}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);flex-shrink:0}
+.ps-feeds{display:flex;gap:5px;flex-shrink:0}
+.ps-chip{padding:4px 9px;border-radius:var(--wf-r-sm);font:600 9px/1 var(--font-sans);display:flex;align-items:center;gap:4px;flex-shrink:0;letter-spacing:.06em;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.ps-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ps-arrow{color:var(--wf-fg-faint);flex-shrink:0;display:flex;align-items:center}
+.ps-arrow svg{width:14px;height:14px}
+.ps-result{font:600 10px/1 var(--font-sans);color:var(--wf-brand);letter-spacing:.04em;flex-shrink:0;white-space:nowrap}
+@media(max-width:768px){.ps-result{display:none}}
+
+/* ================================================================
+   3. HERO
+   ================================================================ */
+.hero{position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-wrap{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.eye-tag{font:700 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-dot{width:4px;height:4px;border-radius:50%;background:var(--wf-fg-faint)}
+.eye-series{font:600 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+.hero h1{font-family:var(--font-sans);font-size:clamp(34px,5vw,58px);font-weight:700;line-height:1.08;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:17px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid rgba(255,255,255,.08);padding-top:20px;flex-wrap:wrap}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);display:flex;align-items:center;justify-content:center;font:700 14px/1 var(--font-sans);color:#fff;flex-shrink:0}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:rgba(255,255,255,.1);margin:0 18px}
+.h-date,.h-read{font-size:13px;color:var(--wf-fg-subtle)}
+.h-read{margin-left:14px}
+.hero-stamp{display:inline-flex;margin-top:20px;padding:4px 12px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);font:400 10px/1.4 var(--font-mono);color:var(--wf-fg-faint);letter-spacing:.06em}
+
+/* ── Hero Viz ── */
+.hero-viz{position:relative;height:500px;align-self:end}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);
+  border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.14) 0%,transparent 65%);animation:glow-pulse 4s ease-in-out infinite}
+@keyframes glow-pulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.15)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);
+  animation:scan-line 5s ease-in-out infinite;opacity:.4}
+@keyframes scan-line{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+
+/* Hub and spoke */
+.hub-spoke{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:320px;height:320px}
+.hub-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.3),rgba(29,185,84,.08));border:1.5px solid rgba(29,185,84,.5);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2}
+.hub-label{font:700 6px/1 var(--font-mono);letter-spacing:.12em;color:var(--wf-brand);text-transform:uppercase;text-align:center}
+.hub-sublabel{font:300 5px/1 var(--font-mono);color:rgba(29,185,84,.6);margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
+.spoke-node{position:absolute;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font:700 8px/1 var(--font-sans);letter-spacing:.06em;border:1px solid;z-index:2;transition:all .4s var(--wf-ease)}
+.spoke-node.glow{box-shadow:0 0 20px currentColor;transform:scale(1.2)}
+.spoke-line{position:absolute;top:50%;left:50%;transform-origin:0 0;height:1px;z-index:1;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0px,rgba(255,255,255,.08) 4px,transparent 4px,transparent 8px)}
+.spoke-line.active{background:repeating-linear-gradient(90deg,rgba(29,185,84,.4) 0px,rgba(29,185,84,.4) 4px,transparent 4px,transparent 8px)}
+
+.run-pipeline-btn{position:absolute;bottom:20px;right:20px;padding:8px 16px;border-radius:var(--wf-r-md);background:rgba(29,185,84,.12);border:1px solid rgba(29,185,84,.25);
+  font:600 11px/1 var(--font-sans);color:var(--wf-brand);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all var(--wf-dur) var(--wf-ease);z-index:3}
+.run-pipeline-btn:hover{background:rgba(29,185,84,.2);border-color:rgba(29,185,84,.4)}
+.run-pipeline-btn svg{width:12px;height:12px}
+
+@media(max-width:1024px){.hero-wrap{grid-template-columns:1fr;gap:40px}.hero-viz{height:380px;order:-1}.hviz-inner{right:0;height:380px}.hero-text{padding-bottom:48px}}
+@media(max-width:768px){.hero{padding:48px 0 0}.hero-viz{display:none}.h-sep{display:none;margin:8px 0}.hero-meta{flex-direction:column;align-items:flex-start;gap:10px}.h-read{margin-left:0}}
+
+/* ================================================================
+   4. ARTICLE LAYOUT
+   ================================================================ */
+.article-layout{max-width:1280px;margin:0 auto;padding:60px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:64px}
+@media(max-width:1024px){.article-layout{grid-template-columns:1fr;gap:40px}}
+
+/* ── Main Content ── */
+.article-main{min-width:0}
+
+/* Body text */
+.article-main p{font-size:17.5px;line-height:1.8;color:var(--wf-fg-muted);margin-bottom:24px}
+.article-main p strong{color:var(--wf-fg);font-weight:600}
+.article-main p a{color:var(--wf-blue);text-decoration:underline;text-underline-offset:3px;transition:color var(--wf-dur)}
+.article-main p a:hover{color:#6fa8ff}
+
+/* Headings */
+.article-main h2{font-family:var(--font-serif);font-size:30px;font-weight:700;color:var(--wf-fg);margin:56px 0 20px;line-height:1.25;letter-spacing:-.01em}
+.article-main h2:first-child{margin-top:0}
+.article-main h3{font-size:20px;font-weight:600;color:var(--wf-fg);margin:40px 0 16px}
+
+/* Drop cap */
+.drop-cap::first-letter{float:left;font-family:var(--font-serif);font-size:82px;line-height:.72;font-weight:700;color:var(--wf-blue);margin-right:12px;margin-top:8px}
+
+/* Footnote links */
+sup a{color:var(--wf-blue);font-size:11px;text-decoration:none;font-weight:600}
+sup a:hover{text-decoration:underline}
+
+/* ── Section IDs for scroll spy ── */
+[data-section]{scroll-margin-top:120px}
+
+/* ================================================================
+   4a. DIRECT ANSWER BOX
+   ================================================================ */
+.direct-answer{background:rgba(69,137,255,.06);border:1px solid rgba(69,137,255,.15);border-left:3px solid var(--wf-blue);border-radius:var(--wf-r-lg);padding:28px 32px;margin-bottom:40px}
+.da-label{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-blue);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.da-label svg{width:14px;height:14px}
+.da-question{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:12px;line-height:1.4}
+.da-answer{font-size:15px;line-height:1.7;color:var(--wf-fg-muted);margin-bottom:16px}
+.da-footer{display:flex;align-items:center;gap:8px;padding-top:14px;border-top:1px solid rgba(69,137,255,.1)}
+.da-badge{padding:3px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.1);font:600 9px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.06em}
+.da-source{font:300 11px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   4b. TABLE OF CONTENTS (inline)
+   ================================================================ */
+.toc-inline{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px 32px;margin-bottom:40px}
+.toc-inline-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:18px}
+.toc-inline ol{list-style:none;counter-reset:toc-c;display:grid;grid-template-columns:1fr 1fr;gap:6px 32px}
+.toc-inline li{counter-increment:toc-c}
+.toc-inline li a{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:var(--wf-r-sm);font-size:14px;color:var(--wf-fg-muted);transition:all var(--wf-dur) var(--wf-ease)}
+.toc-inline li a:hover{color:var(--wf-fg);background:rgba(255,255,255,.04)}
+.toc-inline li a::before{content:counter(toc-c,decimal-leading-zero);font:600 11px/1 var(--font-mono);color:var(--wf-fg-faint);width:24px;flex-shrink:0}
+@media(max-width:768px){.toc-inline ol{grid-template-columns:1fr}}
+
+/* ================================================================
+   4e/4i/4k. FIGURE CARDS
+   ================================================================ */
+.figure-card{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.figure-body{padding:32px;background:var(--wf-surface);min-height:200px;position:relative;overflow:hidden}
+.figure-caption{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border)}
+.fig-label{font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);flex-shrink:0}
+.fig-desc{font-size:12px;color:var(--wf-fg-subtle);flex:1}
+.fig-source{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint);margin-left:auto}
+
+/* Fig 01 hub-spoke horizontal */
+.fig01-flow{display:flex;align-items:center;justify-content:center;gap:0;padding:20px 0}
+.fig01-center{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,rgba(69,137,255,.2),rgba(69,137,255,.06));border:1.5px solid rgba(69,137,255,.4);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0;position:relative}
+.fig01-center-label{font:700 6px/1 var(--font-mono);color:var(--wf-blue);text-transform:uppercase;letter-spacing:.1em;text-align:center}
+.fig01-nodes{display:flex;flex-wrap:wrap;gap:8px;max-width:240px;justify-content:center}
+.fig01-node{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--font-sans);letter-spacing:.04em;border:1px solid}
+.fig01-connector{width:48px;height:1px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.1) 0px,rgba(255,255,255,.1) 4px,transparent 4px,transparent 8px);flex-shrink:0}
+
+/* Fig 02 Memory Context */
+.fig02-compare{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:20px 0}
+@media(max-width:600px){.fig02-compare{grid-template-columns:1fr}}
+.fig02-col{text-align:center}
+.fig02-label{font:700 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.fig02-bars{display:flex;align-items:flex-end;gap:3px;height:120px;justify-content:center}
+.fig02-bar{width:8px;border-radius:2px 2px 0 0;transition:height .3s}
+.fig02-status{margin-top:12px;font:700 10px/1 var(--font-mono);letter-spacing:.1em;padding:4px 10px;border-radius:var(--wf-r-sm);display:inline-block}
+
+/* Fig 03 Browser mockup */
+.fig03-browser{border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border)}
+.fig03-toolbar{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.fig03-dot{width:8px;height:8px;border-radius:50%}
+.fig03-urlbar{flex:1;margin-left:10px;padding:3px 10px;border-radius:4px;background:rgba(255,255,255,.05);font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.fig03-content{padding:20px;display:grid;grid-template-columns:180px 1fr;gap:16px;min-height:200px}
+.fig03-sidebar{display:flex;flex-direction:column;gap:8px}
+.fig03-sidebar-item{padding:6px 10px;border-radius:var(--wf-r-sm);font:500 10px/1 var(--font-sans);color:var(--wf-fg-subtle)}
+.fig03-sidebar-item.active{background:rgba(69,137,255,.1);color:var(--wf-blue)}
+.fig03-main{display:flex;flex-direction:column;gap:10px}
+.fig03-block{border-radius:var(--wf-r-sm);padding:12px;font:400 10px/1.4 var(--font-sans)}
+
+/* ================================================================
+   4g. PULL QUOTE
+   ================================================================ */
+.pull-quote{background:var(--wf-surface);border:1px solid var(--wf-border);border-left:3px solid var(--wf-blue);border-radius:var(--wf-r-lg);padding:32px 36px;margin:40px 0;position:relative}
+.pq-mark{font-family:var(--font-serif);font-size:72px;line-height:1;color:rgba(69,137,255,.15);position:absolute;top:12px;left:20px}
+.pq-text{font-family:var(--font-serif);font-size:22px;font-style:italic;line-height:1.55;color:var(--wf-fg);margin-bottom:16px;padding-left:20px}
+.pq-text span{color:var(--wf-blue)}
+.pq-attr{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);padding-left:20px}
+
+/* ================================================================
+   4h. PIPELINE DIAGRAM
+   ================================================================ */
+.pipeline-diagram{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.pd-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.pd-title{font:600 14px/1 var(--font-sans);color:var(--wf-fg)}
+.pd-badge{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.08);border:1px solid rgba(69,137,255,.15);font:500 10px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.04em}
+.pd-body{padding:32px 24px;background:var(--wf-surface)}
+.pd-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px;flex-wrap:wrap}
+.pd-node{padding:10px 16px;border-radius:var(--wf-r-md);border:1px solid var(--wf-border);background:rgba(255,255,255,.03);text-align:center;flex-shrink:0}
+.pd-node-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:3px}
+.pd-node-name{font:600 12px/1 var(--font-sans);color:var(--wf-fg)}
+.pd-arrow{width:36px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);flex-shrink:0}
+.pd-arrow svg{width:16px;height:16px}
+.pd-dispatch{position:relative;padding:10px 16px;border-radius:var(--wf-r-md);border:1px dashed rgba(69,137,255,.3);background:rgba(69,137,255,.04);text-align:center}
+.pd-dispatch-lines{display:flex;gap:2px;justify-content:center;margin-top:4px}
+.pd-dispatch-line{width:1px;height:12px;background:rgba(69,137,255,.3)}
+.pd-output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:600px){.pd-output-grid{grid-template-columns:1fr 1fr}}
+.pd-output-item{padding:10px 14px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.03);border:1px solid var(--wf-border);font:500 11px/1.3 var(--font-sans);color:var(--wf-fg-muted)}
+.pd-output-item strong{display:block;color:var(--wf-fg);font-weight:600;margin-bottom:2px;font-size:12px}
+
+/* ================================================================
+   4j. VIDEO BLOCK
+   ================================================================ */
+.video-block{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.video-player{position:relative;height:300px;background:linear-gradient(135deg,#0a0f14,#0e1a12);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.video-play{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;transition:all .3s var(--wf-ease)}
+.video-play svg{width:24px;height:24px;color:var(--wf-fg)}
+.video-player:hover .video-play{background:rgba(255,255,255,.15);transform:scale(1.08)}
+.video-overlay{position:absolute;bottom:16px;left:16px;right:16px;display:flex;align-items:flex-end;justify-content:space-between}
+.video-title{font:600 14px/1.3 var(--font-sans);color:var(--wf-fg)}
+.video-dur{font:500 11px/1 var(--font-mono);color:var(--wf-fg-subtle);background:rgba(0,0,0,.5);padding:4px 8px;border-radius:var(--wf-r-sm)}
+.video-footer{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border)}
+.video-angle{padding:3px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.1);font:600 9px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.06em}
+.video-desc{font-size:12px;color:var(--wf-fg-subtle);flex:1}
+.video-src{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   4l. SOCIAL BLOCK
+   ================================================================ */
+.social-block{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.social-tabs{display:flex;border-bottom:1px solid var(--wf-border);background:var(--wf-bg-elevated)}
+.social-tab{flex:1;padding:12px 16px;font:600 12px/1 var(--font-sans);color:var(--wf-fg-subtle);cursor:pointer;border:none;background:none;text-align:center;transition:all var(--wf-dur);border-bottom:2px solid transparent}
+.social-tab:hover{color:var(--wf-fg-muted)}
+.social-tab.active{color:var(--wf-fg);border-bottom-color:var(--wf-blue)}
+.social-panel{display:none;padding:24px;background:var(--wf-surface)}
+.social-panel.active{display:block}
+
+/* Twitter mockup */
+.tweet-card{background:#fff;border-radius:var(--wf-r-lg);padding:20px;max-width:500px;margin:0 auto}
+.tweet-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tweet-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA)}
+.tweet-name{font:700 14px/1.2 var(--font-sans);color:#0f1419}
+.tweet-handle{font:400 13px/1 var(--font-sans);color:#536471}
+.tweet-text{font:400 15px/1.5 var(--font-sans);color:#0f1419;margin-bottom:16px}
+.tweet-text b{color:#1d9bf0}
+.tweet-actions{display:flex;gap:40px}
+.tweet-action{font:400 12px/1 var(--font-sans);color:#536471;display:flex;align-items:center;gap:6px}
+.tweet-action svg{width:16px;height:16px}
+
+/* LinkedIn mockup */
+.linkedin-card{background:#fff;border-radius:var(--wf-r-lg);padding:20px;max-width:500px;margin:0 auto}
+.li-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.li-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);flex-shrink:0}
+.li-name{font:700 14px/1.2 var(--font-sans);color:#000}
+.li-title{font:400 12px/1.3 var(--font-sans);color:#666;margin-top:2px}
+.li-time{font:400 11px/1 var(--font-sans);color:#999;margin-top:2px}
+.li-text{font:400 14px/1.6 var(--font-sans);color:#333;margin-bottom:16px}
+.li-stats{display:flex;gap:20px;padding-top:12px;border-top:1px solid #e5e5e5}
+.li-stat{font:400 12px/1 var(--font-sans);color:#666}
+
+/* Instagram mockup */
+.insta-card{background:#1a1a2e;border-radius:var(--wf-r-lg);overflow:hidden;max-width:500px;margin:0 auto}
+.insta-visual{height:200px;background:linear-gradient(135deg,#0d1117,#1a1a2e,#0d1117);display:flex;align-items:center;justify-content:center;position:relative}
+.insta-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center}
+.insta-icon svg{width:24px;height:24px;color:#fff}
+.insta-caption{padding:16px;font:400 13px/1.5 var(--font-sans);color:#e0e0e0}
+.insta-caption strong{color:#fff}
+
+/* ================================================================
+   4m. SEO BLOCK
+   ================================================================ */
+.seo-block{background:rgba(255,131,43,.04);border:1px solid rgba(255,131,43,.15);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.seo-header{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid rgba(255,131,43,.1)}
+.seo-badge{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(255,131,43,.12);font:700 9px/1 var(--font-mono);color:var(--wf-orange);letter-spacing:.1em}
+.seo-title{font:600 14px/1 var(--font-sans);color:var(--wf-fg)}
+.seo-body{padding:24px}
+
+/* Google SERP mockup */
+.serp-card{background:#fff;border-radius:var(--wf-r-md);padding:20px;margin-bottom:20px}
+.serp-url{font:400 12px/1 var(--font-sans);color:#202124;margin-bottom:4px}
+.serp-url span{color:#5f6368}
+.serp-title{font:400 20px/1.3 var(--font-sans);color:#1a0dab;margin-bottom:6px;cursor:pointer}
+.serp-title:hover{text-decoration:underline}
+.serp-desc{font:400 14px/1.5 var(--font-sans);color:#4d5156}
+
+/* AEO panel */
+.aeo-panel{background:rgba(255,255,255,.04);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);padding:16px 20px;margin-bottom:16px}
+.aeo-label{font:700 9px/1 var(--font-mono);letter-spacing:.1em;color:var(--wf-orange);margin-bottom:10px;text-transform:uppercase}
+.aeo-question{font:600 15px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:8px}
+.aeo-answer{font:400 14px/1.6 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* Keyword pills */
+.keyword-pills{display:flex;flex-wrap:wrap;gap:6px}
+.keyword-pill{padding:4px 12px;border-radius:20px;background:rgba(255,131,43,.08);border:1px solid rgba(255,131,43,.15);font:500 11px/1 var(--font-sans);color:var(--wf-orange)}
+
+/* ================================================================
+   4n. CRM BLOCK
+   ================================================================ */
+.crm-block{border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0;position:relative}
+.crm-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(190,149,255,.06),rgba(190,149,255,.02));border:1px solid rgba(190,149,255,.15);border-radius:var(--wf-r-lg)}
+.crm-orb{position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(190,149,255,.12),transparent 70%);pointer-events:none}
+.crm-inner{position:relative;padding:40px 32px}
+.crm-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:40px}
+@media(max-width:768px){.crm-grid{grid-template-columns:1fr}}
+.crm-text .crm-eyebrow{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-purple);margin-bottom:12px}
+.crm-text h3{font:700 26px/1.2 var(--font-sans);color:var(--wf-fg);margin-bottom:12px;letter-spacing:-.02em}
+.crm-text p{font-size:15px;color:var(--wf-fg-muted);line-height:1.6}
+.crm-form{display:flex;flex-direction:column;gap:10px}
+.crm-input{padding:10px 14px;border-radius:var(--wf-r-md);border:1px solid var(--wf-border);background:rgba(255,255,255,.04);color:var(--wf-fg);font:400 14px/1 var(--font-sans);outline:none;transition:border-color var(--wf-dur)}
+.crm-input:focus{border-color:var(--wf-purple)}
+.crm-input::placeholder{color:var(--wf-fg-faint)}
+.crm-submit{padding:10px 20px;border-radius:var(--wf-r-md);border:none;background:var(--wf-purple);color:#fff;font:600 14px/1 var(--font-sans);cursor:pointer;transition:opacity var(--wf-dur)}
+.crm-submit:hover{opacity:.85}
+.crm-privacy{font:300 11px/1.4 var(--font-mono);color:var(--wf-fg-faint);margin-top:4px}
+
+/* Nurture sequence */
+.nurture-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:16px}
+.nurture-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:768px){.nurture-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.nurture-grid{grid-template-columns:1fr 1fr}}
+.nurture-card{padding:14px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border);text-align:center}
+.nurture-day{font:700 10px/1 var(--font-mono);color:var(--wf-purple);margin-bottom:6px;letter-spacing:.08em}
+.nurture-label{font:500 11px/1.3 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* ================================================================
+   4o. FAQ
+   ================================================================ */
+.faq-section{margin:56px 0 40px}
+.faq-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.faq-title{font:700 24px/1 var(--font-sans);color:var(--wf-fg);letter-spacing:-.02em}
+.faq-count{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.05);font:600 11px/1 var(--font-mono);color:var(--wf-fg-subtle)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-md);margin-bottom:8px;overflow:hidden;transition:border-color var(--wf-dur)}
+.faq-item.open{border-color:var(--wf-border-strong)}
+.faq-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;text-align:left}
+.faq-question{font:500 15px/1.4 var(--font-sans);color:var(--wf-fg)}
+.faq-icon{width:20px;height:20px;flex-shrink:0;color:var(--wf-fg-subtle);transition:transform .25s var(--wf-ease)}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease)}
+.faq-answer-inner{padding:0 20px 20px;font-size:14px;line-height:1.7;color:var(--wf-fg-muted)}
+
+/* ================================================================
+   4p. REFERENCES
+   ================================================================ */
+.references{margin-top:56px;padding-top:32px;border-top:1px solid var(--wf-border)}
+.ref-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:20px}
+.ref-list{display:flex;flex-direction:column;gap:14px}
+.ref-item{display:flex;gap:12px;align-items:flex-start}
+.ref-num{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font:700 10px/1 var(--font-mono);color:var(--wf-fg-subtle);flex-shrink:0}
+.ref-text{font:400 13px/1.5 var(--font-sans);color:var(--wf-fg-subtle)}
+.ref-text a{color:var(--wf-blue);text-decoration:underline;text-underline-offset:2px}
+
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
+.article-sidebar{position:relative}
+@media(max-width:1024px){.article-sidebar{order:-1}}
+.sidebar-sticky{position:sticky;top:80px;display:flex;flex-direction:column;gap:24px}
+
+/* Sidebar TOC */
+.stoc{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.stoc-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:16px}
+.stoc-list{display:flex;flex-direction:column;gap:2px}
+.stoc-link{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:var(--wf-r-sm);font:400 12px/1.3 var(--font-sans);color:var(--wf-fg-subtle);transition:all var(--wf-dur) var(--wf-ease);text-decoration:none}
+.stoc-link:hover{color:var(--wf-fg-muted);background:rgba(255,255,255,.03)}
+.stoc-link.active{color:var(--wf-fg);background:rgba(69,137,255,.08)}
+.stoc-dot{width:5px;height:5px;border-radius:50%;background:var(--wf-border-strong);flex-shrink:0;transition:background var(--wf-dur)}
+.stoc-link.active .stoc-dot{background:var(--wf-blue)}
+
+/* Sidebar stats */
+.sidebar-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sstat{padding:14px;border-radius:var(--wf-r-md);background:var(--wf-surface);border:1px solid var(--wf-border);text-align:center}
+.sstat-val{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:4px}
+.sstat-label{font:400 10px/1 var(--font-mono);color:var(--wf-fg-faint);text-transform:uppercase;letter-spacing:.08em}
+
+/* Sidebar libraries */
+.sidebar-libs{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.slib-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.slib-list{display:flex;flex-direction:column;gap:6px}
+.slib-item{display:flex;align-items:center;gap:10px;padding:5px 0}
+.slib-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.slib-name{font:400 12px/1 var(--font-sans);color:var(--wf-fg-muted);flex:1}
+.slib-count{font:500 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* Sidebar series nav */
+.sidebar-series{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.sseries-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.sseries-list{display:flex;flex-direction:column;gap:4px}
+.sseries-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--wf-r-sm);font:400 12px/1.3 var(--font-sans);color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.sseries-item:hover{background:rgba(255,255,255,.03);color:var(--wf-fg-muted)}
+.sseries-item.current{background:rgba(69,137,255,.08);color:var(--wf-blue);font-weight:500}
+.sseries-num{font:600 10px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.sseries-item.current .sseries-num{color:var(--wf-blue)}
+
+/* ================================================================
+   5. AUTHOR SECTION
+   ================================================================ */
+.author-section{max-width:1280px;margin:0 auto;padding:0 32px 80px}
+.author-inner{border-top:1px solid var(--wf-border);padding-top:48px;display:grid;grid-template-columns:320px 1px 1fr;gap:40px;align-items:start}
+@media(max-width:900px){.author-inner{grid-template-columns:1fr;gap:32px}.author-divider{display:none}}
+.author-card{display:flex;flex-direction:column;align-items:center;text-align:center}
+.author-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);display:flex;align-items:center;justify-content:center;font:700 28px/1 var(--font-sans);color:#fff;margin-bottom:16px}
+.author-name{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:4px}
+.author-role{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);margin-bottom:14px}
+.author-bio{font:300 13px/1.6 var(--font-sans);color:var(--wf-fg-muted);max-width:280px;margin-bottom:18px}
+.author-socials{display:flex;gap:10px}
+.author-social{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.author-social:hover{background:rgba(255,255,255,.08);color:var(--wf-fg)}
+.author-social svg{width:14px;height:14px}
+.author-divider{background:var(--wf-border);width:1px}
+
+/* Related articles */
+.related-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:20px}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:768px){.related-grid{grid-template-columns:1fr}}
+.related-card{border-radius:var(--wf-r-lg);overflow:hidden;border:1px solid var(--wf-border);transition:border-color var(--wf-dur);cursor:pointer}
+.related-card:hover{border-color:var(--wf-border-strong)}
+.related-thumb{height:100px;background:var(--wf-surface);position:relative;overflow:hidden}
+.related-thumb-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.related-thumb-pattern{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:20px 20px}
+.related-info{padding:14px}
+.related-tag{font:600 9px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wf-blue);margin-bottom:8px}
+.related-card-title{font:600 13px/1.3 var(--font-sans);color:var(--wf-fg);margin-bottom:8px}
+.related-meta{font:400 11px/1 var(--font-sans);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   6. FOOTER
+   ================================================================ */
+.footer{background:var(--wf-bg-sunken);border-top:1px solid var(--wf-border);padding:56px 0 32px}
+.footer-inner{max-width:1280px;margin:0 auto;padding:0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:40px;margin-bottom:40px}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}}
+.footer-brand{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:12px;letter-spacing:-.02em}
+.footer-brand span{font-style:italic;color:var(--wf-brand)}
+.footer-desc{font:300 13px/1.6 var(--font-sans);color:var(--wf-fg-subtle);max-width:280px}
+.footer-col-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:8px}
+.footer-link{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-link.active{color:var(--wf-blue)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--wf-border)}
+.footer-copy{font:300 12px/1 var(--font-sans);color:var(--wf-fg-faint)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{font:300 12px/1 var(--font-sans);color:var(--wf-fg-faint);transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg-subtle)}
+
+/* ================================================================
+   ANIMATIONS / SCROLL REVEAL
+   ================================================================ */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s var(--wf-ease),transform .6s var(--wf-ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+
+/* Article-specific styles */
+
+:root {
+  --void:var(--wf-bg);--deep:#0d0d10;--dark:#111116;--mid:#18181f;--lift:#252530;
+  --cream:#f2ede6;--cream2:#e8e2d9;
+  --t1:#f2ede6;--t2:#9e9a93;--t3:#5c5956;--t4:#36342f;
+  --blue:#4589FF;--blue-lt:#6fa8ff;--green:#1db954;--amber:#e8a000;
+  --red:#e03030;--teal:#0891b2;--rose:#e11d48;
+  /* Article 05 accent: purple — architecture/orchestrator */
+  --acc:#8b5cf6;--acc-lt:#4ade80;--acc-dim:rgba(139,92,246,.14);--acc-border:rgba(139,92,246,.24);
+  /* dumb zone red */
+  --dz:#e03030;--dz-lt:#f87171;
+  --border:rgba(242,237,230,.06);--border2:rgba(242,237,230,.1);--border3:rgba(242,237,230,.16);
+  --serif:"Playfair Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",'Fira Code',monospace;
+  --ease:cubic-bezier(.25,.46,.45,.94);--spring:cubic-bezier(.34,1.56,.64,1);
+  --c-art:#4589FF;--c-img:#1db954;--c-vid:#e8a000;--c-soc:#e11d48;
+  --c-des:#0891b2;--c-seo:#d97706;--c-crm:#8b5cf6;--c-con:#059669;--c-tas:#6b7280;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+.src{position:relative}
+.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}
+.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}
+.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-art);outline-offset:3px}
+body.attr .img{outline:1.5px solid var(--c-img);outline-offset:3px}
+body.attr .des{outline:1.5px solid var(--c-des);outline-offset:3px}
+body.attr .seo{outline:1.5px solid var(--c-seo);outline-offset:3px}
+body.attr .crm{outline:1.5px solid var(--c-crm);outline-offset:3px}
+body.attr .soc{outline:1.5px solid var(--c-soc);outline-offset:3px}
+body.attr .tas{outline:1.5px solid var(--c-tas);outline-offset:3px}
+.art .src-tag{background:var(--c-art);color:#fff}.img .src-tag{background:var(--c-img);color:#fff}
+.des .src-tag{background:var(--c-des);color:#fff}.seo .src-tag{background:var(--c-seo);color:#fff}
+.crm .src-tag{background:var(--c-crm);color:#fff}.soc .src-tag{background:var(--c-soc);color:#fff}
+.tas .src-tag{background:var(--c-tas);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-art)}body.attr .img .ann-c{border-color:var(--c-img)}
+body.attr .seo .ann-c{border-color:var(--c-seo)}body.attr .crm .ann-c{border-color:var(--c-crm)}
+body.attr .soc .ann-c{border-color:var(--c-soc)}body.attr .tas .ann-c{border-color:var(--c-tas)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--acc);z-index:9999;width:0;transition:width .1s linear}
+
+nav{position:sticky;top:0;z-index:500;background:rgba(8,8,10,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border-subtle);height:52px;display:flex;align-items:center}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center;gap:0}
+.nav-logo{font-family:var(--font-serif);font-size:18px;font-weight:700;color:var(--wf-fg);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}
+.nav-logo span{font-style:italic;color:var(--wf-blue)}
+.nav-rule{width:1px;height:16px;background:var(--wf-border);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--font-sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--ease)}
+.nbtn-ghost{background:none;border:1px solid var(--wf-border);color:var(--wf-fg-subtle)}
+.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--wf-brand);display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+#pstrip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border-subtle);overflow:hidden;max-height:0;transition:max-height .35s var(--ease)}
+#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;gap:0;overflow-x:auto}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}
+.ps-chip{padding:4px 10px;border-radius:4px;font:600 10px/1 var(--font-sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}
+.ps-arrow{font-size:10px;color:var(--wf-fg-faint);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--font-sans);color:var(--wf-brand);letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+
+#pipemap{background:var(--wf-surface);border-bottom:1px solid var(--wf-border-subtle);overflow:hidden;max-height:0;transition:max-height .5s var(--ease)}
+#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.pm-title span{font-weight:300;color:var(--wf-fg-subtle)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.5),transparent);animation:scan2 2s ease-in-out infinite;margin:10px 0}
+@keyframes scan2{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--wf-border);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--font-sans);color:var(--wf-fg)}
+.pm-node-sub{font:300 8px/1 var(--font-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:6px;text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}
+.pm-lib-name{font:700 7px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.pm-lib-count{font:300 8px/1 var(--font-mono);color:var(--wf-fg-faint);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--wf-border-subtle)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--font-mono);color:var(--wf-fg-subtle)}
+.pm-meta-n{font:700 11px/1 var(--font-mono);color:var(--wf-fg)}
+
+.hero{background:var(--wf-bg);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border-subtle)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 55% 55% at 72% 32%,rgba(139,92,246,.06) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 15% 80%,rgba(36,96,255,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--wf-border-subtle) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border-subtle) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-divider{width:20px;height:1px;background:var(--wf-fg-faint)}
+.eye-series{font:600 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc);opacity:.8}
+h1{font-family:var(--font-serif);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+h1 em{font-style:italic;color:var(--acc-lt)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--wf-border);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc),var(--wf-blue));display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:var(--wf-border);margin:0 18px}
+.h-date{font-size:13px;color:var(--wf-fg-subtle)}
+.h-read{font-size:13px;color:var(--wf-fg-subtle);margin-left:14px}
+
+/* ━━ HERO VIZ — Article 05: context window meter + orchestrator ━━ */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#08060f 0%,#0d0818 55%,#080512 100%);
+  border-radius:16px 16px 0 0;border:1px solid rgba(139,92,246,.12);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(139,92,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,.4) 30%,rgba(167,139,250,.65) 50%,rgba(139,92,246,.4) 70%,transparent);
+  animation:scan 5.5s ease-in-out infinite;opacity:.45}
+@keyframes scan{0%{top:8%;opacity:0}8%{opacity:.45}92%{opacity:.2}100%{top:92%;opacity:0}}
+.hv-badge{position:absolute;top:14px;right:14px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(167,139,250,.22)}
+
+/* Orchestrator center node */
+.hv-orch{
+  position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);
+  width:72px;height:72px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,.22),rgba(139,92,246,.06));
+  border:1.5px solid rgba(139,92,246,.55);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  font:700 8px/1.4 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--acc-lt);text-align:center;
+  box-shadow:0 0 40px rgba(139,92,246,.25),inset 0 0 20px rgba(139,92,246,.08);
+  cursor:pointer;transition:box-shadow .2s;z-index:10}
+.hv-orch:hover{box-shadow:0 0 60px rgba(139,92,246,.4)}
+.hv-ring{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);border-radius:50%;
+  border:1px solid rgba(139,92,246,.25);animation:expand5 3s ease-out infinite}
+@keyframes expand5{0%{width:72px;height:72px;opacity:.8}100%{width:180px;height:180px;opacity:0}}
+.hv-ring2{animation-delay:1.5s}
+
+/* Episode return nodes (9 libraries returning episodes) */
+.ep-node{position:absolute;transform:translate(-50%,-50%);z-index:8;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.ep-pill{padding:3px 8px;border-radius:4px;font:700 7px/1 var(--font-mono);letter-spacing:.07em;text-transform:uppercase;transition:transform .2s var(--spring)}
+.ep-pill:hover{transform:scale(1.12)}
+.ep-label{font:300 7px/1 var(--font-mono);color:rgba(242,237,230,.18);white-space:nowrap}
+
+/* Context window comparison — bottom half */
+.hv-cw-area{position:absolute;bottom:16px;left:14px;right:14px}
+.hv-cw-title{font:700 7.5px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(167,139,250,.35);margin-bottom:8px;text-align:center}
+.hv-cw-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.hv-cw-label{font:300 7px/1 var(--font-mono);color:var(--wf-fg-faint);width:52px;flex-shrink:0;text-align:right}
+.hv-cw-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden;position:relative}
+.hv-cw-bar{height:100%;border-radius:3px;transition:width 1s var(--ease)}
+.hv-cw-dumb{position:absolute;right:0;top:0;height:100%;background:repeating-linear-gradient(45deg,rgba(224,48,48,.4),rgba(224,48,48,.4) 3px,rgba(224,48,48,.2) 3px,rgba(224,48,48,.2) 6px);border-left:1px solid rgba(224,48,48,.5)}
+.hv-cw-val{font:700 8px/1 var(--font-mono);width:44px;flex-shrink:0}
+/* OS analogy labels */
+.hv-os-labels{position:absolute;top:50%;left:8%;right:8%;transform:translateY(-50%);
+  display:flex;justify-content:space-between;pointer-events:none}
+.hv-os-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;border-radius:3px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+.hv-readout{position:absolute;bottom:100px;left:14px;font:300 8px/1.8 var(--font-mono);color:rgba(167,139,250,.28);letter-spacing:.06em}
+.hv-run-btn{
+  position:absolute;top:20px;right:20px;z-index:20;
+  padding:7px 16px;border-radius:20px;
+  background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.35);
+  color:var(--acc-lt);font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;
+}
+.hv-run-btn:hover{background:rgba(139,92,246,.25);border-color:var(--acc-lt)}
+.hv-svg5{position:absolute;inset:0;pointer-events:none;overflow:visible}
+
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}
+.sidebar{position:sticky;top:72px}
+
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;
+  background:linear-gradient(135deg,rgba(139,92,246,.05),rgba(139,92,246,.02));
+  border:1px solid var(--acc-border);border-left:3px solid var(--acc);
+  border-radius:10px;position:relative}
+.dab-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc-lt);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dab-label::before{content:'\25B8';font-size:9px}
+.dab-q{font:600 15px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:10px}
+.dab-a{font:300 14px/1.72 var(--font-sans);color:var(--cream2)}
+.dab-a strong{font-weight:600;color:var(--wf-fg)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}
+.dab-source{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(139,92,246,.08);color:rgba(139,92,246,.5);border:1px solid var(--acc-border)}
+
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:10px}
+.toc-inline-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--wf-border-subtle);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;text-decoration:none;transition:color .15s}
+.toc-inline-item:last-child{border-bottom:none}
+.toc-inline-item:hover{color:var(--wf-fg)}
+.toc-n{font:700 9px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0;padding-top:2px}
+
+.body p{font-size:17.5px;line-height:1.82;color:var(--cream2);font-weight:300;margin-bottom:28px}
+.body p strong{font-weight:600;color:var(--wf-fg)}
+.body p a{color:var(--acc-lt);text-decoration:none;border-bottom:1px solid rgba(167,139,250,.3);transition:border-color .15s}
+.body p a:hover{border-bottom-color:var(--acc-lt)}
+.body p sup a{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);font:700 9px/1 var(--font-mono);color:var(--acc-lt);vertical-align:super;margin-left:2px;text-decoration:none;transition:all .15s}
+.body p sup a:hover{background:var(--acc);color:#fff;border:none}
+h2.sh{font-family:var(--font-serif);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--wf-fg);margin:60px 0 20px}
+h3.sh3{font:700 11px/1 var(--font-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin:40px 0 14px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--wf-fg)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--font-serif);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--acc-lt)}
+
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--wf-surface);border-radius:10px;border:1px solid var(--wf-border-subtle);border-left:3px solid var(--acc);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--font-serif);font-size:150px;font-weight:700;color:rgba(139,92,246,.08);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--font-serif);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--wf-fg);position:relative;z-index:1;margin-bottom:14px}
+.pq-text em{font-style:italic;color:var(--acc-lt)}
+.pq-attr{font:600 11px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);position:relative;z-index:1}
+
+/* ━━ CONTEXT WINDOW COMPARISON ━━ */
+.cw-comparison{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--wf-border);background:var(--wf-surface)}
+.cwc-header{padding:14px 22px;border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;gap:12px}
+.cwc-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.cwc-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--font-mono);background:rgba(139,92,246,.1);color:var(--acc-lt);border:1px solid rgba(139,92,246,.2)}
+.cwc-body{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:640px){.cwc-body{grid-template-columns:1fr}}
+.cwc-col{}
+.cwc-col-head{padding:8px 14px;border-radius:6px;font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;text-align:center;margin-bottom:14px}
+.cwc-col-head.legacy{background:rgba(224,48,48,.08);color:#f87171;border:1px solid rgba(224,48,48,.15)}
+.cwc-col-head.swarm{background:rgba(139,92,246,.08);color:var(--acc-lt);border:1px solid rgba(139,92,246,.18)}
+.cwc-steps{display:flex;flex-direction:column;gap:8px}
+.cwc-step-row{display:flex;align-items:center;gap:8px}
+.cwc-step-label{font:700 8px/1 var(--font-mono);color:var(--wf-fg-faint);width:56px;flex-shrink:0;letter-spacing:.05em}
+.cwc-bar-wrap{flex:1;height:14px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden;position:relative}
+.cwc-bar{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px;transition:width 1.2s var(--ease)}
+.cwc-bar-label{font:700 8px/1 var(--font-mono);color:rgba(0,0,0,.7);white-space:nowrap;font-size:7px}
+.cwc-dumb-overlay{position:absolute;right:0;top:0;height:100%;
+  background:repeating-linear-gradient(45deg,rgba(224,48,48,.45),rgba(224,48,48,.45) 3px,rgba(224,48,48,.2) 3px,rgba(224,48,48,.2) 6px);
+  border-left:1px solid rgba(224,48,48,.6)}
+.cwc-dumb-label{position:absolute;top:50%;right:-32px;transform:translateY(-50%);
+  font:700 6px/1 var(--font-mono);color:rgba(224,48,48,.7);letter-spacing:.06em;text-transform:uppercase;writing-mode:vertical-lr;white-space:nowrap}
+.cwc-fail-tag{font:600 8px/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;text-align:center;margin-top:8px}
+/* Episode anatomy */
+.episode-anatomy{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid rgba(139,92,246,.18);background:var(--wf-surface)}
+.ea-header{padding:14px 22px;border-bottom:1px solid rgba(139,92,246,.1);display:flex;align-items:center;gap:12px;background:rgba(139,92,246,.03)}
+.ea-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.ea-body{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:640px){.ea-body{grid-template-columns:1fr}}
+.ea-json{background:rgba(0,0,0,.35);border:1px solid var(--wf-border);border-radius:8px;padding:16px;font:300 11px/1.8 var(--font-mono);color:rgba(167,139,250,.55);letter-spacing:.02em;overflow-x:auto}
+.ea-json .key{color:rgba(129,140,248,.7)}
+.ea-json .val-str{color:rgba(52,211,153,.7)}
+.ea-json .val-num{color:rgba(251,191,36,.7)}
+.ea-json .val-bool{color:rgba(167,139,250,.8)}
+.ea-json .comment{color:rgba(242,237,230,.2);font-style:italic}
+.ea-explainer{display:flex;flex-direction:column;gap:10px}
+.ea-field-row{background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);border-radius:6px;padding:11px 14px}
+.ea-field-key{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc-lt);margin-bottom:4px}
+.ea-field-desc{font:300 12px/1.55 var(--font-sans);color:var(--wf-fg-muted)}
+.ea-field-desc strong{font-weight:600;color:var(--wf-fg)}
+/* OS analogy diagram */
+.os-diagram{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--wf-border);background:var(--wf-surface)}
+.osd-header{padding:14px 22px;border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;gap:12px}
+.osd-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.osd-body{padding:24px}
+.osd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.osd-grid{grid-template-columns:1fr}}
+.osd-col{background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);border-radius:8px;overflow:hidden}
+.osd-col-head{padding:10px 14px;border-bottom:1px solid var(--wf-border-subtle)}
+.osd-col-head-os{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase}
+.osd-col-head-io{font:300 9px/1 var(--font-mono);color:var(--wf-fg-faint);margin-top:3px}
+.osd-col-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.osd-mapping{display:flex;align-items:flex-start;gap:8px}
+.osd-map-os{font:700 8px/1 var(--font-mono);color:var(--wf-fg-subtle);flex-shrink:0;width:56px;letter-spacing:.04em;padding-top:1px}
+.osd-map-io{font:300 11px/1.5 var(--font-sans);color:var(--wf-fg-muted);flex:1}
+.osd-map-io strong{font-weight:600;color:var(--wf-fg)}
+/* step counter comparison */
+.step-counter{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--wf-border);background:var(--wf-surface)}
+.sc-header{padding:14px 22px;border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;gap:12px}
+.sc-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.sc-body{padding:24px}
+.sc-sim-area{height:120px;background:rgba(0,0,0,.25);border:1px solid var(--wf-border-subtle);border-radius:8px;margin-bottom:16px;position:relative;overflow:hidden;display:flex;align-items:center;padding:0 20px;gap:0}
+.sc-legacy-track{flex:1;position:relative}
+.sc-swarm-track{flex:1;position:relative;margin-left:20px}
+.sc-track-label{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.sc-progress-bar{height:8px;border-radius:3px;position:relative;overflow:visible}
+.sc-agent-dot{width:12px;height:12px;border-radius:50%;position:absolute;top:50%;transform:translateY(-50%);transition:left 0.1s linear;display:flex;align-items:center;justify-content:center;font-size:7px}
+.sc-dz-marker{position:absolute;top:0;bottom:0;background:rgba(224,48,48,.12);border-left:1px dashed rgba(224,48,48,.4);display:flex;align-items:flex-start;padding-top:4px;padding-left:4px}
+.sc-dz-marker span{font:700 7px/1 var(--font-mono);color:rgba(224,48,48,.5);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.sc-controls{display:flex;align-items:center;gap:10px}
+.sc-step-display{font:700 14px/1 var(--font-mono);color:var(--wf-fg);width:80px}
+.sc-quality-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sc-quality-item{background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.sc-quality-label{font:300 11px/1 var(--font-sans);color:var(--wf-fg-subtle);flex:1}
+.sc-quality-val{font:700 16px/1 var(--font-mono)}
+.sc-run-btn{padding:6px 16px;border-radius:6px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);color:var(--acc-lt);font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .15s}
+.sc-run-btn:hover{background:rgba(139,92,246,.25)}
+
+/* Social */
+.social-block{margin:52px 0;border-radius:10px;overflow:hidden;border:1px solid var(--wf-border-subtle)}
+.sb-hd{padding:11px 18px;background:var(--wf-surface);border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;justify-content:space-between}
+.sb-hd-label{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.sb-hd-src{font:normal 9px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.sb-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--wf-border-subtle)}
+.sb-tab{padding:10px 20px;font:600 11px/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--font-sans)}
+.sb-tab.on{color:var(--wf-fg);border-bottom-color:var(--acc)}
+.sb-platform{display:none;padding:20px 22px;background:var(--mid)}
+.sb-platform.on{display:block}
+.tw-card{background:#fff;border:1px solid #e1e8ed;border-radius:14px;padding:16px;max-width:500px}
+.tw-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tw-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#8b5cf6,#4589FF);display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:15px;color:#fff;font-weight:700}
+.tw-name{font:700 14px/1 'Helvetica Neue',sans-serif;color:#14171a}
+.tw-handle{font:400 13px/1 'Helvetica Neue',sans-serif;color:#657786}
+.tw-body{font:400 14px/1.6 'Helvetica Neue',sans-serif;color:#14171a;margin-bottom:12px}
+.tw-meta{font:400 12px/1 'Helvetica Neue',sans-serif;color:#657786}
+.li-card{background:#fff;border:1px solid #dce6f1;border-radius:10px;padding:16px;max-width:500px;font-family:'Helvetica Neue',Arial,sans-serif}
+.li-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.li-av{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#8b5cf6,#4589FF);display:flex;align-items:center;justify-content:center;font:700 16px var(--font-serif);color:#fff}
+.li-name{font:600 14px/1 'Helvetica Neue',sans-serif;color:#000000e6}
+.li-sub{font:400 12px/1 'Helvetica Neue',sans-serif;color:#00000099}
+.li-body{font:400 14px/1.65 'Helvetica Neue',sans-serif;color:#000000cc}
+.ig-card{max-width:400px}
+.ig-handle{font:700 13px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:10px}
+.ig-img{height:240px;border-radius:6px;margin-bottom:12px;background:linear-gradient(135deg,#08060f,#0d0818);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ig-img::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(139,92,246,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.06) 1px,transparent 1px);background-size:22px 22px}
+.ig-img-text{position:relative;z-index:2;font-family:var(--font-serif);font-size:22px;font-style:italic;color:rgba(242,237,230,.8);text-align:center;max-width:260px;line-height:1.3}
+.ig-cap{font-size:13px;line-height:1.65;color:var(--wf-fg-muted)}
+.ig-hash{font-size:12px;color:var(--acc-lt);margin-top:8px}
+
+.seo-block{margin:48px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(217,119,6,.2);background:linear-gradient(135deg,rgba(217,119,6,.04),transparent)}
+.seo-hd{padding:11px 18px;border-bottom:1px solid rgba(217,119,6,.15);display:flex;align-items:center;gap:10px}
+.seo-tag{padding:3px 9px;border-radius:4px;font:700 9px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;background:rgba(217,119,6,.12);color:var(--wf-orange);border:1px solid rgba(217,119,6,.2)}
+.seo-body{padding:18px 22px}
+.serp{background:#fff;border:1px solid #dfe1e5;border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.serp-url{font:normal 12px/1 'Roboto',Arial,sans-serif;color:#3c4043;margin-bottom:4px}
+.serp-title{font:400 18px/1.3 Arial,sans-serif;color:#1a0dab;cursor:pointer;margin-bottom:5px}
+.serp-title:hover{text-decoration:underline}
+.serp-desc{font:400 13px/1.55 Arial,sans-serif;color:#4d5156}
+.aeo-panel{background:linear-gradient(135deg,rgba(217,119,6,.04),transparent);border:1px solid rgba(217,119,6,.12);border-radius:8px;padding:16px 18px;margin-top:16px}
+.aeo-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(217,119,6,.6);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.aeo-label::before{content:'\25C8';font-size:9px}
+.aeo-q{font:600 13px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:6px}
+.aeo-a{font:300 12px/1.65 var(--font-sans);color:var(--wf-fg-muted)}
+.seo-kws{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.seo-kw{padding:4px 11px;border-radius:20px;font:500 11px/1 var(--font-sans);background:rgba(217,119,6,.08);color:#92600a;border:1px solid rgba(217,119,6,.15)}
+
+.crm-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid rgba(139,92,246,.2);background:linear-gradient(135deg,var(--wf-surface) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-block::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}
+@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(139,92,246,.6);margin-bottom:10px}
+.crm-headline{font-family:var(--font-serif);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--wf-fg);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--wf-fg-subtle);line-height:1.65}
+.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--wf-border);border-radius:8px;font:300 14px var(--font-sans);color:var(--wf-fg);outline:none;transition:border-color .15s}
+.crm-inp:focus{border-color:rgba(139,92,246,.5)}
+.crm-inp::placeholder{color:var(--wf-fg-faint)}
+.crm-btn{padding:12px;background:var(--acc);border:none;border-radius:8px;font:700 13px var(--font-sans);color:#fff;cursor:pointer;transition:opacity .15s}
+.crm-btn:hover{opacity:.88}
+.crm-note{font-size:10px;color:var(--wf-fg-faint);text-align:center}
+.crm-seq{padding:0 44px 28px;border-top:1px solid var(--wf-border-subtle);position:relative;z-index:1}
+.crm-seq-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin:18px 0 12px}
+.crm-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:700px){.crm-steps{grid-template-columns:1fr 1fr}}
+.crm-step{background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);border-radius:7px;padding:10px 12px}
+.crm-step-d{font:700 9px/1 var(--font-mono);color:rgba(139,92,246,.6);margin-bottom:5px;letter-spacing:.05em}
+.crm-step-t{font:400 11px/1.4 var(--font-sans);color:var(--wf-fg-muted)}
+
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--wf-border)}
+.faq-head-title{font-family:var(--font-serif);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--wf-fg)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--font-mono);background:rgba(139,92,246,.1);color:var(--acc-lt);border:1px solid rgba(139,92,246,.2)}
+.faq-item{border:1px solid var(--wf-border-subtle);border-radius:8px;overflow:hidden;margin-bottom:8px;transition:border-color .15s}
+.faq-item.open{border-color:var(--wf-border)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--font-sans);color:var(--wf-fg-muted);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--wf-fg)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wf-fg-subtle);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.3);color:var(--acc-lt)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--ease),padding .2s}
+.faq-item.open .faq-a{max-height:600px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--font-sans);color:var(--cream2)}
+.faq-a-inner strong{font-weight:600;color:var(--wf-fg)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.faq-schema-note::before{content:'\25C8';color:rgba(217,119,6,.4);font-size:8px}
+
+.references{margin-top:52px;padding-top:28px;border-top:1px solid var(--wf-border-subtle)}
+.ref-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ref-title::after{content:'';flex:1;height:1px;background:var(--wf-border-subtle)}
+.ref-item{display:flex;gap:10px;margin-bottom:12px;font-size:12px;color:var(--wf-fg-subtle);line-height:1.65}
+.ref-num{width:22px;height:22px;border-radius:50%;flex-shrink:0;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);display:flex;align-items:center;justify-content:center;font:700 9px/1 var(--font-mono);color:var(--acc-lt);margin-top:1px}
+
+.sb-sec{margin-bottom:36px}
+.sb-sec-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border-subtle)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--wf-border-subtle);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}
+.toc-item:hover,.toc-item.active{color:var(--wf-fg)}
+.toc-item.active{color:var(--acc-lt)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}
+.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--wf-surface);border:1px solid var(--wf-border-subtle);border-radius:8px;padding:12px}
+.stat-n{font:700 22px/1 var(--font-mono);color:var(--wf-fg);margin-bottom:3px}
+.stat-l{font-size:10px;color:var(--wf-fg-subtle);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}
+.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wf-surface);border:1px solid var(--wf-border-subtle);border-radius:7px;cursor:pointer;transition:all .15s}
+.lib-item:hover{border-color:var(--wf-border)}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lib-name{font:500 12px/1 var(--font-sans);color:var(--wf-fg);flex:1}
+.lib-count{font:normal 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--wf-surface);border:1px solid var(--wf-border-subtle);border-radius:7px;text-decoration:none;transition:all .15s;cursor:pointer}
+.sn-item:hover{border-color:var(--wf-border)}
+.sn-item.current{border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.04)}
+.sn-num{font:700 10px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.sn-item.current .sn-num{color:var(--acc-lt)}
+.sn-title{font:400 11px/1.35 var(--font-sans);color:var(--wf-fg-subtle);flex:1}
+.sn-item.current .sn-title{color:var(--wf-fg)}
+
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--wf-border-subtle)}
+.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}
+@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--wf-blue));display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--font-serif);font-size:24px;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--font-sans);color:var(--acc-lt);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--wf-fg-subtle);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--wf-border);color:var(--wf-fg-subtle);text-decoration:none;transition:all .15s}
+.author-link:hover{color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.author-divider{background:var(--wf-border-subtle)}
+.related-label{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}
+.rel-thumb{height:100px;border-radius:8px;margin-bottom:10px;overflow:hidden;position:relative}
+.rel-thumb-bg{width:100%;height:100%;position:relative}
+.rt-01{background:linear-gradient(135deg,#07071a,#0d1030)}
+.rt-04{background:linear-gradient(135deg,#050c08,#06100a)}
+.rt-06{background:linear-gradient(135deg,#100508,#1a060c)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--font-mono)}
+.rel-series-tag{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rel-title{font:500 13px/1.45 var(--font-sans);color:var(--wf-fg-muted);margin-bottom:4px;transition:color .15s}
+.rel-card:hover .rel-title{color:var(--wf-fg)}
+.rel-meta{font:300 11px/1 var(--font-sans);color:var(--wf-fg-faint)}
+
+.footer-menu{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border-subtle);padding:52px 32px 36px}
+.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--wf-border-subtle)}
+@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--font-serif);font-size:20px;color:var(--wf-fg);margin-bottom:8px}
+.fm-logo span{font-style:italic;color:var(--wf-blue)}
+.fm-tagline{font-size:13px;color:var(--wf-fg-subtle);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(36,96,255,.08);border:1px solid rgba(36,96,255,.15);color:rgba(36,96,255,.6)}
+.fm-col-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-col a{font-size:13px;color:var(--wf-fg-subtle);text-decoration:none;transition:color .15s}
+.fm-col a:hover{color:var(--wf-fg)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}
+.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}
+.fm-series-item:hover{opacity:.75}
+.fm-s-num{font:700 9px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.fm-s-title{font:300 11px/1.3 var(--font-sans);color:var(--wf-fg-subtle);flex:1}
+.final-footer{background:var(--wf-bg);border-top:1px solid var(--wf-border-subtle);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--font-mono);color:var(--wf-fg-faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ff-sep{width:1px;height:10px;background:var(--wf-fg-faint)}
+.ff-series{color:rgba(36,96,255,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-blue);padding:5px 14px;border:1px solid rgba(36,96,255,.2);border-radius:20px;background:rgba(36,96,255,.06)}
+
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.r.in{opacity:1;transform:none}
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Wind<span>field</span></a>
+    <nav class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/about" class="nav-link">About</a>
+      <a href="/portfolio" class="nav-link">Portfolio</a>
+      <a href="/product" class="nav-link">Product</a>
+      <a href="/pricing" class="nav-link">Pricing</a>
+      <a href="/blog" class="nav-link active">Blog</a>
+      <a href="/contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <button class="nav-toggle" id="pipeline-toggle" onclick="togglePipeline()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Pipeline Map
+      </button>
+      <a href="#" class="nav-cta">Get Started</a>
+      <button class="nav-hamburger" onclick="this.closest('.navbar').classList.toggle('mobile-open')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="pstrip">
+  <div class="ps-inner">
+    <div class="ps-label">Pipeline &middot; A05</div>
+    <div class="ps-feeds" id="ps-feeds"></div>
+    <div class="ps-arrow">&rarr;</div>
+    <div class="ps-result"><span class="live-dot"></span>Complete Article &middot; 4 Libraries &middot; ~40k Tokens &middot; 2m 22s</div>
+  </div>
+</div>
+
+<div id="pipemap">
+  <div class="pm-inner">
+    <div class="pm-title">ORCHESTRATION MAP <span>&mdash; Article 05 &middot; The Orchestrator: Episodic Memory &amp; Why IO Doesn&rsquo;t Get Stuck After 30 Steps</span></div>
+    <div class="pm-scan"></div>
+    <div class="pm-flow">
+      <div class="pm-node" style="border-color:rgba(139,92,246,.3)">
+        <div class="pm-node-label">Input</div>
+        <div class="pm-node-name" style="color:var(--acc-lt)">Context Brief</div>
+        <div class="pm-node-sub">Architecture focus</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-libs">
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-art)"></div><div class="pm-lib-name" style="color:var(--c-art)">ART</div><div class="pm-lib-count">16</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-img)"></div><div class="pm-lib-name" style="color:var(--c-img)">IMG</div><div class="pm-lib-count">5</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-seo)"></div><div class="pm-lib-name" style="color:var(--c-seo)">SEO</div><div class="pm-lib-count">6</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-tas)"></div><div class="pm-lib-name" style="color:var(--c-tas)">TAS</div><div class="pm-lib-count">4</div></div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(139,92,246,.5)">
+        <div class="pm-node-label">Phase 3</div>
+        <div class="pm-node-name" style="color:var(--acc-lt)">Orchestrator</div>
+        <div class="pm-node-sub">4 episodes in</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.3)">
+        <div class="pm-node-label">Output</div>
+        <div class="pm-node-name" style="color:#4ade80">Full Package</div>
+        <div class="pm-node-sub">&lt; 3 minutes</div>
+      </div>
+    </div>
+    <div class="pm-meta-row">
+      <div class="pm-meta-item"><span class="pm-meta-n">4</span> Libraries</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">31</span> Prompts total</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">~40k</span> Tokens</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">2m 22s</span> Runtime</div>
+      <div class="pm-meta-item" style="margin-left:auto"><span style="color:var(--wf-brand);font:700 9px/1 var(--font-mono)">&bull; ACTIVE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero src art" id="hero">
+  
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow">
+        <span class="eye-tag">Architecture</span>
+        <span class="eye-divider"></span>
+        <span class="eye-series">IO Content Ops Series &middot; Article 05</span>
+      </div>
+      <h1>The <em>Orchestrator:</em> Episodic Memory &amp; Why IO Doesn&rsquo;t Get Stuck After 30 Steps</h1>
+      <p class="hero-deck">The Orchestrator doesn&rsquo;t run the libraries. It receives their outputs. Each library compresses its work into a 48-token episode. The Orchestrator reads clean state &mdash; and its context window stays flat at step 1,000 just as at step 1.</p>
+      <div class="hero-meta">
+        <div class="h-author">
+          <div class="h-av">T</div>
+          <div>
+            <div class="h-name">Tommy Saunders</div>
+            <div class="h-role">Founder, IntelligentOperations.ai</div>
+          </div>
+        </div>
+        <div class="h-sep"></div>
+        <span class="h-date">April 12, 2026</span>
+        <span class="h-read">&middot; 11 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.18)">
+        <span style="font:700 8px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc-lt)">IO-CB-2026-001</span>
+        <span style="width:1px;height:10px;background:rgba(139,92,246,.3)"></span>
+        <span style="font:300 8px/1 var(--font-mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; A05 &middot; APRIL 2026</span>
+      </div>
+    </div>
+
+    <!-- HERO VIZ: Orchestrator + context window meter -->
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz5">
+        <div class="hv-grid"></div>
+        <div class="hv-scan"></div>
+
+        <!-- Orchestrator center -->
+        <div class="hv-orch" id="hv-orch-node" onclick="pulseOrch()">
+          <span style="font-size:18px">&#9670;</span>
+          ORCH
+        </div>
+        <div class="hv-ring"></div>
+        <div class="hv-ring hv-ring2"></div>
+
+        <!-- 9 episode return nodes -->
+        <div class="ep-node" style="top:12%;left:20%">
+          <div class="ep-pill" style="background:rgba(36,96,255,.12);border:1px solid rgba(36,96,255,.4);color:var(--wf-blue)">EP:ART</div>
+          <div class="ep-label">48 tokens</div>
+        </div>
+        <div class="ep-node" style="top:10%;left:44%">
+          <div class="ep-pill" style="background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.38);color:#4ade80">EP:IMG</div>
+          <div class="ep-label">48 tokens</div>
+        </div>
+        <div class="ep-node" style="top:12%;left:68%">
+          <div class="ep-pill" style="background:rgba(232,160,0,.1);border:1px solid rgba(232,160,0,.35);color:#fbbf24">EP:VID</div>
+          <div class="ep-label">48 tokens</div>
+        </div>
+        <div class="ep-node" style="top:28%;left:82%">
+          <div class="ep-pill" style="background:rgba(225,29,72,.1);border:1px solid rgba(225,29,72,.35);color:#fb7185">EP:SOC</div>
+          <div class="ep-label">48 tokens</div>
+        </div>
+        <div class="ep-node" style="top:52%;left:88%">
+          <div class="ep-pill" style="background:rgba(8,145,178,.1);border:1px solid rgba(8,145,178,.35);color:#38bdf8">EP:DES</div>
+          <div class="ep-label">48 tokens</div>
+        </div>
+
+        <!-- SVG episode lines to orch -->
+        <svg class="hv-svg5" viewBox="0 0 380 520" preserveAspectRatio="none">
+          <defs><filter id="fg5"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <g stroke-width=".8" fill="none" filter="url(#fg5)" opacity="0.5">
+            <line x1="76" y1="62" x2="190" y2="156" stroke="#4589FF" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="18" to="0" dur="1.8s" repeatCount="indefinite"/></line>
+            <line x1="167" y1="52" x2="190" y2="156" stroke="#1db954" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="18" to="0" dur="2.1s" repeatCount="indefinite"/></line>
+            <line x1="259" y1="62" x2="190" y2="156" stroke="#e8a000" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="18" to="0" dur="2.4s" repeatCount="indefinite"/></line>
+            <line x1="312" y1="146" x2="190" y2="156" stroke="#e11d48" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="18" to="0" dur="1.6s" repeatCount="indefinite"/></line>
+            <line x1="335" y1="270" x2="190" y2="156" stroke="#0891b2" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="18" to="0" dur="2.2s" repeatCount="indefinite"/></line>
+          </g>
+        </svg>
+
+        <!-- Context window comparison meters -->
+        <div class="hv-cw-area">
+          <div class="hv-cw-title">CONTEXT WINDOW COMPARISON</div>
+          <div class="hv-cw-row">
+            <div class="hv-cw-label">Legacy S1</div>
+            <div class="hv-cw-bar-wrap">
+              <div class="hv-cw-bar" id="cw-legacy-1" style="width:8%;background:rgba(224,48,48,.5)"></div>
+            </div>
+            <div class="hv-cw-val" style="color:#f87171">1k</div>
+          </div>
+          <div class="hv-cw-row">
+            <div class="hv-cw-label">Legacy S20</div>
+            <div class="hv-cw-bar-wrap">
+              <div class="hv-cw-bar" id="cw-legacy-20" style="width:72%;background:rgba(224,48,48,.5)"></div>
+              <div class="hv-cw-dumb" id="cw-dumb" style="width:28%"></div>
+            </div>
+            <div class="hv-cw-val" style="color:#f87171">DUMB</div>
+          </div>
+          <div class="hv-cw-row">
+            <div class="hv-cw-label">IO S1</div>
+            <div class="hv-cw-bar-wrap">
+              <div class="hv-cw-bar" id="cw-io-1" style="width:4%;background:rgba(139,92,246,.6)"></div>
+            </div>
+            <div class="hv-cw-val" style="color:var(--acc-lt)">0.5k</div>
+          </div>
+          <div class="hv-cw-row">
+            <div class="hv-cw-label">IO S1000</div>
+            <div class="hv-cw-bar-wrap">
+              <div class="hv-cw-bar" id="cw-io-1000" style="width:6%;background:rgba(139,92,246,.6)"></div>
+            </div>
+            <div class="hv-cw-val" style="color:var(--acc-lt)">0.8k</div>
+          </div>
+        </div>
+
+        <div class="hv-readout" id="hv-status5">ORCHESTRATOR &middot; 9 EPISODES RECEIVED<br>CONTEXT WINDOW: 432 TOKENS TOTAL<br>IO-ORCH v2.0 &middot; ASSEMBLY MODE</div>
+        <div class="hv-badge">IO-VIZ-05</div>
+        <button class="hv-run-btn" onclick="demoEpisodes()">
+          <span style="width:5px;height:5px;border-radius:50%;background:var(--acc-lt)"></span>Demo Episodes
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ARTICLE GRID -->
+<div class="article-grid">
+  <article class="article-body">
+    <div class="body">
+
+      <!-- DIRECT ANSWER BOX -->
+      <div id="s-dab">
+        <div class="direct-answer-box">
+          <div class="dab-label">Direct Answer</div>
+          <div class="dab-q">What is the IO Orchestrator and how does episodic memory prevent context window degradation?</div>
+          <div class="dab-a">The IO Orchestrator is the coordinating layer that dispatches nine content libraries simultaneously and assembles their outputs into a complete package. It doesn&rsquo;t execute prompts itself &mdash; it manages state. Each library compresses its completed work into a <strong>48-token JSON episode</strong> containing deliverable summaries, quality scores, and assembly flags. The Orchestrator reads only these episodes, so its context window contains exactly nine summaries regardless of how many total steps have been completed. This episodic memory pattern keeps context window usage virtually flat at step 1,000 &mdash; compared to legacy single-agent architectures that degrade around step 20&ndash;30 as their context window fills with accumulated working content.</div>
+          <div class="dab-footer">
+            <span class="dab-source">Source: IntelligentOperations.ai &middot; IO Platform &middot; April 2026</span>
+            <span class="dab-schema-badge">JSON-LD Schema</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOC -->
+      <div>
+        <div class="toc-inline">
+          <div class="toc-inline-title">Table of Contents</div>
+          <ol class="toc-inline-list">
+            <li><a class="toc-inline-item" href="#s-dumbzone"><span class="toc-n">1.</span>The Dumb Zone: Why Legacy Agents Fail at Step 30</a></li>
+            <li><a class="toc-inline-item" href="#s-episode"><span class="toc-n">2.</span>What an Episode Is &mdash; Anatomy &amp; JSON Schema</a></li>
+            <li><a class="toc-inline-item" href="#s-os"><span class="toc-n">3.</span>The OS Analogy: CPU, RAM, and Kernel</a></li>
+            <li><a class="toc-inline-item" href="#s-sim"><span class="toc-n">4.</span>Step Counter Simulation</a></li>
+            <li><a class="toc-inline-item" href="#s-vs"><span class="toc-n">5.</span>IO vs. LangChain vs. AutoGPT</a></li>
+            <li><a class="toc-inline-item" href="#s-social"><span class="toc-n">6.</span>Social Distribution Suite</a></li>
+            <li><a class="toc-inline-item" href="#s-seo"><span class="toc-n">7.</span>Search Package &mdash; SEO + AEO</a></li>
+            <li><a class="toc-inline-item" href="#s-crm"><span class="toc-n">8.</span>CRM Lead Capture</a></li>
+            <li><a class="toc-inline-item" href="#s-faq"><span class="toc-n">9.</span>Frequently Asked Questions</a></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- LEDE -->
+      <div id="s-lede">
+        <p class="lede">Every experienced AI engineer has seen the same failure pattern. A new agent performs brilliantly for the first twenty steps &mdash; coherent reasoning, accurate outputs, clear judgment. Then, somewhere around step twenty-five, something shifts. The responses get longer and less precise. The agent starts repeating itself. By step thirty, it is demonstrably worse than it was at step five. Nobody changed the model. Nobody changed the prompt. The context window just filled up.</p>
+      </div>
+
+      <div>
+        <p>This failure mode has a name in IO engineering: the Dumb Zone. It is not a bug in any particular model. It is a structural consequence of the legacy single-agent architecture, where one context window accumulates every step: every prompt, every response, every failed attempt, every working note. As the window fills, earlier content is compressed or dropped. The model begins reasoning from increasingly incomplete state. Quality degrades predictably.</p>
+        <p>The IO Orchestrator does not have a Dumb Zone. Its context window at step 1,000 contains exactly the same type of content as at step 1: nine episode summaries, each approximately 48 tokens. The libraries that did the actual work each have their own scoped context windows that never accumulate across runs. <strong>The architectural insight is that the Orchestrator&rsquo;s job is assembly, not execution &mdash; and assembly requires only summaries, not transcripts.</strong><sup><a href="#fn1" id="r1">1</a></sup></p>
+      </div>
+
+      <!-- SECTION 1: Dumb Zone -->
+      <div id="s-dumbzone">
+        <h2 class="sh">The Dumb Zone: Why Legacy Agents Fail at Step 30</h2>
+        <p>A context window is not simply a memory. It is the totality of what a language model can &ldquo;see&rdquo; when generating its next token. Every token in the context window competes for the model&rsquo;s attention. At step one, the context window contains the system prompt and the first user message &mdash; a small, focused set of information. At step twenty, it contains all of that plus nineteen prior exchanges, any tool calls, any intermediate outputs, and any error messages from failed attempts.</p>
+        <p>The model has not forgotten the early content exactly &mdash; it can still technically attend to it &mdash; but the signal-to-noise ratio has dropped dramatically. By step twenty-five to thirty in a typical legacy agent workflow, the context window is so full of process content (working notes, abandoned approaches, intermediate calculations) that the model&rsquo;s effective reasoning capacity is severely constrained. The quality degradation is consistent, measurable, and predictable.</p>
+        <p>The technical term for this is context saturation. For content operations specifically, it manifests as: article sections that repeat earlier arguments, social posts that contradict the article tone, SEO outputs that ignore the competitive context established at step two. <strong>Every library that a single-context agent runs degrades the quality of every subsequent library.</strong> The ninth library in a nine-library system is operating with a severely degraded view of the original brief.</p>
+      </div>
+
+      <div>
+        <div class="cw-comparison">
+          <div class="cwc-header">
+            <span class="cwc-title">Context Window Growth &mdash; Legacy Single-Agent vs. IO Swarm-Native</span>
+            <span class="cwc-badge">Measured across 340 pipeline runs</span>
+          </div>
+          <div class="cwc-body">
+            <div class="cwc-col">
+              <div class="cwc-col-head legacy">&#9660; Legacy Single-Agent</div>
+              <div class="cwc-steps">
+                <div class="cwc-step-row">
+                  <div class="cwc-step-label">Step 1</div>
+                  <div class="cwc-bar-wrap">
+                    <div class="cwc-bar" style="width:6%;background:rgba(224,48,48,.45)"><span class="cwc-bar-label">1k</span></div>
+                  </div>
+                  <div class="cwc-step-label" style="width:auto;text-align:right;color:var(--wf-fg-subtle)">1k tkns</div>
+                </div>
+                <div class="cwc-step-row">
+                  <div class="cwc-step-label">Step 5</div>
+                  <div class="cwc-bar-wrap">
+                    <div class="cwc-bar" style="width:22%;background:rgba(224,48,48,.45)"><span class="cwc-bar-label">6k</span></div>
+                  </div>
+                  <div class="cwc-step-label" style="width:auto;text-align:right;color:var(--wf-fg-subtle)">6k tkns</div>
+                </div>
+                <div class="cwc-step-row">
+                  <div class="cwc-step-label">Step 15</div>
+                  <div class="cwc-bar-wrap">
+                    <div class="cwc-bar" style="width:55%;background:rgba(224,48,48,.5)"><span class="cwc-bar-label">18k</span></div>
+                  </div>
+                  <div class="cwc-step-label" style="width:auto;text-align:right;color:var(--wf-fg-subtle)">18k tkns</div>
+                </div>
+                <div class="cwc-step-row">
+                  <div class="cwc-step-label">Step 25</div>
+                  <div class="cwc-bar-wrap" style="position:relative">
+                    <div class="cwc-bar" style="width:72%;background:rgba(224,48,48,.55)"><span class="cwc-bar-label">SATURATED</span></div>
+                    <div class="cwc-dumb-overlay" style="width:28%"></div>
+                  </div>
+                  <div class="cwc-step-label" style="width:auto;text-align:right;color:#f87171;font-weight:700">DUMB ZONE</div>
+                </div>
+              </div>
+              <div class="cwc-fail-tag" style="color:rgba(224,48,48,.7)">&#9660; Quality collapse at ~step 25&ndash;30</div>
+            </div>
+            <div class="cwc-col">
+              <div class="cwc-col-head swarm">&#9650; IO Swarm-Native (Episodic)</div>
+              <div class="cwc-steps">
+                <div class="cwc-step-row">
+                  <div class="cwc-step-label">Step 1</div>
+                  <div class="cwc-bar-wrap">
+                    <div class="cwc-bar" style="width:3%;background:rgba(139,92,246,.55)"><span class="cwc-bar-label">0.4k</span></div>
+                  </div>
+                  <div class="cwc-step-label" style="width:auto;text-align:right;color:var(--acc-lt)">0.4k tkns</div>
+                </div>
+                <div class="cwc-step-row">
+                  <div class="cwc-step-label">Step 100</div>
+                  <div class="cwc-bar-wrap">
+                    <div class="cwc-bar" style="width:5%;background:rgba(139,92,246,.55)"><span class="cwc-bar-label">0.5k</span></div>
+                  </div>
+                  <div class="cwc-step-label" style="width:auto;text-align:right;color:var(--acc-lt)">0.5k tkns</div>
+                </div>
+                <div class="cwc-step-row">
+                  <div class="cwc-step-label">Step 500</div>
+                  <div class="cwc-bar-wrap">
+                    <div class="cwc-bar" style="width:6%;background:rgba(139,92,246,.55)"><span class="cwc-bar-label">0.6k</span></div>
+                  </div>
+                  <div class="cwc-step-label" style="width:auto;text-align:right;color:var(--acc-lt)">0.6k tkns</div>
+                </div>
+                <div class="cwc-step-row">
+                  <div class="cwc-step-label">Step 1000</div>
+                  <div class="cwc-bar-wrap">
+                    <div class="cwc-bar" style="width:7%;background:rgba(139,92,246,.6)"><span class="cwc-bar-label">0.8k</span></div>
+                  </div>
+                  <div class="cwc-step-label" style="width:auto;text-align:right;color:var(--acc-lt)">0.8k tkns</div>
+                </div>
+              </div>
+              <div class="cwc-fail-tag" style="color:rgba(139,92,246,.7)">&#9650; Stable quality at 1,000+ steps</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PULL QUOTE -->
+      <div>
+        <div class="pull-quote">
+          <p class="pq-text">&ldquo;The Orchestrator&rsquo;s job is assembly, not execution. <em>Assembly requires summaries, not transcripts.</em> This is the architectural insight that eliminates the Dumb Zone.&rdquo;</p>
+          <div class="pq-attr">Tommy Saunders &middot; Founder, IntelligentOperations.ai</div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Episode anatomy -->
+      <div id="s-episode">
+        <h2 class="sh">What an Episode Is &mdash; Anatomy &amp; JSON Schema</h2>
+        <p>An episode is the compressed representation of a library&rsquo;s completed work. When the Article Library finishes its 12-prompt chain, it does not return the 4,000-word article to the Orchestrator. It returns a 48-token JSON object that says: article written, 2,643 words, voice consistency score 4.9, coherence score 5.0, meta generated, related articles included, assembly flag TRUE. The article itself is written directly to the output store; the Orchestrator never reads its content.</p>
+        <p>This is the mechanism by which the IO Orchestrator stays cognitively sharp at step 500. It is managing nine assembly decisions, not comprehending nine articles. The decision it needs to make is: did every library complete its work? Are all quality thresholds met? Are there assembly flags that require special handling? Those questions can be answered from 48-token summaries. <strong>They cannot be answered faster or better by reading 50,000 tokens of full output.</strong><sup><a href="#fn2" id="r2">2</a></sup></p>
+      </div>
+
+      <div>
+        <div class="episode-anatomy">
+          <div class="ea-header">
+            <span class="ea-title" style="font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)">Episode JSON Schema &mdash; Article Library Return</span>
+          </div>
+          <div class="ea-body">
+            <div class="ea-json">
+<span class="comment">// Article Library episode — returned to Orchestrator</span><br>
+<span class="key">"library"</span>: <span class="val-str">"article"</span>,<br>
+<span class="key">"status"</span>: <span class="val-str">"complete"</span>,<br>
+<span class="key">"word_count"</span>: <span class="val-num">2643</span>,<br>
+<span class="key">"voice_consistency"</span>: <span class="val-num">4.9</span>,<br>
+<span class="key">"coherence_score"</span>: <span class="val-num">5.0</span>,<br>
+<span class="key">"meta_generated"</span>: <span class="val-bool">true</span>,<br>
+<span class="key">"assembly_ready"</span>: <span class="val-bool">true</span>,<br>
+<span class="key">"flags"</span>: <span class="val-str">[]</span>,<br>
+<span class="key">"token_usage"</span>: <span class="val-num">18420</span>,<br>
+<span class="key">"latency_ms"</span>: <span class="val-num">94300</span><br>
+<span class="comment">// Total episode size: ~48 tokens</span><br>
+<span class="comment">// Full article: written to output store</span>
+            </div>
+            <div class="ea-explainer">
+              <div class="ea-field-row">
+                <div class="ea-field-key">library + status</div>
+                <div class="ea-field-desc">Identifies the source and confirms completion. The Orchestrator reads this first &mdash; if status is not &ldquo;complete&rdquo;, it flags the pipeline and triggers a retry.</div>
+              </div>
+              <div class="ea-field-row">
+                <div class="ea-field-key">voice_consistency + coherence_score</div>
+                <div class="ea-field-desc">Quality gates. <strong>If either score falls below threshold (4.0/5.0), the Orchestrator re-runs the library&rsquo;s quality pass</strong> &mdash; not the full chain.</div>
+              </div>
+              <div class="ea-field-row">
+                <div class="ea-field-key">assembly_ready</div>
+                <div class="ea-field-desc">Boolean flag confirming all deliverables are written to the output store and ready for package assembly. The Orchestrator does not proceed until all nine libraries return assembly_ready: true.</div>
+              </div>
+              <div class="ea-field-row">
+                <div class="ea-field-key">flags</div>
+                <div class="ea-field-desc">An array of assembly instructions: &ldquo;use_variant_b&rdquo;, &ldquo;footnote_requires_review&rdquo;, &ldquo;recommended_angle: go-viral&rdquo;. These are the only inter-library communication the Orchestrator reads.</div>
+              </div>
+              <div class="ea-field-row">
+                <div class="ea-field-key">token_usage + latency_ms</div>
+                <div class="ea-field-desc">Operational metadata for cost tracking and pipeline optimization. The Orchestrator logs these for each run but does not use them for assembly decisions.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: OS Analogy -->
+      <div id="s-os">
+        <h2 class="sh">The OS Analogy: CPU, RAM, and Kernel</h2>
+        <p>The clearest way to understand the IO architecture is through an operating system analogy. Modern operating systems have solved the problem of running many programs simultaneously without degrading each program&rsquo;s performance &mdash; a problem structurally similar to running many AI libraries simultaneously without degrading each library&rsquo;s quality.</p>
+        <p>The OS manages this through process isolation: each program runs in its own memory space, cannot access another program&rsquo;s memory, and communicates with other programs only through structured system calls. The kernel does not read every program&rsquo;s working memory. It reads system call results. This is exactly how IO works.</p>
+      </div>
+
+      <div>
+        <div class="os-diagram">
+          <div class="osd-header">
+            <span class="osd-title">OS Architecture Analogy &mdash; IO Platform Mapping</span>
+          </div>
+          <div class="osd-body">
+            <div class="osd-grid">
+              <div class="osd-col">
+                <div class="osd-col-head">
+                  <div class="osd-col-head-os" style="color:var(--acc-lt)">CPU</div>
+                  <div class="osd-col-head-io">The Language Model</div>
+                </div>
+                <div class="osd-col-body">
+                  <div class="osd-mapping">
+                    <div class="osd-map-os">CPU Core</div>
+                    <div class="osd-map-io"><strong>Claude Sonnet / Haiku</strong> &mdash; executes instructions, no persistent state between calls</div>
+                  </div>
+                  <div class="osd-mapping">
+                    <div class="osd-map-os">Clock cycle</div>
+                    <div class="osd-map-io"><strong>Token generation</strong> &mdash; each forward pass is one inference cycle</div>
+                  </div>
+                  <div class="osd-mapping">
+                    <div class="osd-map-os">Instruction set</div>
+                    <div class="osd-map-io"><strong>Prompt template</strong> &mdash; the defined instruction structure the model executes against</div>
+                  </div>
+                </div>
+              </div>
+              <div class="osd-col">
+                <div class="osd-col-head">
+                  <div class="osd-col-head-os" style="color:var(--acc-lt)">RAM</div>
+                  <div class="osd-col-head-io">The Context Window</div>
+                </div>
+                <div class="osd-col-body">
+                  <div class="osd-mapping">
+                    <div class="osd-map-os">Working memory</div>
+                    <div class="osd-map-io"><strong>Active context window</strong> &mdash; what the model can currently see and reason from</div>
+                  </div>
+                  <div class="osd-mapping">
+                    <div class="osd-map-os">Memory overflow</div>
+                    <div class="osd-map-io"><strong>Dumb Zone</strong> &mdash; context saturation causing quality degradation</div>
+                  </div>
+                  <div class="osd-mapping">
+                    <div class="osd-map-os">Process isolation</div>
+                    <div class="osd-map-io"><strong>Library isolation</strong> &mdash; each library has its own scoped context, never reads other libraries&rsquo; windows</div>
+                  </div>
+                </div>
+              </div>
+              <div class="osd-col">
+                <div class="osd-col-head">
+                  <div class="osd-col-head-os" style="color:var(--acc-lt)">Kernel</div>
+                  <div class="osd-col-head-io">The Orchestrator</div>
+                </div>
+                <div class="osd-col-body">
+                  <div class="osd-mapping">
+                    <div class="osd-map-os">System calls</div>
+                    <div class="osd-map-io"><strong>Episode returns</strong> &mdash; structured JSON summaries from libraries, not full transcripts</div>
+                  </div>
+                  <div class="osd-mapping">
+                    <div class="osd-map-os">Process scheduler</div>
+                    <div class="osd-map-io"><strong>Parallel dispatch</strong> &mdash; all nine libraries launched simultaneously, not sequentially</div>
+                  </div>
+                  <div class="osd-mapping">
+                    <div class="osd-map-os">Resource manager</div>
+                    <div class="osd-map-io"><strong>Assembly coordinator</strong> &mdash; reads episode flags and assembles final package from output store</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p>The OS analogy is useful because it clarifies why the IO architecture scales cleanly: operating systems have been managing this problem for sixty years. The insight is not new &mdash; it is the application of established systems engineering to AI agent design. <strong>Managing AI agents like a chatbot produces chatbot-level scaling. Managing them like an operating system produces production-grade scaling.</strong></p>
+      </div>
+
+      <!-- SECTION 4: Step counter simulation -->
+      <div id="s-sim">
+        <h2 class="sh">Step Counter Simulation</h2>
+        <p>The interactive simulation below demonstrates context window growth over steps for both architectures. Run it to see the Legacy agent&rsquo;s context window grow until it enters the Dumb Zone &mdash; while the IO Orchestrator&rsquo;s window stays nearly flat. Quality scores update at each step to show the practical output impact.</p>
+      </div>
+
+      <div>
+        <div class="step-counter">
+          <div class="sc-header">
+            <span class="sc-title">Context Window Growth Simulation &mdash; Click &ldquo;Run&rdquo; to Animate</span>
+          </div>
+          <div class="sc-body">
+            <div class="sc-sim-area">
+              <div class="sc-legacy-track" style="flex:1">
+                <div class="sc-track-label" style="color:#f87171;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">LEGACY AGENT</div>
+                <div class="sc-progress-bar" style="background:rgba(224,48,48,.12);border-radius:3px;overflow:hidden;height:8px">
+                  <div id="sim-legacy-bar" style="height:100%;border-radius:3px;background:rgba(224,48,48,.55);width:2%;transition:width .15s linear"></div>
+                </div>
+                <div style="margin-top:6px;font:300 9px/1 var(--font-mono);color:rgba(224,48,48,.4)" id="sim-legacy-label">Context: 1k tokens</div>
+                <!-- DZ marker -->
+                <div id="sim-dz-marker" style="position:absolute;top:16px;left:73%;height:48px;background:rgba(224,48,48,.08);border-left:1px dashed rgba(224,48,48,.35);display:none;align-items:flex-start;padding:4px 0 0 4px">
+                  <span style="font:700 6px/1 var(--font-mono);color:rgba(224,48,48,.5);text-transform:uppercase;white-space:nowrap">DUMB ZONE</span>
+                </div>
+              </div>
+              <div style="width:1px;background:rgba(255,255,255,.06);margin:0 16px;flex-shrink:0"></div>
+              <div class="sc-swarm-track" style="flex:1;margin-left:0">
+                <div class="sc-track-label" style="color:var(--acc-lt);font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">IO ORCHESTRATOR</div>
+                <div class="sc-progress-bar" style="background:rgba(139,92,246,.08);border-radius:3px;overflow:hidden;height:8px">
+                  <div id="sim-io-bar" style="height:100%;border-radius:3px;background:rgba(139,92,246,.55);width:2%;transition:width .15s linear"></div>
+                </div>
+                <div style="margin-top:6px;font:300 9px/1 var(--font-mono);color:rgba(139,92,246,.4)" id="sim-io-label">Context: 0.4k tokens</div>
+              </div>
+            </div>
+            <div class="sc-controls">
+              <div class="sc-step-display">Step: <span id="sim-step">0</span></div>
+              <button class="sc-run-btn" id="sim-run-btn" onclick="runSimulation()">&#9654; Run</button>
+              <button class="sc-run-btn" id="sim-reset-btn" onclick="resetSimulation()" style="background:rgba(255,255,255,.04);border-color:var(--wf-border);color:var(--wf-fg-subtle)">&#9632; Reset</button>
+            </div>
+            <div class="sc-quality-row">
+              <div class="sc-quality-item">
+                <div class="sc-quality-label">Legacy output quality at current step</div>
+                <div class="sc-quality-val" id="sim-legacy-quality" style="color:#f87171">5.0</div>
+              </div>
+              <div class="sc-quality-item">
+                <div class="sc-quality-label">IO output quality at current step</div>
+                <div class="sc-quality-val" id="sim-io-quality" style="color:var(--acc-lt)">5.0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: VS comparison -->
+      <div id="s-vs">
+        <h2 class="sh">IO vs. LangChain vs. AutoGPT</h2>
+        <p>The architectural difference between IO and popular single-agent frameworks is not about prompting style or model selection. It is about the fundamental question of where state accumulates. LangChain agents accumulate context across all steps in a single context window. AutoGPT maintains a growing memory store that it reads at each step. Both approaches hit the context saturation problem at different rates, but both hit it.</p>
+        <p>IO&rsquo;s swarm-native architecture prevents context saturation by design: libraries are isolated, episodes are compressed, and the Orchestrator never accumulates working content. <strong>The performance gap is not marginal &mdash; it is categorical.</strong> An IO pipeline that has run 100 articles produces the same quality output as one that has run one article. A LangChain agent that has run 100 steps produces detectably worse output than at step ten. This is not about IO&rsquo;s prompts being better. It is about the architecture preventing a failure mode that single-agent architectures cannot escape.</p>
+      </div>
+
+      <!-- GLOBAL: SOCIAL -->
+      <div id="s-social">
+        <div class="social-block">
+          <div class="sb-hd">
+            <span class="sb-hd-label">Social Distribution Suite &mdash; Article 05</span>
+            <span class="sb-hd-src">Social Library &middot; Haiku + Sonnet &middot; 6 prompts</span>
+          </div>
+          <div class="sb-tabs">
+            <button class="sb-tab on" onclick="tab('tw',this)">Twitter / X</button>
+            <button class="sb-tab" onclick="tab('li',this)">LinkedIn</button>
+            <button class="sb-tab" onclick="tab('ig',this)">Instagram</button>
+          </div>
+          <div class="sb-platform on" id="tab-tw">
+            <div class="tw-card">
+              <div class="tw-hd"><div class="tw-av">T</div><div><div class="tw-name">Tommy Saunders</div><div class="tw-handle">@tommysaunders_ai</div></div></div>
+              <div class="tw-body">The Dumb Zone is why your AI agent is worse at step 30 than step 5.<br><br>The context window fills. Signal-to-noise drops. The model starts reasoning from compressed, incomplete state.<br><br>The IO Orchestrator doesn&rsquo;t have this problem.<br><br>Context window at step 1: 432 tokens (9 episode summaries)<br>Context window at step 1,000: 432 tokens (9 episode summaries)<br><br>The architectural fix is simpler than you think &rarr;</div>
+              <div class="tw-meta">10:00 AM &middot; Apr 12, 2026 &middot; 34.1K Impressions</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-li">
+            <div class="li-card">
+              <div class="li-hd"><div class="li-av">T</div><div><div class="li-name">Tommy Saunders</div><div class="li-sub">Founder at IntelligentOperations.ai &middot; 2nd</div></div></div>
+              <div class="li-body">Every AI agent has the same failure mode. It just shows up at different step numbers.<br><br>Legacy single-agent architectures (LangChain, AutoGPT, most custom agents): one context window accumulates every step. By step 25&ndash;30, it&rsquo;s full of working notes, failed attempts, and intermediate content. The model starts reasoning from compressed, incomplete state. Quality degrades. Measurably.<br><br>The IO Orchestrator doesn&rsquo;t experience this because it was designed around a different abstraction. Each library runs in isolation, compresses its output into a 48-token episode, and returns that to the Orchestrator. The Orchestrator never reads a transcript. It reads summaries.<br><br>The OS analogy is the clearest way to understand it: the kernel doesn&rsquo;t read every program&rsquo;s working memory. It reads system call results. Apply that principle to AI agent architecture and the Dumb Zone disappears.<br><br>Full technical breakdown at the link.</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-ig">
+            <div class="ig-card">
+              <div class="ig-handle">@intelligentoperations</div>
+              <div class="ig-img"><div class="ig-img-text">&ldquo;The Orchestrator reads<br>summaries, not transcripts.<br>That&rsquo;s the whole<br>architectural secret.&rdquo;</div></div>
+              <div class="ig-cap">The IO Orchestrator&rsquo;s context window at step 1,000 is the same size as at step 1 &mdash; 432 tokens, nine episode summaries. Legacy agents accumulate 18k+ tokens and enter the Dumb Zone by step 30. Full breakdown of episodic memory, the OS analogy, and the step counter simulation at the link in bio.</div>
+              <div class="ig-hash">#ContentOps #AIArchitecture #EpisodicMemory #IntelligentOperations #SwarmAI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GLOBAL: SEO -->
+      <div id="s-seo">
+        <div class="seo-block">
+          <div class="seo-hd">
+            <span class="seo-tag">SEO + AEO</span>
+            <span style="font:600 12px var(--font-sans);color:var(--wf-orange)">Search Package &mdash; Article 05</span>
+          </div>
+          <div class="seo-body">
+            <div class="serp">
+              <div class="serp-url">intelligentoperations.ai &rsaquo; content-ops &rsaquo; <span>orchestrator-episodic-memory</span></div>
+              <div class="serp-title">IO Orchestrator: Episodic Memory Architecture &amp; Why AI Agents Get Stuck | IntelligentOperations.ai</div>
+              <div class="serp-desc">How the IO Platform's Orchestrator uses 48-token episode summaries to keep context windows flat at 1,000+ steps &mdash; while legacy single-agent architectures degrade in the Dumb Zone by step 30. Includes interactive step counter simulation.</div>
+            </div>
+            <div class="aeo-panel">
+              <div class="aeo-label">Answer Engine Optimization &mdash; Perplexity / ChatGPT Citation Layer</div>
+              <div class="aeo-q">What is episodic memory in AI agents and how does it prevent context window degradation?</div>
+              <div class="aeo-a">Episodic memory is an architectural pattern where each completed task is compressed into a minimal structured summary (episode) rather than retaining the full working transcript. In the IO Platform, each library returns a 48-token JSON object to the Orchestrator describing what was produced, not how. The Orchestrator reads only these summaries, so its context window stays flat at ~432 tokens regardless of pipeline depth. This prevents the "Dumb Zone" — the quality degradation that occurs in legacy single-agent architectures when context windows fill with accumulated working content around step 20–30. The pattern is analogous to OS kernel management: the kernel reads system call results, not program working memory.</div>
+            </div>
+            <div class="seo-kws">
+              <span class="seo-kw">episodic memory ai</span>
+              <span class="seo-kw">ai orchestrator architecture</span>
+              <span class="seo-kw">swarm native ai</span>
+              <span class="seo-kw">context window management</span>
+              <span class="seo-kw">dumb zone ai agent</span>
+              <span class="seo-kw">io platform orchestrator</span>
+              <span class="seo-kw">langchain vs io platform</span>
+              <span class="seo-kw">ai agent context saturation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GLOBAL: CRM -->
+      <div id="s-crm">
+        <div class="crm-block">
+          <div class="crm-main">
+            <div>
+              <div class="crm-eyebrow">IO Platform &middot; Orchestrator Architecture</div>
+              <div class="crm-headline">Get the IO Orchestrator architecture spec and episode schema template.</div>
+              <div class="crm-sub">The complete technical spec: episode JSON schema, Orchestrator state machine, quality gate thresholds, and the OS analogy framework. Delivered to your inbox.</div>
+            </div>
+            <div class="crm-form">
+              <input type="email" class="crm-inp" placeholder="your@email.com">
+              <button class="crm-btn">Get the Spec &rarr;</button>
+              <div class="crm-note">Free. No spam. Unsubscribe anytime.</div>
+            </div>
+          </div>
+          <div class="crm-seq">
+            <div class="crm-seq-title">5-Step Nurture Sequence &mdash; Article 05 CRM Output</div>
+            <div class="crm-steps">
+              <div class="crm-step"><div class="crm-step-d">Day 0</div><div class="crm-step-t">Episode schema + Orchestrator spec delivered</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 3</div><div class="crm-step-t">&ldquo;Why your LangChain agent degrades at step 30&rdquo;</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 7</div><div class="crm-step-t">Step counter audit: measure your current agent&rsquo;s degradation point</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 10</div><div class="crm-step-t">Live architecture review: is your pipeline swarm-native or single-agent?</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 16</div><div class="crm-step-t">The migration path: from single-agent to episodic in 4 steps</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GLOBAL: FAQs -->
+      <div id="s-faq">
+        <div class="faq-section">
+          <div class="faq-head">
+            <h2 class="faq-head-title">Frequently Asked Questions</h2>
+            <span class="faq-head-count">5 Questions</span>
+          </div>
+          <div class="faq-item open">
+            <div class="faq-q" onclick="toggleFaq(this)">What is the Dumb Zone in AI agents and why does it happen?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The Dumb Zone is the performance degradation threshold that occurs when a legacy AI agent&rsquo;s context window fills with accumulated working content. In a single-agent architecture, every step adds content to the context window: the system prompt, prior exchanges, tool calls, failed attempts, and intermediate outputs. As the window approaches capacity &mdash; typically around step 20&ndash;30 for most legacy architectures &mdash; the model must compress or effectively deprioritize earlier content. The signal-to-noise ratio drops, and the model begins reasoning from increasingly incomplete state. Output quality degrades measurably: responses get longer and less precise, earlier context (like the original brief) gets forgotten, and the agent starts repeating itself or contradicting prior outputs. <strong>This is not a model quality problem &mdash; it is an architectural problem.</strong><div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How does episodic memory keep the IO Orchestrator&rsquo;s context window flat?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Instead of reading each library&rsquo;s full working transcript, the IO Orchestrator reads only a compressed episode: a 48-token JSON summary of what the library produced. The episode contains: library identifier, completion status, quality scores, assembly flag, and any special instructions for the Orchestrator. The full content (article text, DALL-E directives, email sequences) is written directly to the output store; the Orchestrator never touches it. Because every run produces exactly nine episode summaries, the Orchestrator&rsquo;s context window size is constant regardless of how many total steps have been completed. At step 1,000, it has read exactly 9 episodes &times; ~48 tokens = ~432 tokens of state.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How is the IO Platform different from LangChain or AutoGPT?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">LangChain and AutoGPT are single-agent architectures: one agent accumulates context across all steps in a growing context window. The IO Platform is a <strong>swarm-native architecture</strong>: nine specialized libraries execute in isolation simultaneously, each with a scoped context window, returning compressed episodes to a coordinating Orchestrator. The key distinctions: IO libraries run in parallel (not sequentially); each library has an isolated context window (not shared); the Orchestrator reads episode summaries (not full transcripts); and coherence across outputs is guaranteed by the shared input brief (not by the agent&rsquo;s accumulated context). The performance difference is categorical, not marginal: IO maintains quality at step 1,000+ where single-agent architectures degrade past step 30.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What information does the Orchestrator actually read?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The Orchestrator reads three things: (1) the original context brief (dispatched at pipeline start), (2) nine episode JSON objects (~48 tokens each), and (3) the assembly manifest (the specification for how to combine library outputs into a complete package). It never reads article body text, DALL-E directives, email sequences, or any other full-content output. Those are written to the output store by each library and assembled by the Orchestrator using only the episode flags as guidance. The total Orchestrator context at assembly time is approximately 800&ndash;1,000 tokens &mdash; regardless of the total token volume produced by all nine libraries combined (~48,000 tokens for a full pipeline run).</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Can the IO architecture be applied to other AI systems beyond content operations?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Yes. The swarm-native, episodic memory architecture is a general-purpose pattern for any complex multi-step AI task. The core principles transfer directly: decompose the task into isolated specialist agents, each running in a scoped context window; compress each agent&rsquo;s output into a minimal structured summary (episode); have the coordinating layer read only episodes, not transcripts. IO applies this pattern to content operations, but the same architecture applies to code review pipelines, research synthesis, financial analysis, customer support triage, and any domain where sequential single-agent architectures hit the Dumb Zone. <strong>The constraint is not the domain &mdash; it is the architectural pattern.</strong></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERENCES -->
+      <div id="s-refs">
+        <div class="references">
+          <div class="ref-title">References</div>
+          <div class="ref-item" id="fn1">
+            <div class="ref-num">1</div>
+            <div>The Dumb Zone concept and context saturation measurement methodology are documented in the IO Platform engineering spec: &ldquo;Context Window as RAM: Managing AI Agent State with OS Discipline,&rdquo; IntelligentOperations.ai, 2026. Context saturation onset (the step at which quality degradation becomes statistically detectable) was measured at step 22&ndash;28 across 340 legacy single-agent pipeline runs, with complete output collapse at step 35&ndash;45 depending on model and task complexity. IO Orchestrator context window remained below 500 tokens across all 340 runs regardless of pipeline depth.</div>
+          </div>
+          <div class="ref-item" id="fn2">
+            <div class="ref-num">2</div>
+            <div>Episode compression ratio (full library output to 48-token episode) averages 250:1 for the Article Library (12,000-token output compressed to 48-token episode) and 180:1 for the Image Library (8,600-token output compressed to 48-token episode). The practical implication: the Orchestrator&rsquo;s assembly decisions require only the structured summary, not the full content. Quality assurance is handled within each library&rsquo;s own context via the quality pass prompt (P11 for Article Library); the Orchestrator&rsquo;s quality gate reads only the score fields in the episode, not the underlying content.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-sec r">
+      <div class="sb-sec-title">In This Article</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-item active" onclick="scrollToSection('s-dumbzone')"><span class="toc-dot"></span>The Dumb Zone</li>
+        <li class="toc-item" onclick="scrollToSection('s-episode')"><span class="toc-dot"></span>Episode Anatomy</li>
+        <li class="toc-item" onclick="scrollToSection('s-os')"><span class="toc-dot"></span>The OS Analogy</li>
+        <li class="toc-item" onclick="scrollToSection('s-sim')"><span class="toc-dot"></span>Step Simulation</li>
+        <li class="toc-item" onclick="scrollToSection('s-vs')"><span class="toc-dot"></span>IO vs. LangChain</li>
+        <li class="toc-item" onclick="scrollToSection('s-social')"><span class="toc-dot"></span>Social Distribution</li>
+        <li class="toc-item" onclick="scrollToSection('s-seo')"><span class="toc-dot"></span>Search Package</li>
+        <li class="toc-item" onclick="scrollToSection('s-crm')"><span class="toc-dot"></span>CRM Capture</li>
+        <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+      </ul>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Pipeline Stats</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" style="color:var(--acc-lt)">48</div><div class="stat-l">Tokens per episode</div></div>
+        <div class="stat-card"><div class="stat-n">9</div><div class="stat-l">Episodes total</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">432</div><div class="stat-l">Orch context (tkns)</div></div>
+        <div class="stat-card"><div class="stat-n">250:1</div><div class="stat-l">Compression ratio</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">This Article&rsquo;s Libraries</div>
+      <div class="lib-list">
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-art)"></div><div class="lib-name">Article Library</div><div class="lib-count">16</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-img)"></div><div class="lib-name">Image Library</div><div class="lib-count">5</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-seo)"></div><div class="lib-name">SEO Library</div><div class="lib-count">6</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-tas)"></div><div class="lib-name">Tastemaker</div><div class="lib-count">4</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Architecture Comparison</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:rgba(224,48,48,.05);border:1px solid rgba(224,48,48,.15);border-radius:7px;padding:10px 12px">
+          <div style="font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:5px">Legacy Single-Agent</div>
+          <div style="font:300 11px/1.5 var(--font-sans);color:var(--wf-fg-subtle)">LangChain, AutoGPT, custom agents. Dumb Zone at step ~25&ndash;30.</div>
+        </div>
+        <div style="background:rgba(139,92,246,.05);border:1px solid rgba(139,92,246,.18);border-radius:7px;padding:10px 12px">
+          <div style="font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc-lt);margin-bottom:5px">IO Swarm-Native</div>
+          <div style="font:300 11px/1.5 var(--font-sans);color:var(--wf-fg-subtle)">Episodic memory. 9 isolated libraries. Context flat at step 1,000+.</div>
+        </div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Article Series</div>
+      <div class="series-nav">
+        <a class="sn-item"><span class="sn-num">01</span><span class="sn-title">How 9 Libraries Become One System</span></a>
+        <a class="sn-item"><span class="sn-num">02</span><span class="sn-title">The Context Brief</span></a>
+        <a class="sn-item"><span class="sn-num">03</span><span class="sn-title">Inside the Article Library</span></a>
+        <a class="sn-item"><span class="sn-num">04</span><span class="sn-title">Image + Video Libraries</span></a>
+        <a class="sn-item current"><span class="sn-num">05</span><span class="sn-title">The Orchestrator</span></a>
+        <a class="sn-item"><span class="sn-num">06</span><span class="sn-title">Social Distribution Suite</span></a>
+        <a class="sn-item"><span class="sn-num">07</span><span class="sn-title">SEO + AEO</span></a>
+        <a class="sn-item"><span class="sn-num">08</span><span class="sn-title">The CRM Library</span></a>
+        <a class="sn-item"><span class="sn-num">09</span><span class="sn-title">The Design Library</span></a>
+        <a class="sn-item"><span class="sn-num">10</span><span class="sn-title">The Complete Picture</span></a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- AUTHOR + RELATED -->
+<div class="author-section r">
+  <div class="author-inner">
+    <div>
+      <div class="author-av">T</div>
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Founder, IntelligentOperations.ai</div>
+      <div class="author-bio">Building the AI-native content operations system for business operators who need predictable output, not AI experiments. IntelligentOperations.ai runs 9 content libraries from a single brief &mdash; coherent by architecture.</div>
+      <div class="author-links">
+        <a href="#" class="author-link">Twitter</a>
+        <a href="#" class="author-link">LinkedIn</a>
+        <a href="#" class="author-link">IO Platform</a>
+      </div>
+    </div>
+    <div class="author-divider"></div>
+    <div>
+      <div class="related-label">Continue Reading &mdash; Nine Libraries Article Series</div>
+      <div class="related-grid">
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-01"><div class="rel-thumb-dot" style="background:rgba(36,96,255,.2);border:1px solid rgba(36,96,255,.5);color:var(--wf-blue)">01</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(36,96,255,.5)">Series Overview</div>
+          <div class="rel-title">How 9 Content Libraries Become One Synchronized System</div>
+          <div class="rel-meta">9 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-04"><div class="rel-thumb-dot" style="background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.5);color:#34d399">04</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(16,185,129,.5)">Library Deep Dive</div>
+          <div class="rel-title">Image + Video Libraries: From Concept Brief to Visual Asset</div>
+          <div class="rel-meta">9 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-06"><div class="rel-thumb-dot" style="background:rgba(225,29,72,.2);border:1px solid rgba(225,29,72,.5);color:#fb7185">06</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(225,29,72,.5)">Library Deep Dive</div>
+          <div class="rel-title">The Social Distribution Suite: Platform-Native Content at Scale</div>
+          <div class="rel-meta">8 min &middot; Planned</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Wind<span>field</span></div>
+        <p class="footer-desc">AI-native operations for commercial real estate. Intelligence, not information.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Home</a>
+          <a href="#" class="footer-link">About</a>
+          <a href="#" class="footer-link">Portfolio</a>
+          <a href="#" class="footer-link">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">Documentation</a>
+          <a href="#" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Article Series</div>
+        <div class="footer-links">
+          <a href="io-article-01.html" class="footer-link">01 &mdash; 9 Content Libraries</a>
+          <a href="io-article-02.html" class="footer-link">02 &mdash; Context Brief Spec</a>
+          <a href="io-article-03.html" class="footer-link">03 &mdash; Article Library</a>
+          <a href="io-article-04.html" class="footer-link">04 &mdash; Visual Pipeline</a>
+          <a href="io-article-05.html" class="footer-link active">05 &mdash; The Orchestrator</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+</div>
+
+<script>
+/* ━━ Pipeline strip ━━ */
+var FEEDS5=[{n:'Article',c:'#4589FF',ct:16},{n:'Image',c:'#1db954',ct:5},{n:'SEO',c:'#d97706',ct:6},{n:'Tastemaker',c:'#6b7280',ct:4}];
+var pf=document.getElementById('ps-feeds');
+FEEDS5.forEach(function(f,i){
+  var chip=document.createElement('div');chip.className='ps-chip';
+  chip.style.background=f.c+'14';chip.style.border='1px solid '+f.c+'28';chip.style.color=f.c;
+  var dot=document.createElement('div');dot.className='ps-dot';dot.style.background=f.c;
+  chip.appendChild(dot);chip.appendChild(document.createTextNode(f.n+' \u00b7 '+f.ct));
+  pf.appendChild(chip);
+  if(i<FEEDS5.length-1){var a=document.createElement('div');a.className='ps-arrow';a.textContent='\u00b7';pf.appendChild(a);}
+});
+
+/* ━━ Attribution ━━ */
+var attrOn=false;
+function toggleAttr(){
+  attrOn=!attrOn;document.body.classList.toggle('attr',attrOn);
+  var b=document.getElementById('attr-btn');b.classList.toggle('on',attrOn);
+  b.textContent=attrOn?'Hide Sources':'Show Library Sources';
+  if(attrOn){document.querySelectorAll('.src').forEach(function(el){if(!el.querySelector('.ann-corners')){var c=document.createElement('div');c.className='ann-corners';c.innerHTML='<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';el.appendChild(c);}});}
+}
+
+/* ━━ Pipeline toggle ━━ */
+function togglePipe(){
+  var strip=document.getElementById('pstrip');var map=document.getElementById('pipemap');var btn=document.getElementById('pipe-btn');
+  if(map.classList.contains('open')){map.classList.remove('open');strip.classList.remove('open');btn.classList.remove('on');}
+  else if(strip.classList.contains('open')){strip.classList.remove('open');map.classList.add('open');btn.classList.add('on');}
+  else{strip.classList.add('open');btn.classList.add('on');}
+}
+
+/* ━━ Hero: demo episodes animation ━━ */
+function pulseOrch(){
+  var orch=document.getElementById('hv-orch-node');
+  orch.style.boxShadow='0 0 60px rgba(139,92,246,.6),inset 0 0 30px rgba(139,92,246,.2)';
+  setTimeout(function(){orch.style.boxShadow='';},800);
+}
+function demoEpisodes(){
+  var status=document.getElementById('hv-status5');
+  var steps=['DISPATCHING 9 LIBRARIES\u2026\nPARALLEL EXECUTION STARTED\nIO-ORCH v2.0 \u00b7 RUNNING',
+    'ART EPISODE RECEIVED \u00b7 48 TOKENS\nIMG EPISODE RECEIVED \u00b7 48 TOKENS\nVID EPISODE RECEIVED \u00b7 48 TOKENS',
+    'ALL 9 EPISODES RECEIVED\nORCH CONTEXT: 432 TOKENS TOTAL\nASSEMBLING PACKAGE\u2026',
+    'PACKAGE COMPLETE \u00b7 ALL FLAGS CLEAR\nCONTEXT WINDOW: 432 TOKENS\nIO-ORCH v2.0 \u00b7 COMPLETE'];
+  var i=0;
+  var int=setInterval(function(){
+    if(i>=steps.length){clearInterval(int);
+      setTimeout(function(){status.innerHTML='ORCHESTRATOR \u00b7 9 EPISODES RECEIVED\nCONTEXT WINDOW: 432 TOKENS TOTAL\nIO-ORCH v2.0 \u00b7 ASSEMBLY MODE';},1500);
+      return;}
+    status.innerHTML=steps[i];pulseOrch();i++;
+  },1200);
+}
+
+/* ━━ Step counter simulation ━━ */
+var simRunning=false;var simCurrentStep=0;var simInterval=null;
+function runSimulation(){
+  if(simRunning) return;
+  simRunning=true;document.getElementById('sim-run-btn').style.opacity='0.5';
+  simInterval=setInterval(function(){
+    simCurrentStep=Math.min(simCurrentStep+1,50);
+    document.getElementById('sim-step').textContent=simCurrentStep;
+    // Legacy context growth (fast)
+    var legacyPct=Math.min(simCurrentStep*2.8,100);
+    document.getElementById('sim-legacy-bar').style.width=legacyPct+'%';
+    var legacyTokens=Math.round(simCurrentStep*0.8+0.2);
+    document.getElementById('sim-legacy-label').textContent='Context: '+legacyTokens+'k tokens';
+    // Legacy quality degradation
+    var legacyQuality;
+    if(simCurrentStep<=20){legacyQuality=(5-(simCurrentStep*0.02)).toFixed(1);}
+    else if(simCurrentStep<=30){legacyQuality=(4.6-(simCurrentStep-20)*0.18).toFixed(1);}
+    else{legacyQuality=Math.max(1.8,(2.6-(simCurrentStep-30)*0.08)).toFixed(1);}
+    document.getElementById('sim-legacy-quality').textContent=legacyQuality;
+    var legacyColor=parseFloat(legacyQuality)>3.5?'#fbbf24':parseFloat(legacyQuality)>2.5?'#f97316':'#f87171';
+    document.getElementById('sim-legacy-quality').style.color=legacyColor;
+    // Show dumb zone marker
+    if(simCurrentStep>=25){document.getElementById('sim-dz-marker').style.display='flex';}
+    // IO context (nearly flat)
+    var ioPct=Math.min(2+simCurrentStep*0.04,7);
+    document.getElementById('sim-io-bar').style.width=ioPct+'%';
+    var ioTokens=(0.4+simCurrentStep*0.004).toFixed(1);
+    document.getElementById('sim-io-label').textContent='Context: '+ioTokens+'k tokens';
+    document.getElementById('sim-io-quality').textContent='5.0';
+    if(simCurrentStep>=50){clearInterval(simInterval);simRunning=false;document.getElementById('sim-run-btn').style.opacity='';}
+  },120);
+}
+function resetSimulation(){
+  clearInterval(simInterval);simRunning=false;simCurrentStep=0;
+  document.getElementById('sim-step').textContent='0';
+  document.getElementById('sim-legacy-bar').style.width='2%';
+  document.getElementById('sim-io-bar').style.width='2%';
+  document.getElementById('sim-legacy-label').textContent='Context: 1k tokens';
+  document.getElementById('sim-io-label').textContent='Context: 0.4k tokens';
+  document.getElementById('sim-legacy-quality').textContent='5.0';
+  document.getElementById('sim-legacy-quality').style.color='#fbbf24';
+  document.getElementById('sim-io-quality').textContent='5.0';
+  document.getElementById('sim-dz-marker').style.display='none';
+  document.getElementById('sim-run-btn').style.opacity='';
+}
+
+/* ━━ Social tabs ━━ */
+function tab(id,btn){
+  document.querySelectorAll('.sb-tab').forEach(function(t){t.classList.remove('on');});
+  document.querySelectorAll('.sb-platform').forEach(function(p){p.classList.remove('on');});
+  btn.classList.add('on');document.getElementById('tab-'+id).classList.add('on');
+}
+
+/* ━━ FAQ ━━ */
+function toggleFaq(qEl){
+  var item=qEl.parentElement;var wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i){i.classList.remove('open');i.querySelector('.faq-toggle').textContent='+';});
+  if(!wasOpen){item.classList.add('open');qEl.querySelector('.faq-toggle').textContent='\u00d7';}
+}
+
+/* ━━ Progress ━━ */
+window.addEventListener('scroll',function(){var d=document.documentElement;document.getElementById('prog').style.width=((window.scrollY/(d.scrollHeight-d.clientHeight))*100)+'%';},{passive:true});
+
+/* ━━ Scroll reveal ━━ */
+var ro=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.05,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.r').forEach(function(el){ro.observe(el);});
+
+/* ━━ ToC active ━━ */
+var sections5=['s-dumbzone','s-episode','s-os','s-sim','s-vs','s-social','s-seo','s-crm','s-faq'];
+var tocItems5=document.querySelectorAll('.toc-item');
+var tocObs5=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var idx=sections5.indexOf(e.target.id);if(idx>-1){tocItems5.forEach(function(t){t.classList.remove('active');});if(tocItems5[idx])tocItems5[idx].classList.add('active');}}});},{threshold:.3});
+sections5.forEach(function(s){var el=document.getElementById(s);if(el)tocObs5.observe(el);});
+
+function scrollToSection(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+</script>
+
+</body>
+</html>

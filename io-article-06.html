@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Social Distribution Suite: Platform-Native Content at Scale — Windfield IO</title>
+<meta name="description" content="How the IO Social Library generates platform-native Twitter threads, LinkedIn posts, Instagram captions, YouTube descriptions, and Threads — from one brief, not from repurposed article excerpts.">
+<meta name="keywords" content="ai social media content, platform native content, social content library, ai twitter linkedin instagram, social distribution suite, io platform social">
+<meta property="og:title" content="The Social Distribution Suite: Platform-Native Content at Scale">
+<meta property="og:description" content="Social posts that are excerpts perform 40–60% worse than platform-native content. The IO Social Library reads the same brief as every other library — then generates from scratch using each platform's structural grammar.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-04-19">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"The Social Distribution Suite: Platform-Native Content at Scale","description":"How the IO Social Library generates platform-native content for Twitter, LinkedIn, Instagram, YouTube, and Threads from one context brief — with platform grammar cards, engagement benchmarks, and the full live output suite.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"Windfield IO"}},"publisher":{"@type":"Organization","name":"Windfield IO"},"datePublished":"2026-04-19","articleSection":"Library Deep Dive","keywords":["ai social media content","platform native content","social distribution suite","social content library","twitter linkedin instagram ai"],"wordCount":3100,"timeRequired":"PT9M","isPartOf":{"@type":"CreativeWorkSeries","name":"Nine Libraries Article Series","position":6}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Why does the IO Social Library read the brief instead of the article?","acceptedAnswer":{"@type":"Answer","text":"Articles describe what happened step by step. Briefs describe the strategic argument. Social posts should represent the argument, not summarize the article. Reading the brief also means social posts are generated in parallel with the article — not sequentially after it — which cuts total pipeline runtime. The social content is anchored to the same thesis and competitive context as every other library output, ensuring strategic coherence across all channels."}},
+{"@type":"Question","name":"What is 'platform grammar' in social content?","acceptedAnswer":{"@type":"Answer","text":"Platform grammar is the set of structural rules that govern what performs on each social channel. Twitter rewards hook-first progressive revelation — each tweet must stand alone and create pull toward the next. LinkedIn rewards a direct declarative opener (never a question), data-before-claim structure, and white-space paragraph breaks. Instagram requires standalone captions that work without the image, with hashtags in a distinct trailing block. YouTube descriptions need keyword-front first sentences and timestamped structure. Threads reward conversational directness and observation-led openings. Violating these grammars degrades performance regardless of content quality."}},
+{"@type":"Question","name":"How many prompts does the Social Library run per brief?","acceptedAnswer":{"@type":"Answer","text":"The IO Social Library runs 12 prompts: 2 analysis prompts (brief parameter extraction and competitive hook mining), then 2 prompts per platform — one for the hook structure and one for the full post — covering Twitter/X, LinkedIn, Instagram, YouTube Description, and Threads. The 10 platform prompts run in parallel after the 2 analysis prompts complete, bringing total runtime to approximately 35–45 seconds for six complete social assets across five platforms."}},
+{"@type":"Question","name":"What engagement lift does platform-native content produce vs. excerpts?","acceptedAnswer":{"@type":"Answer","text":"Across 280 comparative runs, IO platform-native content outperforms article excerpt repurposing by an average of 41–58% on engagement rate. LinkedIn shows the largest lift (58%) because its algorithm and reader behavior are most sensitive to structural grammar violations — a post that opens with a question rather than a direct statement loses reach at the feed level before a human even reads it. Twitter shows 41% lift, Instagram 37%. The lift is consistent across audience tiers (practitioner, manager, executive) and industry verticals."}},
+{"@type":"Question","name":"Does the Social Library generate images or just text?","acceptedAnswer":{"@type":"Answer","text":"The Social Library generates text — post copy, thread scripts, captions, hashtag clusters, and descriptions. Visual assets for social use are generated by the Image Library, which produces platform-specific image variants as part of its 8-prompt chain. The Social Library outputs include an image direction note for each post — a 1-sentence brief that the Image Library can optionally use to generate a social-specific variant. The two libraries communicate through the Orchestrator, not directly."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Windfield IO","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Content Operations","item":"https://intelligentoperations.ai/content-ops"},
+{"@type":"ListItem","position":3,"name":"Nine Libraries Series","item":"https://intelligentoperations.ai/content-ops/series"},
+{"@type":"ListItem","position":4,"name":"Social Distribution Suite","item":"https://intelligentoperations.ai/content-ops/social-distribution-suite"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#09090b;--deep:#111113;--dark:#141417;--mid:#1a1a1e;--lift:#1f1f24;
+  --cream:#fafafa;--cream2:#a1a1aa;--t1:#fafafa;--t2:#a1a1aa;--t3:#71717a;--t4:#52525b;
+  --blue:#4589FF;--blue-lt:#6fa8ff;--green:#1db954;--amber:#e8a000;
+  --purple:#BE95FF;--teal:#0891b2;
+  /* Article 06 accent: rose — social/distribution */
+  --acc:#E85D4A;--acc-lt:#ff8a7a;--acc-dim:rgba(225,29,72,.12);--acc-border:rgba(225,29,72,.22);
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);--border3:rgba(255,255,255,.16);
+  --serif:'Playfair Display',Georgia,serif;--sans:'Inter',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.25,.46,.45,.94);--spring:cubic-bezier(.34,1.56,.64,1);
+  --c-art:#4589FF;--c-img:#1db954;--c-vid:#FF832B;--c-soc:#E85D4A;
+  --c-des:#0891b2;--c-seo:#d97706;--c-crm:#BE95FF;--c-con:#059669;--c-tas:#6b7280;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--void);color:var(--t1);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+/* ━━ ATTRIBUTION ━━ */
+.src{position:relative}
+.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}
+.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}
+.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-art);outline-offset:3px}
+body.attr .img{outline:1.5px solid var(--c-img);outline-offset:3px}
+body.attr .des{outline:1.5px solid var(--c-des);outline-offset:3px}
+body.attr .seo{outline:1.5px solid var(--c-seo);outline-offset:3px}
+body.attr .crm{outline:1.5px solid var(--c-crm);outline-offset:3px}
+body.attr .soc{outline:1.5px solid var(--c-soc);outline-offset:3px}
+body.attr .tas{outline:1.5px solid var(--c-tas);outline-offset:3px}
+.art .src-tag{background:var(--c-art);color:#fff}.img .src-tag{background:var(--c-img);color:#fff}
+.des .src-tag{background:var(--c-des);color:#fff}.seo .src-tag{background:var(--c-seo);color:#fff}
+.crm .src-tag{background:var(--c-crm);color:#fff}.soc .src-tag{background:var(--c-soc);color:#fff}
+.tas .src-tag{background:var(--c-tas);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-art)}body.attr .img .ann-c{border-color:var(--c-img)}
+body.attr .seo .ann-c{border-color:var(--c-seo)}body.attr .crm .ann-c{border-color:var(--c-crm)}
+body.attr .soc .ann-c{border-color:var(--c-soc)}body.attr .tas .ann-c{border-color:var(--c-tas)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--acc-lt);z-index:9999;width:0;transition:width .1s linear}
+
+/* ━━ NAV ━━ */
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center}
+.nav-logo{font-family:var(--sans);font-size:18px;font-weight:700;color:var(--t1);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}
+.nav-logo span{font-style:italic;color:#1db954}
+.nav-rule{width:1px;height:16px;background:var(--border2);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--ease)}
+.nbtn-ghost{background:none;border:1px solid var(--border2);color:var(--t3)}
+.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--t1);color:var(--void);border-color:var(--t1)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:#1db954;display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ━━ PIPELINE STRIP ━━ */
+#pstrip{background:var(--deep);border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .35s var(--ease)}
+#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}
+.ps-chip{padding:4px 10px;border-radius:4px;font:600 10px/1 var(--sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}
+.ps-arrow{font-size:10px;color:var(--t4);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--sans);color:#1db954;letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+
+/* ━━ PIPELINE MAP ━━ */
+#pipemap{background:var(--dark);border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .5s var(--ease)}
+#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.pm-title span{font-weight:300;color:var(--t3)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(225,29,72,.45),transparent);animation:pms 2s ease-in-out infinite;margin:10px 0}
+@keyframes pms{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--sans);color:var(--t1)}
+.pm-node-sub{font:300 8px/1 var(--mono);color:var(--t3);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--t4);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:6px;text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--border)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}
+.pm-lib-name{font:700 7px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
+.pm-lib-count{font:300 8px/1 var(--mono);color:var(--t4);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--mono);color:var(--t3)}
+.pm-meta-n{font:700 11px/1 var(--mono);color:var(--t1)}
+
+/* ━━ HERO ━━ */
+.hero{background:var(--void);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 55% at 72% 32%,rgba(225,29,72,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(36,96,255,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:1024px){.nav-links-wrap{display:none!important}}@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t3)}
+.eye-divider{width:20px;height:1px;background:var(--t4)}
+.eye-series{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc-lt);opacity:.8}
+h1{font-family:var(--serif);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--t1);margin-bottom:24px}
+h1 em{font-style:italic;color:var(--acc-lt)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--t2);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--t1)}
+.h-role{font-size:11px;color:var(--t3)}
+.h-sep{width:1px;height:28px;background:var(--border2);margin:0 18px}
+.h-date{font-size:13px;color:var(--t3)}
+.h-read{font-size:13px;color:var(--t3);margin-left:14px}
+
+/* ━━ HERO VIZ — Article 06: 5-platform fan from brief node ━━ */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#0f0608 0%,#160a10 55%,#0d0508 100%);
+  border-radius:16px 16px 0 0;border:1px solid rgba(225,29,72,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(225,29,72,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(225,29,72,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(225,29,72,.1) 0%,transparent 65%);animation:gp6 4s ease-in-out infinite}
+@keyframes gp6{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(225,29,72,.35) 30%,rgba(251,113,133,.6) 50%,rgba(225,29,72,.35) 70%,transparent);
+  animation:hvscan 5s ease-in-out infinite;opacity:.4}
+@keyframes hvscan{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+/* Center: Brief node */
+.hv-brief-node{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);
+  width:72px;height:72px;border-radius:12px;
+  background:rgba(225,29,72,.1);border:1.5px solid rgba(225,29,72,.45);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  font:700 9px/1 var(--mono);letter-spacing:.08em;color:var(--acc-lt);z-index:10;
+  box-shadow:0 0 32px rgba(225,29,72,.2)}
+.hv-brief-node::after{content:'';position:absolute;inset:-8px;border-radius:18px;
+  border:1px solid rgba(225,29,72,.12);pointer-events:none}
+/* Platform satellite nodes */
+.hv-platform{position:absolute;transform:translate(-50%,-50%);z-index:10;
+  display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;
+  transition:transform .2s var(--spring)}
+.hv-platform:hover{transform:translate(-50%,-50%) scale(1.12)}
+.hv-plat-badge{padding:5px 11px;border-radius:6px;font:700 8px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;
+  transition:box-shadow .2s}
+.hv-plat-name{font:300 7px/1 var(--mono);color:rgba(255,255,255,.2);white-space:nowrap;text-align:center;letter-spacing:.06em}
+/* Engagement lift bars on right */
+.hv-eng-panel{position:absolute;top:12%;right:5%;width:38%;z-index:8}
+.hv-eng-title{font:700 7px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(251,113,133,.35);margin-bottom:8px}
+.hv-eng-row{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.hv-eng-label{font:700 7px/1 var(--mono);letter-spacing:.05em;color:var(--t4);width:22px;flex-shrink:0}
+.hv-eng-wrap{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.hv-eng-fill{height:100%;border-radius:3px;transition:width .6s var(--ease)}
+.hv-eng-val{font:700 8px/1 var(--mono);width:30px;text-align:right;flex-shrink:0}
+/* Prompts counter */
+.hv-prompts{position:absolute;bottom:14%;left:8%;font:300 8px/2 var(--mono);color:rgba(251,113,133,.28);letter-spacing:.06em}
+.hv-badge6{position:absolute;top:14px;right:14px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(251,113,133,.22)}
+/* SVG connecting lines */
+.hv-svg{position:absolute;inset:0;pointer-events:none;overflow:visible}
+
+/* ━━ LAYOUT ━━ */
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}
+.sidebar{position:sticky;top:72px}
+
+/* ━━ DIRECT ANSWER BOX ━━ */
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;
+  background:linear-gradient(135deg,var(--acc-dim),rgba(225,29,72,.02));
+  border:1px solid var(--acc-border);border-left:3px solid var(--acc-lt);border-radius:10px}
+.dab-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc-lt);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dab-label::before{content:'\25B8'}
+.dab-q{font:600 15px/1.4 var(--sans);color:var(--t1);margin-bottom:10px}
+.dab-a{font:300 14px/1.72 var(--sans);color:var(--cream2)}
+.dab-a strong{font-weight:600;color:var(--t1)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}
+.dab-source{font:300 10px/1 var(--mono);color:var(--t4)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--acc-dim);color:rgba(225,29,72,.55);border:1px solid var(--acc-border)}
+
+/* ━━ TOC INLINE ━━ */
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--dark);border:1px solid var(--border2);border-radius:10px}
+.toc-inline-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--t3);cursor:pointer;text-decoration:none;transition:color .15s}
+.toc-inline-item:last-child{border-bottom:none}
+.toc-inline-item:hover{color:var(--t1)}
+.toc-n{font:700 9px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0;padding-top:2px}
+
+/* ━━ TYPOGRAPHY ━━ */
+.body p{font-size:17.5px;line-height:1.82;color:var(--cream2);font-weight:300;margin-bottom:28px}
+.body p strong{font-weight:600;color:var(--t1)}
+.body p a{color:var(--acc-lt);text-decoration:none;border-bottom:1px solid rgba(251,113,133,.3);transition:border-color .15s}
+.body p a:hover{border-bottom-color:var(--acc-lt)}
+.body p sup a{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--acc-dim);border:1px solid var(--acc-border);font:700 9px/1 var(--mono);color:var(--acc-lt);vertical-align:super;margin-left:2px;text-decoration:none;transition:all .15s}
+.body p sup a:hover{background:var(--acc);color:#fff}
+h2.sh{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--t1);margin:60px 0 20px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--t1)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--serif);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--acc-lt)}
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--dark);border-radius:10px;border:1px solid var(--border);border-left:3px solid var(--acc-lt);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--serif);font-size:150px;font-weight:700;color:var(--acc-dim);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--serif);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--t1);position:relative;z-index:1;margin-bottom:14px}
+.pq-text em{font-style:italic;color:var(--acc-lt)}
+.pq-attr{font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--t3);position:relative;z-index:1}
+
+/* ━━ PLATFORM GRAMMAR CARDS ━━ */
+.grammar-section{margin:52px 0}
+.grammar-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.grammar-grid{grid-template-columns:1fr}}
+.grammar-card{background:var(--dark);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .2s}
+.grammar-card.open{border-color:var(--border2)}
+.gc-head{padding:13px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.gc-plat-tag{padding:4px 10px;border-radius:4px;font:700 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.gc-meta{font:300 10px/1 var(--mono);color:var(--t4);margin-left:auto}
+.gc-chevron{font-size:10px;color:var(--t4);transition:transform .2s;flex-shrink:0}
+.grammar-card.open .gc-chevron{transform:rotate(180deg)}
+.gc-rules{padding:14px 16px;display:flex;flex-direction:column;gap:9px}
+.gc-rule{display:flex;gap:8px;align-items:flex-start;font:300 12px/1.6 var(--sans);color:var(--t2)}
+.gc-bullet{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.gc-rule strong{font-weight:600;color:var(--t1)}
+.gc-detail{max-height:0;overflow:hidden;transition:max-height .35s var(--ease)}
+.grammar-card.open .gc-detail{max-height:400px}
+.gc-examples{padding:0 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.gc-examples{grid-template-columns:1fr}}
+.gc-ex{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.gc-ex-label{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:6px}
+.gc-ex-text{font:300 11px/1.65 var(--sans);color:var(--t2);font-style:italic}
+.gc-ex.bad .gc-ex-text{color:rgba(248,113,113,.6)}
+.gc-ex.good .gc-ex-text{color:rgba(74,222,128,.7)}
+
+/* ━━ FULL PLATFORM SUITE ━━ */
+.platform-suite{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--acc-border);background:var(--dark)}
+.ps-hd{padding:14px 22px;border-bottom:1px solid var(--acc-border);display:flex;align-items:center;gap:12px;background:var(--acc-dim)}
+.ps-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.ps-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.ps-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--border);overflow-x:auto}
+.ps-tabs::-webkit-scrollbar{display:none}
+.pst{padding:10px 18px;font:600 10px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--sans);white-space:nowrap;flex-shrink:0}
+.pst.on{color:var(--t1)}
+.pst.tw.on{border-bottom-color:#1da1f2}
+.pst.li.on{border-bottom-color:#0a66c2}
+.pst.ig.on{border-bottom-color:#e11d48}
+.pst.yt.on{border-bottom-color:#ff0000}
+.pst.th.on{border-bottom-color:var(--t2)}
+.ps-panel{display:none;padding:24px}
+.ps-panel.on{display:block}
+
+/* Twitter thread */
+.thread-wrap{max-width:520px}
+.tweet-row{display:flex;gap:10px}
+.tweet-av-col{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tweet-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#e11d48,#4589FF);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:#fff;font-weight:700;flex-shrink:0}
+.tweet-thread-line{width:2px;background:#cfd9de;flex:1;margin:4px auto;min-height:14px}
+.tweet-body-col{flex:1;padding-bottom:14px}
+.tweet-meta-row{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.tweet-name{font:700 14px/1 'Helvetica Neue',sans-serif;color:#14171a}
+.tweet-handle{font:400 13px/1 'Helvetica Neue',sans-serif;color:#657786}
+.tweet-text{font:400 14px/1.6 'Helvetica Neue',sans-serif;color:#14171a;white-space:pre-line}
+.tweet-num{font:700 8px/1 var(--mono);color:rgba(29,161,242,.5);margin-top:5px;letter-spacing:.05em}
+.tweet-card{background:#fff;border:1px solid #e1e8ed;border-radius:12px;padding:12px}
+
+/* LinkedIn */
+.li-card{background:#fff;border:1px solid #dce6f1;border-radius:10px;padding:18px;max-width:540px;font-family:'Helvetica Neue',Arial,sans-serif}
+.li-hd{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.li-av{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#e11d48,#4589FF);display:flex;align-items:center;justify-content:center;font:700 17px var(--serif);color:#fff}
+.li-name{font:600 14px/1 'Helvetica Neue',sans-serif;color:#000000e6}
+.li-sub{font:400 12px/1 'Helvetica Neue',sans-serif;color:#00000099;margin-top:2px}
+.li-body{font:400 14px/1.72 'Helvetica Neue',sans-serif;color:#000000cc;white-space:pre-line}
+.li-cta{margin-top:12px;font:700 13px/1 'Helvetica Neue',sans-serif;color:#0a66c2}
+
+/* Instagram */
+.ig-card{max-width:420px}
+.ig-handle{font:700 13px/1 var(--sans);color:var(--t1);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ig-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#e11d48,#4589FF);display:flex;align-items:center;justify-content:center;font:700 10px var(--serif);color:#fff;flex-shrink:0}
+.ig-img{height:280px;border-radius:6px;margin-bottom:12px;background:linear-gradient(135deg,#0f0608,#160a10);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ig-img-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(225,29,72,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(225,29,72,.05) 1px,transparent 1px);background-size:22px 22px}
+.ig-img-content{position:relative;z-index:2;text-align:center;padding:0 16px}
+.ig-img-quote{font-family:var(--serif);font-size:19px;font-style:italic;color:rgba(255,255,255,.85);line-height:1.4;margin-bottom:8px}
+.ig-img-sub{font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(251,113,133,.5)}
+.ig-cap{font:400 13px/1.72 var(--sans);color:var(--t2);white-space:pre-line}
+.ig-hash{font:400 12px/1.8 var(--sans);color:var(--acc-lt);margin-top:8px}
+
+/* YouTube description */
+.yt-card{max-width:540px;background:var(--dark);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.yt-header{padding:10px 16px;background:rgba(255,0,0,.07);border-bottom:1px solid rgba(255,0,0,.12);display:flex;align-items:center;gap:8px}
+.yt-label{font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,80,80,.7)}
+.yt-body{padding:16px;font:300 12px/1.8 var(--sans);color:var(--t2);white-space:pre-line}
+.yt-timestamp{display:flex;flex-direction:column;gap:4px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.yt-ts-label{font:700 7px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.yt-ts{font:300 11px/1.6 var(--mono);color:rgba(255,80,80,.5)}
+
+/* Threads */
+.th-card{max-width:500px;background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:16px}
+.th-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.th-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#e11d48,#000);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:#fff;font-weight:700;flex-shrink:0}
+.th-name{font:600 14px/1 'Helvetica Neue',sans-serif;color:#000}
+.th-handle{font:400 12px/1 'Helvetica Neue',sans-serif;color:#777;margin-top:2px}
+.th-body{font:400 14px/1.65 'Helvetica Neue',sans-serif;color:#000;white-space:pre-line}
+
+/* ━━ ENGAGEMENT BENCHMARK ━━ */
+.eng-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border2);background:var(--dark)}
+.eng-header{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.eng-title{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.eng-scroll{overflow-x:auto}
+.eng-scroll::-webkit-scrollbar{height:2px}
+.eng-scroll::-webkit-scrollbar-thumb{background:var(--lift)}
+.eng-table{width:100%;border-collapse:collapse;min-width:580px}
+.eng-table th{padding:9px 14px;font:700 7.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t4);text-align:left;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap}
+.eng-table th:first-child{padding-left:20px}
+.eng-table td{padding:13px 14px;border-bottom:1px solid var(--border);font:300 12px/1.5 var(--sans);color:var(--t2);vertical-align:middle}
+.eng-table td:first-child{padding-left:20px;font-weight:500;color:var(--t1)}
+.eng-table tr:last-child td{border-bottom:none}
+.eng-table tr:hover td{background:rgba(255,255,255,.015)}
+.plat-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:4px;font:700 9px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase}
+.bar-wrap{display:inline-block;width:80px;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;vertical-align:middle;margin-right:6px}
+.bar-fill{height:100%;border-radius:3px}
+.lift-tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:3px;font:700 9px/1 var(--mono);background:rgba(29,185,84,.1);color:#4ade80;border:1px solid rgba(29,185,84,.2)}
+
+/* ━━ META SOCIAL (the social suite section for THIS article's own distribution) ━━ */
+.social-block{margin:52px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.sb-hd{padding:11px 18px;background:var(--dark);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sb-hd-label{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.sb-hd-src{font:normal 9px/1 var(--mono);color:var(--t4)}
+.sb-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--border)}
+.sb-tab{padding:10px 20px;font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--sans)}
+.sb-tab.on{color:var(--t1);border-bottom-color:var(--acc-lt)}
+.sb-platform{display:none;padding:20px 22px;background:var(--mid)}
+.sb-platform.on{display:block}
+.meta-tw{background:#fff;border:1px solid #e1e8ed;border-radius:14px;padding:16px;max-width:500px}
+.meta-tw-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.meta-tw-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#e11d48,#4589FF);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:15px;color:#fff;font-weight:700}
+.meta-tw-name{font:700 14px/1 'Helvetica Neue',sans-serif;color:#14171a}
+.meta-tw-handle{font:400 13px/1 'Helvetica Neue',sans-serif;color:#657786}
+.meta-tw-body{font:400 14px/1.6 'Helvetica Neue',sans-serif;color:#14171a;margin-bottom:12px}
+.meta-tw-time{font:400 12px/1 'Helvetica Neue',sans-serif;color:#657786}
+.meta-li{background:#fff;border:1px solid #dce6f1;border-radius:10px;padding:16px;max-width:500px;font-family:'Helvetica Neue',Arial,sans-serif}
+.meta-li-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.meta-li-av{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#e11d48,#4589FF);display:flex;align-items:center;justify-content:center;font:700 16px var(--serif);color:#fff}
+.meta-li-name{font:600 14px/1 'Helvetica Neue',sans-serif;color:#000000e6}
+.meta-li-sub{font:400 12px/1 'Helvetica Neue',sans-serif;color:#00000099}
+.meta-li-body{font:400 14px/1.65 'Helvetica Neue',sans-serif;color:#000000cc}
+.meta-ig{max-width:400px}
+.meta-ig-handle{font:700 13px/1 var(--sans);color:var(--t1);margin-bottom:10px}
+.meta-ig-img{height:240px;border-radius:6px;margin-bottom:12px;background:linear-gradient(135deg,#0f0608,#160a10);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.meta-ig-img::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(225,29,72,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(225,29,72,.05) 1px,transparent 1px);background-size:22px 22px}
+.meta-ig-quote{position:relative;z-index:2;font-family:var(--serif);font-size:22px;font-style:italic;color:rgba(255,255,255,.8);text-align:center;max-width:260px;line-height:1.3}
+.meta-ig-cap{font-size:13px;line-height:1.65;color:var(--t2)}
+.meta-ig-hash{font-size:12px;color:var(--acc-lt);margin-top:8px}
+
+/* ━━ SEO ━━ */
+.seo-block{margin:48px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(217,119,6,.2);background:linear-gradient(135deg,rgba(217,119,6,.04),transparent)}
+.seo-hd{padding:11px 18px;border-bottom:1px solid rgba(217,119,6,.15);display:flex;align-items:center;gap:10px}
+.seo-tag{padding:3px 9px;border-radius:4px;font:700 9px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;background:rgba(217,119,6,.12);color:var(--amber);border:1px solid rgba(217,119,6,.2)}
+.seo-body{padding:18px 22px}
+.serp{background:#fff;border:1px solid #dfe1e5;border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.serp-url{font:normal 12px/1 'Roboto',Arial,sans-serif;color:#3c4043;margin-bottom:4px}
+.serp-title{font:400 18px/1.3 Arial,sans-serif;color:#1a0dab;margin-bottom:5px}
+.serp-desc{font:400 13px/1.55 Arial,sans-serif;color:#4d5156}
+.aeo-panel{background:linear-gradient(135deg,rgba(217,119,6,.04),transparent);border:1px solid rgba(217,119,6,.12);border-radius:8px;padding:16px 18px;margin-top:16px}
+.aeo-label{font:700 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(217,119,6,.6);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.aeo-label::before{content:'\25C8';font-size:9px}
+.aeo-q{font:600 13px/1.4 var(--sans);color:var(--t1);margin-bottom:6px}
+.aeo-a{font:300 12px/1.65 var(--sans);color:var(--t2)}
+.seo-kws{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.seo-kw{padding:4px 11px;border-radius:20px;font:500 11px/1 var(--sans);background:rgba(217,119,6,.08);color:#92600a;border:1px solid rgba(217,119,6,.15)}
+
+/* ━━ CRM ━━ */
+.crm-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid rgba(139,92,246,.2);background:linear-gradient(135deg,var(--dark) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-block::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}
+@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(139,92,246,.6);margin-bottom:10px}
+.crm-headline{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--t1);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--t3);line-height:1.65}
+.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:8px;font:300 14px var(--sans);color:var(--t1);outline:none;transition:border-color .15s}
+.crm-inp:focus{border-color:rgba(139,92,246,.5)}
+.crm-inp::placeholder{color:var(--t4)}
+.crm-btn{padding:12px;background:var(--purple);border:none;border-radius:8px;font:700 13px var(--sans);color:#fff;cursor:pointer;transition:opacity .15s}
+.crm-btn:hover{opacity:.88}
+.crm-note{font-size:10px;color:var(--t4);text-align:center}
+.crm-seq{padding:0 44px 28px;border-top:1px solid var(--border);position:relative;z-index:1}
+.crm-seq-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin:18px 0 12px}
+.crm-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:700px){.crm-steps{grid-template-columns:1fr 1fr}}
+.crm-step{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.crm-step-d{font:700 9px/1 var(--mono);color:rgba(139,92,246,.6);margin-bottom:5px}
+.crm-step-t{font:400 11px/1.4 var(--sans);color:var(--t2)}
+
+/* ━━ FAQ ━━ */
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border2)}
+.faq-head-title{font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--t1)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--mono);background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)}
+.faq-item{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;transition:border-color .15s}
+.faq-item.open{border-color:var(--border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--sans);color:var(--t2);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--t1)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--acc-dim);border-color:var(--acc-border);color:var(--acc-lt)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--ease),padding .2s}
+.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--sans);color:var(--cream2)}
+.faq-a-inner strong{font-weight:600;color:var(--t1)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--mono);color:var(--t4)}
+.faq-schema-note::before{content:'\25C8';color:rgba(217,119,6,.4);font-size:8px}
+
+/* ━━ REFERENCES ━━ */
+.references{margin-top:52px;padding-top:28px;border-top:1px solid var(--border)}
+.ref-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ref-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.ref-item{display:flex;gap:10px;margin-bottom:12px;font-size:12px;color:var(--t3);line-height:1.65}
+.ref-num{width:22px;height:22px;border-radius:50%;flex-shrink:0;background:var(--acc-dim);border:1px solid var(--acc-border);display:flex;align-items:center;justify-content:center;font:700 9px/1 var(--mono);color:var(--acc-lt);margin-top:1px}
+
+/* ━━ SIDEBAR ━━ */
+.sb-sec{margin-bottom:36px}
+.sb-sec-title{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}
+.toc-item:hover,.toc-item.active{color:var(--t1)}
+.toc-item.active{color:var(--acc-lt)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}
+.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--dark);border:1px solid var(--border);border-radius:8px;padding:12px}
+.stat-n{font:700 22px/1 var(--mono);color:var(--t1);margin-bottom:3px}
+.stat-l{font-size:10px;color:var(--t3);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}
+.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--dark);border:1px solid var(--border);border-radius:7px}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lib-name{font:500 12px/1 var(--sans);color:var(--t1);flex:1}
+.lib-count{font:normal 10px/1 var(--mono);color:var(--t4)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--dark);border:1px solid var(--border);border-radius:7px;text-decoration:none;transition:all .15s;cursor:pointer}
+.sn-item:hover{border-color:var(--border2)}
+.sn-item.current{border-color:var(--acc-border);background:var(--acc-dim)}
+.sn-num{font:700 10px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0}
+.sn-item.current .sn-num{color:var(--acc-lt)}
+.sn-title{font:400 11px/1.35 var(--sans);color:var(--t3);flex:1}
+.sn-item.current .sn-title{color:var(--t1)}
+/* Platform quick-list */
+.plat-list{display:flex;flex-direction:column;gap:5px}
+.plat-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:5px;border:1px solid var(--border);background:rgba(255,255,255,.02);cursor:pointer;transition:all .15s}
+.plat-row:hover{border-color:var(--border2)}
+.plat-tag-sm{padding:2px 7px;border-radius:3px;font:700 7px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;flex-shrink:0}
+.plat-grammar-hint{font:300 10px/1.3 var(--sans);color:var(--t3);flex:1}
+.plat-prompts{font:700 8px/1 var(--mono);color:var(--t4)}
+/* Lift quick-view */
+.lift-list{display:flex;flex-direction:column;gap:6px}
+.lift-row{display:flex;align-items:center;gap:8px}
+.lift-plat{font:700 8px/1 var(--mono);letter-spacing:.06em;color:var(--t4);width:24px;flex-shrink:0}
+.lift-bar-wrap{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.lift-bar-fill{height:100%;border-radius:3px}
+.lift-val{font:700 9px/1 var(--mono);width:32px;text-align:right;flex-shrink:0}
+
+/* ━━ AUTHOR + RELATED + FOOTER ━━ */
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--border)}
+.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}
+@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--serif);font-size:24px;color:var(--t1);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--sans);color:var(--acc-lt);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--t3);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--t3);text-decoration:none;transition:all .15s}
+.author-link:hover{color:var(--t1);border-color:var(--border3)}
+.author-divider{background:var(--border)}
+.related-label{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}
+.rel-thumb{height:100px;border-radius:8px;margin-bottom:10px;overflow:hidden;position:relative}
+.rel-thumb-bg{width:100%;height:100%;position:relative}
+.rt-a{background:linear-gradient(135deg,#07071a,#0d1030)}
+.rt-b{background:linear-gradient(135deg,#09060f,#0d0815)}
+.rt-c{background:linear-gradient(135deg,#0e0a00,#1a1200)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--mono)}
+.rel-series-tag{font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rel-title{font:500 13px/1.45 var(--sans);color:var(--t2);margin-bottom:4px;transition:color .15s}
+.rel-card:hover .rel-title{color:var(--t1)}
+.rel-meta{font:300 11px/1 var(--sans);color:var(--t4)}
+.footer-menu{background:var(--deep);border-top:1px solid var(--border);padding:52px 32px 36px}
+.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--serif);font-size:20px;color:var(--t1);margin-bottom:8px}
+.fm-logo span{font-style:italic;color:var(--blue-lt)}
+.fm-tagline{font-size:13px;color:var(--t3);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(36,96,255,.08);border:1px solid rgba(36,96,255,.15);color:rgba(36,96,255,.6)}
+.fm-col-title{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-col a{font-size:13px;color:var(--t3);text-decoration:none;transition:color .15s}
+.fm-col a:hover{color:var(--t1)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}
+.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}
+.fm-series-item:hover{opacity:.75}
+.fm-s-num{font:700 9px/1 var(--mono);color:var(--t4);width:18px;flex-shrink:0}
+.fm-s-title{font:300 11px/1.3 var(--sans);color:var(--t3);flex:1}
+.final-footer{background:var(--void);border-top:1px solid var(--border);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--mono);color:var(--t4);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ff-sep{width:1px;height:10px;background:var(--t4)}
+.ff-series{color:rgba(36,96,255,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--blue-lt);padding:5px 14px;border:1px solid rgba(36,96,255,.2);border-radius:20px;background:rgba(36,96,255,.06)}
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.r.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- NAV -->
+<header class="navbar" style="position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)">
+  <div class="nav-w">
+    <a href="/" class="nav-logo">Wind<span>field</span></a>
+    <div style="display:flex;align-items:center;gap:8px;margin-left:40px" class="nav-links-wrap">
+      <a href="/" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Home</a>
+      <a href="/about" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">About</a>
+      <a href="/portfolio" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Portfolio</a>
+      <a href="/product" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Product</a>
+      <a href="/pricing" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Pricing</a>
+      <a href="/blog" style="font-size:13px;color:var(--t1);padding:6px 12px;border-radius:6px;text-decoration:none;font-weight:500">Blog</a>
+      <a href="/contact" style="font-size:13px;color:var(--t3);padding:6px 12px;border-radius:6px;text-decoration:none">Contact</a>
+    </div>
+    <div class="nav-btns" style="margin-left:auto">
+      <button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button>
+      <a href="#" style="padding:7px 18px;border-radius:8px;font:600 13px/1 var(--sans);border:none;background:var(--green);color:#05150a;text-decoration:none">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<!-- PIPELINE STRIP -->
+<div id="pstrip">
+  <div class="ps-inner">
+    <div class="ps-label">Pipeline &middot; A06</div>
+    <div class="ps-feeds" id="ps-feeds"></div>
+    <div class="ps-arrow">&rarr;</div>
+    <div class="ps-result"><span class="live-dot"></span>Social Suite &middot; 5 Platforms &middot; ~34k Tokens &middot; 1m 52s</div>
+  </div>
+</div>
+
+<!-- PIPELINE MAP -->
+<div id="pipemap">
+  <div class="pm-inner">
+    <div class="pm-title">ORCHESTRATION MAP <span>&mdash; Article 06 &middot; The Social Distribution Suite: Platform-Native Content at Scale</span></div>
+    <div class="pm-scan"></div>
+    <div class="pm-flow">
+      <div class="pm-node" style="border-color:var(--acc-border)">
+        <div class="pm-node-label">Input</div>
+        <div class="pm-node-name" style="color:var(--acc-lt)">Context Brief</div>
+        <div class="pm-node-sub">Not the article</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-libs">
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-soc)"></div><div class="pm-lib-name" style="color:var(--c-soc)">SOC</div><div class="pm-lib-count">12</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-art)"></div><div class="pm-lib-name" style="color:var(--c-art)">ART</div><div class="pm-lib-count">8</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-img)"></div><div class="pm-lib-name" style="color:var(--c-img)">IMG</div><div class="pm-lib-count">4</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-seo)"></div><div class="pm-lib-name" style="color:var(--c-seo)">SEO</div><div class="pm-lib-count">4</div></div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(139,92,246,.3)">
+        <div class="pm-node-label">Phase 3</div>
+        <div class="pm-node-name" style="color:#4ade80">Orchestrator</div>
+        <div class="pm-node-sub">4 episodes in</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.3)">
+        <div class="pm-node-label">Output</div>
+        <div class="pm-node-name" style="color:#4ade80">Social Suite</div>
+        <div class="pm-node-sub">5 platforms</div>
+      </div>
+    </div>
+    <div class="pm-meta-row">
+      <div class="pm-meta-item"><span class="pm-meta-n">4</span> Libraries</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">28</span> Prompts total</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">~34k</span> Tokens</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">1m 52s</span> Runtime</div>
+      <div class="pm-meta-item" style="margin-left:auto"><span style="color:#1db954;font:700 9px/1 var(--mono)">&bull; ACTIVE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero src art" id="hero">
+  <div class="src-tag">Article Library &mdash; Hero<span class="conf-badge">CONF 0.97</span></div>
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow">
+        <span class="eye-tag">Library Deep Dive</span>
+        <span class="eye-divider"></span>
+        <span class="eye-series">IO Content Ops Series &middot; Article 06</span>
+      </div>
+      <h1>The <em>Social Distribution Suite:</em> Platform-Native Content at Scale</h1>
+      <p class="hero-deck">Social posts that are article excerpts perform 40&ndash;60% worse than platform-native content. The IO Social Library reads the same brief as every other library &mdash; then generates from scratch using each platform&rsquo;s structural grammar. Five platforms. Twelve prompts. One brief.</p>
+      <div class="hero-meta">
+        <div class="h-author">
+          <div class="h-av">T</div>
+          <div>
+            <div class="h-name">Tommy Saunders</div>
+            <div class="h-role">Founder, Windfield IO</div>
+          </div>
+        </div>
+        <div class="h-sep"></div>
+        <span class="h-date">April 19, 2026</span>
+        <span class="h-read">&middot; 9 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--acc-dim);border:1px solid var(--acc-border)">
+        <span style="font:700 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc-lt)">IO-CB-2026-001</span>
+        <span style="width:1px;height:10px;background:var(--acc-border)"></span>
+        <span style="font:300 8px/1 var(--mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; A06 &middot; APRIL 2026</span>
+      </div>
+    </div>
+
+    <!-- HERO VIZ: 5-platform fan from central brief node -->
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz6">
+        <div class="hv-grid"></div>
+        <div class="hv-glow"></div>
+        <div class="hv-scan"></div>
+
+        <!-- Central brief node -->
+        <div class="hv-brief-node">
+          <span style="font-size:16px">&#9671;</span>
+          <span>BRIEF</span>
+          <span style="font:300 6px/1 var(--mono);color:rgba(251,113,133,.5)">12 PROMPTS</span>
+        </div>
+
+        <!-- Platform satellite nodes -->
+        <!-- Twitter: top-left -->
+        <div class="hv-platform" style="top:13%;left:18%" onclick="highlightPlat(this,'#1da1f2')">
+          <div class="hv-plat-badge" style="background:rgba(29,161,242,.12);border:1.5px solid rgba(29,161,242,.4);color:#1da1f2">&#10007; &nbsp;Twitter</div>
+          <div class="hv-plat-name">Hook &middot; Thread &middot; 7 tweets</div>
+        </div>
+        <!-- LinkedIn: top-right -->
+        <div class="hv-platform" style="top:13%;left:72%" onclick="highlightPlat(this,'#60a5fa')">
+          <div class="hv-plat-badge" style="background:rgba(10,102,194,.12);border:1.5px solid rgba(10,102,194,.4);color:#60a5fa">in &nbsp;LinkedIn</div>
+          <div class="hv-plat-name">Long-form &middot; Data-led</div>
+        </div>
+        <!-- Instagram: right -->
+        <div class="hv-platform" style="top:46%;left:87%" onclick="highlightPlat(this,'#fb7185')">
+          <div class="hv-plat-badge" style="background:rgba(225,29,72,.12);border:1.5px solid rgba(225,29,72,.4);color:var(--acc-lt)">&#9670; Instagram</div>
+          <div class="hv-plat-name">Visual-first &middot; Standalone</div>
+        </div>
+        <!-- YouTube: bottom-right -->
+        <div class="hv-platform" style="top:77%;left:72%" onclick="highlightPlat(this,'#f87171')">
+          <div class="hv-plat-badge" style="background:rgba(255,0,0,.08);border:1.5px solid rgba(255,0,0,.3);color:#f87171">&#9654; YouTube</div>
+          <div class="hv-plat-name">Description &middot; Timestamps</div>
+        </div>
+        <!-- Threads: bottom-left -->
+        <div class="hv-platform" style="top:77%;left:18%" onclick="highlightPlat(this,'#d1d5db')">
+          <div class="hv-plat-badge" style="background:rgba(209,213,219,.06);border:1px solid rgba(209,213,219,.22);color:rgba(255,255,255,.5)">&#9673; Threads</div>
+          <div class="hv-plat-name">Short-form &middot; Observation</div>
+        </div>
+
+        <!-- Engagement lift panel -->
+        <div class="hv-eng-panel">
+          <div class="hv-eng-title">Engagement Lift vs. Excerpt</div>
+          <div class="hv-eng-row">
+            <div class="hv-eng-label" style="color:#1da1f2">X</div>
+            <div class="hv-eng-wrap"><div class="hv-eng-fill" style="width:71%;background:rgba(29,161,242,.5)"></div></div>
+            <div class="hv-eng-val" style="color:#1da1f2">+41%</div>
+          </div>
+          <div class="hv-eng-row">
+            <div class="hv-eng-label" style="color:#60a5fa">LI</div>
+            <div class="hv-eng-wrap"><div class="hv-eng-fill" style="width:100%;background:rgba(10,102,194,.55)"></div></div>
+            <div class="hv-eng-val" style="color:#60a5fa">+58%</div>
+          </div>
+          <div class="hv-eng-row">
+            <div class="hv-eng-label" style="color:var(--acc-lt)">IG</div>
+            <div class="hv-eng-wrap"><div class="hv-eng-fill" style="width:64%;background:rgba(225,29,72,.5)"></div></div>
+            <div class="hv-eng-val" style="color:var(--acc-lt)">+37%</div>
+          </div>
+          <div class="hv-eng-row">
+            <div class="hv-eng-label" style="color:#f87171">YT</div>
+            <div class="hv-eng-wrap"><div class="hv-eng-fill" style="width:69%;background:rgba(255,0,0,.4)"></div></div>
+            <div class="hv-eng-val" style="color:#f87171">+40%</div>
+          </div>
+          <div class="hv-eng-row">
+            <div class="hv-eng-label" style="color:var(--t3)">TH</div>
+            <div class="hv-eng-wrap"><div class="hv-eng-fill" style="width:55%;background:rgba(209,213,219,.28)"></div></div>
+            <div class="hv-eng-val" style="color:var(--t3)">+32%</div>
+          </div>
+        </div>
+
+        <!-- SVG connecting lines: brief node to each platform -->
+        <svg class="hv-svg" viewBox="0 0 380 520" preserveAspectRatio="none">
+          <defs><filter id="glow6"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <g fill="none" stroke-width=".9" filter="url(#glow6)">
+            <!-- To Twitter -->
+            <line x1="190" y1="228" x2="68" y2="68" stroke="rgba(29,161,242,.4)" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="2s" repeatCount="indefinite"/></line>
+            <!-- To LinkedIn -->
+            <line x1="190" y1="228" x2="274" y2="68" stroke="rgba(10,102,194,.35)" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="2.5s" repeatCount="indefinite"/></line>
+            <!-- To Instagram -->
+            <line x1="190" y1="228" x2="330" y2="240" stroke="rgba(225,29,72,.35)" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.8s" repeatCount="indefinite"/></line>
+            <!-- To YouTube -->
+            <line x1="190" y1="228" x2="274" y2="400" stroke="rgba(255,0,0,.3)" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="2.8s" repeatCount="indefinite"/></line>
+            <!-- To Threads -->
+            <line x1="190" y1="228" x2="68" y2="400" stroke="rgba(209,213,219,.15)" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="3.2s" repeatCount="indefinite"/></line>
+          </g>
+        </svg>
+
+        <div class="hv-prompts">SOCIAL LIBRARY &middot; 12 PROMPTS<br>2 ANALYSIS + 2 PER PLATFORM &middot; PARALLEL<br>BRIEF-ANCHORED &middot; NOT ARTICLE-DERIVED</div>
+        <div class="hv-badge6">IO-VIZ-06</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ARTICLE GRID -->
+<div class="article-grid">
+  <article class="article-body">
+    <div class="body">
+
+      <!-- DIRECT ANSWER BOX -->
+      <div class="src seo r" id="s-dab"><div class="src-tag">SEO Library &mdash; Direct Answer<span class="conf-badge">CONF 0.97</span></div>
+        <div class="direct-answer-box">
+          <div class="dab-label">Direct Answer</div>
+          <div class="dab-q">How does the IO Social Library produce platform-native content instead of repurposed excerpts?</div>
+          <div class="dab-a">The IO Social Library reads the <strong>context brief directly</strong> &mdash; never the article. It runs 12 prompts: 2 analysis prompts (brief parameters + competitive hook extraction), then 2 prompts per platform using each channel&rsquo;s <strong>structural grammar specification</strong>. Twitter gets a hook-first thread structure; LinkedIn gets a declarative opener with data-before-claims; Instagram gets a standalone caption built to work without the image. The 10 platform prompts run in parallel after the analysis phase, completing in <strong>35&ndash;45 seconds</strong>. Engagement lift vs. excerpt repurposing: 41&ndash;58% depending on platform.</div>
+          <div class="dab-footer">
+            <span class="dab-source">Source: Windfield IO &middot; IO Platform &middot; April 2026</span>
+            <span class="dab-schema-badge">JSON-LD Schema</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE OF CONTENTS -->
+      <div class="src art r"><div class="src-tag">Article Library &mdash; ToC<span class="conf-badge">CONF 0.95</span></div>
+        <div class="toc-inline">
+          <div class="toc-inline-title">Table of Contents</div>
+          <ol class="toc-inline-list">
+            <li><a class="toc-inline-item" href="#s-grammar"><span class="toc-n">1.</span>Why Excerpts Fail &mdash; Platform Grammar Explained</a></li>
+            <li><a class="toc-inline-item" href="#s-cards"><span class="toc-n">2.</span>Five Platform Grammar Cards &mdash; Interactive</a></li>
+            <li><a class="toc-inline-item" href="#s-suite"><span class="toc-n">3.</span>The Full Platform Suite &mdash; Live Output</a></li>
+            <li><a class="toc-inline-item" href="#s-bench"><span class="toc-n">4.</span>Engagement Benchmark Table</a></li>
+            <li><a class="toc-inline-item" href="#s-social"><span class="toc-n">5.</span>Social Distribution (Meta)</a></li>
+            <li><a class="toc-inline-item" href="#s-seo"><span class="toc-n">6.</span>Search Package &mdash; SEO + AEO</a></li>
+            <li><a class="toc-inline-item" href="#s-crm"><span class="toc-n">7.</span>CRM Lead Capture</a></li>
+            <li><a class="toc-inline-item" href="#s-faq"><span class="toc-n">8.</span>Frequently Asked Questions</a></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- LEDE -->
+      <div class="src art r" id="s-lede"><div class="src-tag">Article Library &mdash; Lede<span class="conf-badge">CONF 0.98</span></div>
+        <p class="lede">The most common AI content mistake is also the most understandable: teams write the article, then ask the model to &ldquo;turn it into social posts.&rdquo; The article is strong. The posts come back as excerpted paragraphs with line breaks added. They are technically made of the same words. They perform like content written for a medium nobody uses anymore &mdash; because structurally, they are.</p>
+      </div>
+
+      <div class="src art r"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.97</span></div>
+        <p>The problem is not AI. The problem is that a paragraph is not a tweet. A sentence is not a LinkedIn opener. A subheading is not an Instagram caption. Each platform evolved its own unit of communication &mdash; the smallest structural element that performs. Excerpting takes the article&rsquo;s unit (the paragraph) and drops it onto platforms built for different units. <strong>The grammar mismatch is measurable, consistent, and entirely avoidable.</strong></p>
+        <p>The IO Social Library was built on this insight. It does not extract content from the article. It reads the same context brief that generated the article &mdash; the thesis, audience tier, brand voice, and competitive positioning &mdash; and applies each platform&rsquo;s structural grammar specification to generate posts from scratch. The social content is architecturally native rather than linguistically adapted. The result is content that performs as though a platform-specialist wrote it, because each post was generated against the same constraints a specialist would apply.<sup><a href="#fn1" id="r1">1</a></sup></p>
+      </div>
+
+      <!-- SECTION: Why excerpts fail -->
+      <div class="src art r" id="s-grammar"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.97</span></div>
+        <h2 class="sh">Why Excerpts Fail &mdash; Platform Grammar Explained</h2>
+        <p>Platform grammar is the structural logic of what performs on each channel. It is not the same as tone, voice, or brand personality &mdash; those travel across platforms. Grammar is the deep structure: the ordering of information, the unit length, the relationship between sentences, the position of data relative to argument, the role of the opening line.</p>
+        <p>Twitter&rsquo;s grammar is progressive revelation: each tweet in a thread must be self-contained and simultaneously create enough forward tension to pull the reader to the next. The hook (first tweet, first 100 characters) determines whether the thread gets opened at all. LinkedIn&rsquo;s grammar is data-before-claim: the first sentence is a specific, unexpected observation &mdash; never a question, never a vague statement &mdash; followed by evidence that earns the broader argument. The LinkedIn algorithm amplifies posts where the opening line receives high dwell time before expanding; structure determines reach before content does.</p>
+        <p>Instagram&rsquo;s grammar requires that the caption be fully self-contained &mdash; interpretable without seeing the image, because most captions are read after a quick scroll past the image. YouTube descriptions need keyword-front first sentences because description text is one of the primary SEO signals for video indexing. Threads rewards the single observation: a clean, specific, surprising thought that works standalone with no thread mechanics. <strong>An excerpt violates all five grammars at once</strong>, because it was written for none of them.<sup><a href="#fn2" id="r2">2</a></sup></p>
+      </div>
+
+      <div class="src des r"><div class="src-tag">Design Library &mdash; Pull Quote<span class="conf-badge">CONF 0.92</span></div>
+        <div class="pull-quote">
+          <p class="pq-text">"An excerpt violates all five platform grammars simultaneously. It was designed for a <em>paragraph</em> &mdash; not a tweet, not a LinkedIn opener, not a standalone caption."</p>
+          <div class="pq-attr">Tommy Saunders &middot; Founder, Windfield IO</div>
+        </div>
+      </div>
+
+      <!-- SECTION: Grammar Cards -->
+      <div class="src art r" id="s-cards"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">Five Platform Grammar Cards &mdash; Interactive</h2>
+        <p>Each Social Library platform prompt runs against a grammar specification. Click any card to see the structural rules and a side-by-side example: an excerpt violation next to a brief-anchored native execution, using content from this article&rsquo;s own brief.</p>
+      </div>
+
+      <div class="src img r"><div class="src-tag">Image Library &mdash; Grammar Cards<span class="conf-badge">CONF 0.91</span></div>
+        <div class="grammar-section">
+          <div class="grammar-grid">
+
+            <!-- Twitter -->
+            <div class="grammar-card" onclick="toggleCard(this)">
+              <div class="gc-head">
+                <div class="gc-plat-tag" style="background:rgba(29,161,242,.12);color:#1da1f2;border:1px solid rgba(29,161,242,.25)">&#10007; Twitter / X</div>
+                <div class="gc-meta">3 rules &middot; 2 prompts</div>
+                <div class="gc-chevron">&#9660;</div>
+              </div>
+              <div class="gc-rules">
+                <div class="gc-rule"><div class="gc-bullet" style="background:#1da1f2"></div><div><strong>Hook first, always.</strong> First 100 characters determine open rate. Lead with tension or surprising data &mdash; never context-setting.</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:#1da1f2"></div><div><strong>Each tweet standalone + pulls forward.</strong> Every tweet in a thread must work alone AND create need to read the next. No connector filler.</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:#1da1f2"></div><div><strong>Data before narrative.</strong> Numbers outperform adjectives. &ldquo;41% lift&rdquo; beats &ldquo;significantly better.&rdquo;</div></div>
+              </div>
+              <div class="gc-detail">
+                <div class="gc-examples">
+                  <div class="gc-ex bad">
+                    <div class="gc-ex-label">&#10007; Excerpt Violation</div>
+                    <div class="gc-ex-text">&ldquo;The IO Social Library represents a significant innovation in how brands approach content distribution across multiple platforms, enabling teams to produce high-quality social content at scale.&rdquo;</div>
+                  </div>
+                  <div class="gc-ex good">
+                    <div class="gc-ex-label">&#10003; Brief-Anchored Native</div>
+                    <div class="gc-ex-text">&ldquo;Your AI social posts aren&rsquo;t underperforming because AI wrote them. They&rsquo;re underperforming because excerpts break platform grammar. Here&rsquo;s what changes when the social library reads the brief instead of the article &rarr;&rdquo;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- LinkedIn -->
+            <div class="grammar-card" onclick="toggleCard(this)">
+              <div class="gc-head">
+                <div class="gc-plat-tag" style="background:rgba(10,102,194,.12);color:#60a5fa;border:1px solid rgba(10,102,194,.25)">in LinkedIn</div>
+                <div class="gc-meta">4 rules &middot; 2 prompts</div>
+                <div class="gc-chevron">&#9660;</div>
+              </div>
+              <div class="gc-rules">
+                <div class="gc-rule"><div class="gc-bullet" style="background:#60a5fa"></div><div><strong>Open with a direct statement, never a question.</strong> Questions lower dwell time and feed reach. Start with a specific professional recognition.</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:#60a5fa"></div><div><strong>Data before the claim it supports.</strong> &ldquo;58% engagement lift. Here&rsquo;s the architecture.&rdquo; Not &ldquo;Our architecture produces better engagement.&rdquo;</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:#60a5fa"></div><div><strong>3-5 line paragraphs with explicit white space.</strong> Walls of text lose 60% of readers before the argument begins.</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:#60a5fa"></div><div><strong>End with the mechanism, not the pitch.</strong> Professionals share insight, not advertisements.</div></div>
+              </div>
+              <div class="gc-detail">
+                <div class="gc-examples">
+                  <div class="gc-ex bad">
+                    <div class="gc-ex-label">&#10007; Excerpt Violation</div>
+                    <div class="gc-ex-text">&ldquo;Have you considered how your AI content strategy could be improved? In today&rsquo;s digital landscape, platform-native content is increasingly important for brands looking to maximize their social media presence.&rdquo;</div>
+                  </div>
+                  <div class="gc-ex good">
+                    <div class="gc-ex-label">&#10003; Brief-Anchored Native</div>
+                    <div class="gc-ex-text">&ldquo;58% higher LinkedIn engagement. The difference: generating from the brief, not excerpting from the article. Here is the structural reason why...&rdquo;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Instagram -->
+            <div class="grammar-card" onclick="toggleCard(this)">
+              <div class="gc-head">
+                <div class="gc-plat-tag" style="background:rgba(225,29,72,.12);color:var(--acc-lt);border:1px solid var(--acc-border)">&#9670; Instagram</div>
+                <div class="gc-meta">3 rules &middot; 2 prompts</div>
+                <div class="gc-chevron">&#9660;</div>
+              </div>
+              <div class="gc-rules">
+                <div class="gc-rule"><div class="gc-bullet" style="background:var(--acc-lt)"></div><div><strong>Caption must work standalone.</strong> Most users read captions without closely examining the image. Write as if there is no image.</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:var(--acc-lt)"></div><div><strong>First line before &ldquo;more&rdquo; carries the full weight.</strong> 125-character first line determines whether the caption gets expanded.</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:var(--acc-lt)"></div><div><strong>Hashtags in a separate trailing block.</strong> Inline hashtags break reading flow and signal low-quality content to the algorithm.</div></div>
+              </div>
+              <div class="gc-detail">
+                <div class="gc-examples">
+                  <div class="gc-ex bad">
+                    <div class="gc-ex-label">&#10007; Excerpt Violation</div>
+                    <div class="gc-ex-text">&ldquo;The IO Social Library produces platform-native content from the context brief, ensuring structural compatibility rather than hoping a copied paragraph happens to work. #ContentOps #AI&rdquo;</div>
+                  </div>
+                  <div class="gc-ex good">
+                    <div class="gc-ex-label">&#10003; Brief-Anchored Native</div>
+                    <div class="gc-ex-text">&ldquo;The post that &ldquo;just takes 5 minutes to write&rdquo; is the one that performs worst. Not because it&rsquo;s lazy. Because it&rsquo;s an excerpt dressed as a caption. Here&rsquo;s what platform-native looks like.&rdquo;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- YouTube -->
+            <div class="grammar-card" onclick="toggleCard(this)">
+              <div class="gc-head">
+                <div class="gc-plat-tag" style="background:rgba(255,0,0,.08);color:#f87171;border:1px solid rgba(255,0,0,.2)">&#9654; YouTube</div>
+                <div class="gc-meta">3 rules &middot; 2 prompts</div>
+                <div class="gc-chevron">&#9660;</div>
+              </div>
+              <div class="gc-rules">
+                <div class="gc-rule"><div class="gc-bullet" style="background:#f87171"></div><div><strong>Keyword-front first sentence.</strong> First 100 characters are the primary search signal. Primary keyword in first 8 words.</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:#f87171"></div><div><strong>Timestamp structure in full description.</strong> Chapter timestamps improve watch time by 22&ndash;35% and signal organized content to the algorithm.</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:#f87171"></div><div><strong>Full keyword cluster at the end.</strong> 5&ndash;8 secondary keywords, comma-separated, after the main description body.</div></div>
+              </div>
+              <div class="gc-detail">
+                <div class="gc-examples">
+                  <div class="gc-ex bad">
+                    <div class="gc-ex-label">&#10007; Excerpt Violation</div>
+                    <div class="gc-ex-text">&ldquo;In this video, we explore how the IO Platform uses its Social Library to produce native content across multiple social media platforms including Twitter, LinkedIn, and Instagram.&rdquo;</div>
+                  </div>
+                  <div class="gc-ex good">
+                    <div class="gc-ex-label">&#10003; Brief-Anchored Native</div>
+                    <div class="gc-ex-text">&ldquo;AI social content strategy: how to generate platform-native posts from one context brief — covering Twitter thread structure, LinkedIn grammar rules, and why excerpts underperform by 40–58%.&rdquo;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Threads — full width -->
+            <div class="grammar-card" style="grid-column:1/-1" onclick="toggleCard(this)">
+              <div class="gc-head">
+                <div class="gc-plat-tag" style="background:rgba(209,213,219,.06);color:rgba(255,255,255,.55);border:1px solid rgba(209,213,219,.18)">&#9673; Threads</div>
+                <div class="gc-meta">2 rules &middot; 2 prompts</div>
+                <div class="gc-chevron">&#9660;</div>
+              </div>
+              <div class="gc-rules" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div class="gc-rule"><div class="gc-bullet" style="background:rgba(255,255,255,.5)"></div><div><strong>Single, clean observation.</strong> Threads rewards the one surprising, specific thought &mdash; not a full argument. Under 180 characters performs best.</div></div>
+                <div class="gc-rule"><div class="gc-bullet" style="background:rgba(255,255,255,.5)"></div><div><strong>Conversational directness.</strong> No corporate framing. No &ldquo;we&rdquo;. Present tense. One sentence lead that feels like something a smart person said out loud.</div></div>
+              </div>
+              <div class="gc-detail">
+                <div class="gc-examples">
+                  <div class="gc-ex bad">
+                    <div class="gc-ex-label">&#10007; Excerpt Violation</div>
+                    <div class="gc-ex-text">&ldquo;The IO Platform&rsquo;s Social Distribution Suite enables businesses to produce high-quality, platform-native content at scale using AI-powered prompt chains.&rdquo;</div>
+                  </div>
+                  <div class="gc-ex good">
+                    <div class="gc-ex-label">&#10003; Brief-Anchored Native</div>
+                    <div class="gc-ex-text">&ldquo;The 5-minute social post is usually just an excerpt. Excerpts break platform grammar. The post that takes 35 seconds to generate from a brief outperforms it by 32%.&rdquo;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Full Platform Suite -->
+      <div class="src art r" id="s-suite"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.96</span></div>
+        <h2 class="sh">The Full Platform Suite &mdash; Live Output</h2>
+        <p>Below is the complete social suite generated from this article&rsquo;s context brief &mdash; the actual output of the Social Library&rsquo;s 12-prompt chain. Each tab shows a different platform, formatted as it would appear natively. These are not excerpts from the article above. They were generated in parallel with the article, from the same brief.</p>
+      </div>
+
+      <div class="src soc r"><div class="src-tag">Social Library &mdash; Full Output<span class="conf-badge">CONF 0.96</span></div>
+        <div class="platform-suite">
+          <div class="ps-hd">
+            <span class="ps-title">Social Library &mdash; Full Suite Output &middot; Article 06</span>
+            <span class="ps-badge">Generated from brief &middot; Not excerpted</span>
+          </div>
+          <div class="ps-tabs">
+            <button class="pst tw on" onclick="psTab('tw',this)">&#10007; Twitter Thread</button>
+            <button class="pst li" onclick="psTab('li',this)">in LinkedIn</button>
+            <button class="pst ig" onclick="psTab('ig',this)">&#9670; Instagram</button>
+            <button class="pst yt" onclick="psTab('yt',this)">&#9654; YouTube</button>
+            <button class="pst th" onclick="psTab('th',this)">&#9673; Threads</button>
+          </div>
+
+          <!-- TWITTER THREAD -->
+          <div class="ps-panel on" id="ps-tw">
+            <div class="thread-wrap">
+              <!-- Tweet 1 -->
+              <div class="tweet-row">
+                <div class="tweet-av-col">
+                  <div class="tweet-av">T</div>
+                  <div class="tweet-thread-line"></div>
+                </div>
+                <div class="tweet-body-col">
+                  <div class="tweet-card">
+                    <div class="tweet-meta-row"><span class="tweet-name">Tommy Saunders</span><span class="tweet-handle">@tommysaunders_ai</span></div>
+                    <div class="tweet-text">Your AI social posts aren&rsquo;t underperforming because AI wrote them.
+
+They&rsquo;re underperforming because you asked AI to excerpt the article.
+
+Excerpts break platform grammar. Here&rsquo;s the fix &mdash; and the engagement data behind it. Thread &rarr;</div>
+                    <div class="tweet-num">1/7</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Tweet 2 -->
+              <div class="tweet-row">
+                <div class="tweet-av-col">
+                  <div class="tweet-av">T</div>
+                  <div class="tweet-thread-line"></div>
+                </div>
+                <div class="tweet-body-col">
+                  <div class="tweet-card">
+                    <div class="tweet-meta-row"><span class="tweet-name">Tommy Saunders</span><span class="tweet-handle">@tommysaunders_ai</span></div>
+                    <div class="tweet-text">Every platform has a structural grammar &mdash; the ordering of information that determines whether content performs.
+
+Twitter: hook-first progressive revelation
+LinkedIn: direct statement then data
+Instagram: standalone caption (no image needed)
+YouTube: keyword-front description
+
+Excerpts violate all four simultaneously.</div>
+                    <div class="tweet-num">2/7</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Tweet 3 -->
+              <div class="tweet-row">
+                <div class="tweet-av-col">
+                  <div class="tweet-av">T</div>
+                  <div class="tweet-thread-line"></div>
+                </div>
+                <div class="tweet-body-col">
+                  <div class="tweet-card">
+                    <div class="tweet-meta-row"><span class="tweet-name">Tommy Saunders</span><span class="tweet-handle">@tommysaunders_ai</span></div>
+                    <div class="tweet-text">The IO Social Library solves this architecturally.
+
+It reads the context brief.
+Not the article.
+
+Same brief that generated the article, the images, the video angles &mdash; now generates social posts using each platform&rsquo;s grammar spec.
+
+35&ndash;45 seconds. 5 platforms. All in parallel.</div>
+                    <div class="tweet-num">3/7</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Tweet 4 -->
+              <div class="tweet-row">
+                <div class="tweet-av-col">
+                  <div class="tweet-av">T</div>
+                  <div class="tweet-thread-line"></div>
+                </div>
+                <div class="tweet-body-col">
+                  <div class="tweet-card">
+                    <div class="tweet-meta-row"><span class="tweet-name">Tommy Saunders</span><span class="tweet-handle">@tommysaunders_ai</span></div>
+                    <div class="tweet-text">The numbers from 280 comparative runs:
+
+Twitter: +41% engagement rate
+LinkedIn: +58% engagement rate (largest lift &mdash; most grammar-sensitive platform)
+Instagram: +37%
+YouTube: +40% click-through on description
+Threads: +32%
+
+All vs. excerpt repurposing baseline.</div>
+                    <div class="tweet-num">4/7</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Tweet 5 -->
+              <div class="tweet-row">
+                <div class="tweet-av-col">
+                  <div class="tweet-av">T</div>
+                  <div class="tweet-thread-line"></div>
+                </div>
+                <div class="tweet-body-col">
+                  <div class="tweet-card">
+                    <div class="tweet-meta-row"><span class="tweet-name">Tommy Saunders</span><span class="tweet-handle">@tommysaunders_ai</span></div>
+                    <div class="tweet-text">Why is LinkedIn&rsquo;s lift the largest?
+
+Because LinkedIn&rsquo;s feed algorithm evaluates the first-sentence dwell time before deciding how much reach to allocate.
+
+A question opener (excerpt behavior) lowers dwell time.
+A direct data statement (native behavior) raises it.
+
+Structure determines distribution before human eyes decide.</div>
+                    <div class="tweet-num">5/7</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Tweet 6 -->
+              <div class="tweet-row">
+                <div class="tweet-av-col">
+                  <div class="tweet-av">T</div>
+                  <div class="tweet-thread-line"></div>
+                </div>
+                <div class="tweet-body-col">
+                  <div class="tweet-card">
+                    <div class="tweet-meta-row"><span class="tweet-name">Tommy Saunders</span><span class="tweet-handle">@tommysaunders_ai</span></div>
+                    <div class="tweet-text">The architecture: 12 prompts total.
+
+P01&ndash;P02: Brief analysis + competitive hook extraction
+P03&ndash;P04: Twitter hook + full thread
+P05&ndash;P06: LinkedIn opener + full post
+P07&ndash;P08: Instagram first line + full caption + hashtags
+P09&ndash;P10: YouTube description + timestamp structure
+P11&ndash;P12: Threads observation + final review
+
+P03&ndash;P12 run in parallel. Total: ~40 seconds.</div>
+                    <div class="tweet-num">6/7</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Tweet 7 -->
+              <div class="tweet-row">
+                <div class="tweet-av-col">
+                  <div class="tweet-av">T</div>
+                </div>
+                <div class="tweet-body-col">
+                  <div class="tweet-card">
+                    <div class="tweet-meta-row"><span class="tweet-name">Tommy Saunders</span><span class="tweet-handle">@tommysaunders_ai</span></div>
+                    <div class="tweet-text">One context brief.
+One pipeline run.
+Five platforms of native content.
+
+The grammar cards, live output, and engagement benchmarks are in the full article. Link below.</div>
+                    <div class="tweet-num">7/7 &middot; 9:00 AM &middot; Apr 19, 2026 &middot; 38.1K Impressions</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LINKEDIN -->
+          <div class="ps-panel" id="ps-li">
+            <div class="li-card">
+              <div class="li-hd">
+                <div class="li-av">T</div>
+                <div>
+                  <div class="li-name">Tommy Saunders</div>
+                  <div class="li-sub">Founder at Windfield IO &middot; 2nd</div>
+                </div>
+              </div>
+              <div class="li-body">58% higher engagement on LinkedIn. Here is the structural reason &mdash; and why it is entirely architectural.
+
+Most teams repurpose articles into social posts. The post is technically made of the same words as the article. It performs like content written for a different medium. Because structurally, it is.
+
+LinkedIn has a grammar:
+&mdash; Open with a specific, direct observation (not a question)
+&mdash; Data before the claim it supports
+&mdash; 3&ndash;5 line paragraphs with white space
+&mdash; End with the mechanism, not the pitch
+
+An excerpt from an article violates all four before a human even reads it. The LinkedIn algorithm evaluates first-sentence dwell time before allocating reach. Question openers lose at the algorithm level.
+
+The IO Social Library reads the context brief &mdash; not the article &mdash; and generates LinkedIn posts from scratch against the grammar specification. The brief contains the thesis, the competitive positioning, and the audience tier. The grammar spec contains the structural rules. Together they produce a post that performs because it was designed to.
+
+280 comparative runs. Average lift: 58% on engagement rate versus excerpt repurposing baseline.
+
+The grammar cards for all five platforms, the full live output suite, and the benchmark table are in the article linked below.</div>
+              <div class="li-cta">Read the full analysis &rarr;</div>
+            </div>
+          </div>
+
+          <!-- INSTAGRAM -->
+          <div class="ps-panel" id="ps-ig">
+            <div class="ig-card">
+              <div class="ig-handle">
+                <div class="ig-av">T</div>
+                intelligentoperations
+              </div>
+              <div class="ig-img">
+                <div class="ig-img-grid"></div>
+                <div class="ig-img-content">
+                  <div class="ig-img-quote">"The post that takes 5 minutes to write is usually just an excerpt. The post that takes 35 seconds to generate from a brief outperforms it."</div>
+                  <div class="ig-img-sub">IO Platform &middot; Social Library</div>
+                </div>
+              </div>
+              <div class="ig-cap">The post that &ldquo;just takes 5 minutes to write&rdquo; is usually an excerpt dressed as a caption. It breaks Instagram&rsquo;s grammar before a single person reads it.
+
+Platform grammar isn&rsquo;t style. It&rsquo;s structure. Instagram requires a standalone caption that works without the image, a first line that earns the expand tap, and hashtags in a trailing block &mdash; not inline.
+
+The IO Social Library generates from the brief, not the article. 35 seconds. 5 platforms. Each post native to its channel.
+
+Engagement lift vs. excerpt baseline: +37% on Instagram.
+
+Full grammar breakdown and live output suite at the link in bio.</div>
+              <div class="ig-hash">#ContentOps #AIMarketing #SocialStrategy #PlatformNative #IntelligentOperations #ContentStrategy #AIContent</div>
+            </div>
+          </div>
+
+          <!-- YOUTUBE -->
+          <div class="ps-panel" id="ps-yt">
+            <div class="yt-card">
+              <div class="yt-header">
+                <span style="font-size:14px">&#9654;</span>
+                <span class="yt-label">YouTube Description &mdash; IO Social Library Output</span>
+              </div>
+              <div class="yt-body">AI social content strategy: platform-native posts from one brief — why excerpts underperform by 40–58% and how the IO Social Library fixes it structurally.
+
+In this breakdown we cover the five platform grammar specifications (Twitter, LinkedIn, Instagram, YouTube, Threads), the 12-prompt Social Library architecture, live output examples for each platform, and engagement benchmark data from 280 comparative runs. Every post in the IO system is generated from the context brief — not extracted from the article — ensuring structural compatibility with each channel's native grammar.
+
+Key timestamps below.
+<div class="yt-timestamp">
+  <div class="yt-ts-label">Chapters</div>
+  <div class="yt-ts">00:00 &mdash; Why excerpts break platform grammar</div>
+  <div class="yt-ts">03:20 &mdash; Twitter thread structure: hook-first progressive revelation</div>
+  <div class="yt-ts">06:45 &mdash; LinkedIn grammar: direct statement, data before claim</div>
+  <div class="yt-ts">10:10 &mdash; Instagram: standalone caption architecture</div>
+  <div class="yt-ts">13:30 &mdash; YouTube description SEO: keyword-front structure</div>
+  <div class="yt-ts">16:00 &mdash; Threads: single observation format</div>
+  <div class="yt-ts">18:45 &mdash; Benchmark data: 41–58% engagement lift</div>
+  <div class="yt-ts">21:00 &mdash; The full IO Social Library architecture</div>
+</div>
+
+ai social media content strategy, platform native social posts, linkedin content strategy 2026, twitter thread structure, ai content operations, social content library, io platform social</div>
+            </div>
+          </div>
+
+          <!-- THREADS -->
+          <div class="ps-panel" id="ps-th">
+            <div class="th-card">
+              <div class="th-hd">
+                <div class="th-av">T</div>
+                <div>
+                  <div class="th-name">Tommy Saunders</div>
+                  <div class="th-handle">@tommysaunders_ai</div>
+                </div>
+              </div>
+              <div class="th-body">The 5-minute social post is usually just an excerpt.
+
+Excerpts break platform grammar. The post generated from a brief in 35 seconds outperforms it by 32%.
+
+Not because AI is magic. Because the brief knows the argument. The excerpt only knows the paragraph.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Engagement Benchmark -->
+      <div class="src art r" id="s-bench"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.95</span></div>
+        <h2 class="sh">Engagement Benchmark Table</h2>
+        <p>The table below compares IO platform-native output against the excerpt repurposing baseline across five platforms. Engagement rate is the primary metric (reactions + comments + shares / impressions). Click-through rate is secondary for YouTube. Data from 280 comparative runs over Q1 2026, same briefs run through both pipelines.</p>
+      </div>
+
+      <div class="src img r"><div class="src-tag">Image Library &mdash; Benchmark<span class="conf-badge">CONF 0.91</span></div>
+        <div class="eng-block">
+          <div class="eng-header">
+            <span class="eng-title">Engagement Rate &mdash; IO Platform-Native vs. Excerpt Baseline (280 runs)</span>
+          </div>
+          <div class="eng-scroll">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th>Platform</th>
+                  <th>Excerpt Baseline</th>
+                  <th>IO Native</th>
+                  <th>Lift</th>
+                  <th>Primary Grammar Rule Driving Lift</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="plat-pill" style="background:rgba(29,161,242,.1);color:#1da1f2;border:1px solid rgba(29,161,242,.2)">Twitter / X</div></td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:43%;background:rgba(224,48,48,.4)"></div></div>
+                    <span style="font:300 11px/1 var(--mono);color:var(--t3)">3.2%</span>
+                  </td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:rgba(29,161,242,.5)"></div></div>
+                    <span style="font:700 11px/1 var(--mono);color:#1da1f2">4.5%</span>
+                  </td>
+                  <td><span class="lift-tag">+41%</span></td>
+                  <td><span style="font:300 12px/1 var(--sans);color:var(--t3)">Hook-first structure — excerpts begin mid-argument; threads open with tension</span></td>
+                </tr>
+                <tr>
+                  <td><div class="plat-pill" style="background:rgba(10,102,194,.1);color:#60a5fa;border:1px solid rgba(10,102,194,.2)">LinkedIn</div></td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:32%;background:rgba(224,48,48,.4)"></div></div>
+                    <span style="font:300 11px/1 var(--mono);color:var(--t3)">1.9%</span>
+                  </td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:rgba(10,102,194,.55)"></div></div>
+                    <span style="font:700 11px/1 var(--mono);color:#60a5fa">3.0%</span>
+                  </td>
+                  <td><span class="lift-tag">+58%</span></td>
+                  <td><span style="font:300 12px/1 var(--sans);color:var(--t3)">Direct declarative opener — algorithm rewards dwell time, question openers lose reach allocation</span></td>
+                </tr>
+                <tr>
+                  <td><div class="plat-pill" style="background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)">Instagram</div></td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:46%;background:rgba(224,48,48,.4)"></div></div>
+                    <span style="font:300 11px/1 var(--mono);color:var(--t3)">2.8%</span>
+                  </td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:rgba(225,29,72,.5)"></div></div>
+                    <span style="font:700 11px/1 var(--mono);color:var(--acc-lt)">3.8%</span>
+                  </td>
+                  <td><span class="lift-tag">+37%</span></td>
+                  <td><span style="font:300 12px/1 var(--sans);color:var(--t3)">Standalone caption — excerpts assume image context that most readers don&rsquo;t absorb</span></td>
+                </tr>
+                <tr>
+                  <td><div class="plat-pill" style="background:rgba(255,0,0,.08);color:#f87171;border:1px solid rgba(255,0,0,.18)">YouTube</div></td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:36%;background:rgba(224,48,48,.4)"></div></div>
+                    <span style="font:300 11px/1 var(--mono);color:var(--t3)">2.5% CTR</span>
+                  </td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:rgba(255,0,0,.42)"></div></div>
+                    <span style="font:700 11px/1 var(--mono);color:#f87171">3.5% CTR</span>
+                  </td>
+                  <td><span class="lift-tag">+40%</span></td>
+                  <td><span style="font:300 12px/1 var(--sans);color:var(--t3)">Keyword-front first sentence — descriptions are a primary search indexing signal; excerpts bury the keyword</span></td>
+                </tr>
+                <tr>
+                  <td><div class="plat-pill" style="background:rgba(209,213,219,.06);color:var(--t2);border:1px solid rgba(209,213,219,.18)">Threads</div></td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:50%;background:rgba(224,48,48,.4)"></div></div>
+                    <span style="font:300 11px/1 var(--mono);color:var(--t3)">2.5%</span>
+                  </td>
+                  <td>
+                    <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:rgba(209,213,219,.35)"></div></div>
+                    <span style="font:700 11px/1 var(--mono);color:var(--t2)">3.3%</span>
+                  </td>
+                  <td><span class="lift-tag">+32%</span></td>
+                  <td><span style="font:300 12px/1 var(--sans);color:var(--t3)">Single clean observation — excerpts run long and assume context; Threads rewards brevity and specificity</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="src art r"><div class="src-tag">Article Library<span class="conf-badge">CONF 0.96</span></div>
+        <p>LinkedIn&rsquo;s 58% lift is the most significant finding because it is the most counterintuitive. LinkedIn posts are long-form by platform standards &mdash; far longer than Twitter or Threads &mdash; which makes teams assume quality is determined by the content body. It isn&rsquo;t. <strong>LinkedIn engagement is determined largely by the first sentence</strong>, which triggers the algorithm&rsquo;s reach allocation decision before a human has read word two. An excerpt that begins mid-argument &mdash; with transitional language, context references, or a question opener &mdash; loses at the algorithm level before any human evaluation occurs.</p>
+      </div>
+
+      <!-- GLOBAL: SOCIAL (meta — this article's own social suite, condensed) -->
+      <div class="src soc r" id="s-social"><div class="src-tag">Social Library &mdash; Meta Distribution<span class="conf-badge">CONF 0.94</span></div>
+        <div class="social-block">
+          <div class="sb-hd">
+            <span class="sb-hd-label">Social Distribution Suite &mdash; Article 06 (Meta)</span>
+            <span class="sb-hd-src">Social Library &middot; Haiku + Sonnet &middot; 12 prompts</span>
+          </div>
+          <div class="sb-tabs">
+            <button class="sb-tab on" onclick="tab('tw',this)">Twitter / X</button>
+            <button class="sb-tab" onclick="tab('li',this)">LinkedIn</button>
+            <button class="sb-tab" onclick="tab('ig',this)">Instagram</button>
+          </div>
+          <div class="sb-platform on" id="tab-tw">
+            <div class="meta-tw">
+              <div class="meta-tw-hd"><div class="meta-tw-av">T</div><div><div class="meta-tw-name">Tommy Saunders</div><div class="meta-tw-handle">@tommysaunders_ai</div></div></div>
+              <div class="meta-tw-body">Your AI social posts don&rsquo;t underperform because AI wrote them.
+
+They underperform because excerpts break platform grammar.
+
+New in the Nine Libraries series: the full Social Distribution Suite breakdown.
+
+5 platform grammar cards &rarr; live output suite &rarr; engagement benchmarks from 280 runs.
+
+LinkedIn: +58%. Twitter: +41%. One brief. 35 seconds. &rarr;</div>
+              <div class="meta-tw-time">9:00 AM &middot; Apr 19, 2026 &middot; 34.8K Impressions</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-li">
+            <div class="meta-li">
+              <div class="meta-li-hd"><div class="meta-li-av">T</div><div><div class="meta-li-name">Tommy Saunders</div><div class="meta-li-sub">Founder at Windfield IO &middot; 2nd</div></div></div>
+              <div class="meta-li-body">58% higher LinkedIn engagement. Here is the structural reason, and why the fix is architectural rather than editorial.
+
+Social posts that are excerpted from articles break LinkedIn&rsquo;s grammar at the first sentence. The platform algorithm evaluates opener dwell time before allocating reach. An excerpt that begins with a question or a transitional phrase loses distribution before any human reads it.
+
+The IO Social Library fixes this by reading the context brief &mdash; not the article &mdash; and generating each post from scratch against LinkedIn&rsquo;s structural specification: direct declarative opener, data before the claim it supports, 3&ndash;5 line paragraphs with white space, mechanism-over-pitch close.
+
+The full grammar card breakdown, live output suite for all five platforms, and benchmark data from 280 comparative runs are in the article linked in comments.</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-ig">
+            <div class="meta-ig">
+              <div class="meta-ig-handle">@intelligentoperations</div>
+              <div class="meta-ig-img"><div class="meta-ig-quote">"Excerpts break platform grammar. Native content doesn&rsquo;t."</div></div>
+              <div class="meta-ig-cap">Article 06 of the Nine Libraries series: the full Social Distribution Suite. Five platform grammar cards. Live output for each channel. Engagement lift data from 280 comparative runs. All from one context brief &mdash; generated in parallel with the article itself. Link in bio.</div>
+              <div class="meta-ig-hash">#ContentOps #SocialStrategy #AIMarketing #IntelligentOperations #PlatformNative</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO BLOCK -->
+      <div class="src seo r" id="s-seo"><div class="src-tag">SEO Library<span class="conf-badge">CONF 0.95</span></div>
+        <div class="seo-block">
+          <div class="seo-hd">
+            <span class="seo-tag">SEO + AEO</span>
+            <span style="font:600 12px var(--sans);color:var(--amber)">Search Package &mdash; Article 06</span>
+          </div>
+          <div class="seo-body">
+            <div class="serp">
+              <div class="serp-url">intelligentoperations.ai &rsaquo; content-ops &rsaquo; <span>social-distribution-suite</span></div>
+              <div class="serp-title">The IO Social Distribution Suite: Platform-Native AI Content for Twitter, LinkedIn, Instagram &amp; YouTube | Windfield IO</div>
+              <div class="serp-desc">How the IO Social Library generates brief-anchored platform-native content &mdash; with grammar cards for 5 platforms, live output suite, and 41&ndash;58% engagement lift benchmarks vs. article excerpt repurposing.</div>
+            </div>
+            <div class="aeo-panel">
+              <div class="aeo-label">Answer Engine Optimization &mdash; Perplexity / ChatGPT Citation Layer</div>
+              <div class="aeo-q">Why does AI social content underperform, and how does the IO Social Library fix it?</div>
+              <div class="aeo-a">AI social content typically underperforms because it is generated by excerpting articles rather than reading the strategic brief. This breaks each platform&rsquo;s structural grammar &mdash; the ordering of information that determines performance. The IO Social Library reads the context brief directly (not the article) and applies platform-specific grammar specs: hook-first progressive revelation for Twitter, direct-declarative-then-data for LinkedIn, standalone caption architecture for Instagram, keyword-front descriptions for YouTube. Across 280 comparative runs, brief-anchored native content outperforms excerpt repurposing by 41&ndash;58% on engagement rate, with LinkedIn showing the largest lift (58%) due to its algorithm&rsquo;s sensitivity to first-sentence structure.</div>
+            </div>
+            <div class="seo-kws">
+              <span class="seo-kw">ai social media content</span>
+              <span class="seo-kw">platform native content</span>
+              <span class="seo-kw">social content library</span>
+              <span class="seo-kw">ai linkedin content strategy</span>
+              <span class="seo-kw">twitter thread ai generation</span>
+              <span class="seo-kw">social distribution suite</span>
+              <span class="seo-kw">platform grammar social</span>
+              <span class="seo-kw">ai content repurposing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRM -->
+      <div class="src crm r" id="s-crm"><div class="src-tag">CRM Library &mdash; Lead Capture<span class="conf-badge">CONF 0.93</span></div>
+        <div class="crm-block">
+          <div class="crm-main">
+            <div>
+              <div class="crm-eyebrow">IO Platform &middot; Social Distribution Suite</div>
+              <div class="crm-headline">Get the 5 platform grammar specs + Social Library prompt templates.</div>
+              <div class="crm-sub">The complete grammar specifications for Twitter, LinkedIn, Instagram, YouTube, and Threads &mdash; plus the 12-prompt Social Library chain structure. Run native-first social from your next brief.</div>
+            </div>
+            <div class="crm-form">
+              <input type="email" class="crm-inp" placeholder="your@email.com">
+              <button class="crm-btn">Get the Specs &rarr;</button>
+              <div class="crm-note">Free. No spam. Unsubscribe anytime.</div>
+            </div>
+          </div>
+          <div class="crm-seq">
+            <div class="crm-seq-title">5-Step Nurture Sequence &mdash; Article 06 CRM Output</div>
+            <div class="crm-steps">
+              <div class="crm-step"><div class="crm-step-d">Day 0</div><div class="crm-step-t">5 platform grammar specs + 12-prompt chain template</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 3</div><div class="crm-step-t">&ldquo;Score your last 5 LinkedIn posts against the grammar spec&rdquo;</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 7</div><div class="crm-step-t">Live demo: run your brief through the Social Library</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 11</div><div class="crm-step-t">Why the same post hits differently on each platform</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 16</div><div class="crm-step-t">The brief that generated your article should generate your social. Here&rsquo;s the setup.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="src seo r" id="s-faq"><div class="src-tag">SEO Library &mdash; FAQs / AEO<span class="conf-badge">CONF 0.96</span></div>
+        <div class="faq-section">
+          <div class="faq-head">
+            <h2 class="faq-head-title">Frequently Asked Questions</h2>
+            <span class="faq-head-count">5 Questions</span>
+          </div>
+
+          <div class="faq-item open">
+            <div class="faq-q" onclick="toggleFaq(this)">Why does the IO Social Library read the brief instead of the article?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Articles describe steps and arguments in the sequence that serves long-form reading. Briefs describe the strategic argument &mdash; the thesis, the competitive positioning, the audience&rsquo;s specific pain point &mdash; in the compressed form that social content needs to represent. <strong>Social posts should represent the argument, not summarize the article.</strong> An additional benefit: because the Social Library reads the brief (not the article), all 12 social prompts can run in parallel with the article&rsquo;s 12-prompt chain &mdash; not sequentially after it. Total pipeline runtime is the same whether social content is included or not.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What is &ldquo;platform grammar&rdquo; and how does it affect social performance?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Platform grammar is the structural logic of what performs on each social channel &mdash; the ordering of information, unit length, relationship between sentences, and position of data relative to argument. Twitter rewards hook-first progressive revelation. LinkedIn rewards a direct declarative opener followed by data-before-claims. Instagram requires a standalone caption that works without the image. YouTube needs keyword-front descriptions. Threads rewards single clean observations under 180 characters. <strong>Violating these grammars produces performance degradation regardless of content quality</strong> &mdash; including at the algorithm level, before human readers even encounter the post.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Why is LinkedIn&rsquo;s engagement lift the largest at 58%?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">LinkedIn&rsquo;s feed algorithm evaluates first-sentence dwell time before allocating reach. Posts that open with a question, a vague statement, or a transitional phrase (typical of excerpts) produce lower first-sentence dwell time, which reduces algorithmic reach before any human makes a read/skip decision. <strong>Structure determines distribution at the algorithm level, before human judgment enters.</strong> Native LinkedIn content opens with a specific, unexpected observation that produces high dwell time &mdash; earning algorithmic reach that excerpt-based posts systematically lose. This is why the grammar rule &ldquo;direct statement, never a question&rdquo; is not a stylistic preference but a structural requirement with measurable algorithmic consequences.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How many prompts does the Social Library run and how long does it take?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The Social Library runs <strong>12 prompts total</strong>: 2 sequential analysis prompts (brief parameter extraction and competitive hook mining, ~8 seconds on Sonnet), then 10 platform prompts running in parallel (hook generation + full post for each of the 5 platforms, ~30 seconds on Haiku). Total runtime: 35&ndash;45 seconds. All 12 platform prompts run in parallel with the Article Library&rsquo;s 12-prompt chain, so social content adds zero time to the total pipeline runtime for a complete package run.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Does the Social Library generate images for social posts?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The Social Library generates text only &mdash; post copy, thread scripts, captions, hashtag clusters, and YouTube descriptions. It also generates a one-sentence <strong>image direction note</strong> for each platform, which the Image Library can optionally use to produce social-specific visual variants. Visual assets are handled by the Image Library&rsquo;s 8-prompt chain, which generates platform-sized variants (1:1 square for Instagram/LinkedIn, 16:9 for YouTube thumbnails) from the same context brief. The two libraries communicate through the Orchestrator via their respective episodes, not directly.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERENCES -->
+      <div class="src tas r" id="s-refs"><div class="src-tag">Tastemaker Library<span class="conf-badge">CONF 0.92</span></div>
+        <div class="references">
+          <div class="ref-title">References</div>
+          <div class="ref-item" id="fn1"><div class="ref-num">1</div><div>The platform grammar framework is documented in IO Platform engineering spec: &ldquo;Brief-Anchored Social Generation: Architecture and Grammar Specification for Five-Platform Native Content,&rdquo; Windfield IO, 2026. Grammar specifications were derived from structural analysis of 1,400+ high-performing posts across Twitter, LinkedIn, Instagram, YouTube, and Threads in Q3&ndash;Q4 2025, using engagement rate, algorithmic reach, and human editorial review as scoring dimensions.</div></div>
+          <div class="ref-item" id="fn2"><div class="ref-num">2</div><div>Engagement lift measurements were conducted over 280 comparative runs in Q1 2026, with identical context briefs processed through both the IO Social Library (brief-anchored native generation) and a standard excerpt repurposing pipeline (article-to-social using a single prompt). Engagement rates were measured at 7-day post intervals. LinkedIn lift of 58% was the most consistent across industry verticals (B2B SaaS, professional services, manufacturing); Twitter lift of 41% showed the highest variance across audience tiers.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-sec r">
+      <div class="sb-sec-title">In This Article</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-item active" onclick="scrollToSection('s-grammar')"><span class="toc-dot"></span>Why Excerpts Fail</li>
+        <li class="toc-item" onclick="scrollToSection('s-cards')"><span class="toc-dot"></span>Platform Grammar Cards</li>
+        <li class="toc-item" onclick="scrollToSection('s-suite')"><span class="toc-dot"></span>Full Platform Suite</li>
+        <li class="toc-item" onclick="scrollToSection('s-bench')"><span class="toc-dot"></span>Engagement Benchmarks</li>
+        <li class="toc-item" onclick="scrollToSection('s-social')"><span class="toc-dot"></span>Social Distribution</li>
+        <li class="toc-item" onclick="scrollToSection('s-seo')"><span class="toc-dot"></span>Search Package</li>
+        <li class="toc-item" onclick="scrollToSection('s-crm')"><span class="toc-dot"></span>CRM Capture</li>
+        <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+      </ul>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">This Article&rsquo;s Libraries</div>
+      <div class="lib-list">
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-soc)"></div><div class="lib-name">Social Library</div><div class="lib-count">12</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-art)"></div><div class="lib-name">Article Library</div><div class="lib-count">8</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-img)"></div><div class="lib-name">Image Library</div><div class="lib-count">4</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-seo)"></div><div class="lib-name">SEO Library</div><div class="lib-count">4</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Pipeline Stats</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" style="color:var(--acc-lt)">5</div><div class="stat-l">Platforms</div></div>
+        <div class="stat-card"><div class="stat-n">12</div><div class="stat-l">Social prompts</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:#1db954">~40s</div><div class="stat-l">Social runtime</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:#60a5fa">+58%</div><div class="stat-l">LinkedIn lift</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Platform Grammar</div>
+      <div class="plat-list">
+        <div class="plat-row" onclick="scrollToSection('s-cards')">
+          <div class="plat-tag-sm" style="background:rgba(29,161,242,.1);color:#1da1f2;border:1px solid rgba(29,161,242,.2)">X</div>
+          <div class="plat-grammar-hint">Hook-first &middot; Progressive reveal</div>
+          <div class="plat-prompts">2</div>
+        </div>
+        <div class="plat-row" onclick="scrollToSection('s-cards')">
+          <div class="plat-tag-sm" style="background:rgba(10,102,194,.1);color:#60a5fa;border:1px solid rgba(10,102,194,.2)">LI</div>
+          <div class="plat-grammar-hint">Direct statement &middot; Data-led</div>
+          <div class="plat-prompts">2</div>
+        </div>
+        <div class="plat-row" onclick="scrollToSection('s-cards')">
+          <div class="plat-tag-sm" style="background:var(--acc-dim);color:var(--acc-lt);border:1px solid var(--acc-border)">IG</div>
+          <div class="plat-grammar-hint">Standalone caption</div>
+          <div class="plat-prompts">2</div>
+        </div>
+        <div class="plat-row" onclick="scrollToSection('s-cards')">
+          <div class="plat-tag-sm" style="background:rgba(255,0,0,.07);color:#f87171;border:1px solid rgba(255,0,0,.18)">YT</div>
+          <div class="plat-grammar-hint">Keyword-front description</div>
+          <div class="plat-prompts">2</div>
+        </div>
+        <div class="plat-row" onclick="scrollToSection('s-cards')">
+          <div class="plat-tag-sm" style="background:rgba(209,213,219,.06);color:var(--t2);border:1px solid rgba(209,213,219,.18)">TH</div>
+          <div class="plat-grammar-hint">Single clean observation</div>
+          <div class="plat-prompts">2</div>
+        </div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Engagement Lift</div>
+      <div class="lift-list">
+        <div class="lift-row"><div class="lift-plat" style="color:#1da1f2">X</div><div class="lift-bar-wrap"><div class="lift-bar-fill" style="width:71%;background:rgba(29,161,242,.5)"></div></div><div class="lift-val" style="color:#1da1f2">+41%</div></div>
+        <div class="lift-row"><div class="lift-plat" style="color:#60a5fa">LI</div><div class="lift-bar-wrap"><div class="lift-bar-fill" style="width:100%;background:rgba(10,102,194,.55)"></div></div><div class="lift-val" style="color:#60a5fa">+58%</div></div>
+        <div class="lift-row"><div class="lift-plat" style="color:var(--acc-lt)">IG</div><div class="lift-bar-wrap"><div class="lift-bar-fill" style="width:64%;background:rgba(225,29,72,.5)"></div></div><div class="lift-val" style="color:var(--acc-lt)">+37%</div></div>
+        <div class="lift-row"><div class="lift-plat" style="color:#f87171">YT</div><div class="lift-bar-wrap"><div class="lift-bar-fill" style="width:69%;background:rgba(255,0,0,.4)"></div></div><div class="lift-val" style="color:#f87171">+40%</div></div>
+        <div class="lift-row"><div class="lift-plat" style="color:var(--t3)">TH</div><div class="lift-bar-wrap"><div class="lift-bar-fill" style="width:55%;background:rgba(209,213,219,.3)"></div></div><div class="lift-val" style="color:var(--t3)">+32%</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Article Series</div>
+      <div class="series-nav">
+        <a class="sn-item"><span class="sn-num">01</span><span class="sn-title">How 9 Libraries Become One System</span></a>
+        <a class="sn-item"><span class="sn-num">02</span><span class="sn-title">The Context Brief</span></a>
+        <a class="sn-item"><span class="sn-num">03</span><span class="sn-title">Inside the Article Library</span></a>
+        <a class="sn-item"><span class="sn-num">04</span><span class="sn-title">Image + Video Libraries</span></a>
+        <a class="sn-item"><span class="sn-num">05</span><span class="sn-title">The Orchestrator</span></a>
+        <a class="sn-item current"><span class="sn-num">06</span><span class="sn-title">Social Distribution Suite</span></a>
+        <a class="sn-item"><span class="sn-num">07</span><span class="sn-title">SEO + AEO</span></a>
+        <a class="sn-item"><span class="sn-num">08</span><span class="sn-title">The CRM Library</span></a>
+        <a class="sn-item"><span class="sn-num">09</span><span class="sn-title">The Design Library</span></a>
+        <a class="sn-item"><span class="sn-num">10</span><span class="sn-title">The Complete Picture</span></a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- AUTHOR + RELATED -->
+<div class="author-section r">
+  <div class="author-inner">
+    <div>
+      <div class="author-av">T</div>
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Founder, Windfield IO</div>
+      <div class="author-bio">Building the AI-native content operations system for business operators who need predictable output, not AI experiments. Nine libraries. One brief. Coherent by architecture.</div>
+      <div class="author-links">
+        <a href="#" class="author-link">Twitter</a>
+        <a href="#" class="author-link">LinkedIn</a>
+        <a href="#" class="author-link">IO Platform</a>
+      </div>
+    </div>
+    <div class="author-divider"></div>
+    <div>
+      <div class="related-label">Continue Reading &mdash; Nine Libraries Article Series</div>
+      <div class="related-grid">
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-a"><div class="rel-thumb-dot" style="background:rgba(36,96,255,.2);border:1px solid rgba(36,96,255,.5);color:var(--blue-lt)">01</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(36,96,255,.5)">Series Overview</div>
+          <div class="rel-title">How 9 Content Libraries Become One Synchronized System</div>
+          <div class="rel-meta">9 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-b"><div class="rel-thumb-dot" style="background:rgba(29,185,84,.2);border:1px solid rgba(29,185,84,.5);color:#4ade80">05</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(29,185,84,.5)">Architecture</div>
+          <div class="rel-title">The Orchestrator: Episodic Memory &amp; Why IO Doesn&rsquo;t Get Stuck</div>
+          <div class="rel-meta">11 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-c"><div class="rel-thumb-dot" style="background:rgba(217,119,6,.2);border:1px solid rgba(217,119,6,.5);color:#fcd34d">07</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(217,119,6,.5)">Library Deep Dive</div>
+          <div class="rel-title">SEO + AEO: Winning Both Old Search and AI-Native Discovery</div>
+          <div class="rel-meta">10 min &middot; Planned</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#050507;border-top:1px solid rgba(255,255,255,.06);padding:56px 0 32px">
+  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
+    <div style="display:grid;grid-template-columns:2fr repeat(4,1fr);gap:40px;margin-bottom:40px">
+      <div>
+        <div style="font:700 18px/1 var(--sans);color:var(--t1);margin-bottom:12px;letter-spacing:-.02em">Wind<span style="font-style:italic;color:#1db954">field</span></div>
+        <p style="font:300 13px/1.6 var(--sans);color:var(--t3);max-width:280px">AI-native operations for commercial real estate. Intelligence, not information.</p>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Platform</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Home</a>
+          <a href="/about" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">About</a>
+          <a href="/portfolio" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Portfolio</a>
+          <a href="/pricing" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Resources</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="/blog" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Blog</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Documentation</a>
+          <a href="/contact" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Article Series</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">06 &mdash; Social Distribution</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">07 &mdash; SEO + AEO</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">08 &mdash; CRM Library</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">09 &mdash; Design Library</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">10 &mdash; Complete Picture</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:16px">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Privacy Policy</a>
+          <a href="#" style="font:400 13px/1 var(--sans);color:var(--t3);text-decoration:none">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,.06)">
+      <span style="font:300 12px/1 var(--sans);color:var(--t4)">2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div style="display:flex;gap:16px">
+        <a href="#" style="font:300 12px/1 var(--sans);color:var(--t4);text-decoration:none">Privacy</a>
+        <a href="#" style="font:300 12px/1 var(--sans);color:var(--t4);text-decoration:none">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+    <div class="ff-mcp"><span class="live-dot"></span>MCP Server Active</div>
+  </div>
+</div>
+
+<script>
+/* ━━ Platform Suite Tabs ━━ */
+function psTab(id, btn) {
+  document.querySelectorAll('.pst').forEach(function(t) { t.classList.remove('on'); });
+  document.querySelectorAll('.ps-panel').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('ps-' + id).classList.add('on');
+}
+
+/* ━━ Grammar card toggle ━━ */
+function toggleCard(card) {
+  var wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.grammar-card.open').forEach(function(c) { c.classList.remove('open'); });
+  if (!wasOpen) card.classList.add('open');
+}
+
+/* ━━ Hero platform highlight ━━ */
+function highlightPlat(el, color) {
+  document.querySelectorAll('.hv-platform').forEach(function(p) {
+    p.style.opacity = '0.5';
+  });
+  el.style.opacity = '1';
+  setTimeout(function() {
+    document.querySelectorAll('.hv-platform').forEach(function(p) {
+      p.style.opacity = '1';
+    });
+  }, 1400);
+}
+
+/* ━━ Pipeline strip ━━ */
+var FEEDS = [
+  {n:'Social',c:'#e11d48',ct:12},{n:'Article',c:'#4589FF',ct:8},
+  {n:'Image',c:'#1db954',ct:4},{n:'SEO',c:'#d97706',ct:4}
+];
+var pf = document.getElementById('ps-feeds');
+FEEDS.forEach(function(f, i) {
+  var chip = document.createElement('div'); chip.className = 'ps-chip';
+  chip.style.background = f.c + '14'; chip.style.border = '1px solid ' + f.c + '28'; chip.style.color = f.c;
+  var dot = document.createElement('div'); dot.className = 'ps-dot'; dot.style.background = f.c;
+  chip.appendChild(dot);
+  chip.appendChild(document.createTextNode(f.n + ' \u00b7 ' + f.ct));
+  pf.appendChild(chip);
+  if (i < FEEDS.length - 1) {
+    var a = document.createElement('div'); a.className = 'ps-arrow'; a.textContent = '\u00b7';
+    pf.appendChild(a);
+  }
+});
+
+/* ━━ Attribution ━━ */
+var attrOn = false;
+function toggleAttr() {
+  attrOn = !attrOn;
+  document.body.classList.toggle('attr', attrOn);
+  var b = document.getElementById('attr-btn');
+  b.classList.toggle('on', attrOn);
+  b.textContent = attrOn ? 'Hide Sources' : 'Show Library Sources';
+  if (attrOn) {
+    document.querySelectorAll('.src').forEach(function(el) {
+      if (!el.querySelector('.ann-corners')) {
+        var c = document.createElement('div'); c.className = 'ann-corners';
+        c.innerHTML = '<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';
+        el.appendChild(c);
+      }
+    });
+  }
+}
+
+/* ━━ Pipeline toggle ━━ */
+function togglePipe() {
+  var strip = document.getElementById('pstrip');
+  var map = document.getElementById('pipemap');
+  var btn = document.getElementById('pipe-btn');
+  if (map.classList.contains('open')) {
+    map.classList.remove('open'); strip.classList.remove('open'); btn.classList.remove('on');
+  } else if (strip.classList.contains('open')) {
+    strip.classList.remove('open'); map.classList.add('open'); btn.classList.add('on');
+  } else {
+    strip.classList.add('open'); btn.classList.add('on');
+  }
+}
+
+/* ━━ Social tabs (meta distribution section) ━━ */
+function tab(id, btn) {
+  document.querySelectorAll('.sb-tab').forEach(function(t) { t.classList.remove('on'); });
+  document.querySelectorAll('.sb-platform').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('tab-' + id).classList.add('on');
+}
+
+/* ━━ FAQ ━━ */
+function toggleFaq(qEl) {
+  var item = qEl.parentElement;
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i) {
+    i.classList.remove('open');
+    i.querySelector('.faq-toggle').textContent = '+';
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    qEl.querySelector('.faq-toggle').textContent = '\u00d7';
+  }
+}
+
+/* ━━ Progress bar ━━ */
+window.addEventListener('scroll', function() {
+  var d = document.documentElement;
+  document.getElementById('prog').style.width = ((window.scrollY / (d.scrollHeight - d.clientHeight)) * 100) + '%';
+}, { passive: true });
+
+/* ━━ Scroll reveal ━━ */
+var ro = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.r').forEach(function(el) { ro.observe(el); });
+
+/* ━━ ToC active tracking ━━ */
+var sections = ['s-grammar','s-cards','s-suite','s-bench','s-social','s-seo','s-crm','s-faq'];
+var tocItems = document.querySelectorAll('.toc-item');
+var tocObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      var idx = sections.indexOf(e.target.id);
+      if (idx > -1) {
+        tocItems.forEach(function(t) { t.classList.remove('active'); });
+        if (tocItems[idx]) tocItems[idx].classList.add('active');
+      }
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(function(s) {
+  var el = document.getElementById(s);
+  if (el) tocObserver.observe(el);
+});
+
+function scrollToSection(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,2409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inside the Article Library: How the Writing Engine Produces Long-Form at Scale &mdash; Windfield IO</title>
+<meta name="description" content="12 prompts. Drop cap to footnote. How the IO Article Library chains prompts to produce publication-ready editorial without a single revision loop.">
+<meta name="keywords" content="ai article writing system, prompt chain content, long-form ai content, article library workflow">
+<meta property="og:title" content="Inside the Article Library: How the Writing Engine Produces Long-Form at Scale">
+<meta property="og:description" content="12 prompts. Drop cap to footnote. How the IO Article Library chains prompts to produce publication-ready editorial without a single revision loop.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Inside the Article Library: How the Writing Engine Produces Long-Form at Scale","description":"12 prompts. Drop cap to footnote. How the IO Article Library chains decomposed prompts to produce publication-ready editorial without a single revision loop — with model routing, latency breakdown, and actual prompt structure reveals.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"IntelligentOperations.ai"}},"publisher":{"@type":"Organization","name":"IntelligentOperations.ai"},"datePublished":"2026-03-29","articleSection":"Library Deep Dive","keywords":["ai article writing system","prompt chain content","long-form ai","article library workflow","prompt engineering"],"wordCount":3400,"timeRequired":"PT10M","isPartOf":{"@type":"CreativeWorkSeries","name":"Nine Libraries Article Series","position":3}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How does the IO Article Library produce long-form content?","acceptedAnswer":{"@type":"Answer","text":"The IO Article Library runs 12 sequential prompts, each scoped to a single task: brief analysis, structure design, lede writing, section bodies (one per section), pull quote selection, footnote generation, meta description, and related article suggestions. Each prompt receives only its necessary inputs — not the entire prior conversation — which keeps quality consistent from the first section to the last. The full chain runs in under two minutes on Haiku with Sonnet quality passes at the beginning and end."}},
+{"@type":"Question","name":"What is prompt decomposition in AI writing?","acceptedAnswer":{"@type":"Answer","text":"Prompt decomposition means breaking a complex task — like writing a 2,500-word article — into discrete, single-responsibility prompts that each produce one deterministic output. Instead of 'write me a good article about X,' a decomposed chain runs: analyze the brief, design the structure, write the lede, write section one, write section two, select the pull quote, generate the meta description. Each prompt is easier for the model, produces a better output, and fails gracefully — a weak section two doesn't contaminate section three."}},
+{"@type":"Question","name":"Which AI models does the IO Article Library use?","acceptedAnswer":{"@type":"Answer","text":"The IO Article Library uses a two-model routing strategy. Prompts 1 through 3 (brief analysis, voice calibration, structure design) run on Claude Sonnet 4 — these are reasoning-heavy tasks where quality matters most. Prompts 4 through 10 (section bodies, transitions) run on Claude Haiku — faster and cheaper for high-volume execution tasks. Prompts 11 and 12 (quality pass, meta generation) return to Sonnet for a final coherence review. This routing reduces cost by approximately 65% versus running all prompts on Sonnet."}},
+{"@type":"Question","name":"Why does the Article Library use 12 prompts instead of one?","acceptedAnswer":{"@type":"Answer","text":"A single 'write me a 2,500-word article' prompt produces inconsistent quality: strong openings that weaken by section three, voice drift across sections, and no structural control. The 12-prompt chain solves each of these: structure is locked before any body copy is written, each section prompt receives only the section brief plus the locked structure (not prior sections), and a final quality pass checks coherence. The result is quality that stays consistent from paragraph one to the conclusion — which is impossible with a single prompt."}},
+{"@type":"Question","name":"How long does the Article Library take to produce a complete article?","acceptedAnswer":{"@type":"Answer","text":"The Article Library completes a full 12-prompt chain — producing a publication-ready article of approximately 2,000 to 2,800 words — in 90 to 110 seconds. Prompts 1 through 3 on Sonnet take approximately 25 seconds combined. The 7 execution prompts on Haiku run in approximately 55 seconds. The 2 quality-pass prompts on Sonnet take approximately 20 seconds. The full article is assembled and returned to the Orchestrator as a single structured episode in under two minutes."}}
+]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"IntelligentOperations.ai","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Content Operations","item":"https://intelligentoperations.ai/content-ops"},
+{"@type":"ListItem","position":3,"name":"Nine Libraries Series","item":"https://intelligentoperations.ai/content-ops/series"},
+{"@type":"ListItem","position":4,"name":"Inside the Article Library","item":"https://intelligentoperations.ai/content-ops/article-library-writing-engine"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+
+/* ================================================================
+   WINDFIELD IO — ARTICLE SERIES TEMPLATE
+   Design System Tokens + Full Article Page
+   ================================================================ */
+:root {
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --wf-brand: #1db954; --wf-brand-hover: #17a34a; --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b; --wf-bg-elevated: #111113; --wf-bg-sunken: #050507;
+  --wf-surface: #141417; --wf-surface-hover: #1a1a1e; --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa; --wf-fg-muted: #a1a1aa; --wf-fg-subtle: #71717a; --wf-fg-faint: #52525b;
+  --wf-border: #27272a; --wf-border-strong: #3f3f46; --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF; --wf-teal: #08BDBA; --wf-green: #42BE65; --wf-red: #E85D4A;
+  --wf-purple: #BE95FF; --wf-orange: #FF832B;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1); --wf-dur: 160ms;
+
+  /* Library node colors */
+  --lib-art: #4589FF; --lib-img: #1db954; --lib-vid: #FF832B;
+  --lib-soc: #E85D4A; --lib-des: #08BDBA; --lib-seo: #d97706;
+  --lib-crm: #BE95FF; --lib-con: #059669; --lib-tas: #6b7280;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+/* ================================================================
+   1. READING PROGRESS BAR
+   ================================================================ */
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:10000;width:0;transition:width 80ms linear;pointer-events:none}
+
+/* ================================================================
+   2. NAVBAR
+   ================================================================ */
+.navbar{position:sticky;top:0;z-index:500;background:rgba(9,9,11,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center}
+.nav-logo{font-family:var(--font-sans);font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-.02em;flex-shrink:0}
+.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-links{display:flex;align-items:center;gap:8px;margin-left:40px}
+.nav-link{font-size:13px;font-weight:400;color:var(--wf-fg-muted);padding:6px 12px;border-radius:var(--wf-r-sm);transition:color var(--wf-dur) var(--wf-ease)}
+.nav-link:hover,.nav-link.active{color:var(--wf-fg)}
+.nav-link.active{font-weight:500}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.nav-toggle{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--font-sans);letter-spacing:.04em;cursor:pointer;border:1px solid var(--wf-border);background:none;color:var(--wf-fg-subtle);transition:all var(--wf-dur) var(--wf-ease);display:flex;align-items:center;gap:6px}
+.nav-toggle:hover,.nav-toggle.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nav-toggle svg{width:12px;height:12px}
+.nav-cta{padding:7px 18px;border-radius:var(--wf-r-md);font:600 13px/1 var(--font-sans);cursor:pointer;border:none;background:var(--wf-brand);color:var(--wf-brand-fg);transition:background var(--wf-dur) var(--wf-ease)}
+.nav-cta:hover{background:var(--wf-brand-hover)}
+
+/* Mobile nav */
+.nav-hamburger{display:none;background:none;border:none;color:var(--wf-fg-muted);cursor:pointer;padding:4px}
+.nav-hamburger svg{width:20px;height:20px}
+@media(max-width:1024px){.nav-links{display:none}.nav-hamburger{display:block}}
+@media(max-width:768px){.nav-toggle{display:none}}
+
+/* ================================================================
+   PIPELINE STRIP
+   ================================================================ */
+#pipeline-strip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}
+#pipeline-strip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto;gap:12px}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);flex-shrink:0}
+.ps-feeds{display:flex;gap:5px;flex-shrink:0}
+.ps-chip{padding:4px 9px;border-radius:var(--wf-r-sm);font:600 9px/1 var(--font-sans);display:flex;align-items:center;gap:4px;flex-shrink:0;letter-spacing:.06em;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.ps-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ps-arrow{color:var(--wf-fg-faint);flex-shrink:0;display:flex;align-items:center}
+.ps-arrow svg{width:14px;height:14px}
+.ps-result{font:600 10px/1 var(--font-sans);color:var(--wf-brand);letter-spacing:.04em;flex-shrink:0;white-space:nowrap}
+@media(max-width:768px){.ps-result{display:none}}
+
+/* ================================================================
+   3. HERO
+   ================================================================ */
+.hero{position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-wrap{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.eye-tag{font:700 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-dot{width:4px;height:4px;border-radius:50%;background:var(--wf-fg-faint)}
+.eye-series{font:600 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+.hero h1{font-family:var(--font-sans);font-size:clamp(34px,5vw,58px);font-weight:700;line-height:1.08;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:17px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid rgba(255,255,255,.08);padding-top:20px;flex-wrap:wrap}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);display:flex;align-items:center;justify-content:center;font:700 14px/1 var(--font-sans);color:#fff;flex-shrink:0}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:rgba(255,255,255,.1);margin:0 18px}
+.h-date,.h-read{font-size:13px;color:var(--wf-fg-subtle)}
+.h-read{margin-left:14px}
+.hero-stamp{display:inline-flex;margin-top:20px;padding:4px 12px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);font:400 10px/1.4 var(--font-mono);color:var(--wf-fg-faint);letter-spacing:.06em}
+
+/* ── Hero Viz ── */
+.hero-viz{position:relative;height:500px;align-self:end}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);
+  border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.14) 0%,transparent 65%);animation:glow-pulse 4s ease-in-out infinite}
+@keyframes glow-pulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.15)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);
+  animation:scan-line 5s ease-in-out infinite;opacity:.4}
+@keyframes scan-line{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+
+/* Hub and spoke */
+.hub-spoke{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:320px;height:320px}
+.hub-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.3),rgba(29,185,84,.08));border:1.5px solid rgba(29,185,84,.5);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2}
+.hub-label{font:700 6px/1 var(--font-mono);letter-spacing:.12em;color:var(--wf-brand);text-transform:uppercase;text-align:center}
+.hub-sublabel{font:300 5px/1 var(--font-mono);color:rgba(29,185,84,.6);margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
+.spoke-node{position:absolute;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font:700 8px/1 var(--font-sans);letter-spacing:.06em;border:1px solid;z-index:2;transition:all .4s var(--wf-ease)}
+.spoke-node.glow{box-shadow:0 0 20px currentColor;transform:scale(1.2)}
+.spoke-line{position:absolute;top:50%;left:50%;transform-origin:0 0;height:1px;z-index:1;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0px,rgba(255,255,255,.08) 4px,transparent 4px,transparent 8px)}
+.spoke-line.active{background:repeating-linear-gradient(90deg,rgba(29,185,84,.4) 0px,rgba(29,185,84,.4) 4px,transparent 4px,transparent 8px)}
+
+.run-pipeline-btn{position:absolute;bottom:20px;right:20px;padding:8px 16px;border-radius:var(--wf-r-md);background:rgba(29,185,84,.12);border:1px solid rgba(29,185,84,.25);
+  font:600 11px/1 var(--font-sans);color:var(--wf-brand);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all var(--wf-dur) var(--wf-ease);z-index:3}
+.run-pipeline-btn:hover{background:rgba(29,185,84,.2);border-color:rgba(29,185,84,.4)}
+.run-pipeline-btn svg{width:12px;height:12px}
+
+@media(max-width:1024px){.hero-wrap{grid-template-columns:1fr;gap:40px}.hero-viz{height:380px;order:-1}.hviz-inner{right:0;height:380px}.hero-text{padding-bottom:48px}}
+@media(max-width:768px){.hero{padding:48px 0 0}.hero-viz{display:none}.h-sep{display:none;margin:8px 0}.hero-meta{flex-direction:column;align-items:flex-start;gap:10px}.h-read{margin-left:0}}
+
+/* ================================================================
+   4. ARTICLE LAYOUT
+   ================================================================ */
+.article-layout{max-width:1280px;margin:0 auto;padding:60px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:64px}
+@media(max-width:1024px){.article-layout{grid-template-columns:1fr;gap:40px}}
+
+/* ── Main Content ── */
+.article-main{min-width:0}
+
+/* Body text */
+.article-main p{font-size:17.5px;line-height:1.8;color:var(--wf-fg-muted);margin-bottom:24px}
+.article-main p strong{color:var(--wf-fg);font-weight:600}
+.article-main p a{color:var(--wf-blue);text-decoration:underline;text-underline-offset:3px;transition:color var(--wf-dur)}
+.article-main p a:hover{color:#6fa8ff}
+
+/* Headings */
+.article-main h2{font-family:var(--font-serif);font-size:30px;font-weight:700;color:var(--wf-fg);margin:56px 0 20px;line-height:1.25;letter-spacing:-.01em}
+.article-main h2:first-child{margin-top:0}
+.article-main h3{font-size:20px;font-weight:600;color:var(--wf-fg);margin:40px 0 16px}
+
+/* Drop cap */
+.drop-cap::first-letter{float:left;font-family:var(--font-serif);font-size:82px;line-height:.72;font-weight:700;color:var(--wf-blue);margin-right:12px;margin-top:8px}
+
+/* Footnote links */
+sup a{color:var(--wf-blue);font-size:11px;text-decoration:none;font-weight:600}
+sup a:hover{text-decoration:underline}
+
+/* ── Section IDs for scroll spy ── */
+[data-section]{scroll-margin-top:120px}
+
+/* ================================================================
+   4a. DIRECT ANSWER BOX
+   ================================================================ */
+.direct-answer{background:rgba(69,137,255,.06);border:1px solid rgba(69,137,255,.15);border-left:3px solid var(--wf-blue);border-radius:var(--wf-r-lg);padding:28px 32px;margin-bottom:40px}
+.da-label{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-blue);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.da-label svg{width:14px;height:14px}
+.da-question{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:12px;line-height:1.4}
+.da-answer{font-size:15px;line-height:1.7;color:var(--wf-fg-muted);margin-bottom:16px}
+.da-footer{display:flex;align-items:center;gap:8px;padding-top:14px;border-top:1px solid rgba(69,137,255,.1)}
+.da-badge{padding:3px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.1);font:600 9px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.06em}
+.da-source{font:300 11px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   4b. TABLE OF CONTENTS (inline)
+   ================================================================ */
+.toc-inline{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px 32px;margin-bottom:40px}
+.toc-inline-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:18px}
+.toc-inline ol{list-style:none;counter-reset:toc-c;display:grid;grid-template-columns:1fr 1fr;gap:6px 32px}
+.toc-inline li{counter-increment:toc-c}
+.toc-inline li a{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:var(--wf-r-sm);font-size:14px;color:var(--wf-fg-muted);transition:all var(--wf-dur) var(--wf-ease)}
+.toc-inline li a:hover{color:var(--wf-fg);background:rgba(255,255,255,.04)}
+.toc-inline li a::before{content:counter(toc-c,decimal-leading-zero);font:600 11px/1 var(--font-mono);color:var(--wf-fg-faint);width:24px;flex-shrink:0}
+@media(max-width:768px){.toc-inline ol{grid-template-columns:1fr}}
+
+/* ================================================================
+   4e/4i/4k. FIGURE CARDS
+   ================================================================ */
+.figure-card{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.figure-body{padding:32px;background:var(--wf-surface);min-height:200px;position:relative;overflow:hidden}
+.figure-caption{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border)}
+.fig-label{font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);flex-shrink:0}
+.fig-desc{font-size:12px;color:var(--wf-fg-subtle);flex:1}
+.fig-source{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint);margin-left:auto}
+
+/* Fig 01 hub-spoke horizontal */
+.fig01-flow{display:flex;align-items:center;justify-content:center;gap:0;padding:20px 0}
+.fig01-center{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,rgba(69,137,255,.2),rgba(69,137,255,.06));border:1.5px solid rgba(69,137,255,.4);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0;position:relative}
+.fig01-center-label{font:700 6px/1 var(--font-mono);color:var(--wf-blue);text-transform:uppercase;letter-spacing:.1em;text-align:center}
+.fig01-nodes{display:flex;flex-wrap:wrap;gap:8px;max-width:240px;justify-content:center}
+.fig01-node{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--font-sans);letter-spacing:.04em;border:1px solid}
+.fig01-connector{width:48px;height:1px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.1) 0px,rgba(255,255,255,.1) 4px,transparent 4px,transparent 8px);flex-shrink:0}
+
+/* Fig 02 Memory Context */
+.fig02-compare{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:20px 0}
+@media(max-width:600px){.fig02-compare{grid-template-columns:1fr}}
+.fig02-col{text-align:center}
+.fig02-label{font:700 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.fig02-bars{display:flex;align-items:flex-end;gap:3px;height:120px;justify-content:center}
+.fig02-bar{width:8px;border-radius:2px 2px 0 0;transition:height .3s}
+.fig02-status{margin-top:12px;font:700 10px/1 var(--font-mono);letter-spacing:.1em;padding:4px 10px;border-radius:var(--wf-r-sm);display:inline-block}
+
+/* Fig 03 Browser mockup */
+.fig03-browser{border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border)}
+.fig03-toolbar{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.fig03-dot{width:8px;height:8px;border-radius:50%}
+.fig03-urlbar{flex:1;margin-left:10px;padding:3px 10px;border-radius:4px;background:rgba(255,255,255,.05);font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.fig03-content{padding:20px;display:grid;grid-template-columns:180px 1fr;gap:16px;min-height:200px}
+.fig03-sidebar{display:flex;flex-direction:column;gap:8px}
+.fig03-sidebar-item{padding:6px 10px;border-radius:var(--wf-r-sm);font:500 10px/1 var(--font-sans);color:var(--wf-fg-subtle)}
+.fig03-sidebar-item.active{background:rgba(69,137,255,.1);color:var(--wf-blue)}
+.fig03-main{display:flex;flex-direction:column;gap:10px}
+.fig03-block{border-radius:var(--wf-r-sm);padding:12px;font:400 10px/1.4 var(--font-sans)}
+
+/* ================================================================
+   4g. PULL QUOTE
+   ================================================================ */
+.pull-quote{background:var(--wf-surface);border:1px solid var(--wf-border);border-left:3px solid var(--wf-blue);border-radius:var(--wf-r-lg);padding:32px 36px;margin:40px 0;position:relative}
+.pq-mark{font-family:var(--font-serif);font-size:72px;line-height:1;color:rgba(69,137,255,.15);position:absolute;top:12px;left:20px}
+.pq-text{font-family:var(--font-serif);font-size:22px;font-style:italic;line-height:1.55;color:var(--wf-fg);margin-bottom:16px;padding-left:20px}
+.pq-text span{color:var(--wf-blue)}
+.pq-attr{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);padding-left:20px}
+
+/* ================================================================
+   4h. PIPELINE DIAGRAM
+   ================================================================ */
+.pipeline-diagram{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.pd-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.pd-title{font:600 14px/1 var(--font-sans);color:var(--wf-fg)}
+.pd-badge{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.08);border:1px solid rgba(69,137,255,.15);font:500 10px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.04em}
+.pd-body{padding:32px 24px;background:var(--wf-surface)}
+.pd-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px;flex-wrap:wrap}
+.pd-node{padding:10px 16px;border-radius:var(--wf-r-md);border:1px solid var(--wf-border);background:rgba(255,255,255,.03);text-align:center;flex-shrink:0}
+.pd-node-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:3px}
+.pd-node-name{font:600 12px/1 var(--font-sans);color:var(--wf-fg)}
+.pd-arrow{width:36px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);flex-shrink:0}
+.pd-arrow svg{width:16px;height:16px}
+.pd-dispatch{position:relative;padding:10px 16px;border-radius:var(--wf-r-md);border:1px dashed rgba(69,137,255,.3);background:rgba(69,137,255,.04);text-align:center}
+.pd-dispatch-lines{display:flex;gap:2px;justify-content:center;margin-top:4px}
+.pd-dispatch-line{width:1px;height:12px;background:rgba(69,137,255,.3)}
+.pd-output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:600px){.pd-output-grid{grid-template-columns:1fr 1fr}}
+.pd-output-item{padding:10px 14px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.03);border:1px solid var(--wf-border);font:500 11px/1.3 var(--font-sans);color:var(--wf-fg-muted)}
+.pd-output-item strong{display:block;color:var(--wf-fg);font-weight:600;margin-bottom:2px;font-size:12px}
+
+/* ================================================================
+   4j. VIDEO BLOCK
+   ================================================================ */
+.video-block{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.video-player{position:relative;height:300px;background:linear-gradient(135deg,#0a0f14,#0e1a12);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.video-play{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;transition:all .3s var(--wf-ease)}
+.video-play svg{width:24px;height:24px;color:var(--wf-fg)}
+.video-player:hover .video-play{background:rgba(255,255,255,.15);transform:scale(1.08)}
+.video-overlay{position:absolute;bottom:16px;left:16px;right:16px;display:flex;align-items:flex-end;justify-content:space-between}
+.video-title{font:600 14px/1.3 var(--font-sans);color:var(--wf-fg)}
+.video-dur{font:500 11px/1 var(--font-mono);color:var(--wf-fg-subtle);background:rgba(0,0,0,.5);padding:4px 8px;border-radius:var(--wf-r-sm)}
+.video-footer{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border)}
+.video-angle{padding:3px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.1);font:600 9px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.06em}
+.video-desc{font-size:12px;color:var(--wf-fg-subtle);flex:1}
+.video-src{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   4l. SOCIAL BLOCK
+   ================================================================ */
+.social-block{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.social-tabs{display:flex;border-bottom:1px solid var(--wf-border);background:var(--wf-bg-elevated)}
+.social-tab{flex:1;padding:12px 16px;font:600 12px/1 var(--font-sans);color:var(--wf-fg-subtle);cursor:pointer;border:none;background:none;text-align:center;transition:all var(--wf-dur);border-bottom:2px solid transparent}
+.social-tab:hover{color:var(--wf-fg-muted)}
+.social-tab.active{color:var(--wf-fg);border-bottom-color:var(--wf-blue)}
+.social-panel{display:none;padding:24px;background:var(--wf-surface)}
+.social-panel.active{display:block}
+
+/* Twitter mockup */
+.tweet-card{background:#fff;border-radius:var(--wf-r-lg);padding:20px;max-width:500px;margin:0 auto}
+.tweet-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tweet-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA)}
+.tweet-name{font:700 14px/1.2 var(--font-sans);color:#0f1419}
+.tweet-handle{font:400 13px/1 var(--font-sans);color:#536471}
+.tweet-text{font:400 15px/1.5 var(--font-sans);color:#0f1419;margin-bottom:16px}
+.tweet-text b{color:#1d9bf0}
+.tweet-actions{display:flex;gap:40px}
+.tweet-action{font:400 12px/1 var(--font-sans);color:#536471;display:flex;align-items:center;gap:6px}
+.tweet-action svg{width:16px;height:16px}
+
+/* LinkedIn mockup */
+.linkedin-card{background:#fff;border-radius:var(--wf-r-lg);padding:20px;max-width:500px;margin:0 auto}
+.li-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.li-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);flex-shrink:0}
+.li-name{font:700 14px/1.2 var(--font-sans);color:#000}
+.li-title{font:400 12px/1.3 var(--font-sans);color:#666;margin-top:2px}
+.li-time{font:400 11px/1 var(--font-sans);color:#999;margin-top:2px}
+.li-text{font:400 14px/1.6 var(--font-sans);color:#333;margin-bottom:16px}
+.li-stats{display:flex;gap:20px;padding-top:12px;border-top:1px solid #e5e5e5}
+.li-stat{font:400 12px/1 var(--font-sans);color:#666}
+
+/* Instagram mockup */
+.insta-card{background:#1a1a2e;border-radius:var(--wf-r-lg);overflow:hidden;max-width:500px;margin:0 auto}
+.insta-visual{height:200px;background:linear-gradient(135deg,#0d1117,#1a1a2e,#0d1117);display:flex;align-items:center;justify-content:center;position:relative}
+.insta-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center}
+.insta-icon svg{width:24px;height:24px;color:#fff}
+.insta-caption{padding:16px;font:400 13px/1.5 var(--font-sans);color:#e0e0e0}
+.insta-caption strong{color:#fff}
+
+/* ================================================================
+   4m. SEO BLOCK
+   ================================================================ */
+.seo-block{background:rgba(255,131,43,.04);border:1px solid rgba(255,131,43,.15);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.seo-header{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid rgba(255,131,43,.1)}
+.seo-badge{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(255,131,43,.12);font:700 9px/1 var(--font-mono);color:var(--wf-orange);letter-spacing:.1em}
+.seo-title{font:600 14px/1 var(--font-sans);color:var(--wf-fg)}
+.seo-body{padding:24px}
+
+/* Google SERP mockup */
+.serp-card{background:#fff;border-radius:var(--wf-r-md);padding:20px;margin-bottom:20px}
+.serp-url{font:400 12px/1 var(--font-sans);color:#202124;margin-bottom:4px}
+.serp-url span{color:#5f6368}
+.serp-title{font:400 20px/1.3 var(--font-sans);color:#1a0dab;margin-bottom:6px;cursor:pointer}
+.serp-title:hover{text-decoration:underline}
+.serp-desc{font:400 14px/1.5 var(--font-sans);color:#4d5156}
+
+/* AEO panel */
+.aeo-panel{background:rgba(255,255,255,.04);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);padding:16px 20px;margin-bottom:16px}
+.aeo-label{font:700 9px/1 var(--font-mono);letter-spacing:.1em;color:var(--wf-orange);margin-bottom:10px;text-transform:uppercase}
+.aeo-question{font:600 15px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:8px}
+.aeo-answer{font:400 14px/1.6 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* Keyword pills */
+.keyword-pills{display:flex;flex-wrap:wrap;gap:6px}
+.keyword-pill{padding:4px 12px;border-radius:20px;background:rgba(255,131,43,.08);border:1px solid rgba(255,131,43,.15);font:500 11px/1 var(--font-sans);color:var(--wf-orange)}
+
+/* ================================================================
+   4n. CRM BLOCK
+   ================================================================ */
+.crm-block{border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0;position:relative}
+.crm-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(190,149,255,.06),rgba(190,149,255,.02));border:1px solid rgba(190,149,255,.15);border-radius:var(--wf-r-lg)}
+.crm-orb{position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(190,149,255,.12),transparent 70%);pointer-events:none}
+.crm-inner{position:relative;padding:40px 32px}
+.crm-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:40px}
+@media(max-width:768px){.crm-grid{grid-template-columns:1fr}}
+.crm-text .crm-eyebrow{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-purple);margin-bottom:12px}
+.crm-text h3{font:700 26px/1.2 var(--font-sans);color:var(--wf-fg);margin-bottom:12px;letter-spacing:-.02em}
+.crm-text p{font-size:15px;color:var(--wf-fg-muted);line-height:1.6}
+.crm-form{display:flex;flex-direction:column;gap:10px}
+.crm-input{padding:10px 14px;border-radius:var(--wf-r-md);border:1px solid var(--wf-border);background:rgba(255,255,255,.04);color:var(--wf-fg);font:400 14px/1 var(--font-sans);outline:none;transition:border-color var(--wf-dur)}
+.crm-input:focus{border-color:var(--wf-purple)}
+.crm-input::placeholder{color:var(--wf-fg-faint)}
+.crm-submit{padding:10px 20px;border-radius:var(--wf-r-md);border:none;background:var(--wf-purple);color:#fff;font:600 14px/1 var(--font-sans);cursor:pointer;transition:opacity var(--wf-dur)}
+.crm-submit:hover{opacity:.85}
+.crm-privacy{font:300 11px/1.4 var(--font-mono);color:var(--wf-fg-faint);margin-top:4px}
+
+/* Nurture sequence */
+.nurture-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:16px}
+.nurture-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:768px){.nurture-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.nurture-grid{grid-template-columns:1fr 1fr}}
+.nurture-card{padding:14px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border);text-align:center}
+.nurture-day{font:700 10px/1 var(--font-mono);color:var(--wf-purple);margin-bottom:6px;letter-spacing:.08em}
+.nurture-label{font:500 11px/1.3 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* ================================================================
+   4o. FAQ
+   ================================================================ */
+.faq-section{margin:56px 0 40px}
+.faq-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.faq-title{font:700 24px/1 var(--font-sans);color:var(--wf-fg);letter-spacing:-.02em}
+.faq-count{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.05);font:600 11px/1 var(--font-mono);color:var(--wf-fg-subtle)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-md);margin-bottom:8px;overflow:hidden;transition:border-color var(--wf-dur)}
+.faq-item.open{border-color:var(--wf-border-strong)}
+.faq-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;text-align:left}
+.faq-question{font:500 15px/1.4 var(--font-sans);color:var(--wf-fg)}
+.faq-icon{width:20px;height:20px;flex-shrink:0;color:var(--wf-fg-subtle);transition:transform .25s var(--wf-ease)}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease)}
+.faq-answer-inner{padding:0 20px 20px;font-size:14px;line-height:1.7;color:var(--wf-fg-muted)}
+
+/* ================================================================
+   4p. REFERENCES
+   ================================================================ */
+.references{margin-top:56px;padding-top:32px;border-top:1px solid var(--wf-border)}
+.ref-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:20px}
+.ref-list{display:flex;flex-direction:column;gap:14px}
+.ref-item{display:flex;gap:12px;align-items:flex-start}
+.ref-num{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font:700 10px/1 var(--font-mono);color:var(--wf-fg-subtle);flex-shrink:0}
+.ref-text{font:400 13px/1.5 var(--font-sans);color:var(--wf-fg-subtle)}
+.ref-text a{color:var(--wf-blue);text-decoration:underline;text-underline-offset:2px}
+
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
+.article-sidebar{position:relative}
+@media(max-width:1024px){.article-sidebar{order:-1}}
+.sidebar-sticky{position:sticky;top:80px;display:flex;flex-direction:column;gap:24px}
+
+/* Sidebar TOC */
+.stoc{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.stoc-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:16px}
+.stoc-list{display:flex;flex-direction:column;gap:2px}
+.stoc-link{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:var(--wf-r-sm);font:400 12px/1.3 var(--font-sans);color:var(--wf-fg-subtle);transition:all var(--wf-dur) var(--wf-ease);text-decoration:none}
+.stoc-link:hover{color:var(--wf-fg-muted);background:rgba(255,255,255,.03)}
+.stoc-link.active{color:var(--wf-fg);background:rgba(69,137,255,.08)}
+.stoc-dot{width:5px;height:5px;border-radius:50%;background:var(--wf-border-strong);flex-shrink:0;transition:background var(--wf-dur)}
+.stoc-link.active .stoc-dot{background:var(--wf-blue)}
+
+/* Sidebar stats */
+.sidebar-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sstat{padding:14px;border-radius:var(--wf-r-md);background:var(--wf-surface);border:1px solid var(--wf-border);text-align:center}
+.sstat-val{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:4px}
+.sstat-label{font:400 10px/1 var(--font-mono);color:var(--wf-fg-faint);text-transform:uppercase;letter-spacing:.08em}
+
+/* Sidebar libraries */
+.sidebar-libs{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.slib-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.slib-list{display:flex;flex-direction:column;gap:6px}
+.slib-item{display:flex;align-items:center;gap:10px;padding:5px 0}
+.slib-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.slib-name{font:400 12px/1 var(--font-sans);color:var(--wf-fg-muted);flex:1}
+.slib-count{font:500 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* Sidebar series nav */
+.sidebar-series{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.sseries-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.sseries-list{display:flex;flex-direction:column;gap:4px}
+.sseries-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--wf-r-sm);font:400 12px/1.3 var(--font-sans);color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.sseries-item:hover{background:rgba(255,255,255,.03);color:var(--wf-fg-muted)}
+.sseries-item.current{background:rgba(69,137,255,.08);color:var(--wf-blue);font-weight:500}
+.sseries-num{font:600 10px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.sseries-item.current .sseries-num{color:var(--wf-blue)}
+
+/* ================================================================
+   5. AUTHOR SECTION
+   ================================================================ */
+.author-section{max-width:1280px;margin:0 auto;padding:0 32px 80px}
+.author-inner{border-top:1px solid var(--wf-border);padding-top:48px;display:grid;grid-template-columns:320px 1px 1fr;gap:40px;align-items:start}
+@media(max-width:900px){.author-inner{grid-template-columns:1fr;gap:32px}.author-divider{display:none}}
+.author-card{display:flex;flex-direction:column;align-items:center;text-align:center}
+.author-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);display:flex;align-items:center;justify-content:center;font:700 28px/1 var(--font-sans);color:#fff;margin-bottom:16px}
+.author-name{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:4px}
+.author-role{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);margin-bottom:14px}
+.author-bio{font:300 13px/1.6 var(--font-sans);color:var(--wf-fg-muted);max-width:280px;margin-bottom:18px}
+.author-socials{display:flex;gap:10px}
+.author-social{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.author-social:hover{background:rgba(255,255,255,.08);color:var(--wf-fg)}
+.author-social svg{width:14px;height:14px}
+.author-divider{background:var(--wf-border);width:1px}
+
+/* Related articles */
+.related-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:20px}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:768px){.related-grid{grid-template-columns:1fr}}
+.related-card{border-radius:var(--wf-r-lg);overflow:hidden;border:1px solid var(--wf-border);transition:border-color var(--wf-dur);cursor:pointer}
+.related-card:hover{border-color:var(--wf-border-strong)}
+.related-thumb{height:100px;background:var(--wf-surface);position:relative;overflow:hidden}
+.related-thumb-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.related-thumb-pattern{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:20px 20px}
+.related-info{padding:14px}
+.related-tag{font:600 9px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wf-blue);margin-bottom:8px}
+.related-card-title{font:600 13px/1.3 var(--font-sans);color:var(--wf-fg);margin-bottom:8px}
+.related-meta{font:400 11px/1 var(--font-sans);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   6. FOOTER
+   ================================================================ */
+.footer{background:var(--wf-bg-sunken);border-top:1px solid var(--wf-border);padding:56px 0 32px}
+.footer-inner{max-width:1280px;margin:0 auto;padding:0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:40px;margin-bottom:40px}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}}
+.footer-brand{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:12px;letter-spacing:-.02em}
+.footer-brand span{font-style:italic;color:var(--wf-brand)}
+.footer-desc{font:300 13px/1.6 var(--font-sans);color:var(--wf-fg-subtle);max-width:280px}
+.footer-col-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:8px}
+.footer-link{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-link.active{color:var(--wf-blue)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--wf-border)}
+.footer-copy{font:300 12px/1 var(--font-sans);color:var(--wf-fg-faint)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{font:300 12px/1 var(--font-sans);color:var(--wf-fg-faint);transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg-subtle)}
+
+/* ================================================================
+   ANIMATIONS / SCROLL REVEAL
+   ================================================================ */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s var(--wf-ease),transform .6s var(--wf-ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+
+/* Article-specific styles */
+
+:root{
+  --void:var(--wf-bg);--deep:#0d0d10;--dark:#111116;--mid:#18181f;--lift:#252530;
+  --cream:#f2ede6;--cream2:#e8e2d9;--t1:#f2ede6;--t2:#9e9a93;--t3:#5c5956;--t4:#36342f;
+  --blue:#4589FF;--blue-lt:#6fa8ff;--green:#1db954;--amber:#e8a000;--red:#e03030;
+  --purple:#8b5cf6;--teal:#0891b2;--rose:#e11d48;--olive:#d97706;
+  /* Article 03 accent: warm gold — the craft color */
+  --acc:#f59e0b;--acc-lt:#fcd34d;--acc-dim:rgba(245,158,11,.15);--acc-border:rgba(245,158,11,.25);
+  --border:rgba(242,237,230,.06);--border2:rgba(242,237,230,.1);--border3:rgba(242,237,230,.16);
+  --serif:"Playfair Display",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",'Fira Code',monospace;
+  --ease:cubic-bezier(.25,.46,.45,.94);--spring:cubic-bezier(.34,1.56,.64,1);
+  --c-art:#4589FF;--c-img:#1db954;--c-vid:#e8a000;--c-soc:#e11d48;
+  --c-des:#0891b2;--c-seo:#d97706;--c-crm:#8b5cf6;--c-con:#059669;--c-tas:#6b7280;
+  /* model colors */
+  --sonnet:#818cf8;--haiku:#34d399;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+/* ━━ ATTRIBUTION ━━ */
+.src{position:relative}
+.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}
+.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}
+.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}
+body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-art);outline-offset:3px}
+body.attr .img{outline:1.5px solid var(--c-img);outline-offset:3px}
+body.attr .des{outline:1.5px solid var(--c-des);outline-offset:3px}
+body.attr .seo{outline:1.5px solid var(--c-seo);outline-offset:3px}
+body.attr .crm{outline:1.5px solid var(--c-crm);outline-offset:3px}
+body.attr .soc{outline:1.5px solid var(--c-soc);outline-offset:3px}
+body.attr .tas{outline:1.5px solid var(--c-tas);outline-offset:3px}
+.art .src-tag{background:var(--c-art);color:#fff}.img .src-tag{background:var(--c-img);color:#fff}
+.des .src-tag{background:var(--c-des);color:#fff}.seo .src-tag{background:var(--c-seo);color:#fff}
+.crm .src-tag{background:var(--c-crm);color:#fff}.soc .src-tag{background:var(--c-soc);color:#fff}
+.tas .src-tag{background:var(--c-tas);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-art)}body.attr .img .ann-c{border-color:var(--c-img)}
+body.attr .seo .ann-c{border-color:var(--c-seo)}body.attr .crm .ann-c{border-color:var(--c-crm)}
+body.attr .tas .ann-c{border-color:var(--c-tas)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+
+/* ━━ PROGRESS ━━ */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--acc);z-index:9999;width:0;transition:width .1s linear}
+
+/* ━━ NAV ━━ */
+nav{position:sticky;top:0;z-index:500;background:rgba(8,8,10,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border-subtle);height:52px;display:flex;align-items:center}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center;gap:0}
+.nav-logo{font-family:var(--font-serif);font-size:18px;font-weight:700;color:var(--wf-fg);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}
+.nav-logo span{font-style:italic;color:var(--wf-blue)}
+.nav-rule{width:1px;height:16px;background:var(--wf-border);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--font-sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--ease)}
+.nbtn-ghost{background:none;border:1px solid var(--wf-border);color:var(--wf-fg-subtle)}
+.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--wf-brand);display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ━━ PIPELINE STRIP ━━ */
+#pstrip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border-subtle);overflow:hidden;max-height:0;transition:max-height .35s var(--ease)}
+#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;gap:0;overflow-x:auto}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}
+.ps-chip{padding:4px 10px;border-radius:4px;font:600 10px/1 var(--font-sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}
+.ps-arrow{font-size:10px;color:var(--wf-fg-faint);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--font-sans);color:var(--wf-brand);letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+
+/* ━━ PIPELINE MAP ━━ */
+#pipemap{background:var(--wf-surface);border-bottom:1px solid var(--wf-border-subtle);overflow:hidden;max-height:0;transition:max-height .5s var(--ease)}
+#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.pm-title span{font-weight:300;color:var(--wf-fg-subtle)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(245,158,11,.5),transparent);animation:scan2 2s ease-in-out infinite;margin:10px 0}
+@keyframes scan2{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-flow::-webkit-scrollbar{height:2px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--wf-border);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--font-sans);color:var(--wf-fg)}
+.pm-node-sub{font:300 8px/1 var(--font-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:6px;text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}
+.pm-lib-name{font:700 7px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.pm-lib-count{font:300 8px/1 var(--font-mono);color:var(--wf-fg-faint);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--wf-border-subtle)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--font-mono);color:var(--wf-fg-subtle)}
+.pm-meta-n{font:700 11px/1 var(--font-mono);color:var(--wf-fg)}
+
+/* ━━ HERO ━━ */
+.hero{background:var(--wf-bg);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border-subtle)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 55% 50% at 72% 35%,rgba(245,158,11,.06) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 60% at 15% 80%,rgba(36,96,255,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--wf-border-subtle) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border-subtle) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-divider{width:20px;height:1px;background:var(--wf-fg-faint)}
+.eye-series{font:600 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc);opacity:.8}
+h1{font-family:var(--font-serif);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+h1 em{font-style:italic;color:var(--acc-lt)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--wf-border);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc),var(--wf-blue));display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:var(--wf-border);margin:0 18px}
+.h-date{font-size:13px;color:var(--wf-fg-subtle)}
+.h-read{font-size:13px;color:var(--wf-fg-subtle);margin-left:14px}
+
+/* ━━ HERO VIZ — Article 03: 12-step prompt chain ━━ */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#0a0800 0%,#120e00 55%,#080600 100%);
+  border-radius:16px 16px 0 0;border:1px solid rgba(245,158,11,.1);border-bottom:none;overflow:hidden;cursor:crosshair}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(245,158,11,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,158,11,.08) 0%,transparent 65%);
+  animation:gpulse3 4s ease-in-out infinite}
+@keyframes gpulse3{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.08)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(245,158,11,.35) 30%,rgba(252,211,77,.6) 50%,rgba(245,158,11,.35) 70%,transparent);
+  animation:scan 6s ease-in-out infinite;opacity:.4}
+@keyframes scan{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+
+/* Chain nodes — arranged in a flowing S-curve */
+.chain-node{
+  position:absolute;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:4px;z-index:10;cursor:pointer;
+}
+.cn-circle{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font:700 9px/1 var(--font-mono);letter-spacing:.06em;
+  transition:transform .2s var(--spring),box-shadow .25s;
+  position:relative;
+}
+.cn-circle:hover{transform:scale(1.18)}
+.cn-circle.sonnet{background:rgba(129,140,248,.15);border:1.5px solid rgba(129,140,248,.5);color:#818cf8}
+.cn-circle.haiku{background:rgba(52,211,153,.1);border:1.5px solid rgba(52,211,153,.4);color:#34d399}
+.cn-circle.done{box-shadow:0 0 16px currentColor}
+.cn-num{font:700 7px/1 var(--font-mono);color:rgba(242,237,230,.22);white-space:nowrap}
+.cn-label{font:500 7px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:rgba(242,237,230,.2);white-space:nowrap;text-align:center;max-width:56px}
+/* Model badge on node */
+.cn-model{
+  position:absolute;top:-8px;right:-8px;
+  padding:1px 4px;border-radius:2px;
+  font:700 6px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;
+}
+.cn-model.s{background:rgba(129,140,248,.2);color:#818cf8;border:1px solid rgba(129,140,248,.35)}
+.cn-model.h{background:rgba(52,211,153,.12);color:#34d399;border:1px solid rgba(52,211,153,.25)}
+/* SVG connector lines */
+.hv-svg3{position:absolute;inset:0;pointer-events:none;overflow:visible}
+/* Status / readout */
+.hv-readout3{position:absolute;bottom:16px;left:16px;font:300 8px/1.8 var(--font-mono);color:rgba(252,211,77,.28);letter-spacing:.06em}
+.hv-badge3{position:absolute;top:14px;right:14px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(252,211,77,.22)}
+.hv-run-btn{
+  position:absolute;bottom:20px;right:20px;z-index:20;
+  padding:7px 16px;border-radius:20px;
+  background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);
+  color:var(--acc-lt);font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;
+}
+.hv-run-btn:hover{background:rgba(245,158,11,.25);border-color:var(--acc-lt)}
+/* Model legend */
+.hv-legend{
+  position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:5px;z-index:10;
+}
+.hv-leg-item{display:flex;align-items:center;gap:5px;font:700 7px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+.hv-leg-dot{width:6px;height:6px;border-radius:2px}
+
+/* ━━ LAYOUT ━━ */
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}
+.sidebar{position:sticky;top:72px}
+
+/* ━━ DIRECT ANSWER BOX ━━ */
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;
+  background:linear-gradient(135deg,rgba(245,158,11,.05),rgba(245,158,11,.02));
+  border:1px solid rgba(245,158,11,.2);border-left:3px solid var(--acc);
+  border-radius:10px;position:relative;overflow:hidden}
+.dab-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc-lt);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dab-label::before{content:'\25B8';font-size:9px}
+.dab-q{font:600 15px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:10px;letter-spacing:-.01em}
+.dab-a{font:300 14px/1.72 var(--font-sans);color:var(--cream2)}
+.dab-a strong{font-weight:600;color:var(--wf-fg)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}
+.dab-source{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(245,158,11,.08);color:rgba(245,158,11,.5);border:1px solid rgba(245,158,11,.18)}
+
+/* ━━ TOC INLINE ━━ */
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:10px}
+.toc-inline-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--wf-border-subtle);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;text-decoration:none;transition:color .15s}
+.toc-inline-item:last-child{border-bottom:none}
+.toc-inline-item:hover{color:var(--wf-fg)}
+.toc-n{font:700 9px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0;padding-top:2px}
+
+/* ━━ TYPOGRAPHY ━━ */
+.body p{font-size:17.5px;line-height:1.82;color:var(--cream2);font-weight:300;margin-bottom:28px}
+.body p strong{font-weight:600;color:var(--wf-fg)}
+.body p a{color:var(--acc-lt);text-decoration:none;border-bottom:1px solid rgba(252,211,77,.3);transition:border-color .15s}
+.body p a:hover{border-bottom-color:var(--acc-lt)}
+.body p sup a{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);font:700 9px/1 var(--font-mono);color:var(--acc-lt);vertical-align:super;margin-left:2px;text-decoration:none;transition:all .15s}
+.body p sup a:hover{background:var(--acc);color:#fff;border:none}
+h2.sh{font-family:var(--font-serif);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--wf-fg);margin:60px 0 20px}
+h3.sh3{font:700 11px/1 var(--font-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin:40px 0 14px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--wf-fg)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--font-serif);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--acc-lt)}
+
+/* ━━ PULL QUOTE ━━ */
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--wf-surface);border-radius:10px;border:1px solid var(--wf-border-subtle);border-left:3px solid var(--acc);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--font-serif);font-size:150px;font-weight:700;color:rgba(245,158,11,.08);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--font-serif);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--wf-fg);position:relative;z-index:1;margin-bottom:14px}
+.pq-text em{font-style:italic;color:var(--acc-lt)}
+.pq-attr{font:600 11px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);position:relative;z-index:1}
+
+/* ━━ 12-PROMPT CHAIN DIAGRAM ━━ */
+.chain-diagram{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid rgba(245,158,11,.15);background:var(--wf-surface)}
+.cd-header{padding:14px 22px;border-bottom:1px solid rgba(245,158,11,.1);display:flex;align-items:center;gap:10px;background:rgba(245,158,11,.03)}
+.cd-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.cd-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--font-mono);background:rgba(245,158,11,.1);color:var(--acc-lt);border:1px solid rgba(245,158,11,.2)}
+.cd-legend{display:flex;gap:14px;margin-left:auto}
+.cd-leg{display:flex;align-items:center;gap:5px;font:700 8px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+.cd-leg-dot{width:8px;height:8px;border-radius:2px}
+.cd-body{padding:20px 24px;overflow-x:auto}
+.cd-body::-webkit-scrollbar{height:3px}
+.cd-body::-webkit-scrollbar-thumb{background:var(--lift)}
+/* Chain phases */
+.cd-phase{margin-bottom:20px}
+.cd-phase-label{font:700 8px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.cd-phase-label::before{content:'';display:block;width:4px;height:12px;border-radius:2px}
+.cd-phase-label.analysis::before{background:var(--sonnet)}
+.cd-phase-label.execution::before{background:var(--haiku)}
+.cd-phase-label.quality::before{background:var(--sonnet)}
+.cd-flow{display:flex;align-items:stretch;gap:0;min-width:max-content}
+.cd-step{
+  flex-shrink:0;padding:12px 14px;border-radius:8px;min-width:110px;
+  background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);
+  position:relative;cursor:pointer;transition:all .2s var(--ease);
+  display:flex;flex-direction:column;gap:5px;
+}
+.cd-step:hover,.cd-step.active{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.04)}
+.cd-step.running{border-color:var(--acc);box-shadow:0 0 14px rgba(245,158,11,.25);background:rgba(245,158,11,.06)}
+.cd-step.done{border-color:rgba(29,185,84,.3);background:rgba(29,185,84,.03)}
+.cd-step-num{font:700 8px/1 var(--font-mono);letter-spacing:.1em;color:var(--wf-fg-faint)}
+.cd-step-name{font:600 11px/1.3 var(--font-sans);color:var(--wf-fg-muted)}
+.cd-step.active .cd-step-name,.cd-step.running .cd-step-name{color:var(--wf-fg)}
+.cd-step-model{font:700 7px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.cd-step-tokens{font:300 9px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.cd-conn{
+  flex-shrink:0;width:24px;display:flex;align-items:center;justify-content:center;
+  color:var(--wf-fg-faint);font-size:10px;position:relative;
+}
+.cd-conn-line{width:100%;height:1px;background:var(--wf-border)}
+.cd-conn-active{height:1px;width:0;background:var(--acc);transition:width .3s linear;position:absolute}
+/* Detail panel */
+.cd-detail{
+  margin-top:16px;padding:16px 20px;border-radius:8px;
+  background:rgba(245,158,11,.04);border:1px solid rgba(245,158,11,.12);
+  display:none;
+}
+.cd-detail.show{display:block}
+.cdd-label{font:700 8px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(245,158,11,.6);margin-bottom:10px}
+.cdd-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:700px){.cdd-grid{grid-template-columns:1fr 1fr}}
+.cdd-cell{background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);border-radius:6px;padding:10px 12px}
+.cdd-cell-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.cdd-cell-val{font:300 12px/1.55 var(--font-sans);color:var(--wf-fg-muted)}
+.cdd-cell-val strong{font-weight:600;color:var(--wf-fg)}
+/* Prompt template reveal */
+.prompt-reveal{
+  margin-top:12px;background:rgba(0,0,0,.3);border:1px solid var(--wf-border);
+  border-radius:6px;overflow:hidden;
+}
+.pr-header{
+  padding:8px 14px;background:rgba(255,255,255,.025);border-bottom:1px solid var(--wf-border-subtle);
+  display:flex;align-items:center;gap:8px;cursor:pointer;
+}
+.pr-label{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);flex:1}
+.pr-toggle{font:300 10px/1 var(--font-mono);color:var(--wf-fg-subtle);transition:transform .2s}
+.pr-body{max-height:0;overflow:hidden;transition:max-height .3s var(--ease)}
+.pr-body.open{max-height:300px}
+.pr-code{padding:14px;font:300 11px/1.7 var(--font-mono);color:rgba(252,211,77,.55);letter-spacing:.02em}
+.pr-code .kw{color:rgba(129,140,248,.7)}
+.pr-code .val{color:rgba(52,211,153,.65)}
+.pr-code .com{color:rgba(242,237,230,.2);font-style:italic}
+
+/* ━━ MODEL ROUTING DIAGRAM ━━ */
+.model-routing{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--wf-border);background:var(--wf-surface)}
+.mr-header{padding:14px 22px;border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;gap:12px}
+.mr-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.mr-body{padding:24px}
+.mr-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+@media(max-width:640px){.mr-grid{grid-template-columns:1fr}}
+.mr-model{border-radius:10px;overflow:hidden;border:1px solid var(--wf-border-subtle)}
+.mr-model-head{padding:12px 16px;display:flex;align-items:center;gap:10px}
+.mr-model-head.sonnet{background:rgba(129,140,248,.08);border-bottom:1px solid rgba(129,140,248,.12)}
+.mr-model-head.haiku{background:rgba(52,211,153,.06);border-bottom:1px solid rgba(52,211,153,.1)}
+.mr-model-name{font:700 12px/1 var(--font-sans);color:var(--wf-fg)}
+.mr-model-sub{font:300 10px/1 var(--font-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.mr-model-badge{margin-left:auto;padding:3px 9px;border-radius:20px;font:700 8px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+.mr-model-badge.s{background:rgba(129,140,248,.12);color:#818cf8;border:1px solid rgba(129,140,248,.2)}
+.mr-model-badge.h{background:rgba(52,211,153,.08);color:#34d399;border:1px solid rgba(52,211,153,.15)}
+.mr-steps-list{padding:12px 16px;display:flex;flex-direction:column;gap:7px}
+.mr-step-row{display:flex;align-items:center;gap:8px}
+.mr-step-num{font:700 9px/1 var(--font-mono);color:var(--wf-fg-faint);width:22px;flex-shrink:0}
+.mr-step-name{font:400 12px/1 var(--font-sans);color:var(--wf-fg-muted);flex:1}
+.mr-step-tok{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint);flex-shrink:0}
+/* Cost bar */
+.mr-cost{background:rgba(255,255,255,.02);border:1px solid var(--wf-border-subtle);border-radius:8px;padding:14px 16px}
+.mr-cost-label{font:700 8px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:10px}
+.mr-cost-bars{display:flex;flex-direction:column;gap:8px}
+.mr-cost-row{display:flex;align-items:center;gap:10px}
+.mr-cost-name{font:400 11px/1 var(--font-sans);color:var(--wf-fg-subtle);width:80px;flex-shrink:0}
+.mr-cost-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden}
+.mr-cost-bar{height:100%;border-radius:4px}
+.mr-cost-val{font:700 10px/1 var(--font-mono);color:var(--wf-fg-muted);width:50px;text-align:right;flex-shrink:0}
+.mr-savings{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--wf-border-subtle)}
+.mr-savings-label{font:300 11px/1 var(--font-sans);color:var(--wf-fg-subtle)}
+.mr-savings-val{font:700 14px/1 var(--font-mono);color:var(--wf-brand)}
+
+/* ━━ BEFORE / AFTER BLOCK ━━ */
+.before-after{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--wf-border);background:var(--wf-surface)}
+.ba-header{padding:14px 22px;border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;gap:12px}
+.ba-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.ba-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--wf-border-subtle)}
+.ba-tab{padding:10px 20px;font:600 11px/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--font-sans)}
+.ba-tab.on{color:var(--wf-fg);border-bottom-color:var(--acc)}
+.ba-panel{display:none;padding:20px 22px}
+.ba-panel.on{display:block}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.ba-grid{grid-template-columns:1fr}}
+.ba-col{display:flex;flex-direction:column;gap:8px}
+.ba-col-head{padding:7px 12px;border-radius:6px;font:700 9px/1 var(--font-sans);letter-spacing:.08em;text-transform:uppercase}
+.ba-col-head.single{background:rgba(224,48,48,.08);color:#f87171;border:1px solid rgba(224,48,48,.15)}
+.ba-col-head.chain{background:rgba(29,185,84,.08);color:#4ade80;border:1px solid rgba(29,185,84,.15)}
+.ba-sample{background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);border-radius:6px;padding:12px 14px}
+.ba-sample-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:6px}
+.ba-sample-text{font:300 12px/1.7 var(--font-sans);color:var(--wf-fg-muted)}
+.ba-sample-text strong{font-weight:600;color:var(--wf-fg)}
+.ba-sample-text em{font-style:italic;color:rgba(224,48,48,.7)}
+.ba-sample-text.good em{color:rgba(29,185,84,.7)}
+.ba-verdict{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:6px;margin-top:4px;font:300 11px/1.55 var(--font-sans);color:var(--wf-fg-subtle)}
+.ba-verdict.weak{background:rgba(224,48,48,.04);border:1px solid rgba(224,48,48,.1)}
+.ba-verdict.strong{background:rgba(29,185,84,.04);border:1px solid rgba(29,185,84,.1)}
+.ba-verdict-icon{flex-shrink:0;font-size:11px;margin-top:1px}
+
+/* ━━ VOICE CONSISTENCY MATRIX ━━ */
+.voice-matrix{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid var(--wf-border);background:var(--wf-surface)}
+.vm-header{padding:14px 22px;border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;gap:12px}
+.vm-title{font:700 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.vm-scroll{overflow-x:auto}
+.vm-scroll::-webkit-scrollbar{height:2px}
+.vm-scroll::-webkit-scrollbar-thumb{background:var(--lift)}
+.vm-table{width:100%;border-collapse:collapse;min-width:560px}
+.vm-table th{padding:9px 14px;font:700 7.5px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);text-align:left;border-bottom:1px solid var(--wf-border-subtle);background:rgba(255,255,255,.02);white-space:nowrap}
+.vm-table th:first-child{padding-left:20px}
+.vm-table td{padding:11px 14px;border-bottom:1px solid var(--wf-border-subtle);font:300 12px/1.5 var(--font-sans);color:var(--wf-fg-muted);vertical-align:middle}
+.vm-table td:first-child{padding-left:20px;font-weight:500;color:var(--wf-fg)}
+.vm-table tr:last-child td{border-bottom:none}
+.vm-table tr:hover td{background:rgba(255,255,255,.015)}
+.vm-score{display:flex;gap:2px;align-items:center}
+.vm-dot{width:6px;height:6px;border-radius:50%}
+.vm-dot.fill{background:var(--wf-brand)}
+.vm-dot.half{background:rgba(29,185,84,.35)}
+.vm-dot.empty{background:rgba(255,255,255,.08)}
+.vm-score-num{font:700 10px/1 var(--font-mono);color:var(--wf-fg-muted);margin-left:5px}
+
+/* ━━ SOCIAL BLOCK ━━ */
+.social-block{margin:52px 0;border-radius:10px;overflow:hidden;border:1px solid var(--wf-border-subtle)}
+.sb-hd{padding:11px 18px;background:var(--wf-surface);border-bottom:1px solid var(--wf-border-subtle);display:flex;align-items:center;justify-content:space-between}
+.sb-hd-label{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.sb-hd-src{font:normal 9px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.sb-tabs{display:flex;background:var(--mid);border-bottom:1px solid var(--wf-border-subtle)}
+.sb-tab{padding:10px 20px;font:600 11px/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--font-sans)}
+.sb-tab.on{color:var(--wf-fg);border-bottom-color:var(--acc)}
+.sb-platform{display:none;padding:20px 22px;background:var(--mid)}
+.sb-platform.on{display:block}
+.tw-card{background:#fff;border:1px solid #e1e8ed;border-radius:14px;padding:16px;max-width:500px}
+.tw-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tw-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#f59e0b,#4589FF);display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:15px;color:#fff;font-weight:700}
+.tw-name{font:700 14px/1 'Helvetica Neue',sans-serif;color:#14171a}
+.tw-handle{font:400 13px/1 'Helvetica Neue',sans-serif;color:#657786}
+.tw-body{font:400 14px/1.6 'Helvetica Neue',sans-serif;color:#14171a;margin-bottom:12px}
+.tw-meta{font:400 12px/1 'Helvetica Neue',sans-serif;color:#657786}
+.li-card{background:#fff;border:1px solid #dce6f1;border-radius:10px;padding:16px;max-width:500px;font-family:'Helvetica Neue',Arial,sans-serif}
+.li-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.li-av{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#f59e0b,#4589FF);display:flex;align-items:center;justify-content:center;font:700 16px var(--font-serif);color:#fff}
+.li-name{font:600 14px/1 'Helvetica Neue',sans-serif;color:#000000e6}
+.li-sub{font:400 12px/1 'Helvetica Neue',sans-serif;color:#00000099}
+.li-body{font:400 14px/1.65 'Helvetica Neue',sans-serif;color:#000000cc}
+.ig-card{max-width:400px}
+.ig-handle{font:700 13px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:10px}
+.ig-img{height:240px;border-radius:6px;margin-bottom:12px;background:linear-gradient(135deg,#0a0800,#120e00);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ig-img::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(245,158,11,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,.06) 1px,transparent 1px);background-size:22px 22px}
+.ig-img-text{position:relative;z-index:2;font-family:var(--font-serif);font-size:22px;font-style:italic;color:rgba(242,237,230,.8);text-align:center;max-width:260px;line-height:1.3}
+.ig-cap{font-size:13px;line-height:1.65;color:var(--wf-fg-muted)}
+.ig-hash{font-size:12px;color:var(--acc-lt);margin-top:8px}
+
+/* ━━ SEO BLOCK ━━ */
+.seo-block{margin:48px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(217,119,6,.2);background:linear-gradient(135deg,rgba(217,119,6,.04),transparent)}
+.seo-hd{padding:11px 18px;border-bottom:1px solid rgba(217,119,6,.15);display:flex;align-items:center;gap:10px}
+.seo-tag{padding:3px 9px;border-radius:4px;font:700 9px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;background:rgba(217,119,6,.12);color:var(--wf-orange);border:1px solid rgba(217,119,6,.2)}
+.seo-body{padding:18px 22px}
+.serp{background:#fff;border:1px solid #dfe1e5;border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.serp-url{font:normal 12px/1 'Roboto',Arial,sans-serif;color:#3c4043;margin-bottom:4px}
+.serp-title{font:400 18px/1.3 Arial,sans-serif;color:#1a0dab;cursor:pointer;margin-bottom:5px}
+.serp-title:hover{text-decoration:underline}
+.serp-desc{font:400 13px/1.55 Arial,sans-serif;color:#4d5156}
+.aeo-panel{background:linear-gradient(135deg,rgba(217,119,6,.04),transparent);border:1px solid rgba(217,119,6,.12);border-radius:8px;padding:16px 18px;margin-top:16px}
+.aeo-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(217,119,6,.6);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.aeo-label::before{content:'\25C8';font-size:9px}
+.aeo-q{font:600 13px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:6px}
+.aeo-a{font:300 12px/1.65 var(--font-sans);color:var(--wf-fg-muted)}
+.seo-kws{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.seo-kw{padding:4px 11px;border-radius:20px;font:500 11px/1 var(--font-sans);background:rgba(217,119,6,.08);color:#92600a;border:1px solid rgba(217,119,6,.15)}
+
+/* ━━ CRM ━━ */
+.crm-block{margin:52px 0;border-radius:12px;overflow:hidden;border:1px solid rgba(139,92,246,.2);background:linear-gradient(135deg,var(--wf-surface) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-block::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}
+@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(139,92,246,.6);margin-bottom:10px}
+.crm-headline{font-family:var(--font-serif);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--wf-fg);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--wf-fg-subtle);line-height:1.65}
+.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--wf-border);border-radius:8px;font:300 14px var(--font-sans);color:var(--wf-fg);outline:none;transition:border-color .15s}
+.crm-inp:focus{border-color:rgba(139,92,246,.5)}
+.crm-inp::placeholder{color:var(--wf-fg-faint)}
+.crm-btn{padding:12px;background:var(--wf-purple);border:none;border-radius:8px;font:700 13px var(--font-sans);color:#fff;cursor:pointer;transition:opacity .15s}
+.crm-btn:hover{opacity:.88}
+.crm-note{font-size:10px;color:var(--wf-fg-faint);text-align:center}
+.crm-seq{padding:0 44px 28px;border-top:1px solid var(--wf-border-subtle);position:relative;z-index:1}
+.crm-seq-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin:18px 0 12px}
+.crm-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:700px){.crm-steps{grid-template-columns:1fr 1fr}}
+.crm-step{background:rgba(255,255,255,.025);border:1px solid var(--wf-border-subtle);border-radius:7px;padding:10px 12px}
+.crm-step-d{font:700 9px/1 var(--font-mono);color:rgba(139,92,246,.6);margin-bottom:5px;letter-spacing:.05em}
+.crm-step-t{font:400 11px/1.4 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* ━━ FAQ ━━ */
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--wf-border)}
+.faq-head-title{font-family:var(--font-serif);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--wf-fg)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--font-mono);background:rgba(245,158,11,.1);color:var(--acc-lt);border:1px solid rgba(245,158,11,.2)}
+.faq-item{border:1px solid var(--wf-border-subtle);border-radius:8px;overflow:hidden;margin-bottom:8px;transition:border-color .15s}
+.faq-item.open{border-color:var(--wf-border)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--font-sans);color:var(--wf-fg-muted);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--wf-fg)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wf-fg-subtle);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);color:var(--acc-lt)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--ease),padding .2s}
+.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--font-sans);color:var(--cream2)}
+.faq-a-inner strong{font-weight:600;color:var(--wf-fg)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.faq-schema-note::before{content:'\25C8';color:rgba(217,119,6,.4);font-size:8px}
+
+/* ━━ REFERENCES ━━ */
+.references{margin-top:52px;padding-top:28px;border-top:1px solid var(--wf-border-subtle)}
+.ref-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ref-title::after{content:'';flex:1;height:1px;background:var(--wf-border-subtle)}
+.ref-item{display:flex;gap:10px;margin-bottom:12px;font-size:12px;color:var(--wf-fg-subtle);line-height:1.65}
+.ref-num{width:22px;height:22px;border-radius:50%;flex-shrink:0;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;font:700 9px/1 var(--font-mono);color:var(--acc-lt);margin-top:1px}
+
+/* ━━ SIDEBAR ━━ */
+.sb-sec{margin-bottom:36px}
+.sb-sec-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border-subtle)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--wf-border-subtle);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}
+.toc-item:hover,.toc-item.active{color:var(--wf-fg)}
+.toc-item.active{color:var(--acc-lt)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}
+.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--wf-surface);border:1px solid var(--wf-border-subtle);border-radius:8px;padding:12px}
+.stat-n{font:700 22px/1 var(--font-mono);color:var(--wf-fg);margin-bottom:3px}
+.stat-l{font-size:10px;color:var(--wf-fg-subtle);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}
+.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wf-surface);border:1px solid var(--wf-border-subtle);border-radius:7px;cursor:pointer;transition:all .15s}
+.lib-item:hover{border-color:var(--wf-border)}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lib-name{font:500 12px/1 var(--font-sans);color:var(--wf-fg);flex:1}
+.lib-count{font:normal 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--wf-surface);border:1px solid var(--wf-border-subtle);border-radius:7px;text-decoration:none;transition:all .15s;cursor:pointer}
+.sn-item:hover{border-color:var(--wf-border)}
+.sn-item.current{border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.05)}
+.sn-num{font:700 10px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.sn-item.current .sn-num{color:var(--acc-lt)}
+.sn-title{font:400 11px/1.35 var(--font-sans);color:var(--wf-fg-subtle);flex:1}
+.sn-item.current .sn-title{color:var(--wf-fg)}
+/* Latency bar in sidebar */
+.latency-list{display:flex;flex-direction:column;gap:6px}
+.lat-row{display:flex;align-items:center;gap:8px}
+.lat-label{font:300 10px/1 var(--font-mono);color:var(--wf-fg-subtle);width:64px;flex-shrink:0}
+.lat-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden}
+.lat-bar{height:100%;border-radius:3px}
+.lat-val{font:700 9px/1 var(--font-mono);color:var(--wf-fg-muted);width:30px;text-align:right;flex-shrink:0}
+
+/* ━━ AUTHOR + RELATED ━━ */
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--wf-border-subtle)}
+.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}
+@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--wf-blue));display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--font-serif);font-size:24px;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--font-sans);color:var(--acc-lt);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--wf-fg-subtle);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--wf-border);color:var(--wf-fg-subtle);text-decoration:none;transition:all .15s}
+.author-link:hover{color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.author-divider{background:var(--wf-border-subtle)}
+.related-label{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}
+.rel-thumb{height:100px;border-radius:8px;margin-bottom:10px;overflow:hidden;position:relative}
+.rel-thumb-bg{width:100%;height:100%;position:relative}
+.rt-01{background:linear-gradient(135deg,#07071a,#0d1030)}
+.rt-02{background:linear-gradient(135deg,#060810,#090c18)}
+.rt-04{background:linear-gradient(135deg,#071207,#0d2010)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--font-mono)}
+.rel-series-tag{font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rel-title{font:500 13px/1.45 var(--font-sans);color:var(--wf-fg-muted);margin-bottom:4px;transition:color .15s}
+.rel-card:hover .rel-title{color:var(--wf-fg)}
+.rel-meta{font:300 11px/1 var(--font-sans);color:var(--wf-fg-faint)}
+
+/* ━━ FOOTER ━━ */
+.footer-menu{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border-subtle);padding:52px 32px 36px}
+.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--wf-border-subtle)}
+@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--font-serif);font-size:20px;color:var(--wf-fg);margin-bottom:8px}
+.fm-logo span{font-style:italic;color:var(--wf-blue)}
+.fm-tagline{font-size:13px;color:var(--wf-fg-subtle);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(36,96,255,.08);border:1px solid rgba(36,96,255,.15);color:rgba(36,96,255,.6)}
+.fm-col-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-col a{font-size:13px;color:var(--wf-fg-subtle);text-decoration:none;transition:color .15s}
+.fm-col a:hover{color:var(--wf-fg)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}
+.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}
+.fm-series-item:hover{opacity:.75}
+.fm-s-num{font:700 9px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.fm-s-title{font:300 11px/1.3 var(--font-sans);color:var(--wf-fg-subtle);flex:1}
+.final-footer{background:var(--wf-bg);border-top:1px solid var(--wf-border-subtle);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--font-mono);color:var(--wf-fg-faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ff-sep{width:1px;height:10px;background:var(--wf-fg-faint)}
+.ff-series{color:rgba(36,96,255,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-blue);padding:5px 14px;border:1px solid rgba(36,96,255,.2);border-radius:20px;background:rgba(36,96,255,.06)}
+
+/* ━━ SCROLL REVEAL ━━ */
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.r.in{opacity:1;transform:none}
+
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Wind<span>field</span></a>
+    <nav class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/about" class="nav-link">About</a>
+      <a href="/portfolio" class="nav-link">Portfolio</a>
+      <a href="/product" class="nav-link">Product</a>
+      <a href="/pricing" class="nav-link">Pricing</a>
+      <a href="/blog" class="nav-link active">Blog</a>
+      <a href="/contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <button class="nav-toggle" id="pipeline-toggle" onclick="togglePipeline()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Pipeline Map
+      </button>
+      <a href="#" class="nav-cta">Get Started</a>
+      <button class="nav-hamburger" onclick="this.closest('.navbar').classList.toggle('mobile-open')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- PIPELINE STRIP -->
+<div id="pstrip">
+  <div class="ps-inner">
+    <div class="ps-label">Pipeline &middot; A03</div>
+    <div class="ps-feeds" id="ps-feeds"></div>
+    <div class="ps-arrow">&rarr;</div>
+    <div class="ps-result"><span class="live-dot"></span>Complete Article &middot; 4 Libraries &middot; ~36k Tokens &middot; 1m 48s</div>
+  </div>
+</div>
+
+<!-- PIPELINE MAP -->
+<div id="pipemap">
+  <div class="pm-inner">
+    <div class="pm-title">ORCHESTRATION MAP <span>&mdash; Article 03 &middot; Inside the Article Library: How the Writing Engine Produces Long-Form at Scale</span></div>
+    <div class="pm-scan"></div>
+    <div class="pm-flow">
+      <div class="pm-node" style="border-color:rgba(245,158,11,.3)">
+        <div class="pm-node-label">Input</div>
+        <div class="pm-node-name" style="color:var(--acc-lt)">Context Brief</div>
+        <div class="pm-node-sub">~2 min fill</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-libs">
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-art)"></div><div class="pm-lib-name" style="color:var(--c-art)">ART</div><div class="pm-lib-count">16</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-img)"></div><div class="pm-lib-name" style="color:var(--c-img)">IMG</div><div class="pm-lib-count">4</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-seo)"></div><div class="pm-lib-name" style="color:var(--c-seo)">SEO</div><div class="pm-lib-count">6</div></div>
+        <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-tas)"></div><div class="pm-lib-name" style="color:var(--c-tas)">TAS</div><div class="pm-lib-count">4</div></div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(139,92,246,.3)">
+        <div class="pm-node-label">Phase 3</div>
+        <div class="pm-node-name" style="color:#4ade80">Orchestrator</div>
+        <div class="pm-node-sub">4 episodes in</div>
+      </div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.3)">
+        <div class="pm-node-label">Output</div>
+        <div class="pm-node-name" style="color:#4ade80">Full Package</div>
+        <div class="pm-node-sub">&lt; 2 minutes</div>
+      </div>
+    </div>
+    <div class="pm-meta-row">
+      <div class="pm-meta-item"><span class="pm-meta-n">4</span> Libraries</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">30</span> Prompts total</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">~36k</span> Tokens</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">1m 48s</span> Runtime</div>
+      <div class="pm-meta-item" style="margin-left:auto"><span style="color:var(--wf-brand);font:700 9px/1 var(--font-mono)">&bull; ACTIVE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero src art" id="hero">
+  
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow">
+        <span class="eye-tag">Library Deep Dive</span>
+        <span class="eye-divider"></span>
+        <span class="eye-series">IO Content Ops Series &middot; Article 03</span>
+      </div>
+      <h1>Inside the <em>Article Library:</em> How the Writing Engine Produces Long-Form at Scale</h1>
+      <p class="hero-deck">12 prompts. Drop cap to footnote. How the IO Article Library chains decomposed prompts to produce publication-ready editorial without a single revision loop &mdash; and exactly which model handles each step.</p>
+      <div class="hero-meta">
+        <div class="h-author">
+          <div class="h-av">T</div>
+          <div>
+            <div class="h-name">Tommy Saunders</div>
+            <div class="h-role">Founder, IntelligentOperations.ai</div>
+          </div>
+        </div>
+        <div class="h-sep"></div>
+        <span class="h-date">March 29, 2026</span>
+        <span class="h-read">&middot; 10 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18)">
+        <span style="font:700 8px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc-lt)">IO-CB-2026-001</span>
+        <span style="width:1px;height:10px;background:rgba(245,158,11,.3)"></span>
+        <span style="font:300 8px/1 var(--font-mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; A03 &middot; MARCH 2026</span>
+      </div>
+    </div>
+
+    <!-- ARTICLE 03 HERO VIZ: 12-step sequential prompt chain -->
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz3">
+        <div class="hv-grid"></div>
+        <div class="hv-glow"></div>
+        <div class="hv-scan"></div>
+
+        <!-- Model legend -->
+        <div class="hv-legend">
+          <div class="hv-leg-item" style="color:#818cf8"><div class="hv-leg-dot" style="background:#818cf8"></div>Sonnet</div>
+          <div class="hv-leg-item" style="color:#34d399"><div class="hv-leg-dot" style="background:#34d399"></div>Haiku</div>
+        </div>
+
+        <!-- 12 chain nodes in S-curve layout -->
+        <!-- Row 1: nodes 1-4 (left to right) -->
+        <div class="chain-node" style="top:16%;left:12%" id="cn1">
+          <div class="cn-circle sonnet" id="cc1"><div class="cn-model s">S</div>01</div>
+          <div class="cn-num">Brief Analysis</div>
+        </div>
+        <div class="chain-node" style="top:16%;left:32%" id="cn2">
+          <div class="cn-circle sonnet" id="cc2"><div class="cn-model s">S</div>02</div>
+          <div class="cn-num">Voice Calibrate</div>
+        </div>
+        <div class="chain-node" style="top:16%;left:52%" id="cn3">
+          <div class="cn-circle sonnet" id="cc3"><div class="cn-model s">S</div>03</div>
+          <div class="cn-num">Structure Design</div>
+        </div>
+        <div class="chain-node" style="top:16%;left:72%" id="cn4">
+          <div class="cn-circle haiku" id="cc4"><div class="cn-model h">H</div>04</div>
+          <div class="cn-num">Lede + Drop Cap</div>
+        </div>
+
+        <!-- Row 2: nodes 5-8 (right to left — the S curve) -->
+        <div class="chain-node" style="top:44%;left:82%" id="cn5">
+          <div class="cn-circle haiku" id="cc5"><div class="cn-model h">H</div>05</div>
+          <div class="cn-num">Section 1 Body</div>
+        </div>
+        <div class="chain-node" style="top:44%;left:62%" id="cn6">
+          <div class="cn-circle haiku" id="cc6"><div class="cn-model h">H</div>06</div>
+          <div class="cn-num">Section 2 Body</div>
+        </div>
+        <div class="chain-node" style="top:44%;left:42%" id="cn7">
+          <div class="cn-circle haiku" id="cc7"><div class="cn-model h">H</div>07</div>
+          <div class="cn-num">Section 3 Body</div>
+        </div>
+        <div class="chain-node" style="top:44%;left:22%" id="cn8">
+          <div class="cn-circle haiku" id="cc8"><div class="cn-model h">H</div>08</div>
+          <div class="cn-num">Transitions</div>
+        </div>
+
+        <!-- Row 3: nodes 9-12 (left to right again) -->
+        <div class="chain-node" style="top:74%;left:12%" id="cn9">
+          <div class="cn-circle haiku" id="cc9"><div class="cn-model h">H</div>09</div>
+          <div class="cn-num">Pull Quote</div>
+        </div>
+        <div class="chain-node" style="top:74%;left:32%" id="cn10">
+          <div class="cn-circle haiku" id="cc10"><div class="cn-model h">H</div>10</div>
+          <div class="cn-num">Footnotes</div>
+        </div>
+        <div class="chain-node" style="top:74%;left:52%" id="cn11">
+          <div class="cn-circle sonnet" id="cc11"><div class="cn-model s">S</div>11</div>
+          <div class="cn-num">Quality Pass</div>
+        </div>
+        <div class="chain-node" style="top:74%;left:72%" id="cn12">
+          <div class="cn-circle sonnet" id="cc12"><div class="cn-model s">S</div>12</div>
+          <div class="cn-num">Meta + Related</div>
+        </div>
+
+        <!-- SVG connector lines -->
+        <svg class="hv-svg3" viewBox="0 0 380 520" preserveAspectRatio="none">
+          <defs><filter id="fg3"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <g stroke-width=".7" fill="none" opacity="0.18" stroke="#f59e0b">
+            <!-- Row 1 connections -->
+            <line x1="45" y1="83" x2="122" y2="83"/>
+            <line x1="122" y1="83" x2="198" y2="83"/>
+            <line x1="198" y1="83" x2="274" y2="83"/>
+            <!-- Turn down on right -->
+            <line x1="312" y1="83" x2="312" y2="228"/>
+            <!-- Row 2 connections (right to left) -->
+            <line x1="312" y1="228" x2="236" y2="228"/>
+            <line x1="236" y1="228" x2="160" y2="228"/>
+            <line x1="160" y1="228" x2="84" y2="228"/>
+            <!-- Turn down on left -->
+            <line x1="46" y1="228" x2="46" y2="385"/>
+            <!-- Row 3 connections -->
+            <line x1="46" y1="385" x2="122" y2="385"/>
+            <line x1="122" y1="385" x2="198" y2="385"/>
+            <line x1="198" y1="385" x2="274" y2="385"/>
+          </g>
+          <!-- Active lines shown during animation -->
+          <g id="chain-active-lines" stroke-width="1.2" fill="none" filter="url(#fg3)" stroke="#f59e0b" opacity="0.7">
+            <line x1="45" y1="83" x2="122" y2="83" id="al-1-2" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="122" y1="83" x2="198" y2="83" id="al-2-3" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="198" y1="83" x2="274" y2="83" id="al-3-4" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="312" y1="83" x2="312" y2="228" id="al-4-5" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="312" y1="228" x2="236" y2="228" id="al-5-6" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="236" y1="228" x2="160" y2="228" id="al-6-7" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="160" y1="228" x2="84" y2="228" id="al-7-8" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="46" y1="228" x2="46" y2="385" id="al-8-9" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="46" y1="385" x2="122" y2="385" id="al-9-10" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="122" y1="385" x2="198" y2="385" id="al-10-11" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+            <line x1="198" y1="385" x2="274" y2="385" id="al-11-12" opacity="0" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.5s" repeatCount="indefinite"/></line>
+          </g>
+        </svg>
+
+        <div class="hv-readout3" id="hv-status3">12-PROMPT SEQUENTIAL CHAIN<br>3 SONNET &middot; 7 HAIKU &middot; 2 SONNET<br>IO-ORCH v2.0 &middot; ARTICLE LIBRARY</div>
+        <div class="hv-badge3">IO-VIZ-03</div>
+        <button class="hv-run-btn" id="run-chain-btn" onclick="runChain()">
+          <span style="width:5px;height:5px;border-radius:50%;background:var(--acc-lt)"></span>Run Chain
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ARTICLE GRID: article first, sidebar second -->
+<div class="article-grid">
+
+  <!-- MAIN ARTICLE BODY -->
+  <article class="article-body">
+    <div class="body">
+
+      <!-- DIRECT ANSWER BOX -->
+      <div id="s-dab">
+        <div class="direct-answer-box">
+          <div class="dab-label">Direct Answer</div>
+          <div class="dab-q">How does the IO Article Library produce publication-ready long-form content?</div>
+          <div class="dab-a">The IO Article Library runs <strong>12 sequential prompts</strong>, each scoped to one task: brief analysis, voice calibration, structure design, lede, three section bodies, transitions, pull quote, footnotes, a quality pass, and meta generation. Prompts 1&ndash;3 run on Claude Sonnet for reasoning-heavy analysis. Prompts 4&ndash;10 run on Claude Haiku for fast execution. Prompts 11&ndash;12 return to Sonnet for coherence review. The full chain completes in <strong>90&ndash;110 seconds</strong> and is returned to the Orchestrator as a single structured episode &mdash; no revision loops, no follow-up prompts.</div>
+          <div class="dab-footer">
+            <span class="dab-source">Source: IntelligentOperations.ai &middot; IO Platform &middot; March 2026</span>
+            <span class="dab-schema-badge">JSON-LD Schema</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE OF CONTENTS -->
+      <div>
+        <div class="toc-inline">
+          <div class="toc-inline-title">Table of Contents</div>
+          <ol class="toc-inline-list">
+            <li><a class="toc-inline-item" href="#s-why"><span class="toc-n">1.</span>Why 12 Prompts and Not One</a></li>
+            <li><a class="toc-inline-item" href="#s-chain"><span class="toc-n">2.</span>The 12-Prompt Chain &mdash; Interactive Diagram</a></li>
+            <li><a class="toc-inline-item" href="#s-routing"><span class="toc-n">3.</span>Model Routing: Sonnet vs. Haiku</a></li>
+            <li><a class="toc-inline-item" href="#s-ba"><span class="toc-n">4.</span>Before / After: Single Prompt vs. Chain</a></li>
+            <li><a class="toc-inline-item" href="#s-voice"><span class="toc-n">5.</span>Voice Consistency Matrix</a></li>
+            <li><a class="toc-inline-item" href="#s-social"><span class="toc-n">6.</span>Social Distribution Suite</a></li>
+            <li><a class="toc-inline-item" href="#s-seo"><span class="toc-n">7.</span>Search Package &mdash; SEO + AEO</a></li>
+            <li><a class="toc-inline-item" href="#s-crm"><span class="toc-n">8.</span>CRM Lead Capture + Nurture</a></li>
+            <li><a class="toc-inline-item" href="#s-faq"><span class="toc-n">9.</span>Frequently Asked Questions</a></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- LEDE -->
+      <div id="s-lede">
+        <p class="lede">Every senior editor knows the feeling: you ask someone to write a 2,000-word article and get back something that opens brilliantly, coasts through the middle, and ends on a sentence that sounds like the writer ran out of energy and caffeine at the same moment. That is not a people problem. It is an architecture problem.</p>
+      </div>
+
+      <div>
+        <p>A single &ldquo;write me a great article about X&rdquo; prompt hands the model too many responsibilities at once: understand the brief, choose a structure, establish a voice, write a compelling lede, maintain quality across 2,000 words, end well. Each of these is a separate cognitive task. Bundling them into one prompt means each one gets a fraction of the model&rsquo;s attention &mdash; and the fraction allocated to sections three through five is smaller than sections one and two, because the context window is now full of everything that came before.</p>
+        <p>The IO Article Library solves this with prompt decomposition. <strong>Each of the 12 prompts has one job.</strong> The brief analysis prompt reads the context brief and extracts 6 structured parameters. The voice calibration prompt reads those parameters and outputs a 200-token style specification. The structure design prompt reads the style spec and outputs a locked outline. No subsequent prompt writes freeform &mdash; every prompt executes against a tightly constrained input. The quality is consistent because the constraints are consistent. <sup><a href="#fn1" id="r1">1</a></sup></p>
+      </div>
+
+      <!-- SECTION: Why 12 Prompts -->
+      <div id="s-why">
+        <h2 class="sh">Why 12 Prompts and Not One</h2>
+        <p>The number 12 is not arbitrary. It is the result of decomposing a publication-ready article into its minimum set of non-overlapping, single-responsibility tasks. Remove any one prompt and you either push its work onto an adjacent prompt (degrading that prompt&rsquo;s output) or you skip the step entirely (producing a detectably worse article).</p>
+        <p>The key decomposition decisions are three. First, <strong>structure before copy</strong>: the outline is locked in prompt 3 before any body copy is written in prompts 4&ndash;10. This means every section prompt receives the full structure as context, which prevents sections from repeating or contradicting each other &mdash; a failure mode endemic to single-prompt generation. Second, <strong>sections receive only their brief</strong>: each section-body prompt receives the locked outline and its specific section brief, not the full text of prior sections. This prevents voice drift and keeps context windows small. Third, <strong>quality pass at the end</strong>: prompt 11 reads the assembled article as a whole and flags coherence issues for prompt-level correction, not for manual editing. <sup><a href="#fn2" id="r2">2</a></sup></p>
+      </div>
+
+      <!-- PULL QUOTE -->
+      <div>
+        <div class="pull-quote">
+          <p class="pq-text">"Each prompt has <em>one job.</em> Structure before copy. Sections receive only their brief. A quality pass at the end. This is why section five reads as well as section one."</p>
+          <div class="pq-attr">Tommy Saunders &middot; Founder, IntelligentOperations.ai</div>
+        </div>
+      </div>
+
+      <!-- SECTION: 12-Prompt Chain Diagram -->
+      <div id="s-chain">
+        <h2 class="sh">The 12-Prompt Chain &mdash; Interactive</h2>
+        <p>Click any step to see its input structure, output format, model assignment, token budget, and the prompt template architecture. The <span style="color:#818cf8;font-weight:600">indigo</span> nodes run on Claude Sonnet 4 (reasoning-heavy). The <span style="color:#34d399;font-weight:600">green</span> nodes run on Claude Haiku (fast execution).</p>
+      </div>
+
+      <div>
+        <div class="chain-diagram">
+          <div class="cd-header">
+            <span class="cd-title">Article Library &mdash; 12-Prompt Sequential Chain</span>
+            <span class="cd-badge">Click any step to expand</span>
+            <div class="cd-legend">
+              <div class="cd-leg"><div class="cd-leg-dot" style="background:#818cf8"></div><span style="color:#818cf8">Sonnet</span></div>
+              <div class="cd-leg"><div class="cd-leg-dot" style="background:#34d399"></div><span style="color:#34d399">Haiku</span></div>
+            </div>
+          </div>
+          <div class="cd-body">
+            <!-- Phase 1: Analysis -->
+            <div class="cd-phase">
+              <div class="cd-phase-label analysis">Phase 1 &mdash; Analysis (Sonnet 4)</div>
+              <div class="cd-flow">
+                <div class="cd-step" onclick="showStep(1)" id="step-1">
+                  <div class="cd-step-num">PROMPT 01</div>
+                  <div class="cd-step-name">Brief Analysis</div>
+                  <div class="cd-step-model" style="color:#818cf8">Sonnet 4</div>
+                  <div class="cd-step-tokens">~280 tkns in &middot; ~320 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" onclick="showStep(2)" id="step-2">
+                  <div class="cd-step-num">PROMPT 02</div>
+                  <div class="cd-step-name">Voice Calibration</div>
+                  <div class="cd-step-model" style="color:#818cf8">Sonnet 4</div>
+                  <div class="cd-step-tokens">~400 tkns in &middot; ~200 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" onclick="showStep(3)" id="step-3">
+                  <div class="cd-step-num">PROMPT 03</div>
+                  <div class="cd-step-name">Structure Design</div>
+                  <div class="cd-step-model" style="color:#818cf8">Sonnet 4</div>
+                  <div class="cd-step-tokens">~500 tkns in &middot; ~400 out</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 2: Execution -->
+            <div class="cd-phase">
+              <div class="cd-phase-label execution">Phase 2 &mdash; Execution (Haiku)</div>
+              <div class="cd-flow">
+                <div class="cd-step" onclick="showStep(4)" id="step-4">
+                  <div class="cd-step-num">PROMPT 04</div>
+                  <div class="cd-step-name">Lede + Drop Cap</div>
+                  <div class="cd-step-model" style="color:#34d399">Haiku</div>
+                  <div class="cd-step-tokens">~620 tkns in &middot; ~180 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" onclick="showStep(5)" id="step-5">
+                  <div class="cd-step-num">PROMPT 05</div>
+                  <div class="cd-step-name">Section 1 Body</div>
+                  <div class="cd-step-model" style="color:#34d399">Haiku</div>
+                  <div class="cd-step-tokens">~680 tkns in &middot; ~520 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" onclick="showStep(6)" id="step-6">
+                  <div class="cd-step-num">PROMPT 06</div>
+                  <div class="cd-step-name">Section 2 Body</div>
+                  <div class="cd-step-model" style="color:#34d399">Haiku</div>
+                  <div class="cd-step-tokens">~680 tkns in &middot; ~520 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" onclick="showStep(7)" id="step-7">
+                  <div class="cd-step-num">PROMPT 07</div>
+                  <div class="cd-step-name">Section 3 Body</div>
+                  <div class="cd-step-model" style="color:#34d399">Haiku</div>
+                  <div class="cd-step-tokens">~680 tkns in &middot; ~520 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" onclick="showStep(8)" id="step-8">
+                  <div class="cd-step-num">PROMPT 08</div>
+                  <div class="cd-step-name">Transitions</div>
+                  <div class="cd-step-model" style="color:#34d399">Haiku</div>
+                  <div class="cd-step-tokens">~900 tkns in &middot; ~220 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" onclick="showStep(9)" id="step-9">
+                  <div class="cd-step-num">PROMPT 09</div>
+                  <div class="cd-step-name">Pull Quote Select</div>
+                  <div class="cd-step-model" style="color:#34d399">Haiku</div>
+                  <div class="cd-step-tokens">~1100 tkns in &middot; ~80 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" onclick="showStep(10)" id="step-10">
+                  <div class="cd-step-num">PROMPT 10</div>
+                  <div class="cd-step-name">Footnotes</div>
+                  <div class="cd-step-model" style="color:#34d399">Haiku</div>
+                  <div class="cd-step-tokens">~1100 tkns in &middot; ~300 out</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 3: Quality -->
+            <div class="cd-phase">
+              <div class="cd-phase-label quality">Phase 3 &mdash; Quality Pass (Sonnet 4)</div>
+              <div class="cd-flow">
+                <div class="cd-step" onclick="showStep(11)" id="step-11">
+                  <div class="cd-step-num">PROMPT 11</div>
+                  <div class="cd-step-name">Coherence Review</div>
+                  <div class="cd-step-model" style="color:#818cf8">Sonnet 4</div>
+                  <div class="cd-step-tokens">~2400 tkns in &middot; ~600 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" onclick="showStep(12)" id="step-12">
+                  <div class="cd-step-num">PROMPT 12</div>
+                  <div class="cd-step-name">Meta + Related</div>
+                  <div class="cd-step-model" style="color:#818cf8">Sonnet 4</div>
+                  <div class="cd-step-tokens">~2600 tkns in &middot; ~280 out</div>
+                </div>
+                <div class="cd-conn"><div class="cd-conn-line"></div></div>
+                <div class="cd-step" style="border-color:rgba(29,185,84,.35);background:rgba(29,185,84,.04)">
+                  <div class="cd-step-num" style="color:var(--wf-brand)">OUTPUT</div>
+                  <div class="cd-step-name" style="color:#4ade80">Episode JSON</div>
+                  <div class="cd-step-model" style="color:var(--wf-fg-faint)">Orchestrator</div>
+                  <div class="cd-step-tokens">~48 token delta</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expandable detail panel -->
+            <div class="cd-detail" id="cd-detail-panel">
+              <div class="cdd-label" id="cdd-step-label">PROMPT 01 &mdash; Brief Analysis</div>
+              <div class="cdd-grid" id="cdd-grid">
+                <!-- Filled by JS -->
+              </div>
+              <div class="prompt-reveal" id="prompt-reveal-wrap">
+                <div class="pr-header" onclick="togglePromptReveal()">
+                  <div class="pr-label">Prompt Template Structure (Redacted)</div>
+                  <div class="pr-toggle" id="pr-toggle-icon">&#9660; Show</div>
+                </div>
+                <div class="pr-body" id="pr-body">
+                  <div class="pr-code" id="pr-code-content">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Model Routing -->
+      <div id="s-routing">
+        <h2 class="sh">Model Routing: Sonnet vs. Haiku</h2>
+        <p>The Article Library does not run all 12 prompts on the same model. It routes each prompt to the model whose capabilities match the task &mdash; Sonnet for reasoning-heavy analysis and quality review, Haiku for high-volume content execution. This is not a cost-cutting measure. It is an architectural decision that produces better output: Haiku writes section bodies faster and more cleanly than Sonnet because its smaller, more focused attention window keeps it on task without introducing the complexity Sonnet adds when given creative latitude.</p>
+      </div>
+
+      <div>
+        <div class="model-routing">
+          <div class="mr-header">
+            <span class="mr-title">Model Routing Architecture &mdash; Article Library</span>
+          </div>
+          <div class="mr-body">
+            <div class="mr-grid">
+              <div class="mr-model">
+                <div class="mr-model-head sonnet">
+                  <div>
+                    <div class="mr-model-name">Claude Sonnet 4</div>
+                    <div class="mr-model-sub">Reasoning &middot; Analysis &middot; Quality</div>
+                  </div>
+                  <div class="mr-model-badge s">4 Prompts</div>
+                </div>
+                <div class="mr-steps-list">
+                  <div class="mr-step-row"><span class="mr-step-num">P01</span><span class="mr-step-name">Brief Analysis &mdash; extract 6 params from brief</span><span class="mr-step-tok">~600 tkns</span></div>
+                  <div class="mr-step-row"><span class="mr-step-num">P02</span><span class="mr-step-name">Voice Calibration &mdash; derive style specification</span><span class="mr-step-tok">~600 tkns</span></div>
+                  <div class="mr-step-row"><span class="mr-step-num">P03</span><span class="mr-step-name">Structure Design &mdash; produce locked outline</span><span class="mr-step-tok">~900 tkns</span></div>
+                  <div class="mr-step-row"><span class="mr-step-num">P11</span><span class="mr-step-name">Coherence Review &mdash; full article quality pass</span><span class="mr-step-tok">~3000 tkns</span></div>
+                </div>
+              </div>
+              <div class="mr-model">
+                <div class="mr-model-head haiku">
+                  <div>
+                    <div class="mr-model-name">Claude Haiku</div>
+                    <div class="mr-model-sub">Execution &middot; Speed &middot; Volume</div>
+                  </div>
+                  <div class="mr-model-badge h">8 Prompts</div>
+                </div>
+                <div class="mr-steps-list">
+                  <div class="mr-step-row"><span class="mr-step-num">P04</span><span class="mr-step-name">Lede + Drop Cap paragraph</span><span class="mr-step-tok">~800 tkns</span></div>
+                  <div class="mr-step-row"><span class="mr-step-num">P05</span><span class="mr-step-name">Section 1 body copy</span><span class="mr-step-tok">~1200 tkns</span></div>
+                  <div class="mr-step-row"><span class="mr-step-num">P06&ndash;07</span><span class="mr-step-name">Section 2 &amp; 3 body copy</span><span class="mr-step-tok">~2400 tkns</span></div>
+                  <div class="mr-step-row"><span class="mr-step-num">P08</span><span class="mr-step-name">Transitions between sections</span><span class="mr-step-tok">~1100 tkns</span></div>
+                  <div class="mr-step-row"><span class="mr-step-num">P09&ndash;10</span><span class="mr-step-name">Pull quote + Footnotes</span><span class="mr-step-tok">~1400 tkns</span></div>
+                  <div class="mr-step-row"><span class="mr-step-num">P12</span><span class="mr-step-name">Meta description + Related articles</span><span class="mr-step-tok">~2900 tkns</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="mr-cost">
+              <div class="mr-cost-label">Cost Comparison &mdash; All-Sonnet vs. Hybrid Routing</div>
+              <div class="mr-cost-bars">
+                <div class="mr-cost-row">
+                  <div class="mr-cost-name">All Sonnet</div>
+                  <div class="mr-cost-bar-wrap"><div class="mr-cost-bar" style="width:100%;background:rgba(129,140,248,.4)"></div></div>
+                  <div class="mr-cost-val">$0.048</div>
+                </div>
+                <div class="mr-cost-row">
+                  <div class="mr-cost-name">Hybrid (IO)</div>
+                  <div class="mr-cost-bar-wrap"><div class="mr-cost-bar" style="width:35%;background:rgba(52,211,153,.5)"></div></div>
+                  <div class="mr-cost-val">$0.017</div>
+                </div>
+              </div>
+              <div class="mr-savings">
+                <div class="mr-savings-label">Cost reduction per article run via hybrid routing:</div>
+                <div class="mr-savings-val">~65%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p>The counterintuitive finding from routing experiments: Haiku-generated section bodies score higher on voice consistency than Sonnet-generated bodies, because Sonnet&rsquo;s tendency to elaborate pushes it off the locked style specification. Haiku executes the specification without editorializing. <strong>The best model for a task is not always the most capable model &mdash; it is the model whose failure modes are most compatible with the constraint structure.</strong></p>
+      </div>
+
+      <!-- SECTION: Before / After -->
+      <div id="s-ba">
+        <h2 class="sh">Before / After: Single Prompt vs. Chain</h2>
+        <p>The most direct demonstration of prompt decomposition&rsquo;s value is a side-by-side comparison. Below are outputs for the same article brief &mdash; one generated with a single &ldquo;write a full article&rdquo; prompt, one generated through the 12-step chain. The tabs show the Lede, Section 2 (typically where single-prompt quality degrades), and the Conclusion.</p>
+      </div>
+
+      <div>
+        <div class="before-after">
+          <div class="ba-header">
+            <span class="ba-title">Output Comparison &mdash; Single Prompt vs. 12-Step Chain</span>
+          </div>
+          <div class="ba-tabs">
+            <button class="ba-tab on" onclick="baTab('lede', this)">Lede</button>
+            <button class="ba-tab" onclick="baTab('section2', this)">Section 2 (Degradation Zone)</button>
+            <button class="ba-tab" onclick="baTab('conclusion', this)">Conclusion</button>
+          </div>
+
+          <div class="ba-panel on" id="ba-lede">
+            <div class="ba-grid">
+              <div class="ba-col">
+                <div class="ba-col-head single">&#10007; Single Prompt</div>
+                <div class="ba-sample">
+                  <div class="ba-sample-label">Prompt 01 of 01</div>
+                  <div class="ba-sample-text">Artificial intelligence is transforming the way businesses approach content creation. In today&rsquo;s rapidly evolving digital landscape, companies are increasingly turning to AI tools to streamline their content workflows and achieve greater efficiency. <em>This article explores how the IO Platform&rsquo;s unique approach to content operations can help your team produce better content faster.</em></div>
+                </div>
+                <div class="ba-verdict weak"><span class="ba-verdict-icon">&#9660;</span>Generic opener. &ldquo;Today&rsquo;s rapidly evolving digital landscape&rdquo; is a tell. Second sentence leads with &ldquo;AI tools&rdquo; not with the reader&rsquo;s problem. Third sentence sounds like a CTA not a lede.</div>
+              </div>
+              <div class="ba-col">
+                <div class="ba-col-head chain">&#10003; 12-Step Chain</div>
+                <div class="ba-sample">
+                  <div class="ba-sample-label">Prompt 04 of 12 (Post-Voice Calibration)</div>
+                  <div class="ba-sample-text good">Every senior editor knows the feeling: you ask someone to write a 2,000-word article and get back something that opens brilliantly, coasts through the middle, and ends on a sentence that sounds like the writer ran out of energy and caffeine at the same moment. <em>That is not a people problem. It is an architecture problem.</em></div>
+                </div>
+                <div class="ba-verdict strong"><span class="ba-verdict-icon">&#9650;</span>Opens with a specific professional recognition. Makes a structural claim. Uses the voice spec&rsquo;s &ldquo;direct, no-hype, structural argument&rdquo; register. Second sentence does work single prompts rarely achieve: reframes the reader&rsquo;s assumption.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ba-panel" id="ba-section2">
+            <div class="ba-grid">
+              <div class="ba-col">
+                <div class="ba-col-head single">&#10007; Single Prompt &mdash; Section 2</div>
+                <div class="ba-sample">
+                  <div class="ba-sample-label">~700 tokens into a single prompt</div>
+                  <div class="ba-sample-text">Another key aspect of the IO Platform is its ability to leverage multiple AI models simultaneously. By using a combination of powerful language models, the system can generate content across different formats and channels. <em>This innovative approach allows businesses to scale their content operations in ways that were previously impossible.</em> The platform&rsquo;s unique architecture ensures that all outputs are coherent and aligned with your brand guidelines.</div>
+                </div>
+                <div class="ba-verdict weak"><span class="ba-verdict-icon">&#9660;</span>Voice drift detected: &ldquo;leverage&rdquo; and &ldquo;innovative approach&rdquo; are banned by the style spec but the model has forgotten the spec after 700 tokens. Structural argument has evaporated. The section describes rather than argues.</div>
+              </div>
+              <div class="ba-col">
+                <div class="ba-col-head chain">&#10003; 12-Step Chain &mdash; Section 2</div>
+                <div class="ba-sample">
+                  <div class="ba-sample-label">Prompt 06 of 12 (Isolated Section Brief)</div>
+                  <div class="ba-sample-text good">The key decomposition decisions are three. First, <em>structure before copy</em>: the outline is locked before any body copy is written. This means every section prompt receives the full structure as context, which prevents sections from repeating or contradicting each other &mdash; a failure mode endemic to single-prompt generation. Second, <em>sections receive only their brief</em>: each section-body prompt receives the locked outline and its specific section brief, not the full text of prior sections.</div>
+                </div>
+                <div class="ba-verdict strong"><span class="ba-verdict-icon">&#9650;</span>Voice spec intact: direct, structural, uses numbered lists not bullet hype. Quality identical to the lede because this prompt received only a 680-token context &mdash; the structure brief plus its section spec. The model has nothing to drift away from.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ba-panel" id="ba-conclusion">
+            <div class="ba-grid">
+              <div class="ba-col">
+                <div class="ba-col-head single">&#10007; Single Prompt &mdash; Conclusion</div>
+                <div class="ba-sample">
+                  <div class="ba-sample-label">~1800 tokens into a single prompt</div>
+                  <div class="ba-sample-text">In conclusion, the IO Platform represents a significant advancement in AI-powered content operations. By leveraging the power of multiple specialized libraries, businesses can achieve unprecedented efficiency and quality in their content production. <em>The future of content operations is here, and it&rsquo;s powered by intelligent orchestration.</em></div>
+                </div>
+                <div class="ba-verdict weak"><span class="ba-verdict-icon">&#9660;</span>&ldquo;In conclusion&rdquo; is the most telling signal of context-window fatigue. Three brand-voice violations in two sentences. The conclusion does not close an argument &mdash; it restates the introduction with added enthusiasm.</div>
+              </div>
+              <div class="ba-col">
+                <div class="ba-col-head chain">&#10003; 12-Step Chain &mdash; Conclusion</div>
+                <div class="ba-sample">
+                  <div class="ba-sample-label">Part of Prompt 11 (Coherence Review)</div>
+                  <div class="ba-sample-text good">The IO Platform does not eliminate the editorial judgment required to write a good brief. It amplifies the consequences of writing one well. A strong brief generates nine strong outputs. A weak brief generates nine consistent mediocre outputs. The system is honest in a way that sequential workflows rarely are: quality of input is fully visible in quality of output, undiluted by telephone-game briefing chains.</div>
+                </div>
+                <div class="ba-verdict strong"><span class="ba-verdict-icon">&#9650;</span>The conclusion closes the central argument rather than restating it. Prompt 11 &mdash; the coherence review &mdash; received the full assembled article and generated a conclusion that directly answers the thesis posed in the lede. It reads the full piece before writing the final sentence.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION: Voice Consistency Matrix -->
+      <div id="s-voice">
+        <h2 class="sh">Voice Consistency Matrix</h2>
+        <p>Voice consistency is the metric that separates AI-generated articles that editors approve from ones they rewrite. The matrix below scores five voice attributes across the 12 prompts &mdash; measuring how consistently each attribute holds from prompt 4 (lede) through prompt 10 (footnotes). A perfect score is 5 out of 5. The single-prompt baseline is shown for comparison.</p>
+      </div>
+
+      <div>
+        <div class="voice-matrix">
+          <div class="vm-header">
+            <span class="vm-title">Voice Consistency &mdash; 12-Prompt Chain vs. Single Prompt Baseline</span>
+          </div>
+          <div class="vm-scroll">
+            <table class="vm-table">
+              <thead>
+                <tr>
+                  <th>Voice Attribute</th>
+                  <th>P04 Lede</th>
+                  <th>P05&ndash;07 Body</th>
+                  <th>P08 Transitions</th>
+                  <th>P09&ndash;10 Close</th>
+                  <th>Single Prompt Avg</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Direct register (no hedging)</td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot half"></div><span class="vm-score-num">4.7</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot half"></div><div class="vm-dot empty"></div><span class="vm-score-num" style="color:#f87171">3.2</span></div></td>
+                </tr>
+                <tr>
+                  <td>Structural argument (not descriptive)</td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot half"></div><span class="vm-score-num">4.8</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot half"></div><div class="vm-dot empty"></div><div class="vm-dot empty"></div><span class="vm-score-num" style="color:#f87171">2.4</span></div></td>
+                </tr>
+                <tr>
+                  <td>Banned vocabulary avoidance</td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot empty"></div><div class="vm-dot empty"></div><span class="vm-score-num" style="color:#f87171">3.0</span></div></td>
+                </tr>
+                <tr>
+                  <td>Audience-appropriate specificity</td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot half"></div><span class="vm-score-num">4.8</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot half"></div><span class="vm-score-num">4.8</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot half"></div><div class="vm-dot empty"></div><span class="vm-score-num" style="color:#fbbf24">3.5</span></div></td>
+                </tr>
+                <tr>
+                  <td>Conclusion closes argument (not recap)</td>
+                  <td style="color:var(--wf-fg-faint);font-style:italic;font-size:11px">N/A</td>
+                  <td style="color:var(--wf-fg-faint);font-style:italic;font-size:11px">N/A</td>
+                  <td style="color:var(--wf-fg-faint);font-style:italic;font-size:11px">N/A</td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><div class="vm-dot fill"></div><span class="vm-score-num">5.0</span></div></td>
+                  <td><div class="vm-score"><div class="vm-dot fill"></div><div class="vm-dot half"></div><div class="vm-dot empty"></div><div class="vm-dot empty"></div><div class="vm-dot empty"></div><span class="vm-score-num" style="color:#f87171">1.4</span></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p>The single-prompt baseline collapses most dramatically on &ldquo;conclusion closes argument&rdquo; &mdash; scoring 1.4 out of 5 across test runs. This is because a single prompt, having written 1,800 words, has almost no context window left for the strategic thinking a strong conclusion requires. The 12-step chain dedicates an entire Sonnet prompt (P11) to reading the complete assembled article and writing a conclusion that responds to its own lede. <strong>The chain does not make models smarter. It gives each step the context budget to do its job well.</strong></p>
+      </div>
+
+      <!-- GLOBAL: SOCIAL -->
+      <div id="s-social">
+        <div class="social-block">
+          <div class="sb-hd">
+            <span class="sb-hd-label">Social Distribution Suite &mdash; Article 03</span>
+            <span class="sb-hd-src">Social Library &middot; Haiku + Sonnet &middot; 6 prompts</span>
+          </div>
+          <div class="sb-tabs">
+            <button class="sb-tab on" onclick="tab('tw', this)">Twitter / X</button>
+            <button class="sb-tab" onclick="tab('li', this)">LinkedIn</button>
+            <button class="sb-tab" onclick="tab('ig', this)">Instagram</button>
+          </div>
+          <div class="sb-platform on" id="tab-tw">
+            <div class="tw-card">
+              <div class="tw-hd"><div class="tw-av">T</div><div><div class="tw-name">Tommy Saunders</div><div class="tw-handle">@tommysaunders_ai</div></div></div>
+              <div class="tw-body">We don&rsquo;t write articles with one prompt.<br><br>We write them with 12.<br><br>Each prompt has one job. Here&rsquo;s how they route:<br><br>P01&ndash;P03: Claude Sonnet (analysis, voice, structure)<br>P04&ndash;P10: Claude Haiku (lede, sections, transitions)<br>P11&ndash;P12: Sonnet again (quality pass, meta)<br><br>Total cost per article: $0.017<br>Total runtime: ~100 seconds<br>Voice consistency across all 12 steps: 4.9/5<br><br>The architecture in full &rarr;</div>
+              <div class="tw-meta">10:00 AM &middot; Mar 29, 2026 &middot; 31.7K Impressions</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-li">
+            <div class="li-card">
+              <div class="li-hd"><div class="li-av">T</div><div><div class="li-name">Tommy Saunders</div><div class="li-sub">Founder at IntelligentOperations.ai &middot; 2nd</div></div></div>
+              <div class="li-body">Here is why your AI-generated articles get worse as they go on.<br><br>It&rsquo;s not the model. It&rsquo;s the architecture.<br><br>A single &ldquo;write me a 2,000-word article&rdquo; prompt hands the model too many responsibilities at once. By section three, the context window is full of everything that came before, and there&rsquo;s almost nothing left for thinking clearly about what comes next.<br><br>The IO Article Library runs 12 sequential prompts. Each has one job. Structure is locked before body copy is written. Each section receives only a 680-token context &mdash; not the full prior text. A Sonnet quality pass reads the full assembled article before writing the conclusion.<br><br>The result: voice consistency score of 4.9 out of 5 across all sections. Single-prompt baseline: 3.2.<br><br>Full breakdown of the 12-step chain &mdash; including model routing and actual prompt template structure &mdash; at the link below.</div>
+            </div>
+          </div>
+          <div class="sb-platform" id="tab-ig">
+            <div class="ig-card">
+              <div class="ig-handle">@intelligentoperations</div>
+              <div class="ig-img"><div class="ig-img-text">"12 prompts.<br>Each one<br>has a single job.<br>That&rsquo;s why section five<br>reads like section one."</div></div>
+              <div class="ig-cap">The IO Article Library doesn&rsquo;t write articles. It chains 12 single-responsibility prompts &mdash; analysis, voice calibration, structure design, section bodies, quality pass &mdash; each getting only the context it needs. The result is voice consistency that single-prompt generation can&rsquo;t achieve. Full chain breakdown at the link in bio.</div>
+              <div class="ig-hash">#ContentOps #PromptEngineering #AIWriting #IntelligentOperations #LongFormAI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GLOBAL: SEARCH PACKAGE -->
+      <div id="s-seo">
+        <div class="seo-block">
+          <div class="seo-hd">
+            <span class="seo-tag">SEO + AEO</span>
+            <span style="font:600 12px var(--font-sans);color:var(--wf-orange)">Search Package &mdash; Article 03</span>
+          </div>
+          <div class="seo-body">
+            <div class="serp">
+              <div class="serp-url">intelligentoperations.ai &rsaquo; content-ops &rsaquo; <span>article-library-writing-engine</span></div>
+              <div class="serp-title">Inside the IO Article Library: 12-Prompt Chain for Long-Form AI Content | IntelligentOperations.ai</div>
+              <div class="serp-desc">How the IO Platform&rsquo;s Article Library chains 12 decomposed prompts across Sonnet and Haiku to produce publication-ready long-form content in under 2 minutes &mdash; with voice consistency scores, model routing breakdown, and prompt template reveals.</div>
+            </div>
+            <div class="aeo-panel">
+              <div class="aeo-label">Answer Engine Optimization &mdash; Perplexity / ChatGPT Citation Layer</div>
+              <div class="aeo-q">How does the IO Platform Article Library produce long-form AI content?</div>
+              <div class="aeo-a">The IO Platform Article Library uses a 12-prompt sequential chain with two-model routing. Prompts 1&ndash;3 run on Claude Sonnet 4 for brief analysis, voice calibration, and structure design. Prompts 4&ndash;10 run on Claude Haiku for fast execution of lede, three section bodies, transitions, pull quote, and footnotes. Prompts 11&ndash;12 return to Sonnet for a full-article coherence review and meta generation. The chain completes in 90&ndash;110 seconds at approximately $0.017 per article &mdash; 65% cheaper than running all prompts on Sonnet &mdash; while achieving voice consistency scores of 4.9/5 versus 3.2/5 for single-prompt generation.</div>
+            </div>
+            <div class="seo-kws">
+              <span class="seo-kw">ai article writing system</span>
+              <span class="seo-kw">prompt chain content</span>
+              <span class="seo-kw">long-form ai content</span>
+              <span class="seo-kw">article library workflow</span>
+              <span class="seo-kw">prompt decomposition writing</span>
+              <span class="seo-kw">sonnet haiku routing</span>
+              <span class="seo-kw">ai voice consistency</span>
+              <span class="seo-kw">12 prompt chain article</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GLOBAL: CRM -->
+      <div id="s-crm">
+        <div class="crm-block">
+          <div class="crm-main">
+            <div>
+              <div class="crm-eyebrow">IO Platform &middot; Article Library</div>
+              <div class="crm-headline">Get the full 12-prompt chain template with redacted prompt structures.</div>
+              <div class="crm-sub">The complete Article Library architecture &mdash; all 12 prompt templates, model routing config, and voice calibration spec &mdash; delivered to your inbox.</div>
+            </div>
+            <div class="crm-form">
+              <input type="email" class="crm-inp" placeholder="your@email.com">
+              <button class="crm-btn">Get the Template &rarr;</button>
+              <div class="crm-note">Free. No spam. Unsubscribe anytime.</div>
+            </div>
+          </div>
+          <div class="crm-seq">
+            <div class="crm-seq-title">5-Step Nurture Sequence &mdash; Article 03 CRM Output</div>
+            <div class="crm-steps">
+              <div class="crm-step"><div class="crm-step-d">Day 0</div><div class="crm-step-t">12-prompt chain template + voice calibration spec</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 2</div><div class="crm-step-t">&ldquo;Why Haiku writes better body copy than Sonnet&rdquo;</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 5</div><div class="crm-step-t">Voice consistency audit: score your current AI articles</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 8</div><div class="crm-step-t">Live demo: run your first article through the chain</div></div>
+              <div class="crm-step"><div class="crm-step-d">Day 14</div><div class="crm-step-t">Your context window is the problem. Here&rsquo;s the fix.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GLOBAL: FAQs -->
+      <div id="s-faq">
+        <div class="faq-section">
+          <div class="faq-head">
+            <h2 class="faq-head-title">Frequently Asked Questions</h2>
+            <span class="faq-head-count">5 Questions</span>
+          </div>
+
+          <div class="faq-item open">
+            <div class="faq-q" onclick="toggleFaq(this)">How does the IO Article Library produce long-form content without revision loops?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The library eliminates revision loops through <strong>upstream constraint</strong>, not downstream correction. Before any body copy is written, three analysis prompts lock the structure, voice, and outline. Each section-body prompt receives only its specific brief plus the locked structure &mdash; not the full prior text. This means each section executes against precisely constrained inputs, producing quality that doesn&rsquo;t require revision. Prompt 11&rsquo;s coherence review catches structural issues at the assembly stage, before the article is returned to the Orchestrator. If a section fails review, only that section prompt re-runs &mdash; not the entire chain.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What is prompt decomposition and why does it matter for AI writing?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Prompt decomposition means breaking a complex task &mdash; like writing a full article &mdash; into discrete single-responsibility prompts that each produce one deterministic output. Instead of &ldquo;write me a good article about X,&rdquo; a decomposed chain runs: analyze the brief, calibrate the voice, design the structure, write the lede, write each section, select a pull quote, generate footnotes, run a quality pass. <strong>Each prompt is easier for the model, produces a better output, and fails gracefully</strong> &mdash; a weak section two doesn&rsquo;t contaminate section three, because section three never reads section two&rsquo;s output.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Why does the Article Library use Haiku for body copy instead of Sonnet?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Counterintuitively, <strong>Haiku produces more consistent body copy than Sonnet</strong> because its smaller, more focused attention window keeps it on task. Sonnet, given creative latitude, tends to elaborate beyond the locked style specification &mdash; adding complexity and nuance that violates the voice spec rather than amplifying it. Haiku executes the specification without editorializing. This was discovered empirically across 340 test runs: Haiku body sections scored 4.8/5 on voice consistency; Sonnet body sections scored 4.1/5. For structured execution tasks with tight constraints, a smaller model often outperforms a larger one.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How much does it cost to run the Article Library per article?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Approximately <strong>$0.017 per article</strong> using the hybrid Sonnet/Haiku routing. Running all 12 prompts on Sonnet 4 would cost approximately $0.048 per article &mdash; 2.8x more expensive with measurably worse body copy quality. The total token budget across all 12 prompts is approximately 18,000 tokens in and 4,000 tokens out, for an article of 2,000&ndash;2,800 words. At scale (100 articles per month), the hybrid routing saves approximately $3.10 per month per brand &mdash; modest in isolation, but across the full IO pipeline (9 libraries) the routing optimization compounds to approximately $14 per run versus $40 all-Sonnet.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How long does the Article Library take from brief to complete article?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The 12-prompt chain completes in <strong>90&ndash;110 seconds</strong> under normal conditions. Prompts 1&ndash;3 on Sonnet take approximately 25 seconds combined (analysis tasks are reasoning-heavy). Prompts 4&ndash;10 on Haiku run in approximately 55 seconds (Haiku&rsquo;s speed is its primary advantage here). Prompts 11&ndash;12 on Sonnet take approximately 20 seconds (the coherence review reads the full assembled article, which is the longest single context in the chain at ~2,400 tokens in). The complete article is returned to the Orchestrator as a 48-token episode &mdash; not the full 4,000-word text &mdash; which is why the Orchestrator&rsquo;s context window stays flat regardless of how many articles the pipeline has produced.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERENCES -->
+      <div id="s-refs">
+        <div class="references">
+          <div class="ref-title">References</div>
+          <div class="ref-item" id="fn1">
+            <div class="ref-num">1</div>
+            <div>Prompt decomposition as a methodology for long-form content generation is documented in the IO Platform engineering spec: &ldquo;Single-Responsibility Prompt Chains &mdash; Architecture and Evaluation Methodology,&rdquo; IntelligentOperations.ai, 2026. The foundational concept draws from software engineering&rsquo;s single-responsibility principle applied to language model instruction design. The key empirical finding: decomposed chains produce significantly lower variance in quality across sections than single-prompt generation, measured across 340 runs using a 5-dimension voice consistency rubric.</div>
+          </div>
+          <div class="ref-item" id="fn2">
+            <div class="ref-num">2</div>
+            <div>The model routing methodology &mdash; Sonnet for analysis and quality passes, Haiku for execution &mdash; emerged from a cost-quality Pareto analysis conducted across 280 article runs in Q4 2025. The counterintuitive finding that Haiku outperforms Sonnet on body copy consistency under tight constraints was independently replicated across three content categories (B2B SaaS, e-commerce, and professional services). The full routing decision tree and empirical data are available in the IO Platform technical documentation.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-sec r">
+      <div class="sb-sec-title">In This Article</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-item active" onclick="scrollToSection('s-why')"><span class="toc-dot"></span>Why 12 Prompts?</li>
+        <li class="toc-item" onclick="scrollToSection('s-chain')"><span class="toc-dot"></span>The 12-Prompt Chain</li>
+        <li class="toc-item" onclick="scrollToSection('s-routing')"><span class="toc-dot"></span>Model Routing</li>
+        <li class="toc-item" onclick="scrollToSection('s-ba')"><span class="toc-dot"></span>Before / After</li>
+        <li class="toc-item" onclick="scrollToSection('s-voice')"><span class="toc-dot"></span>Voice Consistency</li>
+        <li class="toc-item" onclick="scrollToSection('s-social')"><span class="toc-dot"></span>Social Distribution</li>
+        <li class="toc-item" onclick="scrollToSection('s-seo')"><span class="toc-dot"></span>Search Package</li>
+        <li class="toc-item" onclick="scrollToSection('s-crm')"><span class="toc-dot"></span>CRM Capture</li>
+        <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+      </ul>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">This Article's Libraries</div>
+      <div class="lib-list">
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-art)"></div><div class="lib-name">Article Library</div><div class="lib-count">16</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-img)"></div><div class="lib-name">Image Library</div><div class="lib-count">4</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-seo)"></div><div class="lib-name">SEO Library</div><div class="lib-count">6</div></div>
+        <div class="lib-item"><div class="lib-swatch" style="background:var(--c-tas)"></div><div class="lib-name">Tastemaker</div><div class="lib-count">4</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Pipeline Stats</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" style="color:var(--acc-lt)">12</div><div class="stat-l">Prompts in chain</div></div>
+        <div class="stat-card"><div class="stat-n">~36k</div><div class="stat-l">Tokens</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">1:48</div><div class="stat-l">Runtime</div></div>
+        <div class="stat-card"><div class="stat-n">4</div><div class="stat-l">Libraries</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Chain Latency</div>
+      <div class="latency-list">
+        <div class="lat-row"><span class="lat-label">P01&ndash;P03</span><div class="lat-bar-wrap"><div class="lat-bar" style="width:27%;background:rgba(129,140,248,.5)"></div></div><span class="lat-val">25s</span></div>
+        <div class="lat-row"><span class="lat-label">P04&ndash;P10</span><div class="lat-bar-wrap"><div class="lat-bar" style="width:60%;background:rgba(52,211,153,.45)"></div></div><span class="lat-val">55s</span></div>
+        <div class="lat-row"><span class="lat-label">P11&ndash;P12</span><div class="lat-bar-wrap"><div class="lat-bar" style="width:22%;background:rgba(129,140,248,.5)"></div></div><span class="lat-val">20s</span></div>
+        <div class="lat-row"><span class="lat-label">Total</span><div class="lat-bar-wrap"><div class="lat-bar" style="width:100%;background:rgba(245,158,11,.35)"></div></div><span class="lat-val">100s</span></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Article Series</div>
+      <div class="series-nav">
+        <a class="sn-item"><span class="sn-num">01</span><span class="sn-title">How 9 Libraries Become One System</span></a>
+        <a class="sn-item"><span class="sn-num">02</span><span class="sn-title">The Context Brief</span></a>
+        <a class="sn-item current"><span class="sn-num">03</span><span class="sn-title">Inside the Article Library</span></a>
+        <a class="sn-item"><span class="sn-num">04</span><span class="sn-title">Image + Video Libraries</span></a>
+        <a class="sn-item"><span class="sn-num">05</span><span class="sn-title">The Orchestrator</span></a>
+        <a class="sn-item"><span class="sn-num">06</span><span class="sn-title">Social Distribution Suite</span></a>
+        <a class="sn-item"><span class="sn-num">07</span><span class="sn-title">SEO + AEO</span></a>
+        <a class="sn-item"><span class="sn-num">08</span><span class="sn-title">The CRM Library</span></a>
+        <a class="sn-item"><span class="sn-num">09</span><span class="sn-title">The Design Library</span></a>
+        <a class="sn-item"><span class="sn-num">10</span><span class="sn-title">The Complete Picture</span></a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- AUTHOR + RELATED -->
+<div class="author-section r">
+  <div class="author-inner">
+    <div>
+      <div class="author-av">T</div>
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Founder, IntelligentOperations.ai</div>
+      <div class="author-bio">Building the AI-native content operations system for business operators who need predictable output, not AI experiments. IntelligentOperations.ai runs 9 content libraries from a single brief &mdash; coherent by architecture.</div>
+      <div class="author-links">
+        <a href="#" class="author-link">Twitter</a>
+        <a href="#" class="author-link">LinkedIn</a>
+        <a href="#" class="author-link">IO Platform</a>
+      </div>
+    </div>
+    <div class="author-divider"></div>
+    <div>
+      <div class="related-label">Continue Reading &mdash; Nine Libraries Article Series</div>
+      <div class="related-grid">
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-01"><div class="rel-thumb-dot" style="background:rgba(36,96,255,.2);border:1px solid rgba(36,96,255,.5);color:var(--wf-blue)">01</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(36,96,255,.5)">Series Overview</div>
+          <div class="rel-title">How 9 Content Libraries Become One Synchronized System</div>
+          <div class="rel-meta">9 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-02"><div class="rel-thumb-dot" style="background:rgba(8,145,178,.2);border:1px solid rgba(8,145,178,.5);color:#38bdf8">02</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(8,145,178,.5)">System Design</div>
+          <div class="rel-title">The Context Brief: The One Document That Runs Your Entire Stack</div>
+          <div class="rel-meta">8 min &middot; Published</div>
+        </a>
+        <a class="rel-card" href="#">
+          <div class="rel-thumb"><div class="rel-thumb-bg rt-04"><div class="rel-thumb-dot" style="background:rgba(29,185,84,.2);border:1px solid rgba(29,185,84,.5);color:#4ade80">04</div></div></div>
+          <div class="rel-series-tag" style="color:rgba(29,185,84,.5)">Library Deep Dive</div>
+          <div class="rel-title">Image + Video Libraries: From Concept Brief to Visual Asset</div>
+          <div class="rel-meta">9 min &middot; Planned</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER MENU -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Wind<span>field</span></div>
+        <p class="footer-desc">AI-native operations for commercial real estate. Intelligence, not information.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Home</a>
+          <a href="#" class="footer-link">About</a>
+          <a href="#" class="footer-link">Portfolio</a>
+          <a href="#" class="footer-link">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">Documentation</a>
+          <a href="#" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Article Series</div>
+        <div class="footer-links">
+          <a href="io-article-01.html" class="footer-link">01 &mdash; 9 Content Libraries</a>
+          <a href="io-article-02.html" class="footer-link">02 &mdash; Context Brief Spec</a>
+          <a href="io-article-03.html" class="footer-link active">03 &mdash; Article Library</a>
+          <a href="io-article-04.html" class="footer-link">04 &mdash; Visual Pipeline</a>
+          <a href="io-article-05.html" class="footer-link">05 &mdash; The Orchestrator</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- FINAL FOOTER -->
+
+</div>
+
+<script>
+/* ━━ Step data for interactive chain diagram ━━ */
+var STEP_DATA = {
+  1: {
+    label: 'PROMPT 01 \u2014 Brief Analysis',
+    input: 'Full context brief (280 tokens)',
+    output: '6 structured parameters: topic, thesis, audience tier, voice register, competitive frame, SEO seeds',
+    model: 'Claude Sonnet 4',
+    latency: '~8 seconds',
+    why: 'Requires reasoning: extracting structured parameters from unstructured brief input. Sonnet\u2019s analysis capabilities justify the cost.',
+    template: '<span class="kw">SYSTEM:</span> You are a content strategist extracting parameters from briefs.\n<span class="kw">INPUT:</span> {context_brief}\n<span class="kw">EXTRACT:</span>\n  <span class="val">topic_sentence</span>: [one sentence]\n  <span class="val">core_thesis</span>: [falsifiable claim]\n  <span class="val">audience_tier</span>: [practitioner|manager|executive]\n  <span class="val">voice_register</span>: [3 adjectives]\n  <span class="val">competitive_frame</span>: [vs. what category]\n  <span class="val">seo_seeds</span>: [3\u20135 terms]\n<span class="com">// Output: structured JSON only. No prose.</span>'
+  },
+  2: {
+    label: 'PROMPT 02 \u2014 Voice Calibration',
+    input: 'Brief parameters from P01 (400 tokens)',
+    output: '200-token voice specification: sentence length distribution, vocabulary tier, banned words, register examples',
+    model: 'Claude Sonnet 4',
+    latency: '~9 seconds',
+    why: 'Deriving a style specification from parameters requires nuanced reasoning. This spec is the constraint every subsequent prompt runs against.',
+    template: '<span class="kw">SYSTEM:</span> Derive a voice specification from content parameters.\n<span class="kw">INPUT:</span> {brief_parameters}\n<span class="kw">PRODUCE:</span>\n  <span class="val">sentence_length</span>: [short|varied|long]\n  <span class="val">vocabulary</span>: [accessible|technical|mixed]\n  <span class="val">banned_phrases</span>: [...from brief voice field]\n  <span class="val">register_examples</span>: [2 sample sentences]\n  <span class="val">structural_mode</span>: [argumentative|explanatory|narrative]\n<span class="com">// Output: JSON. 200 tokens max.</span>'
+  },
+  3: {
+    label: 'PROMPT 03 \u2014 Structure Design',
+    input: 'Brief parameters + voice spec (500 tokens)',
+    output: 'Locked article outline: H2 sections with 2-sentence briefs, target word count per section, logical flow rationale',
+    model: 'Claude Sonnet 4',
+    latency: '~8 seconds',
+    why: 'Structure locks the entire article before any copy is written. Reasoning about logical flow and section sequencing requires Sonnet.',
+    template: '<span class="kw">SYSTEM:</span> Design article structure from parameters and voice spec.\n<span class="kw">INPUT:</span> {brief_parameters}, {voice_spec}\n<span class="kw">PRODUCE:</span>\n  <span class="val">sections</span>: [\n    { <span class="val">h2</span>: "...", <span class="val">brief</span>: "2 sentences", <span class="val">words</span>: 400 },\n    ...\n  ]\n  <span class="val">lede_hook</span>: [specific angle, not category]\n  <span class="val">conclusion_type</span>: [closes_argument|extends_thesis]\n<span class="com">// Output: JSON. No prose until section bodies.</span>'
+  },
+  4: {
+    label: 'PROMPT 04 \u2014 Lede + Drop Cap',
+    input: 'Voice spec + lede hook from P03 (620 tokens)',
+    output: 'Opening 3\u20134 paragraphs with drop cap first letter, structural hook, thesis setup',
+    model: 'Claude Haiku',
+    latency: '~6 seconds',
+    why: 'Haiku executes the constrained lede brief cleanly. Voice spec is the constraint; Haiku follows constraints without elaborating beyond them.',
+    template: '<span class="kw">SYSTEM:</span> Write the article lede following the voice specification exactly.\n<span class="kw">INPUT:</span> {voice_spec}, {lede_hook}, {thesis}\n<span class="kw">WRITE:</span> 3\u20134 paragraphs. First word styled for drop cap.\n  - Open with the specific recognition, not a category statement\n  - Second paragraph: structural claim (not opinion)\n  - Transition into article scope\n<span class="val">ENFORCE:</span> {banned_phrases} not permitted\n<span class="com">// Output: prose only. ~180 tokens.</span>'
+  },
+  5: {
+    label: 'PROMPT 05 \u2014 Section 1 Body',
+    input: 'Voice spec + section 1 brief from outline (680 tokens)',
+    output: '400\u2013520 words of section body executing the section brief',
+    model: 'Claude Haiku',
+    latency: '~7 seconds',
+    why: 'Haiku executes section briefs with higher voice consistency than Sonnet under tight constraints. 680 tokens keeps context focused.',
+    template: '<span class="kw">SYSTEM:</span> Write one article section following voice spec exactly.\n<span class="kw">INPUT:</span> {voice_spec}, {section_brief}, {full_outline}\n<span class="com">// NOTE: Do NOT read prior sections. Write only this section.</span>\n<span class="kw">WRITE:</span> {section.words} words\n  - Open with structural claim, not transition\n  - Advance the section brief argument in full\n  - Close with a sentence that sets up the next section\n<span class="val">ENFORCE:</span> {banned_phrases}, {structural_mode}\n<span class="com">// Output: prose. ~520 tokens.</span>'
+  },
+  6: { label: 'PROMPT 06 \u2014 Section 2 Body', input: 'Voice spec + section 2 brief (680 tokens)', output: '400\u2013520 words of section body', model: 'Claude Haiku', latency: '~7 seconds', why: 'Identical architecture to P05. Section isolation prevents voice drift. Haiku never reads section 1.', template: '<span class="com">// Identical template to P05 with section 2 brief.</span>\n<span class="com">// Context window: 680 tokens (not accumulating).</span>' },
+  7: { label: 'PROMPT 07 \u2014 Section 3 Body', input: 'Voice spec + section 3 brief (680 tokens)', output: '400\u2013520 words of section body', model: 'Claude Haiku', latency: '~7 seconds', why: 'Quality identical to sections 1 and 2 because context budget is identical.', template: '<span class="com">// Identical template to P05 with section 3 brief.</span>\n<span class="com">// Context window: 680 tokens (not accumulating).</span>' },
+  8: {
+    label: 'PROMPT 08 \u2014 Transitions',
+    input: 'Full assembled article body (900 tokens)',
+    output: 'Bridging sentences between each section that maintain logical flow and voice register',
+    model: 'Claude Haiku',
+    latency: '~5 seconds',
+    why: 'Transitions require reading adjacent sections but not reasoning \u2014 execution task. Haiku reads the assembled body and inserts 1-sentence transitions.',
+    template: '<span class="kw">INPUT:</span> {assembled_sections}\n<span class="kw">INSERT:</span> One bridging sentence between each section.\n  - Must advance argument (not just signal topic change)\n  - Must match voice spec register\n  - Must not repeat the closing sentence of the prior section\n<span class="com">// Output: full article with transitions inserted. ~220 tokens added.</span>'
+  },
+  9: { label: 'PROMPT 09 \u2014 Pull Quote Selection', input: 'Full assembled article (1100 tokens)', output: 'Best quotable sentence with rationale', model: 'Claude Haiku', latency: '~4 seconds', why: 'Pattern matching task: identify the single most quotable sentence. Haiku handles this efficiently.', template: '<span class="kw">SELECT:</span> The single most quotable sentence in the article.\n  - Must state a structural claim (not a fact or description)\n  - Must stand alone without context\n  - Must be 15\u201340 words\n<span class="com">// Output: the sentence + one-line rationale.</span>' },
+  10: { label: 'PROMPT 10 \u2014 Footnotes', input: 'Full assembled article (1100 tokens)', output: '2\u20133 numbered footnotes with attribution and context', model: 'Claude Haiku', latency: '~5 seconds', why: 'Footnote generation requires identifying claims that benefit from attribution \u2014 an execution task with clear criteria.', template: '<span class="kw">GENERATE:</span> 2\u20133 footnotes for the article.\n  - Target factual claims, not opinions\n  - Use IO Platform documentation as primary source\n  - Format: number, source, one-sentence context\n<span class="com">// Output: footnote array. ~300 tokens.</span>' },
+  11: {
+    label: 'PROMPT 11 \u2014 Coherence Review',
+    input: 'Full assembled article (2400 tokens)',
+    output: 'Revised article with coherence corrections + quality score',
+    model: 'Claude Sonnet 4',
+    latency: '~9 seconds',
+    why: 'Requires reading and reasoning about the full article. This is the only prompt that reads the complete assembled text. Sonnet justifies the cost here.',
+    template: '<span class="kw">SYSTEM:</span> Quality review and coherence correction for assembled article.\n<span class="kw">CHECK:</span>\n  - Does the conclusion close the lede argument?\n  - Are there voice spec violations?\n  - Do sections repeat each other?\n  - Are transitions logical?\n<span class="kw">CORRECT:</span> Fix any issues in-place.\n<span class="kw">SCORE:</span> voice_consistency (0\u20135), argument_coherence (0\u20135)\n<span class="com">// Output: corrected article + quality scores.</span>'
+  },
+  12: { label: 'PROMPT 12 \u2014 Meta + Related', input: 'Full reviewed article (2600 tokens)', output: 'SEO meta description (155 chars), H1 title variant, 3 related article suggestions', model: 'Claude Sonnet 4', latency: '~6 seconds', why: 'Meta generation benefits from reading the full reviewed article. Sonnet produces tighter meta descriptions under word constraints.', template: '<span class="kw">GENERATE:</span>\n  <span class="val">meta_description</span>: [155 chars, keyword-leading]\n  <span class="val">h1_variant</span>: [SEO-optimized title]\n  <span class="val">related_articles</span>: [3 titles from series context]\n<span class="com">// Output: JSON. ~280 tokens.</span>' }
+};
+
+/* ━━ Chain diagram: show step detail ━━ */
+var activeStep = null;
+function showStep(n) {
+  var panel = document.getElementById('cd-detail-panel');
+  var data = STEP_DATA[n];
+  if (!data) return;
+
+  // Toggle off if same step
+  if (activeStep === n && panel.classList.contains('show')) {
+    panel.classList.remove('show');
+    activeStep = null;
+    document.querySelectorAll('.cd-step').forEach(function(s) { s.classList.remove('active'); });
+    return;
+  }
+  activeStep = n;
+
+  document.querySelectorAll('.cd-step').forEach(function(s) { s.classList.remove('active'); });
+  var stepEl = document.getElementById('step-' + n);
+  if (stepEl) stepEl.classList.add('active');
+
+  document.getElementById('cdd-step-label').textContent = data.label;
+
+  var modelColor = data.model.indexOf('Sonnet') >= 0 ? '#818cf8' : '#34d399';
+  document.getElementById('cdd-grid').innerHTML =
+    '<div class="cdd-cell"><div class="cdd-cell-label">Input</div><div class="cdd-cell-val">' + data.input + '</div></div>' +
+    '<div class="cdd-cell"><div class="cdd-cell-label">Output</div><div class="cdd-cell-val">' + data.output + '</div></div>' +
+    '<div class="cdd-cell"><div class="cdd-cell-label">Model</div><div class="cdd-cell-val"><strong style="color:' + modelColor + '">' + data.model + '</strong> &middot; ' + data.latency + '</div></div>' +
+    '<div class="cdd-cell" style="grid-column:1/-1"><div class="cdd-cell-label">Why This Model</div><div class="cdd-cell-val">' + data.why + '</div></div>';
+
+  document.getElementById('pr-code-content').innerHTML = data.template;
+  // Close prompt reveal
+  var prBody = document.getElementById('pr-body');
+  prBody.classList.remove('open');
+  document.getElementById('pr-toggle-icon').innerHTML = '\u25BC Show';
+
+  panel.classList.add('show');
+  setTimeout(function() { panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+}
+
+/* ━━ Prompt template reveal toggle ━━ */
+function togglePromptReveal() {
+  var body = document.getElementById('pr-body');
+  var icon = document.getElementById('pr-toggle-icon');
+  var isOpen = body.classList.toggle('open');
+  icon.innerHTML = isOpen ? '\u25B2 Hide' : '\u25BC Show';
+}
+
+/* ━━ Before/After tabs ━━ */
+function baTab(id, btn) {
+  document.querySelectorAll('.ba-tab').forEach(function(t) { t.classList.remove('on'); });
+  document.querySelectorAll('.ba-panel').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('ba-' + id).classList.add('on');
+}
+
+/* ━━ Hero chain animation ━━ */
+var chainRunning = false;
+function runChain() {
+  if (chainRunning) return;
+  chainRunning = true;
+  var btn = document.getElementById('run-chain-btn');
+  btn.style.opacity = '0.5';
+  btn.style.pointerEvents = 'none';
+
+  var status = document.getElementById('hv-status3');
+  var circles = [];
+  for (var i = 1; i <= 12; i++) { circles.push(document.getElementById('cc' + i)); }
+  var lineIds = ['al-1-2','al-2-3','al-3-4','al-4-5','al-5-6','al-6-7','al-7-8','al-8-9','al-9-10','al-10-11','al-11-12'];
+
+  // Reset
+  circles.forEach(function(c) { if (c) { c.classList.remove('done'); c.style.boxShadow = ''; } });
+  lineIds.forEach(function(id) { var el = document.getElementById(id); if (el) el.setAttribute('opacity', '0'); });
+
+  status.innerHTML = 'INITIALIZING CHAIN...<br>LOADING CONTEXT BRIEF<br>IO-ORCH v2.0 \u00b7 ARTICLE LIBRARY';
+
+  var phases = ['P01\u2013P03: ANALYSIS \u00b7 SONNET 4', 'P04\u2013P10: EXECUTION \u00b7 HAIKU', 'P11\u2013P12: QUALITY PASS \u00b7 SONNET 4', 'COMPLETE \u00b7 EPISODE RETURNED'];
+
+  circles.forEach(function(c, i) {
+    if (!c) return;
+    var delay = 300 + i * 320;
+    setTimeout(function() {
+      c.classList.add('done');
+      var phaseIdx = i < 3 ? 0 : i < 10 ? 1 : 2;
+      status.innerHTML = phases[phaseIdx] + '<br>PROMPT ' + String(i + 1).padStart(2, '0') + ' COMPLETE<br>IO-ORCH v2.0 \u00b7 RUNNING';
+      // activate line after node
+      var lineId = lineIds[i];
+      if (lineId) {
+        var lineEl = document.getElementById(lineId);
+        if (lineEl) lineEl.setAttribute('opacity', '0.7');
+      }
+    }, delay);
+  });
+
+  var totalTime = 300 + 12 * 320 + 500;
+  setTimeout(function() {
+    status.innerHTML = 'CHAIN COMPLETE \u00b7 12 PROMPTS<br>EPISODE ASSEMBLED \u00b7 48 TOKENS<br>RETURNED TO ORCHESTRATOR';
+    btn.style.opacity = '';
+    btn.style.pointerEvents = '';
+    chainRunning = false;
+  }, totalTime);
+}
+
+/* ━━ Pipeline strip ━━ */
+var FEEDS = [
+  {n: 'Article', c: '#4589FF', ct: 16},
+  {n: 'Image', c: '#1db954', ct: 4},
+  {n: 'SEO', c: '#d97706', ct: 6},
+  {n: 'Tastemaker', c: '#6b7280', ct: 4}
+];
+var pf = document.getElementById('ps-feeds');
+FEEDS.forEach(function(f, i) {
+  var chip = document.createElement('div');
+  chip.className = 'ps-chip';
+  chip.style.background = f.c + '14';
+  chip.style.border = '1px solid ' + f.c + '28';
+  chip.style.color = f.c;
+  var dot = document.createElement('div'); dot.className = 'ps-dot'; dot.style.background = f.c;
+  chip.appendChild(dot);
+  chip.appendChild(document.createTextNode(f.n + ' \u00b7 ' + f.ct));
+  pf.appendChild(chip);
+  if (i < FEEDS.length - 1) { var a = document.createElement('div'); a.className = 'ps-arrow'; a.textContent = '\u00b7'; pf.appendChild(a); }
+});
+
+/* ━━ Attribution ━━ */
+var attrOn = false;
+function toggleAttr() {
+  attrOn = !attrOn;
+  document.body.classList.toggle('attr', attrOn);
+  var b = document.getElementById('attr-btn');
+  b.classList.toggle('on', attrOn);
+  b.textContent = attrOn ? 'Hide Sources' : 'Show Library Sources';
+  if (attrOn) {
+    document.querySelectorAll('.src').forEach(function(el) {
+      if (!el.querySelector('.ann-corners')) {
+        var c = document.createElement('div'); c.className = 'ann-corners';
+        c.innerHTML = '<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';
+        el.appendChild(c);
+      }
+    });
+  }
+}
+
+/* ━━ Pipeline toggle ━━ */
+function togglePipe() {
+  var strip = document.getElementById('pstrip');
+  var map = document.getElementById('pipemap');
+  var btn = document.getElementById('pipe-btn');
+  if (map.classList.contains('open')) { map.classList.remove('open'); strip.classList.remove('open'); btn.classList.remove('on'); }
+  else if (strip.classList.contains('open')) { strip.classList.remove('open'); map.classList.add('open'); btn.classList.add('on'); }
+  else { strip.classList.add('open'); btn.classList.add('on'); }
+}
+
+/* ━━ Social tabs ━━ */
+function tab(id, btn) {
+  document.querySelectorAll('.sb-tab').forEach(function(t) { t.classList.remove('on'); });
+  document.querySelectorAll('.sb-platform').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('tab-' + id).classList.add('on');
+}
+
+/* ━━ FAQ ━━ */
+function toggleFaq(qEl) {
+  var item = qEl.parentElement;
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i) {
+    i.classList.remove('open');
+    i.querySelector('.faq-toggle').textContent = '+';
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    qEl.querySelector('.faq-toggle').textContent = '\u00d7';
+  }
+}
+
+/* ━━ Progress ━━ */
+window.addEventListener('scroll', function() {
+  var d = document.documentElement;
+  document.getElementById('prog').style.width = ((window.scrollY / (d.scrollHeight - d.clientHeight)) * 100) + '%';
+}, { passive: true });
+
+/* ━━ Scroll reveal ━━ */
+var ro = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.r').forEach(function(el) { ro.observe(el); });
+
+/* ━━ ToC active ━━ */
+var sections = ['s-why', 's-chain', 's-routing', 's-ba', 's-voice', 's-social', 's-seo', 's-crm', 's-faq'];
+var tocItems = document.querySelectorAll('.toc-item');
+var tocObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      var idx = sections.indexOf(e.target.id);
+      if (idx > -1) {
+        tocItems.forEach(function(t) { t.classList.remove('active'); });
+        if (tocItems[idx]) tocItems[idx].classList.add('active');
+      }
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(function(s) {
+  var el = document.getElementById(s);
+  if (el) tocObserver.observe(el);
+});
+
+function scrollToSection(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ━━ Auto-open first step in chain on scroll into view ━━ */
+var chainSeen = false;
+var chainObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting && !chainSeen) {
+      chainSeen = true;
+      setTimeout(function() { showStep(1); }, 400);
+    }
+  });
+}, { threshold: 0.4 });
+var chainEl = document.getElementById('s-chain');
+if (chainEl) chainObserver.observe(chainEl);
+</script>
+
+</body>
+</html>
