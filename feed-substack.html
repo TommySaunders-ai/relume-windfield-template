@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Substack Feed | Windfield IO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --wf-brand: #1db954; --wf-brand-hover: #17a34a; --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b; --wf-bg-elevated: #111113; --wf-bg-sunken: #050507;
+  --wf-surface: #141417; --wf-surface-hover: #1a1a1e; --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa; --wf-fg-muted: #a1a1aa; --wf-fg-subtle: #71717a; --wf-fg-faint: #52525b;
+  --wf-border: #27272a; --wf-border-strong: #3f3f46; --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF; --wf-teal: #08BDBA; --wf-green: #42BE65; --wf-red: #E85D4A;
+  --wf-purple: #BE95FF; --wf-orange: #FF832B;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1); --wf-dur: 160ms;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--wf-bg); color: var(--wf-fg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+
+/* Navbar */
+.navbar { position: sticky; top: 0; z-index: 100; background: rgba(9,9,11,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--wf-border-subtle); }
+.navbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.navbar-logo { font-weight: 700; font-size: 18px; color: var(--wf-fg); display: flex; align-items: center; gap: 8px; }
+.navbar-logo svg { color: var(--wf-brand); }
+.navbar-links { display: flex; align-items: center; gap: 28px; }
+.navbar-links a { font-size: 14px; color: var(--wf-fg-muted); transition: color var(--wf-dur) var(--wf-ease); }
+.navbar-links a:hover { color: var(--wf-fg); }
+.navbar-cta { padding: 8px 18px; background: var(--wf-brand); color: var(--wf-brand-fg); font-size: 14px; font-weight: 600; border-radius: var(--wf-r-md); border: none; cursor: pointer; transition: background var(--wf-dur) var(--wf-ease); }
+.navbar-cta:hover { background: var(--wf-brand-hover); }
+.navbar-mobile { display: none; background: none; border: none; color: var(--wf-fg); cursor: pointer; }
+@media (max-width: 768px) {
+  .navbar-links { display: none; }
+  .navbar-mobile { display: block; }
+  .navbar-links.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--wf-bg-elevated); border-bottom: 1px solid var(--wf-border); padding: 16px 24px; gap: 16px; }
+}
+
+/* Hero */
+.hero { text-align: center; padding: 80px 24px 48px; max-width: 720px; margin: 0 auto; }
+.hero-icon { width: 56px; height: 56px; background: var(--wf-brand-muted); border: 1px solid var(--wf-brand-border); border-radius: var(--wf-r-lg); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--wf-brand); }
+.hero h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+.hero p { font-size: 17px; color: var(--wf-fg-muted); max-width: 560px; margin: 0 auto; }
+@media (max-width: 480px) { .hero h1 { font-size: 28px; } .hero { padding: 56px 16px 32px; } }
+
+/* Filter Bar */
+.filter-bar { max-width: 1280px; margin: 0 auto; padding: 0 24px 32px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.filter-btn { padding: 7px 16px; font-size: 13px; font-weight: 500; border-radius: 999px; border: 1px solid var(--wf-border); background: transparent; color: var(--wf-fg-muted); cursor: pointer; transition: all var(--wf-dur) var(--wf-ease); font-family: var(--font-sans); }
+.filter-btn:hover { border-color: var(--wf-border-strong); color: var(--wf-fg); }
+.filter-btn.active { background: var(--wf-brand); border-color: var(--wf-brand); color: var(--wf-brand-fg); }
+.filter-count { margin-left: auto; font-size: 13px; color: var(--wf-fg-faint); font-family: var(--font-mono); }
+
+/* Masonry */
+.masonry { max-width: 1280px; margin: 0 auto; padding: 0 24px; column-count: 4; column-gap: 16px; }
+@media (max-width: 1024px) { .masonry { column-count: 3; } }
+@media (max-width: 768px) { .masonry { column-count: 2; } }
+@media (max-width: 480px) { .masonry { column-count: 1; } }
+
+/* Card */
+.card { break-inside: avoid; background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); margin-bottom: 16px; overflow: hidden; transition: transform var(--wf-dur) var(--wf-ease), box-shadow var(--wf-dur) var(--wf-ease); }
+.card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.35); }
+.card:hover .card-title { color: var(--wf-brand); }
+.card-header { padding: 16px 16px 0; }
+.card-format { display: inline-block; padding: 4px 10px; font-size: 11px; font-weight: 600; border-radius: var(--wf-r-sm); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+.card-format.essay { background: rgba(190,149,255,0.12); color: var(--wf-purple); }
+.card-format.guide { background: rgba(29,185,84,0.12); color: var(--wf-brand); }
+.card-format.qa { background: rgba(8,189,186,0.12); color: var(--wf-teal); }
+.card-format.case-study { background: rgba(255,131,43,0.12); color: var(--wf-orange); }
+.card-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; border-radius: var(--wf-r-sm); margin-left: 6px; }
+.card-badge.locked { background: rgba(255,131,43,0.12); color: var(--wf-orange); }
+.card-badge.free { background: rgba(69,137,255,0.12); color: var(--wf-blue); }
+.card-title { font-size: 16px; font-weight: 700; line-height: 1.35; padding: 0 16px; margin-bottom: 8px; transition: color var(--wf-dur) var(--wf-ease); }
+.card-excerpt { font-size: 13px; color: var(--wf-fg-muted); padding: 0 16px; margin-bottom: 12px; line-height: 1.55; }
+.card-meta { padding: 0 16px; display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--wf-fg-subtle); margin-bottom: 12px; }
+.card-meta svg { width: 14px; height: 14px; flex-shrink: 0; }
+.card-sections { padding: 0 16px; margin-bottom: 12px; }
+.card-sections-label { font-size: 11px; color: var(--wf-fg-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.card-sections-dots { display: flex; gap: 4px; }
+.card-sections-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--wf-brand-muted); border: 1px solid var(--wf-brand-border); }
+.card-engagement { padding: 0 16px 12px; display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--wf-fg-faint); }
+.card-engagement span { display: inline-flex; align-items: center; gap: 4px; }
+.card-engagement svg { width: 14px; height: 14px; }
+.card-footer { padding: 12px 16px; border-top: 1px solid var(--wf-border-subtle); display: flex; gap: 8px; }
+.btn-outline { flex: 1; padding: 8px; font-size: 12px; font-weight: 600; border-radius: var(--wf-r-md); border: 1px solid var(--wf-border); background: transparent; color: var(--wf-fg-muted); cursor: pointer; font-family: var(--font-sans); transition: all var(--wf-dur) var(--wf-ease); }
+.btn-outline:hover { border-color: var(--wf-brand-border-strong); color: var(--wf-fg); }
+.btn-green { flex: 1; padding: 8px; font-size: 12px; font-weight: 600; border-radius: var(--wf-r-md); border: none; background: var(--wf-brand); color: var(--wf-brand-fg); cursor: pointer; font-family: var(--font-sans); transition: background var(--wf-dur) var(--wf-ease); }
+.btn-green:hover { background: var(--wf-brand-hover); }
+
+/* Load More */
+.load-more-wrap { text-align: center; padding: 48px 24px; }
+.load-more-btn { padding: 12px 32px; font-size: 14px; font-weight: 600; border-radius: var(--wf-r-md); border: 1px solid var(--wf-border); background: transparent; color: var(--wf-fg-muted); cursor: pointer; font-family: var(--font-sans); transition: all var(--wf-dur) var(--wf-ease); display: inline-flex; align-items: center; gap: 8px; }
+.load-more-btn:hover { border-color: var(--wf-brand-border-strong); color: var(--wf-fg); }
+.load-more-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.spinner { width: 16px; height: 16px; border: 2px solid var(--wf-border); border-top-color: var(--wf-brand); border-radius: 50%; animation: spin 0.6s linear infinite; display: none; }
+.load-more-btn.loading .spinner { display: block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Author */
+.author-section { max-width: 720px; margin: 0 auto; padding: 48px 24px; display: flex; gap: 20px; align-items: flex-start; border-top: 1px solid var(--wf-border-subtle); }
+.author-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--wf-brand-muted); border: 2px solid var(--wf-brand-border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--wf-brand); font-weight: 700; font-size: 20px; }
+.author-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+.author-info .author-creds { font-size: 13px; color: var(--wf-fg-subtle); margin-bottom: 6px; }
+.author-info p { font-size: 14px; color: var(--wf-fg-muted); }
+
+/* Scroll to top */
+.scroll-top { position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; border-radius: 50%; background: var(--wf-brand); color: var(--wf-brand-fg); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity var(--wf-dur) var(--wf-ease), transform var(--wf-dur) var(--wf-ease); box-shadow: 0 4px 20px rgba(29,185,84,0.3); z-index: 90; }
+.scroll-top.visible { opacity: 1; pointer-events: auto; }
+.scroll-top:hover { transform: scale(1.1); }
+
+/* Footer */
+.footer { border-top: 1px solid var(--wf-border-subtle); padding: 48px 24px; margin-top: 48px; }
+.footer-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-brand { font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.footer-brand svg { color: var(--wf-brand); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 13px; color: var(--wf-fg-subtle); transition: color var(--wf-dur) var(--wf-ease); }
+.footer-links a:hover { color: var(--wf-fg); }
+.footer-copy { font-size: 12px; color: var(--wf-fg-faint); width: 100%; text-align: center; margin-top: 24px; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="navbar-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>
+      Windfield IO
+    </a>
+    <div class="navbar-links" id="navLinks">
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/product.html">Product</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/blog-home.html">Blog</a>
+      <a href="/contact.html">Contact</a>
+      <button class="navbar-cta">Get Started</button>
+    </div>
+    <button class="navbar-mobile" id="navToggle" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-icon">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6z"/></svg>
+  </div>
+  <h1>Substack Feed</h1>
+  <p>The Windfield Letter -- newsletter content on market intelligence, AI, and commercial real estate</p>
+</section>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="essay">Essay</button>
+  <button class="filter-btn" data-filter="guide">Guide</button>
+  <button class="filter-btn" data-filter="qa">Q&A</button>
+  <button class="filter-btn" data-filter="case-study">Case Study</button>
+  <button class="filter-btn" data-filter="subscriber-only">Subscriber-Only</button>
+  <button class="filter-btn" data-filter="free">Free</button>
+  <span class="filter-count" id="filterCount">Showing 8 of 16</span>
+</div>
+
+<!-- Masonry Grid -->
+<div class="masonry" id="masonryGrid">
+
+  <!-- Card 1 -->
+  <article class="card" data-category="essay" data-access="subscriber-only">
+    <div class="card-header">
+      <span class="card-format essay">Essay</span>
+      <span class="card-badge locked"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Subscriber</span>
+    </div>
+    <h3 class="card-title">The One Strategy That Changes Everything in CRE</h3>
+    <p class="card-excerpt">Why the firms that embrace data-driven decision-making today will dominate commercial real estate markets for the next decade.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 8 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 142</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 23</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 38</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+
+  <!-- Card 2 -->
+  <article class="card" data-category="guide" data-access="free">
+    <div class="card-header">
+      <span class="card-format guide">Guide</span>
+      <span class="card-badge free">FREE</span>
+    </div>
+    <h3 class="card-title">Complete Market Analysis Guide: From Raw Data to Actionable Insight</h3>
+    <p class="card-excerpt">A five-part walkthrough covering data sourcing, cleaning, analysis frameworks, visualization, and presentation for CRE professionals.</p>
+    <div class="card-sections">
+      <div class="card-sections-label">5 Sections</div>
+      <div class="card-sections-dots"><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span></div>
+    </div>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 22 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 287</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 45</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 71</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+
+  <!-- Card 3 -->
+  <article class="card" data-category="qa" data-access="free">
+    <div class="card-header">
+      <span class="card-format qa">Q&A</span>
+      <span class="card-badge free">FREE</span>
+    </div>
+    <h3 class="card-title">12 Reader Questions on AI in Real Estate</h3>
+    <p class="card-excerpt">Answering the most-asked questions from the Windfield community about how AI is reshaping commercial property analysis and deal flow.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 14 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 96</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 34</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 19</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+
+  <!-- Card 4 -->
+  <article class="card" data-category="case-study" data-access="subscriber-only">
+    <div class="card-header">
+      <span class="card-format case-study">Case Study</span>
+      <span class="card-badge locked"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Subscriber</span>
+    </div>
+    <h3 class="card-title">How We Scored a $12M Office Conversion Before Market Consensus</h3>
+    <p class="card-excerpt">A detailed breakdown of the data signals, analysis pipeline, and timing strategy that identified this opportunity six months early.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 18 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 203</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 31</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 52</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+
+  <!-- Card 5 -->
+  <article class="card" data-category="essay" data-access="free">
+    <div class="card-header">
+      <span class="card-format essay">Essay</span>
+      <span class="card-badge free">FREE</span>
+    </div>
+    <h3 class="card-title">Why Most CRE Firms Will Fail at AI Adoption</h3>
+    <p class="card-excerpt">The three organizational patterns that predict whether a commercial real estate firm will successfully integrate AI into their workflow -- or waste millions trying.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 11 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 178</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 41</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 63</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+
+  <!-- Card 6 -->
+  <article class="card" data-category="guide" data-access="subscriber-only">
+    <div class="card-header">
+      <span class="card-format guide">Guide</span>
+      <span class="card-badge locked"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Subscriber</span>
+    </div>
+    <h3 class="card-title">Building Your First Property Scoring Model</h3>
+    <p class="card-excerpt">Step-by-step instructions for creating a weighted scoring system that ranks commercial properties by investment potential using publicly available data.</p>
+    <div class="card-sections">
+      <div class="card-sections-label">4 Sections</div>
+      <div class="card-sections-dots"><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span></div>
+    </div>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 19 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 156</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 28</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 44</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+
+  <!-- Card 7 -->
+  <article class="card" data-category="essay" data-access="subscriber-only">
+    <div class="card-header">
+      <span class="card-format essay">Essay</span>
+      <span class="card-badge locked"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Subscriber</span>
+    </div>
+    <h3 class="card-title">The Intelligence Layer Nobody Talks About</h3>
+    <p class="card-excerpt">Between raw data and executive decisions sits an intelligence layer. Most firms skip it. The ones who build it win consistently.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 9 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 134</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 19</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 27</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+
+  <!-- Card 8 -->
+  <article class="card" data-category="qa" data-access="subscriber-only">
+    <div class="card-header">
+      <span class="card-format qa">Q&A</span>
+      <span class="card-badge locked"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Subscriber</span>
+    </div>
+    <h3 class="card-title">AMA: Building a Platform Business in Commercial Real Estate</h3>
+    <p class="card-excerpt">Subscriber-submitted questions on technology stacks, team building, go-to-market strategies, and the future of PropTech platforms.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 16 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 88</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 52</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 15</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+
+</div>
+
+<!-- Hidden cards for Load More (batch 1) -->
+<template id="batch1">
+  <article class="card" data-category="case-study" data-access="free">
+    <div class="card-header">
+      <span class="card-format case-study">Case Study</span>
+      <span class="card-badge free">FREE</span>
+    </div>
+    <h3 class="card-title">Mixed-Use Redevelopment: The Fulton District Playbook</h3>
+    <p class="card-excerpt">How a 40-year-old industrial corridor became one of the highest-performing mixed-use developments in the region -- every step documented.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 24 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 221</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 37</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 58</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+  <article class="card" data-category="essay" data-access="free">
+    <div class="card-header">
+      <span class="card-format essay">Essay</span>
+      <span class="card-badge free">FREE</span>
+    </div>
+    <h3 class="card-title">Data Moats in Real Estate: What Actually Compounds</h3>
+    <p class="card-excerpt">Not all data creates competitive advantage. Here is how to identify which datasets compound in value and which become commoditized.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 7 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 119</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 22</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 33</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+  <article class="card" data-category="guide" data-access="free">
+    <div class="card-header">
+      <span class="card-format guide">Guide</span>
+      <span class="card-badge free">FREE</span>
+    </div>
+    <h3 class="card-title">Automating Your Deal Pipeline: Tools and Workflows</h3>
+    <p class="card-excerpt">A practical guide to connecting CRM, market data, and communication tools into a single automated deal management system.</p>
+    <div class="card-sections">
+      <div class="card-sections-label">3 Sections</div>
+      <div class="card-sections-dots"><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span></div>
+    </div>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 15 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 167</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 29</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 41</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+  <article class="card" data-category="case-study" data-access="subscriber-only">
+    <div class="card-header">
+      <span class="card-format case-study">Case Study</span>
+      <span class="card-badge locked"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Subscriber</span>
+    </div>
+    <h3 class="card-title">Suburban Retail Repositioning: A Data-First Approach</h3>
+    <p class="card-excerpt">When foot traffic data contradicted broker sentiment, one firm used the discrepancy to acquire three undervalued retail centers at a 22% discount.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 20 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 189</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 26</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 47</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+</template>
+
+<!-- Hidden cards for Load More (batch 2) -->
+<template id="batch2">
+  <article class="card" data-category="qa" data-access="free">
+    <div class="card-header">
+      <span class="card-format qa">Q&A</span>
+      <span class="card-badge free">FREE</span>
+    </div>
+    <h3 class="card-title">Reader Mailbag: Portfolio Diversification in a Rising Rate Environment</h3>
+    <p class="card-excerpt">Seven questions from subscribers on balancing risk across asset classes when capital costs keep climbing.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 12 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 74</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 43</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 11</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+  <article class="card" data-category="essay" data-access="subscriber-only">
+    <div class="card-header">
+      <span class="card-format essay">Essay</span>
+      <span class="card-badge locked"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Subscriber</span>
+    </div>
+    <h3 class="card-title">The Operator Advantage: Why Boots-on-Ground Still Beats Algorithms</h3>
+    <p class="card-excerpt">AI augments human judgment -- it does not replace it. The best operators combine institutional knowledge with machine intelligence to find deals others miss.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 10 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 145</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 33</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 29</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+  <article class="card" data-category="guide" data-access="subscriber-only">
+    <div class="card-header">
+      <span class="card-format guide">Guide</span>
+      <span class="card-badge locked"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Subscriber</span>
+    </div>
+    <h3 class="card-title">Due Diligence Checklist for AI-Assisted Property Evaluation</h3>
+    <p class="card-excerpt">A 47-point checklist covering every data source, verification step, and red flag to review when using automated scoring to evaluate commercial properties.</p>
+    <div class="card-sections">
+      <div class="card-sections-label">6 Sections</div>
+      <div class="card-sections-dots"><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span><span class="card-sections-dot"></span></div>
+    </div>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 28 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 312</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 56</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 84</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+  <article class="card" data-category="case-study" data-access="free">
+    <div class="card-header">
+      <span class="card-format case-study">Case Study</span>
+      <span class="card-badge free">FREE</span>
+    </div>
+    <h3 class="card-title">From Signal to Close: 90 Days on the Waterfront Development</h3>
+    <p class="card-excerpt">Tracking every data point, meeting, and decision from initial market signal to signed contract on a waterfront mixed-use project.</p>
+    <div class="card-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 26 min</span>
+      <span>2.1K subscribers</span>
+    </div>
+    <div class="card-engagement">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 256</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 42</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 67</span>
+    </div>
+    <div class="card-footer">
+      <button class="btn-outline">Read more</button>
+      <button class="btn-green">Subscribe -- Free</button>
+    </div>
+  </article>
+</template>
+
+<!-- Load More -->
+<div class="load-more-wrap">
+  <button class="load-more-btn" id="loadMoreBtn">
+    <span>Load More</span>
+    <div class="spinner"></div>
+  </button>
+</div>
+
+<!-- Author -->
+<section class="author-section">
+  <div class="author-avatar">W</div>
+  <div class="author-info">
+    <h3>Windfield IO</h3>
+    <div class="author-creds">Market Intelligence | PropTech | Commercial Real Estate</div>
+    <p>Data-driven insights on commercial real estate, AI-powered market analysis, and the future of property intelligence platforms. Published weekly.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>
+      Windfield IO
+    </div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/pricing.html">Pricing</a>
+    </div>
+    <div class="footer-copy">2026 Windfield IO. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- Scroll to Top -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+(function() {
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  // Filter
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const grid = document.getElementById('masonryGrid');
+  const filterCount = document.getElementById('filterCount');
+
+  function updateCount() {
+    const all = grid.querySelectorAll('.card');
+    const visible = grid.querySelectorAll('.card:not(.hidden)');
+    filterCount.textContent = 'Showing ' + visible.length + ' of ' + all.length;
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      grid.querySelectorAll('.card').forEach(card => {
+        if (filter === 'all') {
+          card.classList.remove('hidden');
+        } else if (filter === 'subscriber-only') {
+          card.classList.toggle('hidden', card.dataset.access !== 'subscriber-only');
+        } else if (filter === 'free') {
+          card.classList.toggle('hidden', card.dataset.access !== 'free');
+        } else {
+          card.classList.toggle('hidden', card.dataset.category !== filter);
+        }
+      });
+      updateCount();
+    });
+  });
+
+  // Load More
+  let loadCount = 0;
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  loadMoreBtn.addEventListener('click', () => {
+    if (loadCount >= 2) return;
+    loadMoreBtn.classList.add('loading');
+    loadMoreBtn.disabled = true;
+    setTimeout(() => {
+      loadCount++;
+      const templateId = loadCount === 1 ? 'batch1' : 'batch2';
+      const template = document.getElementById(templateId);
+      if (template) {
+        const fragment = template.content.cloneNode(true);
+        grid.appendChild(fragment);
+      }
+      loadMoreBtn.classList.remove('loading');
+      if (loadCount >= 2) {
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.querySelector('span').textContent = 'All posts loaded';
+      } else {
+        loadMoreBtn.disabled = false;
+      }
+      // Re-apply current filter
+      const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+      if (activeFilter !== 'all') {
+        grid.querySelectorAll('.card').forEach(card => {
+          if (activeFilter === 'subscriber-only') {
+            card.classList.toggle('hidden', card.dataset.access !== 'subscriber-only');
+          } else if (activeFilter === 'free') {
+            card.classList.toggle('hidden', card.dataset.access !== 'free');
+          } else {
+            card.classList.toggle('hidden', card.dataset.category !== activeFilter);
+          }
+        });
+      }
+      updateCount();
+    }, 800);
+  });
+
+  // Scroll to top
+  const scrollTopBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    scrollTopBtn.classList.toggle('visible', window.scrollY > 600);
+  });
+  scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  updateCount();
+})();
+</script>
+</body>
+</html>

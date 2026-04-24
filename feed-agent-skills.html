@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Skills | Windfield IO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --wf-brand: #1db954; --wf-brand-hover: #17a34a; --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b; --wf-bg-elevated: #111113; --wf-bg-sunken: #050507;
+  --wf-surface: #141417; --wf-surface-hover: #1a1a1e; --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa; --wf-fg-muted: #a1a1aa; --wf-fg-subtle: #71717a; --wf-fg-faint: #52525b;
+  --wf-border: #27272a; --wf-border-strong: #3f3f46; --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF; --wf-teal: #08BDBA; --wf-green: #42BE65; --wf-red: #E85D4A;
+  --wf-purple: #BE95FF; --wf-orange: #FF832B;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1); --wf-dur: 160ms;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--wf-bg); color: var(--wf-fg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+
+.navbar { position: sticky; top: 0; z-index: 100; background: rgba(9,9,11,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--wf-border-subtle); }
+.navbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.navbar-logo { font-weight: 700; font-size: 18px; color: var(--wf-fg); display: flex; align-items: center; gap: 8px; }
+.navbar-logo svg { color: var(--wf-brand); }
+.navbar-links { display: flex; align-items: center; gap: 28px; }
+.navbar-links a { font-size: 14px; color: var(--wf-fg-muted); transition: color var(--wf-dur) var(--wf-ease); }
+.navbar-links a:hover { color: var(--wf-fg); }
+.navbar-cta { padding: 8px 18px; background: var(--wf-brand); color: var(--wf-brand-fg); font-size: 14px; font-weight: 600; border-radius: var(--wf-r-md); border: none; cursor: pointer; transition: background var(--wf-dur) var(--wf-ease); }
+.navbar-cta:hover { background: var(--wf-brand-hover); }
+.navbar-mobile { display: none; background: none; border: none; color: var(--wf-fg); cursor: pointer; }
+@media (max-width: 768px) {
+  .navbar-links { display: none; }
+  .navbar-mobile { display: block; }
+  .navbar-links.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--wf-bg-elevated); border-bottom: 1px solid var(--wf-border); padding: 16px 24px; gap: 16px; }
+}
+
+.hero { text-align: center; padding: 80px 24px 48px; max-width: 760px; margin: 0 auto; }
+.hero-icon { width: 56px; height: 56px; background: var(--wf-brand-muted); border: 1px solid var(--wf-brand-border); border-radius: var(--wf-r-lg); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--wf-brand); }
+.hero h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+.hero p { font-size: 17px; color: var(--wf-fg-muted); max-width: 600px; margin: 0 auto; }
+@media (max-width: 480px) { .hero h1 { font-size: 28px; } .hero { padding: 56px 16px 32px; } }
+
+.filter-bar { max-width: 1280px; margin: 0 auto; padding: 0 24px 32px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.filter-btn { padding: 7px 16px; font-size: 13px; font-weight: 500; border-radius: 999px; border: 1px solid var(--wf-border); background: transparent; color: var(--wf-fg-muted); cursor: pointer; transition: all var(--wf-dur) var(--wf-ease); font-family: var(--font-sans); }
+.filter-btn:hover { border-color: var(--wf-border-strong); color: var(--wf-fg); }
+.filter-btn.active { background: var(--wf-brand); border-color: var(--wf-brand); color: var(--wf-brand-fg); }
+.filter-count { margin-left: auto; font-size: 13px; color: var(--wf-fg-faint); font-family: var(--font-mono); }
+
+.masonry { max-width: 1280px; margin: 0 auto; padding: 0 24px; column-count: 3; column-gap: 16px; }
+@media (max-width: 1024px) { .masonry { column-count: 2; } }
+@media (max-width: 480px) { .masonry { column-count: 1; } }
+
+/* Markdown-style card */
+.md-card { break-inside: avoid; background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); margin-bottom: 16px; overflow: hidden; transition: transform var(--wf-dur) var(--wf-ease), box-shadow var(--wf-dur) var(--wf-ease), border-color var(--wf-dur) var(--wf-ease); }
+.md-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.35); border-color: var(--wf-border-strong); }
+.md-card:hover .md-body h2 { color: var(--wf-brand); }
+
+/* File header */
+.md-file-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--wf-bg-sunken); border-bottom: 1px solid var(--wf-border-subtle); }
+.md-file-name { font-family: var(--font-mono); font-size: 12px; color: var(--wf-fg-subtle); display: flex; align-items: center; gap: 6px; }
+.md-file-name svg { width: 14px; height: 14px; color: var(--wf-fg-faint); }
+.md-copy-btn { background: none; border: 1px solid var(--wf-border); border-radius: var(--wf-r-sm); padding: 4px 8px; color: var(--wf-fg-faint); cursor: pointer; font-size: 11px; font-family: var(--font-mono); display: flex; align-items: center; gap: 4px; transition: all var(--wf-dur) var(--wf-ease); opacity: 0; }
+.md-card:hover .md-copy-btn { opacity: 1; }
+.md-copy-btn:hover { border-color: var(--wf-brand-border); color: var(--wf-fg-muted); }
+.md-copy-btn.copied { border-color: var(--wf-brand); color: var(--wf-brand); opacity: 1; }
+.md-copy-btn svg { width: 12px; height: 12px; }
+
+/* Frontmatter */
+.md-frontmatter { padding: 12px 14px; background: var(--wf-brand-muted); border-bottom: 1px solid var(--wf-brand-border); font-family: var(--font-mono); font-size: 12px; line-height: 1.7; }
+.md-fm-line { display: flex; }
+.md-fm-key { color: var(--wf-brand); min-width: 80px; }
+.md-fm-val { color: var(--wf-fg-muted); }
+
+/* Body */
+.md-body { padding: 16px; }
+.md-body h2 { font-size: 17px; font-weight: 700; margin-bottom: 6px; transition: color var(--wf-dur) var(--wf-ease); }
+.md-body .md-cat-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.md-body .md-cat-tag { padding: 3px 8px; font-size: 11px; border-radius: 999px; border: 1px solid var(--wf-brand-border); color: var(--wf-brand); background: transparent; font-weight: 500; }
+.md-body .md-cat-tag.intelligence { border-color: rgba(69,137,255,0.3); color: var(--wf-blue); }
+.md-body .md-cat-tag.analysis { border-color: rgba(8,189,186,0.3); color: var(--wf-teal); }
+.md-body .md-cat-tag.communication { border-color: rgba(255,131,43,0.3); color: var(--wf-orange); }
+.md-body .md-cat-tag.content { border-color: rgba(190,149,255,0.3); color: var(--wf-purple); }
+.md-body .md-cat-tag.workflow { border-color: rgba(232,93,74,0.3); color: var(--wf-red); }
+.md-body p { font-size: 13px; color: var(--wf-fg-muted); line-height: 1.55; margin-bottom: 12px; }
+.md-body h3 { font-size: 13px; font-weight: 600; color: var(--wf-fg-subtle); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+.md-body ul { list-style: none; margin-bottom: 12px; }
+.md-body ul li { font-size: 13px; color: var(--wf-fg-muted); padding: 2px 0; padding-left: 14px; position: relative; }
+.md-body ul li::before { content: "-"; position: absolute; left: 0; color: var(--wf-fg-faint); }
+.md-body ol { list-style: none; margin-bottom: 12px; counter-reset: steps; }
+.md-body ol li { font-size: 13px; color: var(--wf-fg-muted); padding: 2px 0; padding-left: 20px; position: relative; counter-increment: steps; }
+.md-body ol li::before { content: counter(steps) "."; position: absolute; left: 0; color: var(--wf-brand); font-family: var(--font-mono); font-size: 12px; font-weight: 600; }
+.md-body .md-interaction { background: var(--wf-bg-sunken); border: 1px solid var(--wf-border-subtle); border-radius: var(--wf-r-md); padding: 10px 12px; font-size: 12px; color: var(--wf-fg-muted); margin-bottom: 12px; }
+.md-body .md-interaction .md-int-label { font-size: 11px; color: var(--wf-fg-faint); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+.md-body .md-interaction .md-int-text { font-family: var(--font-mono); font-size: 12px; }
+.md-body .md-code-block { background: var(--wf-bg-sunken); border: 1px solid var(--wf-border-subtle); border-radius: var(--wf-r-md); padding: 12px 14px; font-family: var(--font-mono); font-size: 12px; line-height: 1.6; color: var(--wf-brand); margin-bottom: 12px; overflow-x: auto; white-space: pre; }
+.md-footer-tags { padding: 0 16px 14px; display: flex; gap: 6px; flex-wrap: wrap; }
+.md-footer-tag { padding: 2px 7px; font-size: 10px; border-radius: var(--wf-r-sm); background: var(--wf-surface-hover); color: var(--wf-fg-faint); font-family: var(--font-mono); }
+
+/* Governance */
+.governance { max-width: 800px; margin: 48px auto 0; padding: 0 24px; }
+.governance-box { background: var(--wf-surface); border: 1px solid var(--wf-brand-border); border-radius: var(--wf-r-lg); padding: 24px; text-align: center; }
+.governance-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--wf-brand); }
+.governance-box p { font-size: 14px; color: var(--wf-fg-muted); max-width: 560px; margin: 0 auto; }
+
+.scroll-top { position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; border-radius: 50%; background: var(--wf-brand); color: var(--wf-brand-fg); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity var(--wf-dur) var(--wf-ease), transform var(--wf-dur) var(--wf-ease); box-shadow: 0 4px 20px rgba(29,185,84,0.3); z-index: 90; }
+.scroll-top.visible { opacity: 1; pointer-events: auto; }
+.scroll-top:hover { transform: scale(1.1); }
+
+.footer { border-top: 1px solid var(--wf-border-subtle); padding: 48px 24px; margin-top: 48px; }
+.footer-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-brand { font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.footer-brand svg { color: var(--wf-brand); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 13px; color: var(--wf-fg-subtle); transition: color var(--wf-dur) var(--wf-ease); }
+.footer-links a:hover { color: var(--wf-fg); }
+.footer-copy { font-size: 12px; color: var(--wf-fg-faint); width: 100%; text-align: center; margin-top: 24px; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="navbar-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>
+      Windfield IO
+    </a>
+    <div class="navbar-links" id="navLinks">
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/product.html">Product</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/blog-home.html">Blog</a>
+      <a href="/contact.html">Contact</a>
+      <button class="navbar-cta">Get Started</button>
+    </div>
+    <button class="navbar-mobile" id="navToggle" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-icon">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+  </div>
+  <h1>Agent Skills</h1>
+  <p>Discrete AI capabilities that power the Windfield IO agent team -- each skill is a composable unit with defined triggers, behaviors, and outputs</p>
+</section>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="intelligence">Intelligence</button>
+  <button class="filter-btn" data-filter="communication">Communication</button>
+  <button class="filter-btn" data-filter="analysis">Analysis</button>
+  <button class="filter-btn" data-filter="content">Content</button>
+  <button class="filter-btn" data-filter="workflow">Workflow</button>
+  <span class="filter-count" id="filterCount">16 skills</span>
+</div>
+
+<div class="masonry" id="masonryGrid">
+
+  <!-- Skill 1: Market Analysis -->
+  <article class="md-card" data-category="intelligence">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        market-analysis.md
+      </span>
+      <button class="md-copy-btn" data-copy="Market Analysis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Market Analysis</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Intelligence</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"New property data ingested"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Analyzes market comps, trends, and pricing"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Structured market report with scoring"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Market Analysis</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag intelligence">Intelligence</span>
+      </div>
+      <p>Analyzes comparable properties, market trends, and pricing dynamics from ingested data feeds. Produces structured market reports with confidence scoring and actionable recommendations for the Windfield team.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Analyze comps for 200 Peachtree NW, Atlanta — office, 45K SF"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">Market Report: 12 comps found | Avg rent $32.50/SF | Vacancy 14.2% | Trend: rising | Score: 76/100</div>
+      </div>
+      <div class="md-code-block">skill.run("market-analysis", {
+  address: "200 Peachtree NW",
+  type: "office",
+  sqft: 45000
+})</div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">comps</span>
+      <span class="md-footer-tag">pricing</span>
+      <span class="md-footer-tag">trends</span>
+      <span class="md-footer-tag">reports</span>
+    </div>
+  </article>
+
+  <!-- Skill 2: Property Scoring -->
+  <article class="md-card" data-category="intelligence">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        property-scoring.md
+      </span>
+      <button class="md-copy-btn" data-copy="Property Scoring">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Property Scoring</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Intelligence</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"New property added or enrichment complete"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Scores properties on 12 weighted criteria"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Composite score with per-criterion breakdown"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Property Scoring</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag intelligence">Intelligence</span>
+      </div>
+      <p>Evaluates commercial properties against a weighted 12-criterion model including location, financials, tenant quality, market position, zoning, environmental risk, and growth potential. Produces normalized scores for portfolio-wide comparison.</p>
+      <h3>Steps</h3>
+      <ol>
+        <li>Ingest property data and normalize fields</li>
+        <li>Run each criterion through weighted scoring model</li>
+        <li>Calculate composite score (0-100)</li>
+        <li>Generate per-criterion breakdown with rationale</li>
+        <li>Rank against existing portfolio benchmarks</li>
+      </ol>
+      <div class="md-code-block">criteria: [location, financials, tenant,
+  market, zoning, environmental, growth,
+  infrastructure, demographics, competition,
+  regulatory, liquidity]
+weights: adaptive | model: v3.2</div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">scoring</span>
+      <span class="md-footer-tag">evaluation</span>
+      <span class="md-footer-tag">ranking</span>
+      <span class="md-footer-tag">criteria</span>
+    </div>
+  </article>
+
+  <!-- Skill 3: Competitive Intelligence -->
+  <article class="md-card" data-category="intelligence">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        competitive-intel.md
+      </span>
+      <button class="md-copy-btn" data-copy="Competitive Intelligence">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Competitive Intelligence</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Intelligence</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Daily scan or competitor alert"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Monitors competitor listings and positioning"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Competitive landscape report"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Competitive Intelligence</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag intelligence">Intelligence</span>
+      </div>
+      <p>Monitors competitor listings, pricing strategies, and market positioning across target submarkets. Identifies new entrants, delisted properties, and pricing shifts that may impact Windfield portfolio strategy.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"What changed in the Buckhead office market this week?"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">3 new listings | 2 price reductions | 1 delisted | Avg asking rent down 1.2% WoW</div>
+      </div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">competitors</span>
+      <span class="md-footer-tag">monitoring</span>
+      <span class="md-footer-tag">listings</span>
+    </div>
+  </article>
+
+  <!-- Skill 4: Due Diligence Review -->
+  <article class="md-card" data-category="intelligence">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        due-diligence.md
+      </span>
+      <button class="md-copy-btn" data-copy="Due Diligence Review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Due Diligence Review</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Intelligence</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Deal enters diligence stage"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Flags risks in transaction documents"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Risk report with flagged items"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Due Diligence Review</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag intelligence">Intelligence</span>
+      </div>
+      <p>Scans transaction documents, leases, environmental reports, and title records to flag potential risks. Generates a structured risk report with severity ratings and recommended follow-up actions for the deal team.</p>
+      <h3>Steps</h3>
+      <ol>
+        <li>Ingest and parse all deal documents</li>
+        <li>Extract key terms, dates, and obligations</li>
+        <li>Cross-reference against risk taxonomy</li>
+        <li>Flag items with severity (low/medium/high/critical)</li>
+        <li>Generate actionable risk summary with recommendations</li>
+      </ol>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">risk</span>
+      <span class="md-footer-tag">documents</span>
+      <span class="md-footer-tag">compliance</span>
+      <span class="md-footer-tag">legal</span>
+    </div>
+  </article>
+
+  <!-- Skill 5: Trend Detection -->
+  <article class="md-card" data-category="analysis">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        trend-detection.md
+      </span>
+      <button class="md-copy-btn" data-copy="Trend Detection">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Trend Detection</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Analysis</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Weekly data refresh cycle"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Identifies emerging patterns across market data"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Trend signals with confidence intervals"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Trend Detection</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag analysis">Analysis</span>
+      </div>
+      <p>Identifies emerging patterns across vacancy rates, rental prices, absorption metrics, and construction pipeline data. Uses statistical models to distinguish signal from noise and assigns confidence intervals to each detected trend.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Detect trends in Midtown Atlanta industrial over the last 90 days"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">3 trends detected: Vacancy declining (87% conf) | Rent acceleration (72% conf) | New construction surge (91% conf)</div>
+      </div>
+      <div class="md-code-block">signal.detect({
+  market: "midtown-atlanta",
+  sector: "industrial",
+  window: "90d",
+  min_confidence: 0.70
+})</div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">trends</span>
+      <span class="md-footer-tag">patterns</span>
+      <span class="md-footer-tag">statistics</span>
+      <span class="md-footer-tag">signals</span>
+    </div>
+  </article>
+
+  <!-- Skill 6: Portfolio Analysis -->
+  <article class="md-card" data-category="analysis">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        portfolio-analysis.md
+      </span>
+      <button class="md-copy-btn" data-copy="Portfolio Analysis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Portfolio Analysis</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Analysis</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Monthly review or manual request"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Evaluates portfolio performance and rebalancing"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Portfolio health scorecard"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Portfolio Analysis</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag analysis">Analysis</span>
+      </div>
+      <p>Evaluates portfolio-wide performance including occupancy, NOI, cap rate trends, and concentration risk. Recommends rebalancing actions based on target allocation models and current market conditions.</p>
+      <h3>Steps</h3>
+      <ol>
+        <li>Aggregate performance data across all holdings</li>
+        <li>Calculate KPIs: occupancy, NOI, cap rate, DSCR</li>
+        <li>Assess concentration risk by geography and sector</li>
+        <li>Compare against target allocation model</li>
+        <li>Generate rebalancing recommendations</li>
+      </ol>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">portfolio</span>
+      <span class="md-footer-tag">performance</span>
+      <span class="md-footer-tag">rebalancing</span>
+    </div>
+  </article>
+
+  <!-- Skill 7: Risk Assessment -->
+  <article class="md-card" data-category="analysis">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        risk-assessment.md
+      </span>
+      <button class="md-copy-btn" data-copy="Risk Assessment">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Risk Assessment</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Analysis</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Deal submitted for review"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Quantifies deal risk on a 1-10 scale"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Risk score with breakdown by category"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Risk Assessment</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag analysis">Analysis</span>
+      </div>
+      <p>Quantifies deal risk across market, credit, operational, environmental, and regulatory dimensions. Produces a composite 1-10 risk score with per-category breakdowns and mitigation recommendations.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Assess risk for the Marietta Street warehouse acquisition"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">Risk: 4.2/10 | Market: 3 | Credit: 5 | Operational: 4 | Environmental: 6 | Regulatory: 3</div>
+      </div>
+      <div class="md-code-block">risk.assess({
+  deal_id: "marietta-warehouse-01",
+  dimensions: ["market", "credit",
+    "operational", "environmental",
+    "regulatory"]
+})</div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">risk</span>
+      <span class="md-footer-tag">scoring</span>
+      <span class="md-footer-tag">mitigation</span>
+      <span class="md-footer-tag">deals</span>
+    </div>
+  </article>
+
+  <!-- Skill 8: ROI Calculation -->
+  <article class="md-card" data-category="analysis">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        roi-calculation.md
+      </span>
+      <button class="md-copy-btn" data-copy="ROI Calculation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">ROI Calculation</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Analysis</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Deal parameters entered"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Projects returns based on deal parameters"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"ROI projection with scenario modeling"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>ROI Calculation</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag analysis">Analysis</span>
+      </div>
+      <p>Projects investment returns using deal parameters including purchase price, financing terms, projected NOI, cap rate assumptions, and hold period. Runs base, optimistic, and pessimistic scenarios with sensitivity analysis.</p>
+      <h3>Steps</h3>
+      <ol>
+        <li>Ingest deal parameters and financing structure</li>
+        <li>Model cash flows across hold period</li>
+        <li>Calculate IRR, cash-on-cash, equity multiple</li>
+        <li>Run 3-scenario sensitivity analysis</li>
+        <li>Output projection table with key metrics</li>
+      </ol>
+      <div class="md-code-block">roi.project({
+  purchase: 12500000,
+  noi: 875000,
+  cap_rate: 0.07,
+  hold_years: 7,
+  scenarios: ["base", "bull", "bear"]
+})</div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">roi</span>
+      <span class="md-footer-tag">projections</span>
+      <span class="md-footer-tag">scenarios</span>
+      <span class="md-footer-tag">irr</span>
+    </div>
+  </article>
+
+  <!-- Skill 9: Client Briefing -->
+  <article class="md-card" data-category="communication">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        client-briefing.md
+      </span>
+      <button class="md-copy-btn" data-copy="Client Briefing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Client Briefing</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Communication</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Client meeting scheduled or weekly cycle"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Generates personalized market updates for clients"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Tailored briefing document"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Client Briefing</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag communication">Communication</span>
+      </div>
+      <p>Generates personalized market updates tailored to each client's portfolio, interests, and investment criteria. Pulls from the latest market intelligence, deal pipeline, and relevant signals to create context-rich briefing documents.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Prepare weekly briefing for Meridian Capital — they focus on Class A office in Southeast markets"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">Briefing: 4 market updates | 2 new opportunities matching criteria | 1 deal status update | 3 trend signals</div>
+      </div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">clients</span>
+      <span class="md-footer-tag">briefings</span>
+      <span class="md-footer-tag">personalization</span>
+    </div>
+  </article>
+
+  <!-- Skill 10: Stakeholder Updates -->
+  <article class="md-card" data-category="communication">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        stakeholder-update.md
+      </span>
+      <button class="md-copy-btn" data-copy="Stakeholder Updates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Stakeholder Updates</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Communication</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Weekly cron or milestone reached"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Compiles weekly progress reports"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Formatted progress report"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Stakeholder Updates</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag communication">Communication</span>
+      </div>
+      <p>Compiles weekly progress reports by aggregating deal activity, pipeline changes, team actions, and key metrics. Formats output for different stakeholder audiences -- executives get summaries, operators get details.</p>
+      <h3>Steps</h3>
+      <ol>
+        <li>Aggregate activity logs from all agents and deals</li>
+        <li>Categorize updates by priority and audience</li>
+        <li>Generate executive summary (3-5 bullets)</li>
+        <li>Attach detailed appendix for operational teams</li>
+        <li>Route to appropriate distribution lists</li>
+      </ol>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">reports</span>
+      <span class="md-footer-tag">stakeholders</span>
+      <span class="md-footer-tag">weekly</span>
+    </div>
+  </article>
+
+  <!-- Skill 11: Tour Scheduling -->
+  <article class="md-card" data-category="communication">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        tour-scheduling.md
+      </span>
+      <button class="md-copy-btn" data-copy="Tour Scheduling">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Tour Scheduling</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Communication</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Tour request received"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Coordinates property tours with availability"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Calendar event + confirmation email"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Tour Scheduling</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag communication">Communication</span>
+      </div>
+      <p>Coordinates property tours by matching prospect availability with team calendars and property access windows. Handles multi-party scheduling, sends confirmations, and prepares pre-tour briefing packets with property details.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Schedule a tour of the Ponce City Market space for Sarah Chen, next Tuesday or Wednesday afternoon"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">Tour confirmed: Wed 2:00 PM | Attendees: Sarah Chen, James W. | Briefing packet sent | Reminder set for 24h prior</div>
+      </div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">scheduling</span>
+      <span class="md-footer-tag">tours</span>
+      <span class="md-footer-tag">calendar</span>
+      <span class="md-footer-tag">coordination</span>
+    </div>
+  </article>
+
+  <!-- Skill 12: Report Formatting -->
+  <article class="md-card" data-category="content">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        report-formatting.md
+      </span>
+      <button class="md-copy-btn" data-copy="Report Formatting">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Report Formatting</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Content</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Raw report data ready"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Structures raw data into presentation-ready reports"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Formatted report (PDF, HTML, Markdown)"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Report Formatting</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag content">Content</span>
+      </div>
+      <p>Transforms raw analysis data into polished, presentation-ready reports with consistent branding, clear data tables, and executive summaries. Supports multiple output formats including PDF, HTML, and Markdown.</p>
+      <h3>Steps</h3>
+      <ol>
+        <li>Receive raw data payload from analysis skills</li>
+        <li>Apply report template based on type (market, deal, portfolio)</li>
+        <li>Format tables, charts, and key metrics callouts</li>
+        <li>Apply Windfield brand styling and headers</li>
+        <li>Export to requested format(s)</li>
+      </ol>
+      <div class="md-code-block">report.format({
+  source: "market-analysis-output",
+  template: "quarterly-market",
+  format: ["pdf", "html"],
+  brand: "windfield-v2"
+})</div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">formatting</span>
+      <span class="md-footer-tag">reports</span>
+      <span class="md-footer-tag">pdf</span>
+      <span class="md-footer-tag">templates</span>
+    </div>
+  </article>
+
+  <!-- Skill 13: Data Visualization -->
+  <article class="md-card" data-category="content">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        data-visualization.md
+      </span>
+      <button class="md-copy-btn" data-copy="Data Visualization">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Data Visualization</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Content</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Analysis complete or dashboard refresh"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Generates charts and visual summaries"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Chart assets and visual components"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Data Visualization</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag content">Content</span>
+      </div>
+      <p>Generates charts, heatmaps, and visual summaries from market data, portfolio metrics, and deal pipeline information. Produces brand-consistent visual assets ready for reports, dashboards, and presentations.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Create a vacancy trend chart for Atlanta submarkets, Q1-Q4 2026"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">Line chart generated: 6 submarkets | 4 quarters | Exported as SVG + PNG | Brand palette applied</div>
+      </div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">charts</span>
+      <span class="md-footer-tag">visualization</span>
+      <span class="md-footer-tag">dashboards</span>
+    </div>
+  </article>
+
+  <!-- Skill 14: Brand Voice Enforcement -->
+  <article class="md-card" data-category="content">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        brand-voice.md
+      </span>
+      <button class="md-copy-btn" data-copy="Brand Voice Enforcement">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Brand Voice Enforcement</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Content</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Content submitted for review"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Ensures all content matches Windfield tone"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Revised content with voice compliance score"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Brand Voice Enforcement</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag content">Content</span>
+      </div>
+      <p>Reviews all outgoing content against the Windfield brand voice guidelines. Checks tone, terminology, formatting conventions, and messaging consistency. Returns a compliance score with specific revision suggestions.</p>
+      <h3>Steps</h3>
+      <ol>
+        <li>Receive content draft for review</li>
+        <li>Analyze against voice fingerprint model</li>
+        <li>Flag deviations in tone, jargon, or style</li>
+        <li>Generate revised version with corrections</li>
+        <li>Return compliance score (0-100) with changelog</li>
+      </ol>
+      <div class="md-code-block">voice.enforce({
+  content: draft_text,
+  profile: "windfield-professional",
+  strictness: "high",
+  auto_revise: true
+})</div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">brand</span>
+      <span class="md-footer-tag">voice</span>
+      <span class="md-footer-tag">compliance</span>
+      <span class="md-footer-tag">editing</span>
+    </div>
+  </article>
+
+  <!-- Skill 15: Lead Routing -->
+  <article class="md-card" data-category="workflow">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        lead-routing.md
+      </span>
+      <button class="md-copy-btn" data-copy="Lead Routing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Lead Routing</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Workflow</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"New lead qualified"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Assigns incoming leads to the right agent/broker"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Routing decision + CRM assignment"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Lead Routing</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag workflow">Workflow</span>
+      </div>
+      <p>Assigns incoming qualified leads to the most appropriate agent or broker based on expertise, capacity, geographic coverage, and historical close rates. Ensures balanced workload distribution and fastest response times.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Route new lead: Apex Capital, looking for 20K SF industrial in Marietta"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">Routed to: James Wallace | Reason: industrial specialist, Marietta coverage, 3 open slots | CRM updated | Notification sent</div>
+      </div>
+      <div class="md-code-block">lead.route({
+  company: "Apex Capital",
+  need: "industrial",
+  size: "20000sf",
+  location: "marietta",
+  urgency: "standard"
+})</div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">leads</span>
+      <span class="md-footer-tag">routing</span>
+      <span class="md-footer-tag">assignment</span>
+      <span class="md-footer-tag">crm</span>
+    </div>
+  </article>
+
+  <!-- Skill 16: Deal Tracking -->
+  <article class="md-card" data-category="workflow">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        deal-tracking.md
+      </span>
+      <button class="md-copy-btn" data-copy="Deal Tracking">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Deal Tracking</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">Workflow</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">"Deal stage change or daily check"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">"Monitors deal stages and flags stalled opportunities"</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">"Deal status report + stall alerts"</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Deal Tracking</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag workflow">Workflow</span>
+      </div>
+      <p>Monitors all active deals across pipeline stages, tracking time-in-stage, next actions, and blockers. Automatically flags stalled opportunities when deals exceed expected stage duration and escalates to the responsible team member.</p>
+      <h3>Steps</h3>
+      <ol>
+        <li>Scan all active deals in pipeline daily</li>
+        <li>Calculate time-in-stage vs. expected duration</li>
+        <li>Identify stalled deals (exceeding threshold by 2x)</li>
+        <li>Generate stall alerts with context and suggested actions</li>
+        <li>Escalate to deal owner and log in activity feed</li>
+      </ol>
+      <div class="md-code-block">deals.track({
+  pipeline: "active",
+  stall_threshold: "2x",
+  alert_channels: ["slack", "email"],
+  daily_summary: true
+})</div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">deals</span>
+      <span class="md-footer-tag">pipeline</span>
+      <span class="md-footer-tag">tracking</span>
+      <span class="md-footer-tag">alerts</span>
+    </div>
+  </article>
+
+</div>
+
+<!-- Governance -->
+<div class="governance">
+  <div class="governance-box">
+    <h3>Skill Composability</h3>
+    <p>Every skill is a composable unit designed to chain with other skills. Agents orchestrate skills into workflows -- no skill operates in isolation on production-critical paths. All outputs are structured for downstream consumption.</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>
+      Windfield IO
+    </div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/pricing.html">Pricing</a>
+    </div>
+    <div class="footer-copy">2026 Windfield IO. All rights reserved.</div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+(function() {
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const grid = document.getElementById('masonryGrid');
+  const filterCount = document.getElementById('filterCount');
+
+  function updateCount() {
+    const all = grid.querySelectorAll('.md-card');
+    const visible = grid.querySelectorAll('.md-card:not(.hidden)');
+    filterCount.textContent = visible.length + ' skill' + (visible.length !== 1 ? 's' : '');
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      grid.querySelectorAll('.md-card').forEach(card => {
+        if (filter === 'all') {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.toggle('hidden', card.dataset.category !== filter);
+        }
+      });
+      updateCount();
+    });
+  });
+
+  // Copy to clipboard
+  document.querySelectorAll('.md-copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const title = btn.dataset.copy;
+      navigator.clipboard.writeText(title).then(() => {
+        btn.classList.add('copied');
+        btn.querySelector('svg').style.display = 'none';
+        const origText = btn.childNodes[btn.childNodes.length - 1];
+        const prevText = origText.textContent;
+        origText.textContent = ' Copied';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.querySelector('svg').style.display = '';
+          origText.textContent = prevText;
+        }, 2000);
+      });
+    });
+  });
+
+  const scrollTopBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    scrollTopBtn.classList.toggle('visible', window.scrollY > 600);
+  });
+  scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  updateCount();
+})();
+</script>
+</body>
+</html>

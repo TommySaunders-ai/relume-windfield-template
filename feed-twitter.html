@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X / Twitter Feed — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954; --wf-brand-hover: #17a34a; --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b; --wf-bg-elevated: #111113; --wf-bg-sunken: #050507;
+  --wf-surface: #141417; --wf-surface-hover: #1a1a1e; --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa; --wf-fg-muted: #a1a1aa; --wf-fg-subtle: #71717a; --wf-fg-faint: #52525b;
+  --wf-border: #27272a; --wf-border-strong: #3f3f46; --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF; --wf-teal: #08BDBA; --wf-green: #42BE65; --wf-red: #E85D4A;
+  --wf-purple: #BE95FF; --wf-orange: #FF832B;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1); --wf-dur: 160ms;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+img{max-width:100%;display:block}
+ul{list-style:none}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* ── NAVBAR ── */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(9,9,11,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em;display:flex;align-items:center;gap:8px}
+.navbar-logo svg{width:24px;height:24px;color:var(--wf-brand)}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.navbar-link:hover{color:var(--wf-fg)}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}
+.mobile-toggle svg{width:24px;height:24px}
+
+/* ── HERO ── */
+.feed-hero{padding:64px 0 48px;text-align:center;border-bottom:1px solid var(--wf-border)}
+.feed-hero-icon{width:64px;height:64px;border-radius:var(--wf-r-xl);background:rgba(250,250,250,0.08);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;color:var(--wf-fg)}
+.feed-hero-icon svg{width:32px;height:32px}
+.feed-hero h1{font-size:48px;font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px}
+.feed-hero p{font-size:16px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto 8px}
+.feed-hero .subtitle{font-size:14px;color:var(--wf-fg-subtle);font-family:var(--font-mono)}
+
+/* ── FILTER BAR ── */
+.filter-bar{padding:24px 0;position:sticky;top:64px;z-index:90;background:rgba(9,9,11,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--wf-border)}
+.filter-inner{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.filter-pill{height:34px;padding:0 16px;font-size:13px;font-weight:500;border-radius:999px;border:1px solid var(--wf-border);color:var(--wf-fg-muted);background:transparent;transition:all var(--wf-dur) var(--wf-ease);cursor:pointer}
+.filter-pill:hover{border-color:var(--wf-border-strong);color:var(--wf-fg)}
+.filter-pill.active{background:var(--wf-brand);color:var(--wf-brand-fg);border-color:var(--wf-brand)}
+.filter-count{margin-left:auto;font-size:13px;color:var(--wf-fg-subtle);font-family:var(--font-mono);white-space:nowrap}
+
+/* ── MASONRY GRID ── */
+.masonry{column-count:4;column-gap:16px;padding:32px 0 48px}
+
+/* ── PIN CARD ── */
+.pin-card{break-inside:avoid;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin-bottom:16px;transition:all var(--wf-dur) var(--wf-ease);cursor:pointer}
+.pin-card:hover{transform:translateY(-4px);border-color:var(--wf-border-strong);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
+.pin-card:hover .pin-title{color:var(--wf-brand)}
+.pin-card:hover .pin-save{opacity:1}
+.pin-img{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pin-img-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.pin-badge{position:absolute;top:8px;left:8px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:var(--wf-r-sm);z-index:2}
+.pin-save{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:var(--wf-r-sm);background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--wf-dur);z-index:2}
+.pin-save svg{width:16px;height:16px;color:var(--wf-fg)}
+.pin-body{padding:14px}
+.pin-title{font-size:15px;font-weight:600;color:var(--wf-fg);line-height:1.35;margin-bottom:6px;transition:color var(--wf-dur)}
+.pin-excerpt{font-size:13px;color:var(--wf-fg-muted);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pin-metrics{display:flex;align-items:center;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.pin-metric{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--wf-fg-subtle)}
+.pin-metric svg{width:14px;height:14px}
+.pin-author{display:flex;align-items:center;gap:8px;padding-top:10px;border-top:1px solid var(--wf-border-subtle)}
+.pin-avatar{width:28px;height:28px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--wf-brand);flex-shrink:0}
+.pin-author-name{font-size:12px;font-weight:500;color:var(--wf-fg-muted)}
+.pin-author-date{font-size:11px;color:var(--wf-fg-faint);margin-left:auto;white-space:nowrap}
+
+/* ── TWITTER-SPECIFIC CARD STYLES ── */
+
+/* Character count badge */
+.char-count{font-size:11px;font-family:var(--font-mono);color:var(--wf-fg-faint);padding:2px 8px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,0.05);border:1px solid var(--wf-border-subtle);display:inline-block;margin-bottom:8px}
+
+/* Thread indicator */
+.thread-indicator{display:flex;align-items:stretch;gap:10px;padding:8px 0;margin-bottom:8px}
+.thread-line{width:2px;background:var(--wf-brand);border-radius:2px;position:relative;min-height:60px;flex-shrink:0;margin-left:6px}
+.thread-dots{position:absolute;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:12px;top:4px}
+.thread-dot{width:8px;height:8px;border-radius:50%;background:var(--wf-brand);border:2px solid var(--wf-surface)}
+.thread-content{flex:1}
+.thread-count{font-size:11px;font-family:var(--font-mono);color:var(--wf-brand);font-weight:500;margin-top:6px}
+
+/* Quote tweet nested card */
+.quote-card{border:1px solid var(--wf-border);border-radius:var(--wf-r-md);padding:10px 12px;margin-top:8px;background:rgba(255,255,255,0.02)}
+.quote-header{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.quote-avatar{width:20px;height:20px;border-radius:50%;background:var(--wf-border-strong);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--wf-fg-subtle);flex-shrink:0}
+.quote-name{font-size:12px;font-weight:600;color:var(--wf-fg)}
+.quote-handle{font-size:11px;color:var(--wf-fg-faint);font-family:var(--font-mono)}
+.quote-text{font-size:12px;color:var(--wf-fg-muted);line-height:1.45}
+
+/* Poll bars */
+.poll-options{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.poll-option{position:relative;border-radius:var(--wf-r-sm);overflow:hidden;padding:8px 12px;border:1px solid var(--wf-border-subtle)}
+.poll-fill{position:absolute;top:0;left:0;bottom:0;background:rgba(29,185,84,0.12);border-radius:var(--wf-r-sm);z-index:0;transition:width 0.6s var(--wf-ease)}
+.poll-option-inner{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.poll-option-text{font-size:13px;color:var(--wf-fg)}
+.poll-option-pct{font-size:13px;font-weight:600;color:var(--wf-brand);font-family:var(--font-mono)}
+.poll-meta{font-size:11px;color:var(--wf-fg-faint);font-family:var(--font-mono)}
+
+/* Space / live card */
+.space-gradient{background:linear-gradient(135deg,#0d1a15,#0a1a25);min-height:100px;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}
+.space-live{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:var(--wf-r-sm);background:var(--wf-red);color:#fff;position:absolute;top:8px;left:8px;z-index:2}
+.space-live-dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:pulse-live 1.5s ease-in-out infinite}
+.space-recording{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,0.08);color:var(--wf-fg-muted);position:absolute;top:8px;left:8px;z-index:2}
+.space-recording-dot{width:8px;height:8px;border-radius:50%;background:var(--wf-fg-faint)}
+.space-icon{width:48px;height:48px;border-radius:50%;background:rgba(29,185,84,0.12);display:flex;align-items:center;justify-content:center}
+.space-icon svg{width:24px;height:24px;color:var(--wf-brand)}
+.space-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--wf-fg-subtle);margin-bottom:4px}
+
+/* Image post placeholder */
+.img-placeholder{min-height:280px;display:flex;align-items:center;justify-content:center}
+.img-placeholder-landscape{aspect-ratio:16/10}
+.img-placeholder svg{opacity:0.4}
+
+@keyframes pulse-live{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* ── LOAD MORE ── */
+.load-more-wrap{text-align:center;padding:16px 0 48px}
+.load-more-wrap .btn svg{width:16px;height:16px;animation:spin 1s linear infinite;display:none}
+.load-more-wrap .btn.loading svg{display:inline-block}
+.load-more-wrap .btn.loading span{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── SCROLL TOP ── */
+.scroll-top{position:fixed;bottom:32px;right:32px;width:44px;height:44px;border-radius:50%;background:var(--wf-brand);color:var(--wf-brand-fg);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:all var(--wf-dur) var(--wf-ease);z-index:99;box-shadow:0 4px 16px rgba(0,0,0,0.3)}
+.scroll-top.visible{opacity:1;pointer-events:auto}
+.scroll-top:hover{transform:translateY(-2px)}
+.scroll-top svg{width:20px;height:20px}
+
+/* ── AUTHOR SECTION ── */
+.author-section{padding:48px 0;border-top:1px solid var(--wf-border)}
+.author-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;display:flex;align-items:center;gap:24px;max-width:720px;margin:0 auto}
+.author-avatar-lg{width:64px;height:64px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--wf-brand);flex-shrink:0}
+.author-info h3{font-size:18px;font-weight:600;margin-bottom:2px}
+.author-info .credentials{font-size:13px;color:var(--wf-brand);margin-bottom:8px;font-weight:500}
+.author-info .bio{font-size:14px;color:var(--wf-fg-muted);line-height:1.5;margin-bottom:12px}
+.author-socials{display:flex;gap:12px}
+.author-social{width:32px;height:32px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.author-social:hover{border-color:var(--wf-brand);color:var(--wf-brand)}
+.author-social svg{width:16px;height:16px}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--wf-border);padding:48px 0 0;background:var(--wf-bg)}
+.footer-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:32px;padding-bottom:40px}
+.footer-col-title{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-bottom-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){.masonry{column-count:3}}
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .navbar-links{display:none}.mobile-toggle{display:flex}
+  .footer-cols{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .masonry{column-count:2}
+  .container{padding:0 20px}
+  .feed-hero h1{font-size:36px}
+  .filter-inner{gap:8px}
+  .author-card{flex-direction:column;text-align:center}
+  .author-socials{justify-content:center}
+  .footer-cols{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .masonry{column-count:1}
+  .footer-cols{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="/" class="navbar-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Windfield
+    </a>
+    <div class="navbar-links">
+      <a href="/" class="navbar-link">Home</a>
+      <a href="/about.html" class="navbar-link">About</a>
+      <a href="#" class="navbar-link">Portfolio</a>
+      <a href="#" class="navbar-link">Product</a>
+      <a href="#" class="navbar-link">Pricing</a>
+      <a href="/blog-home.html" class="navbar-link">Blog</a>
+      <a href="/contact.html" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-primary">Get Started</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="feed-hero">
+  <div class="container">
+    <div class="feed-hero-icon">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </div>
+    <h1>X / Twitter Feed</h1>
+    <p>Short-form content for X -- threads, polls, spaces, and posts on commercial real estate, PropTech, and market intelligence.</p>
+    <div class="subtitle">windfield.io/x</div>
+  </div>
+</section>
+
+<!-- ═══════════════ FILTER BAR ═══════════════ -->
+<div class="filter-bar">
+  <div class="container filter-inner">
+    <button class="filter-pill active" data-cat="all">All</button>
+    <button class="filter-pill" data-cat="single-post">Single Post</button>
+    <button class="filter-pill" data-cat="thread">Thread</button>
+    <button class="filter-pill" data-cat="quote-tweet">Quote Tweet</button>
+    <button class="filter-pill" data-cat="poll">Poll</button>
+    <button class="filter-pill" data-cat="space">Space</button>
+    <button class="filter-pill" data-cat="image-post">Image Post</button>
+    <span class="filter-count"><span id="postCount">14</span> posts</span>
+  </div>
+</div>
+
+<!-- ═══════════════ MASONRY GRID ═══════════════ -->
+<div class="container">
+  <div class="masonry" id="masonryGrid">
+
+    <!-- ── Card 1: Single Post ── -->
+    <article class="pin-card" data-cat="single-post">
+      <div class="pin-img" style="padding:20px 16px 12px">
+        <div class="pin-img-inner" style="background:linear-gradient(135deg,#0d1a15,#0a1520);border-radius:var(--wf-r-md);padding:24px;flex-direction:column;align-items:flex-start;gap:12px;min-height:100px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#fafafa" opacity="0.2"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </div>
+        <span class="pin-badge" style="background:var(--wf-brand-muted);color:var(--wf-brand)">Single Post</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <span class="char-count">142 / 280</span>
+        <div class="pin-title">The biggest mistake in CRE? Treating data as a one-time input instead of a continuous feed.</div>
+        <div class="pin-metrics">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>234</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>1.2K</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>4.8K</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>42K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">2h ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 2: Thread ── -->
+    <article class="pin-card" data-cat="thread">
+      <div class="pin-img" style="padding:20px 16px 0">
+        <div class="pin-img-inner" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:var(--wf-r-md);padding:24px;flex-direction:column;align-items:flex-start;min-height:80px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#4589FF" opacity="0.3"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </div>
+        <span class="pin-badge" style="background:rgba(69,137,255,0.15);color:var(--wf-blue)">Thread</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">The 7 signals we track before making any CRE recommendation [1/7]</div>
+        <div class="thread-indicator">
+          <div class="thread-line" style="min-height:50px">
+            <div class="thread-dots">
+              <span class="thread-dot"></span>
+              <span class="thread-dot"></span>
+              <span class="thread-dot"></span>
+            </div>
+          </div>
+          <div class="thread-content">
+            <div class="pin-excerpt" style="margin-bottom:4px">Signal 1: Tenant migration patterns. Where companies are moving tells you more than any broker report...</div>
+            <span class="thread-count">7 posts in thread</span>
+          </div>
+        </div>
+        <div class="pin-metrics">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>412</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>2.3K</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>6.1K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">8h ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 3: Quote Tweet ── -->
+    <article class="pin-card" data-cat="quote-tweet">
+      <div class="pin-img" style="padding:20px 16px 0">
+        <div class="pin-img-inner" style="background:linear-gradient(135deg,#1a150d,#251a0d);border-radius:var(--wf-r-md);padding:24px;min-height:60px;flex-direction:column;align-items:flex-start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF832B" opacity="0.3"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </div>
+        <span class="pin-badge" style="background:rgba(255,131,43,0.15);color:var(--wf-orange)">Quote Tweet</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">This tracks with what we're seeing in our data. 340% isn't hype -- it's the floor.</div>
+        <div class="quote-card">
+          <div class="quote-header">
+            <div class="quote-avatar">C</div>
+            <span class="quote-name">CBRE</span>
+            <span class="quote-handle">@CBRE</span>
+          </div>
+          <div class="quote-text">AI adoption in CRE grew 340% in 2025. The industry is finally catching up to what tech has known for years.</div>
+        </div>
+        <div class="pin-metrics" style="margin-top:10px">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>189</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>876</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>3.2K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">5h ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 4: Poll ── -->
+    <article class="pin-card" data-cat="poll">
+      <div class="pin-img" style="padding:20px 16px 0">
+        <div class="pin-img-inner" style="background:linear-gradient(135deg,#0d1f1a,#0a2a20);border-radius:var(--wf-r-md);padding:24px;min-height:60px;flex-direction:column;align-items:flex-start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#08BDBA" stroke-width="1.5"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        </div>
+        <span class="pin-badge" style="background:rgba(8,189,186,0.15);color:var(--wf-teal)">Poll</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">Which CRE data source gives you the most actionable insights?</div>
+        <div class="poll-options">
+          <div class="poll-option">
+            <div class="poll-fill" style="width:42%"></div>
+            <div class="poll-option-inner">
+              <span class="poll-option-text">CoStar</span>
+              <span class="poll-option-pct">42%</span>
+            </div>
+          </div>
+          <div class="poll-option">
+            <div class="poll-fill" style="width:28%"></div>
+            <div class="poll-option-inner">
+              <span class="poll-option-text">County Records</span>
+              <span class="poll-option-pct">28%</span>
+            </div>
+          </div>
+          <div class="poll-option">
+            <div class="poll-fill" style="width:19%"></div>
+            <div class="poll-option-inner">
+              <span class="poll-option-text">Clay Enrichment</span>
+              <span class="poll-option-pct">19%</span>
+            </div>
+          </div>
+          <div class="poll-option">
+            <div class="poll-fill" style="width:11%"></div>
+            <div class="poll-option-inner">
+              <span class="poll-option-text">Manual Research</span>
+              <span class="poll-option-pct">11%</span>
+            </div>
+          </div>
+        </div>
+        <div class="poll-meta">1,247 votes &middot; 2 days left</div>
+        <div class="pin-metrics" style="margin-top:8px">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>87</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>342</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>1.4K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">1d ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 5: Space (LIVE) ── -->
+    <article class="pin-card" data-cat="space">
+      <div class="pin-img">
+        <div class="space-gradient">
+          <div class="space-live"><span class="space-live-dot"></span>LIVE</div>
+          <div class="space-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+          <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+        </div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">The Future of MCP in Commercial Real Estate</div>
+        <div class="space-meta">
+          <span>342 listening</span>
+          <span>&middot;</span>
+          <span>4 speakers</span>
+        </div>
+        <div class="pin-excerpt">Live discussion on how Model Context Protocol is transforming CRE data pipelines and agent workflows.</div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">Live now</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 6: Single Post ── -->
+    <article class="pin-card" data-cat="single-post">
+      <div class="pin-img" style="padding:20px 16px 12px">
+        <div class="pin-img-inner" style="background:linear-gradient(135deg,#15101a,#1a1525);border-radius:var(--wf-r-md);padding:24px;flex-direction:column;align-items:flex-start;min-height:80px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#fafafa" opacity="0.15"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </div>
+        <span class="pin-badge" style="background:var(--wf-brand-muted);color:var(--wf-brand)">Single Post</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <span class="char-count">89 / 280</span>
+        <div class="pin-title">Hot take: 90% of CRE firms still run their pipeline in spreadsheets. In 2026.</div>
+        <div class="pin-metrics">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>456</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>2.8K</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>7.2K</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>89K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">6h ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 7: Image Post (Square) ── -->
+    <article class="pin-card" data-cat="image-post">
+      <div class="pin-img">
+        <div class="img-placeholder" style="background:linear-gradient(135deg,#0d2015,#0a2a1a,#15301f);width:100%;aspect-ratio:1/1">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#42BE65" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <span class="pin-badge" style="background:rgba(66,190,101,0.15);color:var(--wf-green)">Image Post</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">The 4 Layers of Property Intelligence -- Visual Breakdown</div>
+        <div class="pin-excerpt">From raw data to enriched profiles: how Windfield transforms 40+ data points into actionable property intelligence.</div>
+        <div class="pin-metrics">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>156</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>623</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>2.4K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">12h ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 8: Thread ── -->
+    <article class="pin-card" data-cat="thread">
+      <div class="pin-img" style="padding:20px 16px 0">
+        <div class="pin-img-inner" style="background:linear-gradient(135deg,#1f1a2e,#2d1b4e);border-radius:var(--wf-r-md);padding:24px;flex-direction:column;align-items:flex-start;min-height:80px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#BE95FF" opacity="0.3"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </div>
+        <span class="pin-badge" style="background:rgba(69,137,255,0.15);color:var(--wf-blue)">Thread</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">How we built Windfield IO in 12 months -- a thread on agentic architecture [1/9]</div>
+        <div class="thread-indicator">
+          <div class="thread-line" style="min-height:50px">
+            <div class="thread-dots">
+              <span class="thread-dot"></span>
+              <span class="thread-dot"></span>
+              <span class="thread-dot"></span>
+            </div>
+          </div>
+          <div class="thread-content">
+            <div class="pin-excerpt" style="margin-bottom:4px">Month 1: We started with a single question -- what if every CRE data point could talk to every other one?</div>
+            <span class="thread-count">9 posts in thread</span>
+          </div>
+        </div>
+        <div class="pin-metrics">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>567</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>3.1K</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>8.9K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">3d ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 9: Single Post ── -->
+    <article class="pin-card" data-cat="single-post">
+      <div class="pin-img" style="padding:20px 16px 12px">
+        <div class="pin-img-inner" style="background:linear-gradient(135deg,#0d1a1a,#0a2020);border-radius:var(--wf-r-md);padding:24px;flex-direction:column;align-items:flex-start;min-height:80px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#fafafa" opacity="0.15"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </div>
+        <span class="pin-badge" style="background:var(--wf-brand-muted);color:var(--wf-brand)">Single Post</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <span class="char-count">112 / 280</span>
+        <div class="pin-title">Just shipped our Market Scanner v3. 40% faster enrichment, 3x more data points per property.</div>
+        <div class="pin-metrics">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>312</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>1.5K</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>5.3K</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>67K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">1d ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 10: Quote Tweet ── -->
+    <article class="pin-card" data-cat="quote-tweet">
+      <div class="pin-img" style="padding:20px 16px 0">
+        <div class="pin-img-inner" style="background:linear-gradient(135deg,#1a1a0d,#25250d);border-radius:var(--wf-r-md);padding:24px;min-height:60px;flex-direction:column;align-items:flex-start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF832B" opacity="0.3"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </div>
+        <span class="pin-badge" style="background:rgba(255,131,43,0.15);color:var(--wf-orange)">Quote Tweet</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">KC industrial is one of our top-3 target markets. Our data has been screaming this for 6 months.</div>
+        <div class="quote-card">
+          <div class="quote-header">
+            <div class="quote-avatar">CS</div>
+            <span class="quote-name">CoStar</span>
+            <span class="quote-handle">@CoStar</span>
+          </div>
+          <div class="quote-text">Kansas City industrial vacancy hits 10-year low as demand for distribution centers continues to outpace new construction.</div>
+        </div>
+        <div class="pin-metrics" style="margin-top:10px">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>134</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>567</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>2.1K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">4h ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 11: Space (Recording) ── -->
+    <article class="pin-card" data-cat="space">
+      <div class="pin-img">
+        <div class="space-gradient" style="background:linear-gradient(135deg,#15101a,#1a1530)">
+          <div class="space-recording"><span class="space-recording-dot"></span>Recording &middot; 1:23:45</div>
+          <div class="space-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+          <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+        </div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">PropTech Founders Roundtable -- Weekly Q&A</div>
+        <div class="space-meta">
+          <span>Recording</span>
+          <span>&middot;</span>
+          <span>1:23:45</span>
+        </div>
+        <div class="pin-excerpt">Weekly roundtable with PropTech founders covering fundraising, GTM, and the future of CRE technology.</div>
+        <div class="pin-metrics">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>4.2K plays</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>891</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">2d ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 12: Poll ── -->
+    <article class="pin-card" data-cat="poll">
+      <div class="pin-img" style="padding:20px 16px 0">
+        <div class="pin-img-inner" style="background:linear-gradient(135deg,#1a0d1a,#250d25);border-radius:var(--wf-r-md);padding:24px;min-height:60px;flex-direction:column;align-items:flex-start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#BE95FF" stroke-width="1.5"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        </div>
+        <span class="pin-badge" style="background:rgba(8,189,186,0.15);color:var(--wf-teal)">Poll</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">What's your biggest challenge in CRE operations?</div>
+        <div class="poll-options">
+          <div class="poll-option">
+            <div class="poll-fill" style="width:38%"></div>
+            <div class="poll-option-inner">
+              <span class="poll-option-text">Data fragmentation</span>
+              <span class="poll-option-pct">38%</span>
+            </div>
+          </div>
+          <div class="poll-option">
+            <div class="poll-fill" style="width:31%"></div>
+            <div class="poll-option-inner">
+              <span class="poll-option-text">Pipeline visibility</span>
+              <span class="poll-option-pct">31%</span>
+            </div>
+          </div>
+          <div class="poll-option">
+            <div class="poll-fill" style="width:18%"></div>
+            <div class="poll-option-inner">
+              <span class="poll-option-text">Lead qualification</span>
+              <span class="poll-option-pct">18%</span>
+            </div>
+          </div>
+          <div class="poll-option">
+            <div class="poll-fill" style="width:13%"></div>
+            <div class="poll-option-inner">
+              <span class="poll-option-text">Market timing</span>
+              <span class="poll-option-pct">13%</span>
+            </div>
+          </div>
+        </div>
+        <div class="poll-meta">892 votes &middot; Final results</div>
+        <div class="pin-metrics" style="margin-top:8px">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>64</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>213</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>987</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">5d ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 13: Image Post (Landscape) ── -->
+    <article class="pin-card" data-cat="image-post">
+      <div class="pin-img">
+        <div class="img-placeholder img-placeholder-landscape" style="background:linear-gradient(135deg,#0d1520,#0a1a2a,#152535);width:100%">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4589FF" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <span class="pin-badge" style="background:rgba(66,190,101,0.15);color:var(--wf-green)">Image Post</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">Market Scanner Dashboard -- What 40+ data points look like</div>
+        <div class="pin-excerpt">Full dashboard screenshot showing real-time enrichment, scoring, and property intelligence across 3 target markets.</div>
+        <div class="pin-metrics">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>201</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>789</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>3.1K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">18h ago</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Card 14: Image Post (Heatmap) ── -->
+    <article class="pin-card" data-cat="image-post">
+      <div class="pin-img">
+        <div class="img-placeholder" style="background:linear-gradient(135deg,#1a1a0d,#2a200d,#352a15);width:100%;min-height:280px">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FF832B" stroke-width="1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span class="pin-badge" style="background:rgba(66,190,101,0.15);color:var(--wf-green)">Image Post</span>
+        <div class="pin-save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+      <div class="pin-body">
+        <div class="pin-title">Kansas City CRE Heatmap -- Q1 2026</div>
+        <div class="pin-excerpt">Visualizing deal velocity, rent growth, and investment activity across KC metro submarkets.</div>
+        <div class="pin-metrics">
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>178</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>534</span>
+          <span class="pin-metric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>1.9K</span>
+        </div>
+        <div class="pin-author">
+          <div class="pin-avatar">W</div>
+          <span class="pin-author-name">@WindfieldIO</span>
+          <span class="pin-author-date">2d ago</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ═══════════════ LOAD MORE ═══════════════ -->
+  <div class="load-more-wrap">
+    <button class="btn btn-md btn-outline" id="loadMoreBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+      <span>Load More</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════ AUTHOR SECTION ═══════════════ -->
+<section class="author-section">
+  <div class="container">
+    <div class="author-card">
+      <div class="author-avatar-lg">W</div>
+      <div class="author-info">
+        <h3>Windfield</h3>
+        <div class="credentials">CRE Intelligence Platform -- @WindfieldIO -- 8.7K followers</div>
+        <div class="bio">Agentic intelligence for commercial real estate. Threads on PropTech, market signals, and data-driven CRE operations. Built on MCP.</div>
+        <div class="author-socials">
+          <a href="#" class="author-social" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" class="author-social" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+          <a href="#" class="author-social" aria-label="Website"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-cols">
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Market Intelligence</a>
+          <a href="#" class="footer-link">Deal Analytics</a>
+          <a href="#" class="footer-link">Property Profiles</a>
+          <a href="#" class="footer-link">CRM Pipeline</a>
+          <a href="#" class="footer-link">Integrations</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Documentation</a>
+          <a href="#" class="footer-link">API Reference</a>
+          <a href="#" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">Case Studies</a>
+          <a href="#" class="footer-link">Webinars</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">About</a>
+          <a href="#" class="footer-link">Careers</a>
+          <a href="#" class="footer-link">Press</a>
+          <a href="#" class="footer-link">Partners</a>
+          <a href="#" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+          <a href="#" class="footer-link">Cookie Policy</a>
+          <a href="#" class="footer-link">Security</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">LinkedIn</a>
+          <a href="#" class="footer-link">YouTube</a>
+          <a href="#" class="footer-link">Twitter / X</a>
+          <a href="#" class="footer-link">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-bottom-logo">Windfield</span>
+      <span>2026 Windfield IO. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ SCROLL TO TOP ═══════════════ -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+(function(){
+  // Filter
+  const pills = document.querySelectorAll('.filter-pill');
+  const cards = document.querySelectorAll('.pin-card');
+  const countEl = document.getElementById('postCount');
+
+  pills.forEach(p => p.addEventListener('click', () => {
+    pills.forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+    const cat = p.dataset.cat;
+    let visible = 0;
+    cards.forEach(c => {
+      if(cat === 'all' || c.dataset.cat === cat) { c.style.display = ''; visible++; }
+      else { c.style.display = 'none'; }
+    });
+    countEl.textContent = visible;
+  }));
+
+  // Load More
+  const loadBtn = document.getElementById('loadMoreBtn');
+  let loads = 0;
+  loadBtn.addEventListener('click', () => {
+    if(loads >= 2) return;
+    loadBtn.classList.add('loading');
+    loadBtn.disabled = true;
+    setTimeout(() => {
+      loads++;
+      loadBtn.classList.remove('loading');
+      if(loads >= 2) {
+        loadBtn.innerHTML = '<span>All posts loaded</span>';
+        loadBtn.style.opacity = '0.5';
+        loadBtn.style.cursor = 'default';
+      } else {
+        loadBtn.disabled = false;
+      }
+    }, 1200);
+  });
+
+  // Scroll to top
+  const scrollBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    scrollBtn.classList.toggle('visible', window.scrollY > 600);
+  });
+  scrollBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
+</body>
+</html>

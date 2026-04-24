@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Profiles | Windfield IO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --wf-brand: #1db954; --wf-brand-hover: #17a34a; --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b; --wf-bg-elevated: #111113; --wf-bg-sunken: #050507;
+  --wf-surface: #141417; --wf-surface-hover: #1a1a1e; --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa; --wf-fg-muted: #a1a1aa; --wf-fg-subtle: #71717a; --wf-fg-faint: #52525b;
+  --wf-border: #27272a; --wf-border-strong: #3f3f46; --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF; --wf-teal: #08BDBA; --wf-green: #42BE65; --wf-red: #E85D4A;
+  --wf-purple: #BE95FF; --wf-orange: #FF832B;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1); --wf-dur: 160ms;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--wf-bg); color: var(--wf-fg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+
+.navbar { position: sticky; top: 0; z-index: 100; background: rgba(9,9,11,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--wf-border-subtle); }
+.navbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.navbar-logo { font-weight: 700; font-size: 18px; color: var(--wf-fg); display: flex; align-items: center; gap: 8px; }
+.navbar-logo svg { color: var(--wf-brand); }
+.navbar-links { display: flex; align-items: center; gap: 28px; }
+.navbar-links a { font-size: 14px; color: var(--wf-fg-muted); transition: color var(--wf-dur) var(--wf-ease); }
+.navbar-links a:hover { color: var(--wf-fg); }
+.navbar-cta { padding: 8px 18px; background: var(--wf-brand); color: var(--wf-brand-fg); font-size: 14px; font-weight: 600; border-radius: var(--wf-r-md); border: none; cursor: pointer; transition: background var(--wf-dur) var(--wf-ease); }
+.navbar-cta:hover { background: var(--wf-brand-hover); }
+.navbar-mobile { display: none; background: none; border: none; color: var(--wf-fg); cursor: pointer; }
+@media (max-width: 768px) {
+  .navbar-links { display: none; }
+  .navbar-mobile { display: block; }
+  .navbar-links.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--wf-bg-elevated); border-bottom: 1px solid var(--wf-border); padding: 16px 24px; gap: 16px; }
+}
+
+.hero { text-align: center; padding: 80px 24px 48px; max-width: 760px; margin: 0 auto; }
+.hero-icon { width: 56px; height: 56px; background: var(--wf-brand-muted); border: 1px solid var(--wf-brand-border); border-radius: var(--wf-r-lg); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--wf-brand); }
+.hero h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+.hero p { font-size: 17px; color: var(--wf-fg-muted); max-width: 600px; margin: 0 auto; }
+@media (max-width: 480px) { .hero h1 { font-size: 28px; } .hero { padding: 56px 16px 32px; } }
+
+.filter-bar { max-width: 1280px; margin: 0 auto; padding: 0 24px 32px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.filter-btn { padding: 7px 16px; font-size: 13px; font-weight: 500; border-radius: 999px; border: 1px solid var(--wf-border); background: transparent; color: var(--wf-fg-muted); cursor: pointer; transition: all var(--wf-dur) var(--wf-ease); font-family: var(--font-sans); }
+.filter-btn:hover { border-color: var(--wf-border-strong); color: var(--wf-fg); }
+.filter-btn.active { background: var(--wf-brand); border-color: var(--wf-brand); color: var(--wf-brand-fg); }
+.filter-count { margin-left: auto; font-size: 13px; color: var(--wf-fg-faint); font-family: var(--font-mono); }
+
+.masonry { max-width: 1280px; margin: 0 auto; padding: 0 24px; column-count: 3; column-gap: 16px; }
+@media (max-width: 1024px) { .masonry { column-count: 2; } }
+@media (max-width: 480px) { .masonry { column-count: 1; } }
+
+/* Markdown-style card */
+.md-card { break-inside: avoid; background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); margin-bottom: 16px; overflow: hidden; transition: transform var(--wf-dur) var(--wf-ease), box-shadow var(--wf-dur) var(--wf-ease); }
+.md-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.35); }
+.md-card:hover .md-body h2 { color: var(--wf-brand); }
+
+/* File header */
+.md-file-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--wf-bg-sunken); border-bottom: 1px solid var(--wf-border-subtle); }
+.md-file-name { font-family: var(--font-mono); font-size: 12px; color: var(--wf-fg-subtle); display: flex; align-items: center; gap: 6px; }
+.md-file-name svg { width: 14px; height: 14px; color: var(--wf-fg-faint); }
+.md-copy-btn { background: none; border: 1px solid var(--wf-border); border-radius: var(--wf-r-sm); padding: 4px 8px; color: var(--wf-fg-faint); cursor: pointer; font-size: 11px; font-family: var(--font-mono); display: flex; align-items: center; gap: 4px; transition: all var(--wf-dur) var(--wf-ease); }
+.md-copy-btn:hover { border-color: var(--wf-brand-border); color: var(--wf-fg-muted); }
+.md-copy-btn.copied { border-color: var(--wf-brand); color: var(--wf-brand); }
+.md-copy-btn svg { width: 12px; height: 12px; }
+
+/* Frontmatter */
+.md-frontmatter { padding: 12px 14px; background: var(--wf-brand-muted); border-bottom: 1px solid var(--wf-brand-border); font-family: var(--font-mono); font-size: 12px; line-height: 1.7; }
+.md-fm-line { display: flex; }
+.md-fm-key { color: var(--wf-brand); min-width: 80px; }
+.md-fm-val { color: var(--wf-fg-muted); }
+
+/* Body */
+.md-body { padding: 16px; }
+.md-body h2 { font-size: 17px; font-weight: 700; margin-bottom: 6px; transition: color var(--wf-dur) var(--wf-ease); }
+.md-body .md-cat-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.md-body .md-cat-tag { padding: 3px 8px; font-size: 11px; border-radius: 999px; border: 1px solid var(--wf-brand-border); color: var(--wf-brand); background: transparent; font-weight: 500; }
+.md-body .md-cat-tag.intelligence { border-color: rgba(69,137,255,0.3); color: var(--wf-blue); }
+.md-body .md-cat-tag.content { border-color: rgba(190,149,255,0.3); color: var(--wf-purple); }
+.md-body .md-cat-tag.operations { border-color: rgba(255,131,43,0.3); color: var(--wf-orange); }
+.md-body .md-cat-tag.analytics { border-color: rgba(8,189,186,0.3); color: var(--wf-teal); }
+.md-body p { font-size: 13px; color: var(--wf-fg-muted); line-height: 1.55; margin-bottom: 12px; }
+.md-body h3 { font-size: 13px; font-weight: 600; color: var(--wf-fg-subtle); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+.md-body ul { list-style: none; margin-bottom: 12px; }
+.md-body ul li { font-size: 13px; color: var(--wf-fg-muted); padding: 2px 0; padding-left: 14px; position: relative; }
+.md-body ul li::before { content: "-"; position: absolute; left: 0; color: var(--wf-fg-faint); }
+.md-body .md-interaction { background: var(--wf-bg-sunken); border: 1px solid var(--wf-border-subtle); border-radius: var(--wf-r-md); padding: 10px 12px; font-size: 12px; color: var(--wf-fg-muted); margin-bottom: 12px; }
+.md-body .md-interaction .md-int-label { font-size: 11px; color: var(--wf-fg-faint); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+.md-body .md-interaction .md-int-text { font-family: var(--font-mono); font-size: 12px; }
+.md-footer-tags { padding: 0 16px 14px; display: flex; gap: 6px; flex-wrap: wrap; }
+.md-footer-tag { padding: 2px 7px; font-size: 10px; border-radius: var(--wf-r-sm); background: var(--wf-surface-hover); color: var(--wf-fg-faint); font-family: var(--font-mono); }
+
+/* Governance */
+.governance { max-width: 800px; margin: 48px auto 0; padding: 0 24px; }
+.governance-box { background: var(--wf-surface); border: 1px solid var(--wf-brand-border); border-radius: var(--wf-r-lg); padding: 24px; text-align: center; }
+.governance-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--wf-brand); }
+.governance-box p { font-size: 14px; color: var(--wf-fg-muted); max-width: 560px; margin: 0 auto; }
+
+.scroll-top { position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; border-radius: 50%; background: var(--wf-brand); color: var(--wf-brand-fg); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity var(--wf-dur) var(--wf-ease), transform var(--wf-dur) var(--wf-ease); box-shadow: 0 4px 20px rgba(29,185,84,0.3); z-index: 90; }
+.scroll-top.visible { opacity: 1; pointer-events: auto; }
+.scroll-top:hover { transform: scale(1.1); }
+
+.footer { border-top: 1px solid var(--wf-border-subtle); padding: 48px 24px; margin-top: 48px; }
+.footer-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-brand { font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.footer-brand svg { color: var(--wf-brand); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 13px; color: var(--wf-fg-subtle); transition: color var(--wf-dur) var(--wf-ease); }
+.footer-links a:hover { color: var(--wf-fg); }
+.footer-copy { font-size: 12px; color: var(--wf-fg-faint); width: 100%; text-align: center; margin-top: 24px; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="navbar-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>
+      Windfield IO
+    </a>
+    <div class="navbar-links" id="navLinks">
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/product.html">Product</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/blog-home.html">Blog</a>
+      <a href="/contact.html">Contact</a>
+      <button class="navbar-cta">Get Started</button>
+    </div>
+    <button class="navbar-mobile" id="navToggle" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-icon">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93"/><path d="M8.56 9.93A4.002 4.002 0 0 1 12 2"/><circle cx="12" cy="14" r="4"/><path d="M21 20c-1.4-2.33-4.17-4-7.5-4h-3C7.17 16 4.4 17.67 3 20"/></svg>
+  </div>
+  <h1>Agent Profiles</h1>
+  <p>AI agent team powering the Windfield IO platform -- each agent has defined boundaries, escalation protocols, and human oversight</p>
+</section>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="intelligence">Intelligence</button>
+  <button class="filter-btn" data-filter="content">Content</button>
+  <button class="filter-btn" data-filter="operations">Operations</button>
+  <button class="filter-btn" data-filter="analytics">Analytics</button>
+  <span class="filter-count" id="filterCount">Showing 10 of 10</span>
+</div>
+
+<div class="masonry" id="masonryGrid">
+
+  <!-- Agent 1: Market Intelligence -->
+  <article class="md-card" data-category="intelligence">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        market-intelligence-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="market-intelligence-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Market Intelligence Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">intelligence</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">market_data_update | manual_request</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">analyze, score, summarize</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">market_report | signal_alert</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Market Intelligence Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag intelligence">Intelligence</span>
+        <span class="md-cat-tag">Primary</span>
+      </div>
+      <p>Continuously monitors market data feeds, identifies emerging trends, and generates structured market intelligence reports for the Windfield team. Operates across multiple CRE submarkets with configurable alert thresholds.</p>
+      <h3>Capabilities</h3>
+      <ul>
+        <li>Real-time market data ingestion and normalization</li>
+        <li>Trend detection across vacancy, rental rates, and absorption</li>
+        <li>Comparative market analysis generation</li>
+        <li>Signal-based alert system with configurable sensitivity</li>
+      </ul>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">market-data</span>
+      <span class="md-footer-tag">trend-analysis</span>
+      <span class="md-footer-tag">alerts</span>
+      <span class="md-footer-tag">reports</span>
+    </div>
+  </article>
+
+  <!-- Agent 2: Property Scoring -->
+  <article class="md-card" data-category="intelligence">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        property-scoring-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="property-scoring-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Property Scoring Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">intelligence</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">new_property | enrichment_complete</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">evaluate, weight, rank</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">property_score | ranking_update</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Property Scoring Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag intelligence">Intelligence</span>
+      </div>
+      <p>Evaluates commercial properties against a weighted scoring model incorporating location, financials, tenant quality, market position, and growth potential. Produces normalized scores for portfolio comparison.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Score the Fulton District mixed-use property against current portfolio benchmarks"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">Composite score: 78/100 | Location: 85 | Financials: 72 | Tenant: 81 | Growth: 74</div>
+      </div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">scoring</span>
+      <span class="md-footer-tag">evaluation</span>
+      <span class="md-footer-tag">ranking</span>
+    </div>
+  </article>
+
+  <!-- Agent 3: Lead Qualification -->
+  <article class="md-card" data-category="operations">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        lead-qualification-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="lead-qualification-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Lead Qualification Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">operations</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">new_lead | form_submission</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">screen, classify, route</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">qualified_lead | routing_decision</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Lead Qualification Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag operations">Operations</span>
+      </div>
+      <p>Screens inbound leads by matching contact data against company enrichment, deal history, and property interest signals. Routes qualified leads to the appropriate team member with context-rich summaries.</p>
+      <h3>Capabilities</h3>
+      <ul>
+        <li>Company and contact enrichment via Clay integration</li>
+        <li>Intent signal matching against active listings</li>
+        <li>Automated ICP scoring and tier classification</li>
+        <li>CRM routing with enriched contact profiles</li>
+      </ul>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">leads</span>
+      <span class="md-footer-tag">qualification</span>
+      <span class="md-footer-tag">routing</span>
+      <span class="md-footer-tag">crm</span>
+    </div>
+  </article>
+
+  <!-- Agent 4: Content Writer -->
+  <article class="md-card" data-category="content">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        content-writer-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="content-writer-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Content Writer Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">content</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">content_brief | editorial_calendar</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">research, draft, refine</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">article_draft | content_asset</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Content Writer Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag content">Content</span>
+      </div>
+      <p>Produces long-form CRE content including market analyses, property spotlights, and thought leadership articles. Uses brand voice enforcement and the 12-layer article architecture to maintain consistency.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Write a 2000-word analysis on suburban office market recovery trends"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">12-layer article draft with data citations, market context, and actionable insights</div>
+      </div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">writing</span>
+      <span class="md-footer-tag">articles</span>
+      <span class="md-footer-tag">brand-voice</span>
+    </div>
+  </article>
+
+  <!-- Agent 5: Social Publisher -->
+  <article class="md-card" data-category="content">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        social-publisher-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="social-publisher-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Social Publisher Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">content</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">content_approved | schedule_time</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">format, schedule, publish</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">published_post | engagement_log</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Social Publisher Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag content">Content</span>
+      </div>
+      <p>Manages cross-platform content distribution across LinkedIn, Substack, and Medium. Adapts content format for each platform, schedules optimal posting times, and tracks engagement metrics.</p>
+      <h3>Capabilities</h3>
+      <ul>
+        <li>Platform-specific content reformatting</li>
+        <li>Optimal time scheduling based on audience data</li>
+        <li>Cross-platform engagement tracking</li>
+        <li>A/B headline testing with performance feedback</li>
+      </ul>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">linkedin</span>
+      <span class="md-footer-tag">publishing</span>
+      <span class="md-footer-tag">scheduling</span>
+    </div>
+  </article>
+
+  <!-- Agent 6: Data Pipeline -->
+  <article class="md-card" data-category="analytics">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        data-pipeline-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="data-pipeline-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Data Pipeline Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">analytics</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">cron_schedule | data_source_update</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">ingest, normalize, enrich</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">enriched_dataset | pipeline_log</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Data Pipeline Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag analytics">Analytics</span>
+      </div>
+      <p>Manages the ingestion, normalization, and enrichment of data from multiple CRE sources. Runs on configurable schedules, handles schema changes gracefully, and maintains data quality metrics.</p>
+      <h3>Capabilities</h3>
+      <ul>
+        <li>Multi-source data ingestion (APIs, feeds, scraping)</li>
+        <li>Schema normalization and deduplication</li>
+        <li>Batch enrichment via Clay and custom sources</li>
+        <li>Data quality scoring and anomaly detection</li>
+      </ul>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">data</span>
+      <span class="md-footer-tag">pipeline</span>
+      <span class="md-footer-tag">enrichment</span>
+      <span class="md-footer-tag">etl</span>
+    </div>
+  </article>
+
+  <!-- Agent 7: Analytics Dashboard -->
+  <article class="md-card" data-category="analytics">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        analytics-dashboard-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="analytics-dashboard-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Analytics Dashboard Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">analytics</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">daily_cron | dashboard_request</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">aggregate, visualize, alert</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">dashboard_data | pattern_alert</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Analytics Dashboard Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag analytics">Analytics</span>
+      </div>
+      <p>Analyzes platform-wide patterns across properties, deals, content performance, and agent activity. Generates daily dashboards and proactive alerts when metrics deviate from established baselines.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Generate weekly performance dashboard for Q2 pipeline"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">Dashboard JSON: 12 deals active | 3 trending up | 2 risk flags | $47M pipeline value</div>
+      </div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">analytics</span>
+      <span class="md-footer-tag">dashboards</span>
+      <span class="md-footer-tag">patterns</span>
+    </div>
+  </article>
+
+  <!-- Agent 8: Scheduling Coordinator -->
+  <article class="md-card" data-category="operations">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        scheduling-coordinator-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="scheduling-coordinator-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Scheduling Coordinator Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">operations</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">tour_request | meeting_request</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">coordinate, schedule, confirm</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">calendar_event | confirmation</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Scheduling Coordinator Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag operations">Operations</span>
+      </div>
+      <p>Manages appointment and property tour scheduling by coordinating availability across team members, prospects, and property access windows. Sends confirmations and pre-tour briefing materials automatically.</p>
+      <h3>Capabilities</h3>
+      <ul>
+        <li>Multi-party calendar coordination</li>
+        <li>Property access window management</li>
+        <li>Automated confirmation and reminder sequences</li>
+        <li>Pre-tour briefing packet generation</li>
+      </ul>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">scheduling</span>
+      <span class="md-footer-tag">tours</span>
+      <span class="md-footer-tag">calendar</span>
+    </div>
+  </article>
+
+  <!-- Agent 9: Newsletter Editor -->
+  <article class="md-card" data-category="content">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        newsletter-editor-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="newsletter-editor-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Newsletter Editor Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">content</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">weekly_cron | editorial_trigger</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">curate, compile, format</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">newsletter_draft | send_ready</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Newsletter Editor Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag content">Content</span>
+      </div>
+      <p>Compiles the weekly Windfield Letter by curating top market signals, selecting featured content, and assembling the newsletter layout. Requires human approval before final send.</p>
+      <h3>Example Interaction</h3>
+      <div class="md-interaction">
+        <div class="md-int-label">Input</div>
+        <div class="md-int-text">"Compile this week's Windfield Letter with top 3 market signals and featured property"</div>
+      </div>
+      <div class="md-interaction">
+        <div class="md-int-label">Output</div>
+        <div class="md-int-text">Newsletter draft: 3 signals, 1 featured property, 2 articles, engagement prediction: 42% open rate</div>
+      </div>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">newsletter</span>
+      <span class="md-footer-tag">curation</span>
+      <span class="md-footer-tag">editorial</span>
+    </div>
+  </article>
+
+  <!-- Agent 10: Report Generator -->
+  <article class="md-card" data-category="intelligence">
+    <div class="md-file-header">
+      <span class="md-file-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        report-generator-agent.md
+      </span>
+      <button class="md-copy-btn" data-copy="report-generator-agent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <div class="md-frontmatter">
+      <div class="md-fm-line"><span class="md-fm-key">name:</span><span class="md-fm-val">Report Generator Agent</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">category:</span><span class="md-fm-val">intelligence</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">trigger:</span><span class="md-fm-val">report_request | monthly_cron</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">behavior:</span><span class="md-fm-val">compile, format, deliver</span></div>
+      <div class="md-fm-line"><span class="md-fm-key">output:</span><span class="md-fm-val">formatted_report | pdf_asset</span></div>
+    </div>
+    <div class="md-body">
+      <h2>Report Generator Agent</h2>
+      <div class="md-cat-tags">
+        <span class="md-cat-tag intelligence">Intelligence</span>
+      </div>
+      <p>Generates automated reports including market summaries, property performance reviews, deal pipeline updates, and economic indicator digests. Outputs in structured formats ready for client or internal distribution.</p>
+      <h3>Capabilities</h3>
+      <ul>
+        <li>Template-based report generation</li>
+        <li>Dynamic data table and chart insertion</li>
+        <li>Multi-format output (PDF, HTML, Markdown)</li>
+        <li>Scheduled delivery with recipient management</li>
+      </ul>
+    </div>
+    <div class="md-footer-tags">
+      <span class="md-footer-tag">reports</span>
+      <span class="md-footer-tag">automation</span>
+      <span class="md-footer-tag">formatting</span>
+      <span class="md-footer-tag">delivery</span>
+    </div>
+  </article>
+
+</div>
+
+<!-- Governance -->
+<div class="governance">
+  <div class="governance-box">
+    <h3>Agent Governance</h3>
+    <p>Every agent has defined boundaries, escalation protocols, and requires human approval for critical decisions. No agent operates autonomously on actions that affect external communications, financial transactions, or data deletions.</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>
+      Windfield IO
+    </div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/pricing.html">Pricing</a>
+    </div>
+    <div class="footer-copy">2026 Windfield IO. All rights reserved.</div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+(function() {
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const grid = document.getElementById('masonryGrid');
+  const filterCount = document.getElementById('filterCount');
+
+  function updateCount() {
+    const all = grid.querySelectorAll('.md-card');
+    const visible = grid.querySelectorAll('.md-card:not(.hidden)');
+    filterCount.textContent = 'Showing ' + visible.length + ' of ' + all.length;
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      grid.querySelectorAll('.md-card').forEach(card => {
+        if (filter === 'all') {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.toggle('hidden', card.dataset.category !== filter);
+        }
+      });
+      updateCount();
+    });
+  });
+
+  // Copy to clipboard
+  document.querySelectorAll('.md-copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.md-card');
+      const frontmatter = card.querySelector('.md-frontmatter');
+      const body = card.querySelector('.md-body');
+      let text = '---\n';
+      frontmatter.querySelectorAll('.md-fm-line').forEach(line => {
+        text += line.querySelector('.md-fm-key').textContent + ' ' + line.querySelector('.md-fm-val').textContent + '\n';
+      });
+      text += '---\n\n';
+      text += body.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add('copied');
+        btn.querySelector('svg').style.display = 'none';
+        const origText = btn.childNodes[btn.childNodes.length - 1];
+        const prevText = origText.textContent;
+        origText.textContent = ' Copied';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.querySelector('svg').style.display = '';
+          origText.textContent = prevText;
+        }, 2000);
+      });
+    });
+  });
+
+  const scrollTopBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    scrollTopBtn.classList.toggle('visible', window.scrollY > 600);
+  });
+  scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  updateCount();
+})();
+</script>
+</body>
+</html>
