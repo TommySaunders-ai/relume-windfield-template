@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Resilience Room — Edward Flynn, LPC, NBCCH, DBTC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-success: #22c55e;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 80px 0; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 600; border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap; border: 1px solid transparent;
+}
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-lg { height: 52px; padding: 0 32px; font-size: 15px; }
+.btn-primary { background: var(--wf-brand); color: var(--wf-brand-fg); }
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-outline { background: transparent; color: var(--wf-fg); border-color: var(--wf-border-strong); }
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+
+.kicker {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--wf-brand); margin-bottom: 12px;
+}
+
+/* ── NAVBAR ── */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--wf-bg); border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex; align-items: center; height: 64px; gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  letter-spacing: -0.02em;
+}
+.navbar-logo span { color: var(--wf-brand); }
+.navbar-links {
+  display: flex; align-items: center; gap: 24px; margin-left: auto;
+}
+.navbar-link {
+  font-size: 14px; color: var(--wf-fg-muted); transition: color var(--wf-dur);
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link.active { color: var(--wf-fg); }
+.navbar-actions {
+  display: flex; align-items: center; gap: 12px; margin-left: 16px;
+}
+.mobile-toggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; color: var(--wf-fg); }
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ── HERO ── */
+.hero {
+  position: relative; padding: 100px 0 80px; overflow: hidden;
+  background: var(--wf-bg); text-align: center;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(29,185,84,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border-radius: 9999px;
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  font-size: 13px; font-weight: 500; color: var(--wf-fg-muted);
+  margin-bottom: 32px;
+}
+.hero-badge-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--wf-brand);
+  box-shadow: 0 0 8px var(--wf-brand), 0 0 16px rgba(29,185,84,0.3);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+.hero-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800; letter-spacing: -0.035em;
+  line-height: 1.1; color: var(--wf-fg);
+  margin-bottom: 20px; max-width: 700px; margin-left: auto; margin-right: auto;
+}
+.hero-title .accent { color: var(--wf-brand); }
+.hero-subtitle {
+  font-size: 18px; color: var(--wf-fg-muted); line-height: 1.6;
+  margin-bottom: 16px; max-width: 640px; margin-left: auto; margin-right: auto;
+}
+.hero-price {
+  font-size: 48px; font-weight: 800; color: var(--wf-fg);
+  letter-spacing: -0.04em; margin-bottom: 8px;
+}
+.hero-price span { font-size: 20px; font-weight: 500; color: var(--wf-fg-muted); }
+.hero-cancel {
+  font-size: 14px; color: var(--wf-fg-subtle); margin-bottom: 40px;
+}
+.hero-btns {
+  display: flex; gap: 12px; justify-content: center; margin-bottom: 24px;
+}
+
+/* ── FEATURES / WHAT'S INCLUDED ── */
+.features-section {
+  padding: 80px 0; border-top: 1px solid var(--wf-border);
+}
+.features-header { text-align: center; margin-bottom: 56px; }
+.features-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 16px;
+}
+.features-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+}
+.feature-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); padding: 28px; text-align: center;
+  transition: border-color var(--wf-dur);
+}
+.feature-card:hover { border-color: var(--wf-border-strong); }
+.feature-icon {
+  width: 48px; height: 48px; border-radius: var(--wf-r-md);
+  background: var(--wf-brand-muted); color: var(--wf-brand);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.feature-icon svg { width: 24px; height: 24px; }
+.feature-card h3 {
+  font-size: 15px; font-weight: 700; color: var(--wf-fg);
+  margin-bottom: 6px; letter-spacing: -0.01em;
+}
+.feature-tag {
+  font-family: var(--font-mono); font-size: 11px; color: var(--wf-brand);
+  font-weight: 500;
+}
+
+/* ── GROUP PROGRAMS ── */
+.programs {
+  padding: 80px 0; background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+}
+.programs-header { text-align: center; margin-bottom: 48px; }
+.programs-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 16px;
+}
+.programs-list {
+  display: flex; flex-direction: column; max-width: 800px; margin: 0 auto;
+}
+.program-item {
+  display: grid; grid-template-columns: 1fr auto; gap: 24px;
+  align-items: start; padding: 28px 0;
+  border-bottom: 1px solid var(--wf-border);
+}
+.program-item:first-child { border-top: 1px solid var(--wf-border); }
+.program-item h3 {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  margin-bottom: 8px; letter-spacing: -0.01em;
+}
+.program-item p {
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.6;
+}
+.program-meta {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+  white-space: nowrap;
+}
+.program-frequency {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  color: var(--wf-brand); text-transform: uppercase; letter-spacing: 0.06em;
+}
+.program-duration {
+  font-size: 13px; color: var(--wf-fg-subtle);
+}
+
+/* ── DISCUSSION TOPICS ── */
+.topics {
+  padding: 80px 0; border-top: 1px solid var(--wf-border);
+}
+.topics-header { text-align: center; margin-bottom: 48px; }
+.topics-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 16px;
+}
+.topics-header p { font-size: 15px; color: var(--wf-fg-muted); }
+.topics-grid {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  max-width: 900px; margin: 0 auto;
+}
+.topic-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border-radius: 9999px;
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  font-size: 13px; font-weight: 500; color: var(--wf-fg-muted);
+  transition: border-color var(--wf-dur), color var(--wf-dur);
+}
+.topic-tag:hover { border-color: var(--wf-brand); color: var(--wf-fg); }
+.topic-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--wf-brand);
+}
+
+/* ── TESTIMONIALS ── */
+.testimonials {
+  padding: 80px 0; background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+}
+.testimonials-header { text-align: center; margin-bottom: 48px; }
+.testimonials-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg);
+}
+.testimonials-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.testimonial-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); padding: 28px;
+}
+.testimonial-quote {
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.7;
+  margin-bottom: 20px; font-style: italic;
+}
+.testimonial-author {
+  font-size: 14px; font-weight: 600; color: var(--wf-fg);
+}
+.testimonial-role {
+  font-size: 12px; color: var(--wf-fg-subtle); margin-top: 2px;
+}
+
+/* ── CTA ── */
+.cta-section {
+  padding: 80px 0; border-top: 1px solid var(--wf-border);
+}
+.cta-card {
+  background: var(--wf-surface); border: 2px solid var(--wf-brand);
+  border-radius: var(--wf-r-xl); padding: 56px; text-align: center;
+  max-width: 640px; margin: 0 auto;
+}
+.cta-card h2 {
+  font-size: 32px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 16px;
+}
+.cta-card p {
+  font-size: 15px; color: var(--wf-fg-muted); line-height: 1.6; margin-bottom: 32px;
+}
+.cta-price {
+  font-size: 48px; font-weight: 800; color: var(--wf-fg);
+  letter-spacing: -0.04em; margin-bottom: 8px;
+}
+.cta-price span { font-size: 20px; font-weight: 500; color: var(--wf-fg-muted); }
+.cta-cancel {
+  font-size: 14px; color: var(--wf-fg-subtle); margin-bottom: 32px;
+}
+.cta-btns {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+}
+
+/* ── CLINICIAN BIO ── */
+.bio {
+  padding: 80px 0; background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+}
+.bio-inner {
+  display: grid; grid-template-columns: 200px 1fr; gap: 48px;
+  align-items: start; max-width: 800px; margin: 0 auto;
+}
+.bio-avatar {
+  width: 200px; height: 200px; border-radius: var(--wf-r-xl);
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--wf-fg-faint); font-size: 48px; font-weight: 700;
+}
+.bio h2 {
+  font-size: 28px; font-weight: 800; color: var(--wf-fg);
+  letter-spacing: -0.02em; margin-bottom: 4px;
+}
+.bio-creds {
+  font-family: var(--font-mono); font-size: 13px; color: var(--wf-brand);
+  margin-bottom: 8px;
+}
+.bio-location {
+  font-size: 14px; color: var(--wf-fg-subtle); margin-bottom: 20px;
+}
+.bio p {
+  font-size: 15px; color: var(--wf-fg-muted); line-height: 1.7;
+}
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--wf-border); padding: 56px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 32px; padding-bottom: 40px;
+}
+.footer-brand-name {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  letter-spacing: -0.02em; margin-bottom: 12px;
+}
+.footer-brand-desc {
+  font-size: 13px; color: var(--wf-fg-muted); line-height: 1.6; margin-bottom: 16px;
+}
+.footer-contact-line {
+  font-size: 13px; color: var(--wf-fg-muted); margin-bottom: 4px;
+}
+.footer-contact-line a {
+  color: var(--wf-fg-muted); transition: color var(--wf-dur);
+}
+.footer-contact-line a:hover { color: var(--wf-brand); }
+.footer-col-title {
+  font-size: 13px; font-weight: 600; color: var(--wf-fg); margin-bottom: 16px;
+}
+.footer-links { display: flex; flex-direction: column; gap: 10px; }
+.footer-link {
+  font-size: 13px; color: var(--wf-fg-muted); transition: color var(--wf-dur);
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; border-top: 1px solid var(--wf-border);
+  font-size: 12px; color: var(--wf-fg-subtle);
+}
+.footer-legal { display: flex; gap: 24px; }
+.footer-legal a {
+  color: var(--wf-fg-subtle); text-decoration: underline;
+  text-underline-offset: 2px; transition: color var(--wf-dur);
+}
+.footer-legal a:hover { color: var(--wf-fg); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .hero { padding: 64px 0 56px; }
+  .hero-btns { flex-direction: column; align-items: center; }
+  .navbar-links { display: none; }
+  .mobile-toggle { display: flex; }
+  .features-grid { grid-template-columns: 1fr; }
+  .program-item { grid-template-columns: 1fr; gap: 8px; }
+  .program-meta { align-items: flex-start; flex-direction: row; gap: 12px; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .bio-inner { grid-template-columns: 1fr; text-align: center; }
+  .bio-avatar { margin: 0 auto; }
+  .cta-card { padding: 40px 24px; }
+  .cta-btns { flex-direction: column; align-items: center; }
+  .footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="#" class="navbar-logo">Edward <span>Flynn</span></a>
+    <div class="navbar-links">
+      <a href="#" class="navbar-link">Home</a>
+      <a href="#" class="navbar-link">About</a>
+      <a href="#" class="navbar-link">Services</a>
+      <a href="#" class="navbar-link">DBT Skills Course</a>
+      <a href="#" class="navbar-link active">Community</a>
+      <a href="#" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#join" class="btn btn-primary btn-md">Join Now</a>
+    </div>
+    <button class="mobile-toggle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Membership &middot; Cancel Anytime
+    </div>
+    <h1 class="hero-title">The <span class="accent">Resilience Room</span></h1>
+    <p class="hero-subtitle">Your ongoing support system for continued growth, accountability, and clinical-quality resources delivered every month.</p>
+    <div class="hero-price">$25<span>/month</span></div>
+    <p class="hero-cancel">Cancel anytime &mdash; No long-term commitment</p>
+    <div class="hero-btns">
+      <a href="#join" class="btn btn-primary btn-lg">Join The Resilience Room</a>
+      <a href="#included" class="btn btn-outline btn-lg">See What&rsquo;s Included</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHAT'S INCLUDED ── -->
+<section class="features-section" id="included">
+  <div class="container">
+    <div class="features-header">
+      <div class="kicker">Membership</div>
+      <h2>What&rsquo;s Included</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </div>
+        <h3>New Hypnosis Recording</h3>
+        <div class="feature-tag">Monthly</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3>Live Q&amp;A</h3>
+        <div class="feature-tag">Monthly</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        </div>
+        <h3>Full DBT Toolkit Library</h3>
+        <div class="feature-tag">All Access</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <h3>Journaling Prompts Archive</h3>
+        <div class="feature-tag">Library</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+        </div>
+        <h3>DBT Affirmation Cards</h3>
+        <div class="feature-tag">Printable</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Private Member Community</h3>
+        <div class="feature-tag">Community</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3>Priority 1:1 Scheduling</h3>
+        <div class="feature-tag">Exclusive</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+        </div>
+        <h3>10% Off Courses</h3>
+        <div class="feature-tag">Discount</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── GROUP PROGRAMS ── -->
+<section class="programs">
+  <div class="container">
+    <div class="programs-header">
+      <div class="kicker">Group Programs</div>
+      <h2>Live sessions included with membership</h2>
+    </div>
+    <div class="programs-list">
+      <div class="program-item">
+        <div>
+          <h3>DBT Skills Group</h3>
+          <p>A structured weekly group covering all four DBT modules &mdash; distress tolerance, emotion regulation, interpersonal effectiveness, and mindfulness.</p>
+        </div>
+        <div class="program-meta">
+          <span class="program-frequency">Weekly</span>
+          <span class="program-duration">60 min</span>
+        </div>
+      </div>
+      <div class="program-item">
+        <div>
+          <h3>Mindfulness Meditation Circle</h3>
+          <p>A guided meditation and mindfulness practice session designed to build your daily routine.</p>
+        </div>
+        <div class="program-meta">
+          <span class="program-frequency">Weekly</span>
+          <span class="program-duration">30 min</span>
+        </div>
+      </div>
+      <div class="program-item">
+        <div>
+          <h3>Interpersonal Effectiveness Workshop</h3>
+          <p>Deep-dive monthly workshop focused on DEAR MAN scripts, boundary setting, and assertive communication.</p>
+        </div>
+        <div class="program-meta">
+          <span class="program-frequency">Monthly</span>
+          <span class="program-duration">90 min</span>
+        </div>
+      </div>
+      <div class="program-item">
+        <div>
+          <h3>Healing the Child Within</h3>
+          <p>Trauma-informed group exploring inner child work through guided hypnotherapy and DBT techniques.</p>
+        </div>
+        <div class="program-meta">
+          <span class="program-frequency">Bi-Weekly</span>
+          <span class="program-duration">75 min</span>
+        </div>
+      </div>
+      <div class="program-item">
+        <div>
+          <h3>The Power of Belief</h3>
+          <p>Monthly session combining clinical hypnotherapy with positive outcome imagery.</p>
+        </div>
+        <div class="program-meta">
+          <span class="program-frequency">Monthly</span>
+          <span class="program-duration">60 min</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DISCUSSION TOPICS ── -->
+<section class="topics">
+  <div class="container">
+    <div class="topics-header">
+      <div class="kicker">Community</div>
+      <h2>Discussion Topics</h2>
+      <p>Active conversations across 21 therapeutic focus areas.</p>
+    </div>
+    <div class="topics-grid">
+      <div class="topic-tag"><span class="topic-dot"></span>Anxiety Management</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Distress Tolerance</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Emotion Regulation</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Mindfulness</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Sleep Hygiene</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Boundary Setting</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Self-Compassion</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Radical Acceptance</div>
+      <div class="topic-tag"><span class="topic-dot"></span>DEAR MAN Skills</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Trauma Recovery</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Inner Child Work</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Positive Imagery</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Smoking Cessation</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Grief &amp; Loss</div>
+      <div class="topic-tag"><span class="topic-dot"></span>LGBTQIA+ Support</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Workplace Stress</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Relationship Skills</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Body-Mind Connection</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Daily Routines</div>
+      <div class="topic-tag"><span class="topic-dot"></span>Personal Resilience</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="testimonials">
+  <div class="container">
+    <div class="testimonials-header">
+      <div class="kicker">Member Stories</div>
+      <h2>What members are saying</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;The monthly hypnosis recordings alone are worth the membership. Every month I get a new tool in my toolkit.&rdquo;</p>
+        <div class="testimonial-author">Lauren D.</div>
+        <div class="testimonial-role">Member since January 2026</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;The DBT Skills Group has become the anchor of my week.&rdquo;</p>
+        <div class="testimonial-author">Marcus B.</div>
+        <div class="testimonial-role">Member since March 2026</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;Finding an affirming therapeutic community felt impossible. The Resilience Room is the first space where I felt truly safe.&rdquo;</p>
+        <div class="testimonial-author">Jordan R.</div>
+        <div class="testimonial-role">Member since February 2026</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;The Resilience Room keeps the momentum going. The live Q&amp;A with Edward is like having a therapist on speed dial &mdash; but for $25 a month.&rdquo;</p>
+        <div class="testimonial-author">Priya S.</div>
+        <div class="testimonial-role">Member since January 2026</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;Healing the Child Within changed my life. Edward&rsquo;s approach through hypnotherapy made it feel safe and transformative.&rdquo;</p>
+        <div class="testimonial-author">Christine L.</div>
+        <div class="testimonial-role">Member since January 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section" id="join">
+  <div class="container">
+    <div class="cta-card">
+      <div class="kicker">Join Today</div>
+      <h2>Stop going it alone</h2>
+      <p>The Resilience Room gives you ongoing access to clinical-quality resources, a supportive community, and direct connection with Edward.</p>
+      <div class="cta-price">$25<span>/month</span></div>
+      <p class="cta-cancel">Cancel anytime &mdash; No long-term commitment</p>
+      <div class="cta-btns">
+        <a href="#" class="btn btn-primary btn-lg">Join The Resilience Room</a>
+        <a href="ef-skills-course.html" class="btn btn-outline btn-lg">Explore Course Instead</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CLINICIAN BIO ── -->
+<section class="bio">
+  <div class="container">
+    <div class="bio-inner">
+      <div class="bio-avatar">EF</div>
+      <div>
+        <div class="kicker">Your Clinician</div>
+        <h2>Edward Flynn</h2>
+        <div class="bio-creds">LPC, NBCCH, DBTC</div>
+        <div class="bio-location">St. Louis, Missouri</div>
+        <p>Licensed Professional Counselor with 13+ years of clinical experience. Nationally certified in clinical hypnotherapy and dialectical behavior therapy. Edward has facilitated over 500 IOP group sessions across multiple clinical settings. His practice integrates DBT, trauma-informed care, and clinical hypnosis to help clients move beyond surviving to living life to the fullest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <div class="footer-brand-name">Edward Flynn, LPC</div>
+        <p class="footer-brand-desc">Licensed Professional Counselor specializing in DBT, clinical hypnotherapy, and trauma-informed care in St. Louis, Missouri.</p>
+        <div class="footer-contact-line"><a href="tel:3145717796">(314) 571-7796</a></div>
+        <div class="footer-contact-line">Accepting Clients &middot; St. Louis, MO</div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Programs</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">The Resilience Room</a>
+          <a href="#" class="footer-link">DBT Skills Group</a>
+          <a href="#" class="footer-link">Mindfulness Circle</a>
+          <a href="#" class="footer-link">Healing the Child Within</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">DBT Skills Course</a>
+          <a href="#" class="footer-link">DBT Toolkit</a>
+          <a href="#" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">FAQ</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">About Edward</a>
+          <a href="#" class="footer-link">Book a Session</a>
+          <a href="#" class="footer-link">Contact</a>
+          <a href="tel:3145717796" class="footer-link">(314) 571-7796</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn, LPC, NBCCH, DBTC</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Disclaimer</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

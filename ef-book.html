@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond Surviving — Edward Flynn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono",monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-r-xl:16px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}.btn-sm{height:36px;padding:0 16px;font-size:13px}.btn-lg{height:52px;padding:0 32px;font-size:16px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}.navbar-link:hover{color:var(--wf-fg)}.navbar-link.active{color:var(--wf-fg)}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}.mobile-toggle svg{width:24px;height:24px}
+
+/* Hero */
+.hero{padding:100px 0 80px;border-bottom:1px solid var(--wf-border);text-align:center}
+.hero h1{font-size:52px;font-weight:800;letter-spacing:-0.03em;line-height:1.08;margin-bottom:16px;color:var(--wf-fg);max-width:800px;margin-left:auto;margin-right:auto}
+.hero-subtitle{font-size:20px;color:var(--wf-fg-muted);max-width:600px;margin:0 auto 12px;line-height:1.5}
+.hero-author{font-size:16px;color:var(--wf-fg-subtle);margin-bottom:32px}
+.hero-btns{display:flex;gap:12px;justify-content:center}
+
+/* Section */
+.section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.section-header{text-align:center;margin-bottom:48px}
+.section-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.section-header p{font-size:15px;color:var(--wf-fg-muted);max-width:640px;margin:0 auto;line-height:1.65}
+
+/* About */
+.about-content{max-width:720px;margin:0 auto;font-size:16px;color:var(--wf-fg-muted);line-height:1.75}
+.about-content p{margin-bottom:20px}
+
+/* Key Metrics */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.metric-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:40px 24px;text-align:center}
+.metric-num{font-size:48px;font-weight:800;letter-spacing:-0.03em;color:var(--wf-brand);line-height:1;margin-bottom:8px;font-family:var(--font-mono)}
+.metric-label{font-size:14px;color:var(--wf-fg-muted);font-weight:500}
+
+/* TOC */
+.toc-list{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.toc-item{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px 24px;display:flex;align-items:flex-start;gap:16px;transition:border-color var(--wf-dur)}.toc-item:hover{border-color:var(--wf-border-strong)}
+.toc-num{font-size:13px;font-weight:700;color:var(--wf-brand);font-family:var(--font-mono);min-width:32px;padding-top:2px}
+.toc-content h3{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:4px}
+.toc-content p{font-size:14px;color:var(--wf-fg-muted);line-height:1.5}
+
+/* Pullquote */
+.pullquote{padding:80px 0;border-bottom:1px solid var(--wf-border);background:var(--wf-bg-elevated)}
+.pullquote-inner{max-width:720px;margin:0 auto;text-align:center}
+.pullquote-text{font-size:24px;font-weight:500;color:var(--wf-fg);line-height:1.5;font-style:italic;margin-bottom:20px;letter-spacing:-0.01em}
+.pullquote-attr{font-size:15px;color:var(--wf-fg-subtle)}
+
+/* CTA */
+.cta-band{padding:80px 0;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border)}
+.cta-band-inner{text-align:center;max-width:600px;margin:0 auto}
+.cta-band h2{font-size:40px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:16px}
+.cta-band p{font-size:16px;color:var(--wf-fg-muted);margin-bottom:28px;line-height:1.65}
+.cta-btns{display:flex;gap:12px;justify-content:center}
+
+/* Instructor */
+.instructor{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.instructor-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:start}
+.instructor-avatar{aspect-ratio:1/1;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);display:flex;align-items:center;justify-content:center}
+.instructor-avatar svg{width:64px;height:64px;color:var(--wf-fg-faint)}
+.instructor-info h2{font-size:32px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:4px}
+.instructor-role{font-size:15px;color:var(--wf-fg-subtle);margin-bottom:16px}
+.instructor-bio{font-size:15px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:24px}
+.cred-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.cred-list li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--wf-fg-muted)}
+.cred-dot{width:6px;height:6px;border-radius:50%;background:var(--wf-brand);flex-shrink:0}
+
+/* Footer */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.ft{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.fl{display:flex;flex-direction:column;gap:10px}.fl a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}.fl a:hover{color:var(--wf-fg)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
+.footer-brand-desc{font-size:13px;color:var(--wf-fg-muted);line-height:1.6;max-width:280px}
+
+/* Responsive */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .instructor-grid{grid-template-columns:1fr;gap:40px}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .hero h1,.cta-band h2{font-size:32px}
+  .section-header h2{font-size:28px}
+  .navbar-links{display:none}.mobile-toggle{display:flex}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .hero-btns,.cta-btns{flex-direction:column;align-items:center}
+  .hero-btns .btn,.cta-btns .btn{width:100%;justify-content:center;max-width:320px}
+  .pullquote-text{font-size:20px}
+  .metric-num{font-size:36px}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar"><div class="container navbar-inner">
+  <a href="#" class="navbar-logo">Edward Flynn</a>
+  <div class="navbar-links">
+    <a href="#" class="navbar-link">Services</a>
+    <a href="#" class="navbar-link">Treatments</a>
+    <a href="#" class="navbar-link">Products</a>
+    <a href="#" class="navbar-link">Courses</a>
+    <a href="#" class="navbar-link">Community</a>
+    <a href="#" class="navbar-link">Blog</a>
+    <a href="#" class="navbar-link">About</a>
+  </div>
+  <div class="navbar-actions"><a href="#" class="btn btn-sm btn-primary">Get Started</a></div>
+  <button class="mobile-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</div></nav>
+
+<!-- HERO -->
+<section class="hero"><div class="container">
+  <p class="kicker">New Book</p>
+  <h1>Beyond Surviving &mdash; The DBT Guide to Living Life to the Fullest</h1>
+  <p class="hero-subtitle">A comprehensive, practical guide to mastering Dialectical Behavior Therapy skills and transforming survival mode into a life worth living.</p>
+  <p class="hero-author">By Edward Flynn, LPC, NBCCH, DBTC</p>
+  <div class="hero-btns">
+    <a href="#" class="btn btn-lg btn-primary">Pre-Order Now</a>
+    <a href="#" class="btn btn-lg btn-outline">Take the Course</a>
+  </div>
+</div></section>
+
+<!-- ABOUT -->
+<section class="section"><div class="container">
+  <div class="section-header">
+    <p class="kicker">About the Book</p>
+    <h2>From surviving to thriving</h2>
+  </div>
+  <div class="about-content">
+    <p>Beyond Surviving is more than a self-help book &mdash; it's a clinical roadmap for anyone who has ever felt trapped by their own emotions. Written by Edward Flynn, a licensed therapist with over 13 years of experience treating anxiety, trauma, and emotional dysregulation, this book translates the full scope of Dialectical Behavior Therapy into accessible, actionable practice.</p>
+    <p>Across 15 chapters and 4 core DBT modules, you'll learn the same skills taught in clinical DBT programs &mdash; distress tolerance, emotion regulation, interpersonal effectiveness, and mindfulness &mdash; along with Edward's unique integration of clinical hypnotherapy techniques that deepen the work and accelerate results.</p>
+    <p>Each chapter includes guided exercises, real client scenarios (anonymized), reflection prompts, and practical worksheets. Whether you're a therapy client looking for supplemental material, a clinician seeking a client-friendly resource, or someone navigating emotional challenges on your own, this book meets you where you are and walks with you toward a life that feels genuinely worth living.</p>
+  </div>
+</div></section>
+
+<!-- KEY METRICS -->
+<section class="section"><div class="container">
+  <div class="section-header">
+    <p class="kicker">By the Numbers</p>
+    <h2>What's inside</h2>
+  </div>
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-num">15</div>
+      <div class="metric-label">Chapters</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">4</div>
+      <div class="metric-label">Core DBT Modules</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">50+</div>
+      <div class="metric-label">Guided Exercises</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">13+</div>
+      <div class="metric-label">Years of Clinical Experience</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- TABLE OF CONTENTS -->
+<section class="section"><div class="container">
+  <div class="section-header">
+    <p class="kicker">Table of Contents</p>
+    <h2>15 chapters to transform your life</h2>
+  </div>
+  <div class="toc-list">
+    <div class="toc-item">
+      <span class="toc-num">01</span>
+      <div class="toc-content"><h3>The Dialectical Life</h3><p>Understanding the philosophy of DBT and why "both/and" thinking is the foundation of change.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">02</span>
+      <div class="toc-content"><h3>Beyond Survival Mode</h3><p>Recognizing the patterns that keep you stuck and setting the stage for genuine transformation.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">03</span>
+      <div class="toc-content"><h3>Mindfulness: The Core Skill</h3><p>Building the foundation of awareness that makes every other DBT skill possible.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">04</span>
+      <div class="toc-content"><h3>Wise Mind</h3><p>Finding the balance between emotion mind and reasonable mind in daily decisions.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">05</span>
+      <div class="toc-content"><h3>Distress Tolerance: Crisis Survival</h3><p>TIPP, STOP, and other skills for managing acute emotional crises without making things worse.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">06</span>
+      <div class="toc-content"><h3>Distress Tolerance: Reality Acceptance</h3><p>Radical acceptance, turning the mind, and willingness as paths through pain.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">07</span>
+      <div class="toc-content"><h3>Emotion Regulation: Understanding Emotions</h3><p>The function of emotions, the myth of "bad" feelings, and how to observe without reacting.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">08</span>
+      <div class="toc-content"><h3>Emotion Regulation: Changing Emotions</h3><p>Opposite action, checking the facts, and building a life worth living through valued action.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">09</span>
+      <div class="toc-content"><h3>Reducing Vulnerability: The ABC PLEASE Skills</h3><p>Building emotional resilience through sleep, nutrition, exercise, and mastery experiences.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">10</span>
+      <div class="toc-content"><h3>Interpersonal Effectiveness: DEAR MAN</h3><p>Getting what you need from relationships while maintaining self-respect.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">11</span>
+      <div class="toc-content"><h3>Interpersonal Effectiveness: GIVE &amp; FAST</h3><p>Balancing relationship maintenance with self-respect in every interaction.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">12</span>
+      <div class="toc-content"><h3>Walking the Middle Path</h3><p>Dialectical thinking, validation, and moving beyond black-and-white patterns.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">13</span>
+      <div class="toc-content"><h3>Hypnotherapy as a DBT Accelerator</h3><p>How clinical hypnotherapy deepens skill acquisition and rewires emotional responses.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">14</span>
+      <div class="toc-content"><h3>Building Your Daily Practice</h3><p>Creating sustainable routines that integrate DBT skills into every area of your life.</p></div>
+    </div>
+    <div class="toc-item">
+      <span class="toc-num">15</span>
+      <div class="toc-content"><h3>Life to the Fullest</h3><p>Moving from surviving to thriving &mdash; your ongoing journey of growth, meaning, and emotional freedom.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- AUTHOR QUOTE -->
+<section class="pullquote"><div class="container">
+  <div class="pullquote-inner">
+    <p class="pullquote-text">"The goal of DBT isn't to eliminate pain &mdash; it's to build a life so meaningful that the pain becomes bearable. This book is the roadmap I wish I could hand every client on day one."</p>
+    <p class="pullquote-attr">&mdash; Edward Flynn, LPC, NBCCH, DBTC</p>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section class="cta-band"><div class="container">
+  <div class="cta-band-inner">
+    <h2>Ready to go beyond surviving?</h2>
+    <p>Pre-order the book and get early access to the companion course. 15 chapters, 50+ exercises, and a complete framework for building a life worth living.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn btn-lg btn-primary">Pre-Order the Book</a>
+      <a href="#" class="btn btn-lg btn-outline">Take the Course</a>
+    </div>
+  </div>
+</div></section>
+
+<!-- AUTHOR BIO -->
+<section class="instructor"><div class="container">
+  <div class="instructor-grid">
+    <div class="instructor-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+    <div class="instructor-info">
+      <p class="kicker">About the Author</p>
+      <h2>Edward Flynn</h2>
+      <p class="instructor-role">LPC, NBCCH, DBTC &mdash; Licensed Professional Counselor</p>
+      <p class="instructor-bio">Edward Flynn is a Licensed Professional Counselor, Nationally Board Certified Clinical Hypnotherapist, and certified DBT clinician based in Pennsylvania. With over 13 years of clinical experience, he specializes in treating anxiety disorders, trauma, depression, and emotional dysregulation using a unique integration of evidence-based DBT and clinical hypnotherapy.</p>
+      <p class="instructor-bio">Edward's approach combines the structured skill-building of DBT with the deep, experiential change work of hypnotherapy &mdash; helping clients not just manage symptoms, but fundamentally transform their relationship with their emotions. He has trained hundreds of therapists and helped thousands of clients build lives they genuinely want to live.</p>
+      <ul class="cred-list">
+        <li><span class="cred-dot"></span> Licensed Professional Counselor (LPC)</li>
+        <li><span class="cred-dot"></span> Nationally Board Certified Clinical Hypnotherapist (NBCCH)</li>
+        <li><span class="cred-dot"></span> Certified DBT Clinician (DBTC)</li>
+        <li><span class="cred-dot"></span> 13+ years of clinical practice</li>
+        <li><span class="cred-dot"></span> Specializing in anxiety, trauma, and emotional regulation</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="footer"><div class="container">
+  <div class="footer-top">
+    <div>
+      <div class="navbar-logo" style="margin-bottom:16px">Edward Flynn</div>
+      <p class="footer-brand-desc">Licensed Professional Counselor specializing in DBT, hypnotherapy, and evidence-based treatments for anxiety, trauma, and emotional wellness.</p>
+    </div>
+    <div>
+      <div class="ft">Services</div>
+      <div class="fl">
+        <a href="#">Individual Therapy</a>
+        <a href="#">Group DBT Skills</a>
+        <a href="#">Clinical Hypnotherapy</a>
+        <a href="#">Couples Counseling</a>
+        <a href="#">Consultation</a>
+      </div>
+    </div>
+    <div>
+      <div class="ft">Resources</div>
+      <div class="fl">
+        <a href="#">Products</a>
+        <a href="#">Courses</a>
+        <a href="#">Blog</a>
+        <a href="#">Community</a>
+        <a href="#">Free Resources</a>
+      </div>
+    </div>
+    <div>
+      <div class="ft">Learn More</div>
+      <div class="fl">
+        <a href="#">About Edward</a>
+        <a href="#">Credentials</a>
+        <a href="#">Testimonials</a>
+        <a href="#">Contact</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Edward Flynn Therapy. All rights reserved.</span>
+    <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Disclaimer</a></div>
+  </div>
+</div></footer>
+
+</body>
+</html>

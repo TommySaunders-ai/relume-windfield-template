@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBT Skills Training — Edward Flynn, LPC, NBCCH, DBTC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-success: #22c55e;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 80px 0; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 600; border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap; border: 1px solid transparent;
+}
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-lg { height: 52px; padding: 0 32px; font-size: 15px; }
+.btn-primary { background: var(--wf-brand); color: var(--wf-brand-fg); }
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-outline { background: transparent; color: var(--wf-fg); border-color: var(--wf-border-strong); }
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+
+.kicker {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--wf-brand); margin-bottom: 12px;
+}
+
+/* ── NAVBAR ── */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--wf-bg); border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex; align-items: center; height: 64px; gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  letter-spacing: -0.02em;
+}
+.navbar-logo span { color: var(--wf-brand); }
+.navbar-links {
+  display: flex; align-items: center; gap: 24px; margin-left: auto;
+}
+.navbar-link {
+  font-size: 14px; color: var(--wf-fg-muted); transition: color var(--wf-dur);
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link.active { color: var(--wf-fg); }
+.navbar-actions {
+  display: flex; align-items: center; gap: 12px; margin-left: 16px;
+}
+.mobile-toggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; color: var(--wf-fg); }
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ── HERO ── */
+.hero {
+  position: relative; padding: 100px 0 80px; overflow: hidden;
+  background: var(--wf-bg);
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(29,185,84,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border-radius: 9999px;
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  font-size: 13px; font-weight: 500; color: var(--wf-fg-muted);
+  margin-bottom: 32px;
+}
+.hero-badge-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--wf-brand);
+  box-shadow: 0 0 8px var(--wf-brand), 0 0 16px rgba(29,185,84,0.3);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+.hero-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800; letter-spacing: -0.035em;
+  line-height: 1.1; color: var(--wf-fg);
+  margin-bottom: 20px; max-width: 800px;
+}
+.hero-title .accent { color: var(--wf-brand); }
+.hero-subtitle {
+  font-size: 18px; color: var(--wf-fg-muted); line-height: 1.6;
+  margin-bottom: 40px; max-width: 640px;
+}
+.hero-stats {
+  display: flex; gap: 0; margin-bottom: 40px;
+}
+.hero-stat {
+  padding: 16px 28px; border-left: 3px solid var(--wf-brand);
+}
+.hero-stat-value {
+  font-size: 24px; font-weight: 700; color: var(--wf-fg);
+  letter-spacing: -0.02em;
+}
+.hero-stat-label {
+  font-size: 12px; font-weight: 500; color: var(--wf-fg-subtle);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px;
+}
+.hero-btns { display: flex; gap: 12px; margin-bottom: 24px; }
+.hero-meta {
+  font-size: 13px; color: var(--wf-fg-faint);
+  display: flex; align-items: center; gap: 16px;
+}
+.hero-meta-dot {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--wf-fg-faint);
+}
+
+/* ── CHALLENGE ── */
+.challenge { padding: 80px 0; border-top: 1px solid var(--wf-border); }
+.challenge-header { margin-bottom: 48px; max-width: 560px; }
+.challenge-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 16px;
+}
+.challenge-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.challenge-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); padding: 32px;
+  transition: border-color var(--wf-dur);
+}
+.challenge-card:hover { border-color: var(--wf-border-strong); }
+.challenge-num {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  color: var(--wf-brand); margin-bottom: 16px;
+}
+.challenge-card h3 {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  margin-bottom: 12px; letter-spacing: -0.01em;
+}
+.challenge-card p {
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.6;
+}
+
+/* ── FRAMEWORK ── */
+.framework {
+  padding: 80px 0; background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+}
+.framework-header { text-align: center; margin-bottom: 56px; max-width: 600px; margin-left: auto; margin-right: auto; }
+.framework-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 16px;
+}
+.framework-header p { font-size: 15px; color: var(--wf-fg-muted); line-height: 1.6; }
+.framework-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+}
+.framework-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); padding: 28px; text-align: center;
+  transition: border-color var(--wf-dur);
+}
+.framework-card:hover { border-color: var(--wf-brand); }
+.framework-icon {
+  width: 48px; height: 48px; border-radius: var(--wf-r-md);
+  background: var(--wf-brand-muted); color: var(--wf-brand);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.framework-icon svg { width: 24px; height: 24px; }
+.framework-card h3 {
+  font-size: 16px; font-weight: 700; color: var(--wf-fg);
+  margin-bottom: 8px;
+}
+.framework-card p { font-size: 13px; color: var(--wf-fg-muted); }
+
+/* ── LEARNING PATH ── */
+.learning-path { padding: 80px 0; border-top: 1px solid var(--wf-border); }
+.learning-path-header { margin-bottom: 56px; max-width: 560px; }
+.learning-path-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 16px;
+}
+.phase-list { display: flex; flex-direction: column; gap: 0; }
+.phase {
+  display: grid; grid-template-columns: 200px 1fr; gap: 32px;
+  padding: 32px 0; border-bottom: 1px solid var(--wf-border);
+}
+.phase:first-child { border-top: 1px solid var(--wf-border); }
+.phase-label {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  color: var(--wf-brand); text-transform: uppercase; letter-spacing: 0.08em;
+  padding-top: 4px;
+}
+.phase h3 {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  margin-bottom: 8px; letter-spacing: -0.01em;
+}
+.phase p { font-size: 14px; color: var(--wf-fg-muted); line-height: 1.6; }
+
+/* ── CURRICULUM ACCORDION ── */
+.curriculum {
+  padding: 80px 0; background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+}
+.curriculum-header { text-align: center; margin-bottom: 48px; }
+.curriculum-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 12px;
+}
+.curriculum-header p { font-size: 15px; color: var(--wf-fg-muted); }
+.accordion-list {
+  max-width: 800px; margin: 0 auto;
+  display: flex; flex-direction: column;
+}
+.accordion-item {
+  border-bottom: 1px solid var(--wf-border);
+}
+.accordion-item:first-child { border-top: 1px solid var(--wf-border); }
+.accordion-btn {
+  width: 100%; display: flex; align-items: center; gap: 16px;
+  padding: 20px 0; text-align: left; cursor: pointer;
+  transition: color var(--wf-dur);
+}
+.accordion-btn:hover { color: var(--wf-brand); }
+.accordion-num {
+  font-family: var(--font-mono); font-size: 13px; font-weight: 500;
+  color: var(--wf-fg-subtle); min-width: 32px;
+}
+.accordion-title {
+  font-size: 15px; font-weight: 600; color: var(--wf-fg); flex: 1;
+}
+.accordion-duration {
+  font-family: var(--font-mono); font-size: 12px; color: var(--wf-fg-subtle);
+}
+.accordion-chevron {
+  width: 20px; height: 20px; color: var(--wf-fg-faint);
+  transition: transform var(--wf-dur);
+}
+.accordion-item.open .accordion-chevron { transform: rotate(180deg); }
+.accordion-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 300ms var(--wf-ease);
+}
+.accordion-item.open .accordion-body { max-height: 200px; }
+.accordion-content {
+  padding: 0 0 20px 48px;
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.6;
+}
+
+/* ── SKILLS / COMPETENCIES ── */
+.skills { padding: 80px 0; border-top: 1px solid var(--wf-border); }
+.skills-header { margin-bottom: 48px; max-width: 560px; }
+.skills-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 16px;
+}
+.skills-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.skill-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); padding: 28px;
+  transition: border-color var(--wf-dur);
+}
+.skill-card:hover { border-color: var(--wf-border-strong); }
+.skill-card h3 {
+  font-size: 16px; font-weight: 700; color: var(--wf-fg);
+  margin-bottom: 8px; letter-spacing: -0.01em;
+}
+.skill-card p { font-size: 14px; color: var(--wf-fg-muted); line-height: 1.6; }
+
+/* ── COMPARISON ── */
+.comparison {
+  padding: 80px 0; background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+}
+.comparison-header { text-align: center; margin-bottom: 48px; }
+.comparison-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 12px;
+}
+.comparison-table {
+  width: 100%; border-collapse: collapse; max-width: 900px; margin: 0 auto;
+}
+.comparison-table th, .comparison-table td {
+  padding: 14px 20px; text-align: left; font-size: 14px;
+  border-bottom: 1px solid var(--wf-border);
+}
+.comparison-table th {
+  font-weight: 600; color: var(--wf-fg); background: var(--wf-surface);
+  font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.comparison-table td { color: var(--wf-fg-muted); }
+.comparison-table td:first-child { color: var(--wf-fg); font-weight: 500; }
+.check-yes { color: var(--wf-brand); font-weight: 600; }
+.check-no { color: var(--wf-fg-faint); }
+.highlight-col { background: rgba(29,185,84,0.04); }
+
+/* ── PRICING ── */
+.pricing-section {
+  padding: 80px 0; border-top: 1px solid var(--wf-border);
+}
+.pricing-center { text-align: center; max-width: 560px; margin: 0 auto; }
+.pricing-center h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 24px;
+}
+.pricing-card-main {
+  background: var(--wf-surface); border: 2px solid var(--wf-brand);
+  border-radius: var(--wf-r-xl); padding: 48px; max-width: 480px;
+  margin: 0 auto 32px; text-align: center;
+}
+.pricing-original {
+  font-size: 18px; color: var(--wf-fg-subtle);
+  text-decoration: line-through; margin-bottom: 8px;
+}
+.pricing-amount {
+  font-size: 64px; font-weight: 800; color: var(--wf-fg);
+  letter-spacing: -0.04em; line-height: 1; margin-bottom: 8px;
+}
+.pricing-note {
+  font-size: 14px; color: var(--wf-fg-muted); margin-bottom: 32px;
+}
+.pricing-includes-list {
+  display: flex; flex-direction: column; gap: 12px;
+  text-align: left; margin-bottom: 32px;
+}
+.pricing-include-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; color: var(--wf-fg-muted);
+}
+.pricing-check-icon {
+  width: 20px; height: 20px; flex-shrink: 0; color: var(--wf-brand);
+}
+.guarantee-bar {
+  text-align: center; margin-top: 24px;
+  padding: 20px; background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); max-width: 480px; margin-left: auto; margin-right: auto;
+}
+.guarantee-bar p {
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.5;
+}
+.guarantee-bar strong { color: var(--wf-brand); }
+
+/* ── TESTIMONIALS ── */
+.testimonials {
+  padding: 80px 0; background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+}
+.testimonials-header { text-align: center; margin-bottom: 48px; }
+.testimonials-header h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg);
+}
+.testimonials-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.testimonial-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); padding: 28px;
+}
+.testimonial-quote {
+  font-size: 14px; color: var(--wf-fg-muted); line-height: 1.7;
+  margin-bottom: 20px; font-style: italic;
+}
+.testimonial-author {
+  font-size: 14px; font-weight: 600; color: var(--wf-fg);
+}
+.testimonial-role {
+  font-size: 12px; color: var(--wf-fg-subtle); margin-top: 2px;
+}
+
+/* ── FAQ ── */
+.faq { padding: 80px 0; border-top: 1px solid var(--wf-border); }
+.faq-layout {
+  display: grid; grid-template-columns: 1fr 1.5fr; gap: 64px; align-items: start;
+}
+.faq-left h2 {
+  font-size: 36px; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; color: var(--wf-fg); margin-bottom: 16px;
+}
+.faq-left p { font-size: 15px; color: var(--wf-fg-muted); line-height: 1.6; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { border-bottom: 1px solid var(--wf-border); }
+.faq-item:first-child { border-top: 1px solid var(--wf-border); }
+.faq-question {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; text-align: left; cursor: pointer;
+  font-size: 15px; font-weight: 600; color: var(--wf-fg);
+  transition: color var(--wf-dur);
+}
+.faq-question:hover { color: var(--wf-brand); }
+.faq-chevron {
+  width: 20px; height: 20px; color: var(--wf-fg-faint); flex-shrink: 0;
+  transition: transform var(--wf-dur);
+}
+.faq-item.open .faq-chevron { transform: rotate(180deg); }
+.faq-answer {
+  max-height: 0; overflow: hidden;
+  transition: max-height 300ms var(--wf-ease);
+}
+.faq-item.open .faq-answer { max-height: 300px; }
+.faq-answer-inner {
+  padding: 0 0 20px; font-size: 14px; color: var(--wf-fg-muted); line-height: 1.7;
+}
+
+/* ── INSTRUCTOR BIO ── */
+.instructor {
+  padding: 80px 0; background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+}
+.instructor-inner {
+  display: grid; grid-template-columns: 200px 1fr; gap: 48px;
+  align-items: start; max-width: 800px; margin: 0 auto;
+}
+.instructor-avatar {
+  width: 200px; height: 200px; border-radius: var(--wf-r-xl);
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--wf-fg-faint); font-size: 48px; font-weight: 700;
+}
+.instructor h2 {
+  font-size: 28px; font-weight: 800; color: var(--wf-fg);
+  letter-spacing: -0.02em; margin-bottom: 4px;
+}
+.instructor-creds {
+  font-family: var(--font-mono); font-size: 13px; color: var(--wf-brand);
+  margin-bottom: 8px;
+}
+.instructor-location {
+  font-size: 14px; color: var(--wf-fg-subtle); margin-bottom: 20px;
+}
+.instructor p {
+  font-size: 15px; color: var(--wf-fg-muted); line-height: 1.7;
+}
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--wf-border); padding: 56px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 32px; padding-bottom: 40px;
+}
+.footer-brand-name {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  letter-spacing: -0.02em; margin-bottom: 12px;
+}
+.footer-brand-desc {
+  font-size: 13px; color: var(--wf-fg-muted); line-height: 1.6; margin-bottom: 16px;
+}
+.footer-contact-line {
+  font-size: 13px; color: var(--wf-fg-muted); margin-bottom: 4px;
+}
+.footer-contact-line a {
+  color: var(--wf-fg-muted); transition: color var(--wf-dur);
+}
+.footer-contact-line a:hover { color: var(--wf-brand); }
+.footer-col-title {
+  font-size: 13px; font-weight: 600; color: var(--wf-fg); margin-bottom: 16px;
+}
+.footer-links { display: flex; flex-direction: column; gap: 10px; }
+.footer-link {
+  font-size: 13px; color: var(--wf-fg-muted); transition: color var(--wf-dur);
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; border-top: 1px solid var(--wf-border);
+  font-size: 12px; color: var(--wf-fg-subtle);
+}
+.footer-legal { display: flex; gap: 24px; }
+.footer-legal a {
+  color: var(--wf-fg-subtle); text-decoration: underline;
+  text-underline-offset: 2px; transition: color var(--wf-dur);
+}
+.footer-legal a:hover { color: var(--wf-fg); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .challenge-grid { grid-template-columns: 1fr 1fr; }
+  .framework-grid { grid-template-columns: repeat(2, 1fr); }
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+  .faq-layout { grid-template-columns: 1fr; gap: 32px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .comparison-table { font-size: 13px; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .hero { padding: 64px 0 56px; }
+  .hero-stats { flex-direction: column; gap: 0; }
+  .hero-btns { flex-direction: column; align-items: flex-start; }
+  .navbar-links { display: none; }
+  .mobile-toggle { display: flex; }
+  .challenge-grid { grid-template-columns: 1fr; }
+  .framework-grid { grid-template-columns: 1fr; }
+  .phase { grid-template-columns: 1fr; gap: 8px; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .instructor-inner { grid-template-columns: 1fr; text-align: center; }
+  .instructor-avatar { margin: 0 auto; }
+  .comparison-table th, .comparison-table td { padding: 10px 12px; font-size: 12px; }
+  .footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="#" class="navbar-logo">Edward <span>Flynn</span></a>
+    <div class="navbar-links">
+      <a href="#" class="navbar-link">Home</a>
+      <a href="#" class="navbar-link">About</a>
+      <a href="#" class="navbar-link">Services</a>
+      <a href="#" class="navbar-link active">DBT Skills Course</a>
+      <a href="#" class="navbar-link">Community</a>
+      <a href="#" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#pricing" class="btn btn-primary btn-md">Enroll Now</a>
+    </div>
+    <button class="mobile-toggle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Evidence-Based &middot; Self-Paced &middot; Lifetime Access
+    </div>
+    <h1 class="hero-title">DBT Skills Training &mdash; <span class="accent">$99</span></h1>
+    <p class="hero-subtitle">The complete 20-module evidence-based skills training course for mastering Dialectical Behavior Therapy &mdash; from mindfulness foundations to advanced trauma applications.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">20</div>
+        <div class="hero-stat-label">Modules</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">15+</div>
+        <div class="hero-stat-label">Hours</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">50+</div>
+        <div class="hero-stat-label">Exercises</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">&infin;</div>
+        <div class="hero-stat-label">Lifetime Access</div>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#pricing" class="btn btn-primary btn-lg">Enroll Now &mdash; $99</a>
+      <a href="#curriculum" class="btn btn-outline btn-lg">View Curriculum</a>
+    </div>
+    <div class="hero-meta">
+      <span>Edward Flynn, LPC, NBCCH, DBTC</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── THE CHALLENGE ── -->
+<section class="challenge">
+  <div class="container">
+    <div class="challenge-header">
+      <div class="kicker">The Challenge</div>
+      <h2>Why most people struggle with emotional regulation</h2>
+    </div>
+    <div class="challenge-grid">
+      <div class="challenge-card">
+        <div class="challenge-num">Problem 01</div>
+        <h3>Reactive, Not Responsive</h3>
+        <p>Most people react to difficult emotions &mdash; lashing out, shutting down, or numbing &mdash; because they were never taught an alternative.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-num">Problem 02</div>
+        <h3>Skills Gap</h3>
+        <p>Emotional regulation, distress tolerance, and effective communication are learnable skills &mdash; but almost nobody is taught them.</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-num">Problem 03</div>
+        <h3>One-Size-Fits-All Advice</h3>
+        <p>Generic self-help advice &mdash; &lsquo;just breathe&rsquo; or &lsquo;think positive&rsquo; &mdash; doesn&rsquo;t work for people dealing with real emotional intensity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── THE FRAMEWORK ── -->
+<section class="framework">
+  <div class="container">
+    <div class="framework-header">
+      <div class="kicker">The Framework</div>
+      <h2>Four interconnected modules</h2>
+      <p>DBT organizes emotional skills into four interconnected modules. Each builds on the last &mdash; creating a complete system for managing even the most intense emotions.</p>
+    </div>
+    <div class="framework-grid">
+      <div class="framework-card">
+        <div class="framework-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3>Mindfulness</h3>
+        <p>Observe without judgment</p>
+      </div>
+      <div class="framework-card">
+        <div class="framework-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <h3>Distress Tolerance</h3>
+        <p>Survive crisis moments</p>
+      </div>
+      <div class="framework-card">
+        <div class="framework-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+        </div>
+        <h3>Emotion Regulation</h3>
+        <p>Change unwanted emotions</p>
+      </div>
+      <div class="framework-card">
+        <div class="framework-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Interpersonal Effectiveness</h3>
+        <p>Build stronger relationships</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LEARNING PATH ── -->
+<section class="learning-path">
+  <div class="container">
+    <div class="learning-path-header">
+      <div class="kicker">Learning Path</div>
+      <h2>5-Phase Framework</h2>
+    </div>
+    <div class="phase-list">
+      <div class="phase">
+        <div class="phase-label">Phase 1</div>
+        <div>
+          <h3>Core Mindfulness Foundation</h3>
+          <p>Build the observing awareness that underlies every other DBT skill. Learn to notice thoughts, feelings, and urges without reacting.</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-label">Phase 2</div>
+        <div>
+          <h3>Crisis Survival Skills</h3>
+          <p>Develop concrete techniques for surviving intense emotional moments without making things worse. TIPP, radical acceptance, and distraction.</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-label">Phase 3</div>
+        <div>
+          <h3>Emotional Intelligence</h3>
+          <p>Learn to identify, label, and change unwanted emotions. Master opposite action, check the facts, and build mastery experiences.</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-label">Phase 4</div>
+        <div>
+          <h3>Relationship Mastery</h3>
+          <p>Build interpersonal effectiveness through DEAR MAN, GIVE, and FAST skills. Set boundaries, ask for what you need, and maintain self-respect.</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-label">Phase 5</div>
+        <div>
+          <h3>Integration &amp; Maintenance</h3>
+          <p>Combine all four modules into a unified daily practice. Build a personal DBT skills plan and develop strategies for maintaining progress long-term.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CURRICULUM ── -->
+<section class="curriculum" id="curriculum">
+  <div class="container">
+    <div class="curriculum-header">
+      <div class="kicker">Full Curriculum</div>
+      <h2>20 Modules</h2>
+      <p>15+ hours of evidence-based content across 20 structured modules.</p>
+    </div>
+    <div class="accordion-list">
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">01</span>
+          <span class="accordion-title">Introduction to DBT</span>
+          <span class="accordion-duration">45 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Foundations of Dialectical Behavior Therapy — history, principles, and how the four modules work together to build emotional resilience.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">02</span>
+          <span class="accordion-title">Mindfulness</span>
+          <span class="accordion-duration">50 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Core mindfulness skills — observe, describe, participate. Learn to engage with the present moment without judgment.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">03</span>
+          <span class="accordion-title">Distress Tolerance</span>
+          <span class="accordion-duration">55 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Crisis survival strategies including TIPP skills, radical acceptance, self-soothing, and distraction techniques.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">04</span>
+          <span class="accordion-title">Emotion Regulation</span>
+          <span class="accordion-duration">55 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Identify, label, and change unwanted emotions using opposite action, check the facts, and building mastery.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">05</span>
+          <span class="accordion-title">Interpersonal Effectiveness</span>
+          <span class="accordion-duration">50 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">DEAR MAN, GIVE, and FAST skills for assertive communication, boundary setting, and relationship maintenance.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">06</span>
+          <span class="accordion-title">Walking the Middle Path</span>
+          <span class="accordion-duration">45 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Dialectical thinking, validation, and behaviorism — finding balance between acceptance and change.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">07</span>
+          <span class="accordion-title">Putting It All Together</span>
+          <span class="accordion-duration">40 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Integration of all four core modules into a unified daily practice with real-world application scenarios.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">08</span>
+          <span class="accordion-title">Advanced Mindfulness</span>
+          <span class="accordion-duration">50 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Deepening mindfulness practice with wise mind meditation, loving-kindness, and advanced present-moment awareness.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">09</span>
+          <span class="accordion-title">Managing Triggers</span>
+          <span class="accordion-duration">45 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Identifying emotional triggers, building awareness of vulnerability factors, and developing personalized coping plans.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">10</span>
+          <span class="accordion-title">Emotional Invalidation</span>
+          <span class="accordion-duration">45 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Understanding invalidation, its impact on emotional development, and learning self-validation techniques.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">11</span>
+          <span class="accordion-title">Self-Care</span>
+          <span class="accordion-duration">40 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">PLEASE skills for reducing emotional vulnerability through physical health, sleep, exercise, and balanced nutrition.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">12</span>
+          <span class="accordion-title">Continuing Practice</span>
+          <span class="accordion-duration">35 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Building sustainable daily routines, tracking progress, and maintaining motivation for long-term skill development.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">13</span>
+          <span class="accordion-title">Helping Others</span>
+          <span class="accordion-duration">40 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Sharing DBT skills with family and friends, supporting loved ones, and building a community of practice.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">14</span>
+          <span class="accordion-title">Cognitive Restructuring</span>
+          <span class="accordion-duration">50 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Identifying and challenging cognitive distortions, reframing unhelpful thought patterns, and building cognitive flexibility.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">15</span>
+          <span class="accordion-title">Exposure</span>
+          <span class="accordion-duration">45 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Gradual exposure techniques for anxiety, avoidance patterns, and building tolerance through systematic desensitization.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">16</span>
+          <span class="accordion-title">Communication Skills</span>
+          <span class="accordion-duration">45 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Advanced interpersonal skills including active listening, conflict resolution, and assertive communication strategies.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">17</span>
+          <span class="accordion-title">Building Positive Experiences</span>
+          <span class="accordion-duration">40 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Accumulating positive experiences, building mastery, and increasing positive emotions in daily life.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">18</span>
+          <span class="accordion-title">Trauma and PTSD</span>
+          <span class="accordion-duration">55 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Trauma-informed DBT applications, understanding PTSD, and developing safety and stabilization skills.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">19</span>
+          <span class="accordion-title">Suicide Prevention</span>
+          <span class="accordion-duration">50 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Safety planning, crisis intervention skills, recognizing warning signs, and building reasons for living.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="this.parentElement.classList.toggle('open')">
+          <span class="accordion-num">20</span>
+          <span class="accordion-title">Therapeutic Lifestyle Changes</span>
+          <span class="accordion-duration">45 min</span>
+          <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body"><div class="accordion-content">Integrating therapeutic lifestyle changes for long-term emotional health and sustained well-being.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CORE COMPETENCIES ── -->
+<section class="skills">
+  <div class="container">
+    <div class="skills-header">
+      <div class="kicker">Outcomes</div>
+      <h2>Core Competencies &mdash; Skills You&rsquo;ll Master</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h3>DEAR MAN Communication</h3>
+        <p>Describe, Express, Assert, Reinforce &mdash; the complete framework for asking for what you need while maintaining relationships.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Radical Acceptance</h3>
+        <p>Stop fighting reality. Learn to accept what you cannot change so you can focus energy on what you can.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Opposite Action</h3>
+        <p>When your emotion doesn&rsquo;t fit the facts, act opposite to the urge. A powerful technique for breaking destructive patterns.</p>
+      </div>
+      <div class="skill-card">
+        <h3>TIPP Crisis Skills</h3>
+        <p>Temperature, Intense exercise, Paced breathing, Progressive relaxation &mdash; four tools for immediate emotional regulation in crisis.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Wise Mind Access</h3>
+        <p>Find the balance between emotional mind and reasonable mind. Make decisions from a centered, integrated place.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Check the Facts</h3>
+        <p>Separate interpretations from facts. Evaluate whether your emotional response fits the situation before acting.</p>
+      </div>
+      <div class="skill-card">
+        <h3>PLEASE Skills</h3>
+        <p>Physical health, treat iLlness, balanced Eating, avoid mood-Altering substances, balanced Sleep, Exercise &mdash; reduce emotional vulnerability.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Mindful Breathing</h3>
+        <p>The foundational practice that anchors all other skills. Learn to observe your breath without judgment as a gateway to present-moment awareness.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Chain Analysis</h3>
+        <p>Trace the chain of events, thoughts, and feelings that led to a problem behavior. Identify intervention points for change.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMPARISON ── -->
+<section class="comparison">
+  <div class="container">
+    <div class="comparison-header">
+      <div class="kicker">Compare</div>
+      <h2>How this course stacks up</h2>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Generic Self-Help Books</th>
+          <th class="highlight-col">This Course</th>
+          <th>Therapy Alone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Evidence-based DBT framework</td>
+          <td class="check-no">Rarely</td>
+          <td class="highlight-col check-yes">Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>Structured 20-module curriculum</td>
+          <td class="check-no">No</td>
+          <td class="highlight-col check-yes">Yes</td>
+          <td>Varies</td>
+        </tr>
+        <tr>
+          <td>Self-paced, go at your speed</td>
+          <td>Yes</td>
+          <td class="highlight-col check-yes">Yes</td>
+          <td>Weekly only</td>
+        </tr>
+        <tr>
+          <td>50+ practical exercises</td>
+          <td class="check-no">Limited</td>
+          <td class="highlight-col check-yes">Yes</td>
+          <td>Session-dependent</td>
+        </tr>
+        <tr>
+          <td>Designed by licensed clinician</td>
+          <td class="check-no">Often not</td>
+          <td class="highlight-col check-yes">Yes &mdash; LPC, DBTC</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>Lifetime access &amp; updates</td>
+          <td class="check-no">One edition</td>
+          <td class="highlight-col check-yes">Yes</td>
+          <td class="check-no">No</td>
+        </tr>
+        <tr>
+          <td>Affordable one-time cost</td>
+          <td>$15&ndash;30</td>
+          <td class="highlight-col check-yes">$99</td>
+          <td>$150+/session</td>
+        </tr>
+        <tr>
+          <td>Community support</td>
+          <td class="check-no">No</td>
+          <td class="highlight-col check-yes">Yes</td>
+          <td>Limited</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── PRICING ── -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <div class="pricing-center">
+      <div class="kicker">Enroll Today</div>
+      <h2>One course. Lifetime access.</h2>
+    </div>
+    <div class="pricing-card-main">
+      <div class="pricing-original">$197</div>
+      <div class="pricing-amount">$99</div>
+      <div class="pricing-note">One-time payment. No subscriptions. No hidden fees.</div>
+      <div class="pricing-includes-list">
+        <div class="pricing-include-item">
+          <svg class="pricing-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          All 20 course modules
+        </div>
+        <div class="pricing-include-item">
+          <svg class="pricing-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          50+ guided exercises
+        </div>
+        <div class="pricing-include-item">
+          <svg class="pricing-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          DBT skills workbook (downloadable)
+        </div>
+        <div class="pricing-include-item">
+          <svg class="pricing-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Community access
+        </div>
+        <div class="pricing-include-item">
+          <svg class="pricing-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Lifetime updates &mdash; all future content included
+        </div>
+      </div>
+      <a href="#" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Enroll Now &mdash; $99</a>
+    </div>
+    <div class="guarantee-bar">
+      <p><strong>30-day money-back guarantee.</strong> If the course isn&rsquo;t right for you, get a full refund &mdash; no questions asked.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="testimonials">
+  <div class="container">
+    <div class="testimonials-header">
+      <div class="kicker">Student Outcomes</div>
+      <h2>What students are saying</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;I&rsquo;ve read five DBT books and none of them stuck. This course broke the skills down into steps I could actually practice. After Module 3, I used TIPP during a panic attack for the first time &mdash; it actually worked.&rdquo;</p>
+        <div class="testimonial-author">Rachel M.</div>
+        <div class="testimonial-role">Course Student</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;The DEAR MAN module completely changed how I communicate with my partner. Instead of shutting down or blowing up, I have actual scripts and frameworks I can use in the moment. This is practical, not theoretical.&rdquo;</p>
+        <div class="testimonial-author">Marcus T.</div>
+        <div class="testimonial-role">Course Student</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;As a therapist, I enrolled to sharpen my own DBT skills. The chain analysis exercises are excellent teaching tools &mdash; I&rsquo;ve already adapted several for my clients. Edward clearly knows this material inside and out.&rdquo;</p>
+        <div class="testimonial-author">Dr. Lisa Nguyen</div>
+        <div class="testimonial-role">Licensed Clinical Psychologist</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;Radical acceptance was just a buzzword to me before this course. Edward&rsquo;s guided exercises helped me understand it in my body, not just my head. I&rsquo;m sleeping better, fighting less, and actually enjoying things again.&rdquo;</p>
+        <div class="testimonial-author">Jamie K.</div>
+        <div class="testimonial-role">Course Student</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;I started this course while on a waitlist for a DBT group. By the time a spot opened, I already had a strong foundation. My therapist was impressed by how much I&rsquo;d learned independently. Worth every penny.&rdquo;</p>
+        <div class="testimonial-author">Alex R.</div>
+        <div class="testimonial-role">Course Student</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;The trauma and PTSD module was handled with incredible sensitivity. Edward doesn&rsquo;t just teach the techniques &mdash; he creates a sense of safety even through a screen. I felt held through the hardest material.&rdquo;</p>
+        <div class="testimonial-author">Sam W.</div>
+        <div class="testimonial-role">Course Student</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="faq">
+  <div class="container">
+    <div class="faq-layout">
+      <div class="faq-left">
+        <div class="kicker">FAQ</div>
+        <h2>Common questions</h2>
+        <p>Everything you need to know about the DBT Skills Training course.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            Who is this course for?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">This course is designed for anyone who wants to learn evidence-based emotional regulation skills. That includes individuals struggling with anxiety, depression, emotional intensity, or relationship difficulties &mdash; as well as therapists, counselors, and coaches who want to deepen their understanding of DBT skills for their own practice or professional development.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            Do I need a therapist to take this course?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">No. This course is designed for independent learners and does not require a therapist. However, if you&rsquo;re currently in therapy, this course can be an excellent complement to your clinical work. If you&rsquo;re dealing with active suicidal thoughts or self-harm, please seek professional support before starting any self-paced program.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            How is this different from therapy?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">This course teaches DBT skills &mdash; the educational component of DBT treatment. Therapy provides individualized assessment, crisis support, and a therapeutic relationship that a course cannot replicate. Think of this course as the skills training workbook side of DBT, not a replacement for clinical care. Many people use both together for the best results.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            Can therapists use this for their clients?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">Absolutely. Many therapists and counselors enroll in this course to supplement their clinical work. The structured modules, exercises, and workbook materials can be used as homework assignments or psychoeducation resources for clients in individual therapy or group settings. Edward designed the curriculum with both audiences in mind.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            How long does it take to complete?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">The course contains 15+ hours of content across 20 modules. Most students complete it in 4 to 8 weeks, spending 2 to 4 hours per week. However, it&rsquo;s entirely self-paced &mdash; you have lifetime access and can revisit any module as many times as you&rsquo;d like. Some students take longer to practice each skill before moving on.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            What if I&rsquo;m in a mental health emergency?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">This course is not a substitute for emergency mental health care. If you are in crisis, please contact the 988 Suicide &amp; Crisis Lifeline (call or text 988), go to your nearest emergency room, or call 911. The course includes a module on suicide prevention and safety planning, but it is an educational resource &mdash; not a crisis intervention.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            What is the refund policy?
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner">We offer a 30-day money-back guarantee. If you enroll and decide the course isn&rsquo;t right for you within the first 30 days, contact us for a full refund &mdash; no questions asked. We want you to feel confident in your investment.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── INSTRUCTOR BIO ── -->
+<section class="instructor">
+  <div class="container">
+    <div class="instructor-inner">
+      <div class="instructor-avatar">EF</div>
+      <div>
+        <div class="kicker">Your Instructor</div>
+        <h2>Edward Flynn</h2>
+        <div class="instructor-creds">LPC, NBCCH, DBTC</div>
+        <div class="instructor-location">St. Louis, Missouri</div>
+        <p>Edward Flynn is a Licensed Professional Counselor based in St. Louis, Missouri, with over thirteen years of clinical experience. He holds national board certifications in clinical hypnotherapy and dialectical behavior therapy, and has facilitated over 500 IOP group sessions across multiple clinical settings. His practice integrates DBT, trauma-informed care, and clinical hypnosis to help clients move beyond surviving to living life to the fullest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <div class="footer-brand-name">Edward Flynn, LPC</div>
+        <p class="footer-brand-desc">Licensed Professional Counselor specializing in DBT, clinical hypnotherapy, and trauma-informed care in St. Louis, Missouri.</p>
+        <div class="footer-contact-line"><a href="tel:3145717796">(314) 571-7796</a></div>
+        <div class="footer-contact-line">Accepting Clients &middot; St. Louis, MO</div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Courses</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">DBT Skills Training</a>
+          <a href="#" class="footer-link">Clinical Hypnosis</a>
+          <a href="#" class="footer-link">Trauma Recovery</a>
+          <a href="#" class="footer-link">Mindfulness Foundations</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Community</a>
+          <a href="#" class="footer-link">DBT Toolkit</a>
+          <a href="#" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">FAQ</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">About Edward</a>
+          <a href="#" class="footer-link">Book a Session</a>
+          <a href="#" class="footer-link">Contact</a>
+          <a href="tel:3145717796" class="footer-link">(314) 571-7796</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn, LPC, NBCCH, DBTC</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Disclaimer</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

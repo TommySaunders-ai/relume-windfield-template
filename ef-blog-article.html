@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Four Pillars of DBT: A Complete Guide — Edward Flynn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-brand-ring:rgba(29,185,84,0.28);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-shadow-md:0 4px 16px rgba(0,0,0,0.28);--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+img{max-width:100%;display:block}
+
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.section{padding:80px 0}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}
+.link-arrow:hover{gap:10px}
+.link-arrow svg{width:16px;height:16px}
+
+/* Placeholder */
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+
+/* ── NAVBAR ── */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(9,9,11,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-logo span{color:var(--wf-brand)}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}
+.navbar-link:hover{color:var(--wf-fg)}
+.navbar-link.active{color:var(--wf-fg)}
+.navbar-link svg{width:12px;height:12px}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}
+.mobile-toggle svg{width:24px;height:24px}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{padding:16px 0;border-bottom:1px solid var(--wf-border-subtle)}
+.breadcrumb-list{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-subtle)}
+.breadcrumb-list a{color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.breadcrumb-list a:hover{color:var(--wf-brand)}
+.breadcrumb-sep{color:var(--wf-fg-faint)}
+.breadcrumb-current{color:var(--wf-fg)}
+
+/* ── ARTICLE HERO ── */
+.article-hero{padding:48px 0 40px;border-bottom:1px solid var(--wf-border)}
+.article-hero-inner{max-width:720px}
+.hero-category{display:inline-flex;align-items:center;gap:8px;margin-bottom:16px}
+.hero-cat-badge{font-size:12px;font-weight:600;color:var(--wf-brand);background:var(--wf-brand-muted);padding:4px 12px;border-radius:100px;letter-spacing:0.02em}
+.article-hero h1{font-size:44px;font-weight:800;letter-spacing:-0.03em;line-height:1.1;color:var(--wf-fg);margin-bottom:20px}
+.hero-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hero-author{display:flex;align-items:center;gap:10px}
+.hero-avatar{width:36px;height:36px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hero-avatar svg{width:18px;height:18px;color:var(--wf-fg-faint)}
+.hero-author-name{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.hero-author-title{font-size:12px;color:var(--wf-fg-subtle)}
+.hero-meta-sep{width:4px;height:4px;border-radius:50%;background:var(--wf-fg-faint)}
+.hero-meta-item{font-size:13px;color:var(--wf-fg-subtle)}
+
+/* ── 3-COLUMN LAYOUT ── */
+.article-layout{display:grid;grid-template-columns:220px 1fr 280px;gap:48px;padding:48px 0 80px}
+
+/* ── LEFT SIDEBAR — TOC ── */
+.toc{position:sticky;top:80px;align-self:start}
+.toc-label{font-size:11px;font-weight:700;color:var(--wf-fg-subtle);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px}
+.toc-list{display:flex;flex-direction:column;gap:2px}
+.toc-link{display:block;font-size:13px;color:var(--wf-fg-muted);padding:6px 12px;border-left:2px solid transparent;border-radius:0;transition:all var(--wf-dur);line-height:1.4}
+.toc-link:hover{color:var(--wf-fg);background:var(--wf-surface)}
+.toc-link.active{color:var(--wf-brand);border-left-color:var(--wf-brand);background:var(--wf-brand-muted)}
+
+/* ── ARTICLE BODY ── */
+.article{max-width:100%}
+.article h2{font-size:28px;font-weight:700;letter-spacing:-0.015em;line-height:1.2;color:var(--wf-fg);margin:48px 0 20px;padding-top:8px}
+.article h2:first-child{margin-top:0}
+.article p{font-size:16px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:20px}
+.article p strong{color:var(--wf-fg);font-weight:600}
+.article ul,.article ol{margin:0 0 20px 24px;color:var(--wf-fg-muted);line-height:1.75}
+.article li{margin-bottom:8px;font-size:16px}
+.article li strong{color:var(--wf-fg);font-weight:600}
+.article blockquote{border-left:3px solid var(--wf-brand);padding:16px 0 16px 24px;margin:32px 0;background:transparent}
+.article blockquote p{font-size:17px;font-style:italic;color:var(--wf-fg);line-height:1.7;margin-bottom:0}
+
+.article-img{margin:32px 0;border-radius:var(--wf-r-lg);overflow:hidden}
+.article-img .ph{aspect-ratio:16/9;border-radius:0}
+.article-caption{font-size:13px;color:var(--wf-fg-subtle);margin-top:8px;font-style:italic}
+
+.article-divider{width:64px;height:2px;background:var(--wf-border-strong);margin:48px 0}
+
+/* ── RIGHT SIDEBAR ── */
+.right-sidebar{position:sticky;top:80px;align-self:start;display:flex;flex-direction:column;gap:24px}
+
+.sidebar-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.sidebar-card-label{font-size:11px;font-weight:700;color:var(--wf-fg-subtle);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px}
+
+.related-article{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--wf-border-subtle);cursor:pointer;transition:all var(--wf-dur)}
+.related-article:last-child{border-bottom:none}
+.related-article:hover .ra-title{color:var(--wf-brand)}
+.ra-thumb{width:56px;height:56px;border-radius:var(--wf-r-sm);background:var(--wf-bg-sunken);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ra-thumb svg{width:20px;height:20px;color:var(--wf-fg-faint)}
+.ra-title{font-size:13px;font-weight:600;color:var(--wf-fg);line-height:1.4;margin-bottom:4px;transition:color var(--wf-dur)}
+.ra-meta{font-size:11px;color:var(--wf-fg-subtle)}
+
+.author-spotlight{text-align:center}
+.author-spotlight-avatar{width:64px;height:64px;border-radius:50%;background:var(--wf-surface-active);border:2px solid var(--wf-border);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.author-spotlight-avatar svg{width:28px;height:28px;color:var(--wf-fg-faint)}
+.author-spotlight-name{font-size:15px;font-weight:700;color:var(--wf-fg);margin-bottom:2px}
+.author-spotlight-title{font-size:12px;color:var(--wf-fg-subtle);margin-bottom:8px}
+.author-spotlight-bio{font-size:12px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:12px}
+
+.cta-card{background:linear-gradient(135deg, var(--wf-surface) 0%, rgba(29,185,84,0.05) 100%);border-color:var(--wf-brand-ring)}
+.cta-card-title{font-size:16px;font-weight:700;color:var(--wf-fg);margin-bottom:8px;line-height:1.3}
+.cta-card-desc{font-size:13px;color:var(--wf-fg-muted);line-height:1.5;margin-bottom:16px}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-brand .navbar-logo{margin-bottom:16px}
+.footer-subscribe-text{font-size:13px;color:var(--wf-fg-muted);margin-bottom:12px}
+.footer-form{display:flex;gap:8px;margin-bottom:12px}
+.footer-input{flex:1;height:40px;padding:0 12px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-input::placeholder{color:var(--wf-fg-faint)}
+.footer-input:hover{border-color:var(--wf-border-strong)}
+.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disclaimer{font-size:11px;color:var(--wf-fg-faint);line-height:1.5}
+.footer-disclaimer a{text-decoration:underline;text-underline-offset:2px}
+.footer-col-title{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:8px}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-link svg{width:16px;height:16px;flex-shrink:0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg)}
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .article-layout{grid-template-columns:1fr;gap:32px}
+  .toc,.right-sidebar{position:static}
+  .toc{order:-1;border-bottom:1px solid var(--wf-border);padding-bottom:24px}
+  .right-sidebar{order:3}
+  .article-hero h1{font-size:36px}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .article-hero h1{font-size:28px}
+  .article h2{font-size:22px}
+  .navbar-links{display:none}
+  .mobile-toggle{display:flex}
+  .hero-meta{flex-direction:column;align-items:flex-start;gap:8px}
+  .hero-meta-sep{display:none}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="ef-blog-home.html" class="navbar-logo">Edward <span>Flynn</span></a>
+    <div class="navbar-links">
+      <a href="#" class="navbar-link">Therapy Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+      <a href="#" class="navbar-link">Courses</a>
+      <a href="ef-blog-home.html" class="navbar-link active">Blog</a>
+      <a href="#" class="navbar-link">About</a>
+      <a href="#" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-outline">Resources</a>
+      <a href="#" class="btn btn-sm btn-primary">Book Appointment</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ BREADCRUMB ═══════════════ -->
+<div class="breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-list">
+      <a href="ef-blog-home.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="ef-blog-home.html">Blog</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="ef-blog-category.html">DBT Skills</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">The Four Pillars of DBT</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ARTICLE HERO ═══════════════ -->
+<section class="article-hero">
+  <div class="container">
+    <div class="article-hero-inner">
+      <div class="hero-category">
+        <span class="hero-cat-badge">DBT Skills</span>
+      </div>
+      <h1>The Four Pillars of DBT: A Complete Guide</h1>
+      <div class="hero-meta">
+        <div class="hero-author">
+          <div class="hero-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div>
+            <div class="hero-author-name">Edward Flynn LPC</div>
+            <div class="hero-author-title">Licensed Professional Counselor</div>
+          </div>
+        </div>
+        <span class="hero-meta-sep"></span>
+        <span class="hero-meta-item">March 20, 2026</span>
+        <span class="hero-meta-sep"></span>
+        <span class="hero-meta-item">12 min read</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 3-COLUMN ARTICLE LAYOUT ═══════════════ -->
+<div class="container">
+  <div class="article-layout">
+
+    <!-- LEFT SIDEBAR — TABLE OF CONTENTS -->
+    <aside class="toc">
+      <div class="toc-label">On This Page</div>
+      <nav class="toc-list">
+        <a href="#what-makes-dbt-different" class="toc-link active">What Makes DBT Different</a>
+        <a href="#core-mindfulness" class="toc-link">Pillar 1: Core Mindfulness</a>
+        <a href="#distress-tolerance" class="toc-link">Pillar 2: Distress Tolerance</a>
+        <a href="#emotion-regulation" class="toc-link">Pillar 3: Emotion Regulation</a>
+        <a href="#interpersonal-effectiveness" class="toc-link">Pillar 4: Interpersonal Effectiveness</a>
+        <a href="#living-dbt-daily" class="toc-link">Living DBT Daily</a>
+      </nav>
+    </aside>
+
+    <!-- CENTER — ARTICLE BODY -->
+    <article class="article">
+      <h2 id="what-makes-dbt-different">What Makes DBT Different</h2>
+      <p>Dialectical Behavior Therapy stands apart from other therapeutic modalities because it holds two seemingly contradictory truths at the same time: you are doing the best you can, and you need to do better. This dialectical tension is not a paradox to be resolved but a foundation to build upon. Where traditional cognitive behavioral therapy focuses primarily on change, DBT weaves acceptance and change together into a unified framework.</p>
+      <p>Developed by Dr. Marsha Linehan in the late 1980s, DBT was originally designed for individuals with borderline personality disorder who were chronically suicidal. What Linehan discovered was that pushing solely for change invalidated her clients' experiences, while focusing only on acceptance left them stuck. The synthesis of these two poles became the backbone of an approach that has since been applied to depression, anxiety, eating disorders, substance use, and PTSD.</p>
+      <p>DBT is structured around four core skill modules, each addressing a different dimension of emotional and interpersonal life. Together, they form a comprehensive toolkit that helps individuals not just survive emotional crises but build a life worth living. In clinical practice, these skills are taught in group settings, reinforced in individual therapy, and supported through phone coaching and therapist consultation teams.</p>
+
+      <div class="article-divider"></div>
+
+      <h2 id="core-mindfulness">Pillar 1: Core Mindfulness</h2>
+      <p>Core Mindfulness is the foundation upon which all other DBT skills are built. Without the ability to observe your own experience without judgment, the remaining three modules lose their effectiveness. Mindfulness in DBT is not about meditation retreats or spiritual transcendence. It is a practical, moment-to-moment awareness practice that teaches you to notice what is happening inside and around you without being swept away by it.</p>
+      <p>The mindfulness module introduces two sets of skills. The "What" skills describe what you do when practicing mindfulness: Observe, Describe, and Participate. Observing means noticing your experience through your senses without adding words or labels. Describing means putting words on what you observe, sticking to facts rather than interpretations. Participating means throwing yourself fully into an activity without self-consciousness.</p>
+      <p>The "How" skills describe the manner in which you practice: Non-Judgmentally, One-Mindfully, and Effectively. Non-judgmental practice means dropping evaluations of good and bad. One-mindfully means doing one thing at a time with full attention. Effectively means focusing on what works in a given situation rather than on what is "right" or "fair." Together, these six skills create the awareness needed to deploy every other tool in the DBT arsenal.</p>
+
+      <blockquote>
+        <p>"Mindfulness is the act of consciously focusing the mind in the present moment without judgment and without attachment to the moment."</p>
+      </blockquote>
+
+      <div class="article-divider"></div>
+
+      <h2 id="distress-tolerance">Pillar 2: Distress Tolerance</h2>
+      <p>Distress Tolerance skills address one of the most dangerous moments in emotional life: the crisis point. When pain feels unbearable, the urge to escape through self-harm, substance use, or impulsive behavior can feel overwhelming. Distress Tolerance does not try to fix the pain or make it go away. Instead, it provides strategies for surviving the crisis without making things worse.</p>
+      <p>The module is divided into crisis survival skills and reality acceptance skills. Crisis survival strategies include the TIPP skills (Temperature, Intense exercise, Paced breathing, Paired muscle relaxation), which directly alter body chemistry to reduce emotional arousal. The STOP skill (Stop, Take a step back, Observe, Proceed mindfully) interrupts impulsive reactions. Distraction techniques using the acronym ACCEPTS (Activities, Contributing, Comparisons, Emotions, Pushing away, Thoughts, Sensations) redirect attention away from the pain long enough for the crisis to pass.</p>
+      <p>Reality acceptance skills go deeper. Radical Acceptance means fully acknowledging reality as it is, without fighting it. This does not mean approval or resignation. It means stopping the war with what has already happened. Turning the Mind is the choice to practice acceptance again and again, recognizing that acceptance is not a one-time event but an ongoing commitment. Willingness versus Willfulness distinguishes between engaging with life on its terms and stubbornly refusing to tolerate what cannot be changed.</p>
+
+      <div class="article-divider"></div>
+
+      <h2 id="emotion-regulation">Pillar 3: Emotion Regulation</h2>
+      <p>If Distress Tolerance is about surviving emotional storms, Emotion Regulation is about changing the weather. This module teaches skills for understanding, reducing vulnerability to, and actively shifting painful emotional states. It begins with the premise that emotions are not the enemy. Every emotion, even the ones that feel destructive, carries information and serves a function.</p>
+      <p>The first step in Emotion Regulation is understanding the anatomy of an emotion. The model teaches that emotions involve a prompting event, an interpretation of the event, biological changes, an urge to act, and a behavioral response. By mapping this chain, individuals gain leverage points for intervention. Check the Facts is a skill that targets the interpretation step, asking whether the emotional response fits the actual facts of the situation or whether the mind has added assumptions, worst-case scenarios, or mind-reading.</p>
+      <p>Opposite Action is perhaps the most powerful skill in this module. When an emotion does not fit the facts or when acting on it would be ineffective, Opposite Action involves doing the exact opposite of what the emotion urges. Fear urges avoidance, so Opposite Action means approaching. Anger urges attack, so Opposite Action means gently avoiding or being kind. Sadness urges withdrawal, so Opposite Action means getting active and engaged. The PLEASE skill (treat Physical iLlness, balance Eating, avoid mood-Altering substances, balance Sleep, get Exercise) addresses emotional vulnerability at the physiological level, recognizing that a poorly maintained body makes emotional regulation exponentially harder.</p>
+
+      <div class="article-divider"></div>
+
+      <h2 id="interpersonal-effectiveness">Pillar 4: Interpersonal Effectiveness</h2>
+      <p>The fourth pillar addresses the relational dimension of life. Many individuals who struggle with emotional dysregulation also struggle in relationships. They may have difficulty asking for what they need, saying no, coping with conflict, or maintaining self-respect in the face of pressure. Interpersonal Effectiveness skills provide concrete scripts and frameworks for navigating these challenges.</p>
+      <p>The DEAR MAN skill is the core assertiveness tool. It stands for Describe the situation, Express your feelings, Assert what you want, Reinforce the other person for responding, stay Mindful of your objective, Appear confident, and Negotiate if necessary. DEAR MAN is used when the priority is getting what you want or need from an interaction. The GIVE skill (Gentle, Interested, Validate, Easy manner) is used when the priority is maintaining the relationship. The FAST skill (Fair, no Apologies, Stick to values, be Truthful) is used when the priority is maintaining self-respect.</p>
+      <p>What makes Interpersonal Effectiveness sophisticated is the recognition that these three priorities often compete. Pushing hard for what you want may damage the relationship. Prioritizing the relationship may mean sacrificing self-respect. The skill lies in identifying which priority matters most in a given situation and deploying the appropriate strategy. Over time, individuals learn to navigate these tensions with increasing flexibility and nuance, building relationships that are both authentic and sustainable.</p>
+
+      <div class="article-divider"></div>
+
+      <h2 id="living-dbt-daily">Living DBT Daily</h2>
+      <p>The four pillars of DBT are not academic concepts to be memorized and filed away. They are living skills that require daily practice, repetition, and integration into the fabric of ordinary life. In formal DBT programs, clients track their use of skills on diary cards, review them weekly with their individual therapist, and practice them in real time between sessions. But the goal is not perpetual therapy. The goal is internalization.</p>
+      <p>Living DBT daily means catching yourself in the moment of reactivity and choosing a different response. It means noticing when you are judging and gently returning to description. It means recognizing the prompting event behind your anger before you send the text. It means using TIPP skills at two in the morning when the pain feels unbearable. It means practicing Radical Acceptance when the diagnosis comes, when the relationship ends, when the plan falls apart.</p>
+      <p>What clients consistently report after completing DBT is not that life becomes easy. It is that they develop a sense of agency in the face of difficulty. The skills become second nature, woven into the way they think, feel, and relate. The dialectic that started as an abstract concept becomes a lived reality: they accept themselves fully and continue to grow. That is the promise of DBT, and after thirteen years of clinical practice, it is a promise I have seen fulfilled hundreds of times.</p>
+    </article>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="right-sidebar">
+
+      <!-- Related Articles -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-label">Related Articles</div>
+        <a href="#" class="related-article">
+          <div class="ra-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div>
+            <div class="ra-title">Emotion Regulation: Opposite Action in Practice</div>
+            <div class="ra-meta">8 min read</div>
+          </div>
+        </a>
+        <a href="#" class="related-article">
+          <div class="ra-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div>
+            <div class="ra-title">Distress Tolerance: Surviving the Storm</div>
+            <div class="ra-meta">10 min read</div>
+          </div>
+        </a>
+        <a href="#" class="related-article">
+          <div class="ra-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div>
+            <div class="ra-title">Finding Your Wise Mind</div>
+            <div class="ra-meta">7 min read</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Author Spotlight -->
+      <div class="sidebar-card author-spotlight">
+        <div class="sidebar-card-label">About the Author</div>
+        <div class="author-spotlight-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="author-spotlight-name">Edward Flynn LPC</div>
+        <div class="author-spotlight-title">Licensed Professional Counselor, NBCCH, DBTC</div>
+        <p class="author-spotlight-bio">Edward Flynn is a licensed professional counselor in St. Louis, MO with 13+ years of clinical experience specializing in DBT, clinical hypnotherapy, and trauma-informed care.</p>
+        <a href="#" class="link-arrow">View full profile <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+
+      <!-- Course CTA -->
+      <div class="sidebar-card cta-card">
+        <div class="sidebar-card-label">Featured Course</div>
+        <div class="cta-card-title">Life to the Fullest: A DBT Skills Course</div>
+        <p class="cta-card-desc">Master all four pillars of DBT with structured video lessons, worksheets, and guided exercises. Self-paced. Lifetime access.</p>
+        <a href="#" class="btn btn-sm btn-primary" style="width:100%;justify-content:center">Enroll Now</a>
+      </div>
+
+    </aside>
+
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="navbar-logo" style="margin-bottom:16px">Edward <span style="color:var(--wf-brand)">Flynn</span></div>
+        <p class="footer-subscribe-text">Join the newsletter for insights on DBT, mindfulness, and evidence-based healing.</p>
+        <form class="footer-form" onsubmit="return false;">
+          <input type="email" class="footer-input" placeholder="Enter your email">
+          <button type="submit" class="btn btn-sm btn-outline">Subscribe</button>
+        </form>
+        <p class="footer-disclaimer">By subscribing you agree to our <a href="#">Privacy Policy</a>.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Therapy</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Individual Therapy</a>
+          <a href="#" class="footer-link">Treatments</a>
+          <a href="#" class="footer-link">IOP Program</a>
+          <a href="#" class="footer-link">Book Appointment</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <div class="footer-links">
+          <a href="ef-blog-home.html" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">Knowledge Base</a>
+          <a href="#" class="footer-link">Resource Library</a>
+          <a href="#" class="footer-link">DBT Skills Cards</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+          <a href="#" class="footer-link">About Edward</a>
+          <a href="#" class="footer-link">Contact</a>
+          <a href="#" class="footer-link">(314) 571-7796</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn LPC. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ TOC SCROLL HIGHLIGHT ═══════════════ -->
+<script>
+(function(){
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const sections = [];
+  tocLinks.forEach(link => {
+    const id = link.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if(el) sections.push({el, link});
+  });
+  function onScroll(){
+    let current = sections[0];
+    for(const s of sections){
+      if(s.el.getBoundingClientRect().top <= 120) current = s;
+    }
+    tocLinks.forEach(l => l.classList.remove('active'));
+    if(current) current.link.classList.add('active');
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+
+</body>
+</html>
