@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-violet:#7c3aed;--wf-violet-muted:rgba(124,58,237,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-r-xl:16px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-brand-border:rgba(29,185,84,0.20);--wf-brand-border-strong:rgba(29,185,84,0.35);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
@@ -30,8 +30,9 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 .btn-primary:hover{background:var(--wf-brand-hover)}
 .btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
 .btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
-.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}
+.link-arrow:hover{gap:10px}
+.link-arrow svg{width:16px;height:16px}
 
 /* Navbar */
 .navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
@@ -54,60 +55,63 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 .leadership{padding:0 0 80px;border-bottom:1px solid var(--wf-border)}
 .leadership-header{margin-bottom:48px}
 .leadership-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-.leader-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);overflow:hidden;transition:all var(--wf-dur) var(--wf-ease)}
-.leader-card:hover{border-color:var(--wf-border-strong);transform:translateY(-4px)}
-.leader-img{aspect-ratio:3/4;background:var(--wf-bg-sunken);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--wf-border)}
-.leader-img svg{width:64px;height:64px;color:var(--wf-fg-faint)}
-.leader-body{padding:24px}
-.leader-name{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:2px}
+.leader-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;transition:all var(--wf-dur) var(--wf-ease);display:block}
+.leader-card:hover{border-color:var(--wf-brand-border-strong);transform:translateY(-2px);box-shadow:0 0 24px rgba(29,185,84,0.06)}
+.leader-avatar{width:100%;aspect-ratio:1/1;border-radius:var(--wf-r-lg);background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:32px;font-weight:700;color:var(--wf-fg-faint);letter-spacing:-0.02em}
+.leader-name{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:4px}
 .leader-title{font-size:14px;color:var(--wf-brand);margin-bottom:12px}
-.leader-bio{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.leader-social{display:flex;gap:12px}
-.leader-social-icon{color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
-.leader-social-icon:hover{color:var(--wf-brand)}
-.leader-social-icon svg{width:18px;height:18px}
+.leader-bio{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:16px}
+.leader-socials{display:flex;gap:8px}
+.social-icon-btn{width:36px;height:36px;border-radius:var(--wf-r-sm);background:var(--wf-bg);border:1px solid var(--wf-border);display:inline-flex;align-items:center;justify-content:center;color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.social-icon-btn:hover{color:var(--wf-brand);border-color:var(--wf-brand-border)}
+.social-icon-btn svg{width:16px;height:16px}
 
-/* Full Team Grid */
-.full-team{padding:80px 0;border-bottom:1px solid var(--wf-border)}
-.full-team-header{margin-bottom:48px}
-.full-team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.member-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);overflow:hidden;transition:all var(--wf-dur) var(--wf-ease)}
-.member-card:hover{border-color:var(--wf-border-strong);transform:translateY(-2px)}
-.member-img{aspect-ratio:1/1;background:var(--wf-bg-sunken);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--wf-border)}
-.member-img svg{width:48px;height:48px;color:var(--wf-fg-faint)}
-.member-body{padding:16px 20px 20px}
-.member-name{font-size:15px;font-weight:600;color:var(--wf-fg);margin-bottom:2px}
-.member-role{font-size:13px;color:var(--wf-brand);margin-bottom:8px}
-.member-bio{font-size:13px;color:var(--wf-fg-muted);line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Department Tabs */
+.dept-section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.dept-header{margin-bottom:32px}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--wf-border);margin-bottom:40px}
+.tab-btn{padding:12px 20px;font-size:14px;font-weight:500;color:var(--wf-fg-muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all var(--wf-dur);cursor:pointer;background:none;border-top:none;border-left:none;border-right:none}
+.tab-btn:hover{color:var(--wf-fg)}
+.tab-btn.active{color:var(--wf-fg);border-bottom-color:var(--wf-brand)}
+.member-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.member-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:24px;text-align:center;transition:all var(--wf-dur) var(--wf-ease);display:block}
+.member-card:hover{border-color:var(--wf-brand-border-strong);transform:translateY(-2px)}
+.member-avatar{width:80px;height:80px;border-radius:var(--wf-r-lg);background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:18px;font-weight:700;color:var(--wf-fg-faint);letter-spacing:-0.02em}
+.member-name{font-size:15px;font-weight:600;color:var(--wf-fg);margin-bottom:4px}
+.member-role{font-size:13px;color:var(--wf-fg-muted);margin-bottom:10px}
+.dept-badge{display:inline-flex;align-items:center;height:24px;padding:0 10px;font-size:11px;font-weight:600;border-radius:var(--wf-r-sm);background:var(--wf-brand-muted);color:var(--wf-brand);letter-spacing:0.02em}
 
-/* Values */
-.values{padding:80px 0;border-bottom:1px solid var(--wf-border)}
-.values-header{text-align:center;margin-bottom:48px}
-.values-header .body-text{margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto}
-.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-.value-card{text-align:center}
-.value-icon{width:48px;height:48px;border-radius:var(--wf-r-lg);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--wf-brand)}
-.value-icon svg{width:24px;height:24px}
-.value-title{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:10px}
-.value-text{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+/* Stats Band */
+.stats-band{padding:64px 0;border-bottom:1px solid var(--wf-border);background:var(--wf-bg-elevated)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center}
+.stat-value{font-size:48px;font-weight:700;letter-spacing:-0.03em;color:var(--wf-fg);line-height:1;font-variant-numeric:tabular-nums}
+.stat-label{font-size:14px;color:var(--wf-fg-muted);margin-top:8px}
 
-/* CTA */
-.cta{padding:80px 0;text-align:center;border-bottom:1px solid var(--wf-border)}
-.cta .heading-md{margin-bottom:12px}
-.cta .body-text{margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto}
-.cta-buttons{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+/* Culture */
+.culture{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.culture-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.culture-text .heading-lg{margin-bottom:20px}
+.culture-text .body-text{margin-bottom:16px}
+.culture-images{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.culture-img{aspect-ratio:1/1;border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center}
+.culture-img svg{width:36px;height:36px;opacity:0.3}
+.culture-img:nth-child(1){background:linear-gradient(135deg,#1a2a1d,#0d1a0f)}
+.culture-img:nth-child(2){background:linear-gradient(135deg,#1a1a2d,#0d0d1a)}
+.culture-img:nth-child(3){background:linear-gradient(135deg,#2d1a1a,#1a0d0d)}
+.culture-img:nth-child(4){background:linear-gradient(135deg,#2d2a1a,#1a170d)}
 
-/* Newsletter */
-.newsletter{padding:64px 0;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
-.newsletter-inner{display:flex;align-items:center;justify-content:space-between;gap:48px}
-.newsletter-text{flex:1;max-width:480px}
-.newsletter-heading{font-size:24px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:6px}
-.newsletter-desc{font-size:14px;color:var(--wf-fg-muted)}
-.newsletter-form{display:flex;gap:8px;flex:1;max-width:420px}
-.newsletter-input{flex:1;height:44px;padding:0 14px;background:var(--wf-bg);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);font-size:14px;color:var(--wf-fg);font-family:var(--font-sans)}
-.newsletter-input::placeholder{color:var(--wf-fg-faint)}
-.newsletter-input:hover{border-color:var(--wf-border-strong)}
-.newsletter-input:focus{outline:none;border-color:var(--wf-brand)}
+/* Open Positions CTA */
+.positions{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.positions-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:48px}
+.positions-header{text-align:center;margin-bottom:40px}
+.positions-header .heading-md{margin-bottom:8px}
+.job-row{display:flex;align-items:center;gap:16px;padding:20px 0;border-top:1px solid var(--wf-border)}
+.job-row:last-of-type{border-bottom:1px solid var(--wf-border)}
+.job-title{font-size:16px;font-weight:600;color:var(--wf-fg);flex:1}
+.job-location{font-size:13px;color:var(--wf-fg-muted)}
+.job-apply{font-size:14px;font-weight:500;color:var(--wf-brand);transition:opacity var(--wf-dur)}
+.job-apply:hover{opacity:0.8}
+.positions-footer{text-align:center;margin-top:32px}
 
 /* Footer */
 .footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
@@ -130,18 +134,22 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 @media(max-width:1024px){
   .container{padding:0 24px}
   .leadership-grid{grid-template-columns:1fr}
-  .full-team-grid{grid-template-columns:repeat(2,1fr)}
-  .values-grid{grid-template-columns:1fr}
-  .newsletter-inner{flex-direction:column;align-items:flex-start;gap:24px}
-  .newsletter-form{max-width:100%;width:100%}
+  .member-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:32px 48px}
+  .culture-grid{grid-template-columns:1fr;gap:40px}
   .footer-top{grid-template-columns:1fr 1fr}
 }
 @media(max-width:768px){
   .container{padding:0 20px}.section{padding:56px 0}.heading-xl{font-size:36px}.heading-lg{font-size:32px}
-  .heading-md{font-size:26px}.navbar-links{display:none}.mobile-toggle{display:flex}
-  .full-team-grid{grid-template-columns:1fr}
-  .cta-buttons{flex-direction:column}
-  .cta-buttons .btn{width:100%;justify-content:center}
+  .heading-md{font-size:26px}.stat-value{font-size:36px}.navbar-links{display:none}.mobile-toggle{display:flex}
+  .leadership-grid{grid-template-columns:1fr}
+  .member-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .tab-bar{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab-btn{white-space:nowrap;padding:12px 16px;font-size:13px}
+  .positions-card{padding:24px}
+  .job-row{flex-wrap:wrap;gap:8px}
+  .job-title{min-width:100%}
   .footer-top{grid-template-columns:1fr;gap:32px}
   .footer-bottom{flex-direction:column;gap:12px;text-align:center}
 }
@@ -157,8 +165,7 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
       <a href="home-v1.html" class="navbar-link">Home v1</a>
       <a href="home-v2.html" class="navbar-link">Home v2</a>
       <a href="index.html" class="navbar-link">Home v3</a>
-      <a href="about.html" class="navbar-link">About</a>
-      <a href="team.html" class="navbar-link active">Team</a>
+      <a href="about.html" class="navbar-link active">About</a>
       <a href="contact.html" class="navbar-link">Contact</a>
       <a href="blog-home.html" class="navbar-link">Blog Home</a>
       <a href="blog-categories.html" class="navbar-link">Blog Categories</a>
@@ -183,8 +190,8 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 <section class="team-hero">
   <div class="container">
     <p class="kicker">Our Team</p>
-    <h1 class="heading-xl">Meet the people behind the company</h1>
-    <p class="body-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</p>
+    <h1 class="heading-xl">Meet the People Behind Windfield</h1>
+    <p class="body-text">A diverse group of thinkers, builders, and operators united by a shared mission to transform how real estate intelligence works.</p>
   </div>
 </section>
 
@@ -192,191 +199,181 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 <section class="leadership">
   <div class="container">
     <div class="leadership-header">
-      <p class="kicker">Leadership</p>
+      <h2 class="heading-lg">Leadership</h2>
     </div>
     <div class="leadership-grid">
-
-      <div class="leader-card">
-        <div class="leader-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="leader-body">
-          <div class="leader-name">Alex Thompson</div>
-          <div class="leader-title">Chief Executive Officer</div>
-          <p class="leader-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
-          <div class="leader-social">
-            <a href="#" class="leader-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-            <a href="#" class="leader-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
-            <a href="#" class="leader-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M2 12h20" stroke="var(--wf-bg)" stroke-width="1.5"/></svg></a>
-          </div>
+      <a href="team-member.html" class="leader-card">
+        <div class="leader-avatar">JD</div>
+        <div class="leader-name">James Donovan</div>
+        <div class="leader-title">Chief Executive Officer</div>
+        <p class="leader-bio">15 years of experience leading technology companies through hypergrowth. Previously founded two successful PropTech startups.</p>
+        <div class="leader-socials">
+          <span class="social-icon-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></span>
+          <span class="social-icon-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>
         </div>
-      </div>
-
-      <div class="leader-card">
-        <div class="leader-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="leader-body">
-          <div class="leader-name">Jordan Rivera</div>
-          <div class="leader-title">Chief Technology Officer</div>
-          <p class="leader-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
-          <div class="leader-social">
-            <a href="#" class="leader-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-            <a href="#" class="leader-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
-            <a href="#" class="leader-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M2 12h20" stroke="var(--wf-bg)" stroke-width="1.5"/></svg></a>
-          </div>
+      </a>
+      <a href="team-member.html" class="leader-card">
+        <div class="leader-avatar">SR</div>
+        <div class="leader-name">Sarah Rodriguez</div>
+        <div class="leader-title">Chief Technology Officer</div>
+        <p class="leader-bio">Former engineering lead at a major cloud infrastructure company. Holds a PhD in distributed systems and has authored 20+ research papers.</p>
+        <div class="leader-socials">
+          <span class="social-icon-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></span>
+          <span class="social-icon-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>
         </div>
-      </div>
-
-      <div class="leader-card">
-        <div class="leader-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="leader-body">
-          <div class="leader-name">Morgan Chen</div>
-          <div class="leader-title">Chief Design Officer</div>
-          <p class="leader-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla.</p>
-          <div class="leader-social">
-            <a href="#" class="leader-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-            <a href="#" class="leader-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
-            <a href="#" class="leader-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M2 12h20" stroke="var(--wf-bg)" stroke-width="1.5"/></svg></a>
-          </div>
+      </a>
+      <a href="team-member.html" class="leader-card">
+        <div class="leader-avatar">MK</div>
+        <div class="leader-name">Michael Kim</div>
+        <div class="leader-title">Chief Operating Officer</div>
+        <p class="leader-bio">A decade of operational excellence across real estate and fintech. Scaled operations at three venture-backed companies from seed to Series C.</p>
+        <div class="leader-socials">
+          <span class="social-icon-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></span>
+          <span class="social-icon-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></span>
         </div>
-      </div>
-
+      </a>
     </div>
   </div>
 </section>
 
-<!-- FULL TEAM GRID -->
-<section class="full-team">
+<!-- DEPARTMENT TABS -->
+<section class="dept-section">
   <div class="container">
-    <div class="full-team-header">
-      <p class="kicker">The Team</p>
+    <div class="dept-header">
+      <h2 class="heading-lg">The Team</h2>
     </div>
-    <div class="full-team-grid">
-
-      <div class="member-card">
-        <div class="member-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="member-body">
-          <div class="member-name">Sam Parker</div>
-          <div class="member-role">Senior Engineer</div>
-          <p class="member-bio">Builds scalable systems and leads backend architecture.</p>
-        </div>
-      </div>
-
-      <div class="member-card">
-        <div class="member-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="member-body">
-          <div class="member-name">Taylor Kim</div>
-          <div class="member-role">Product Designer</div>
-          <p class="member-bio">Crafts intuitive interfaces and design systems.</p>
-        </div>
-      </div>
-
-      <div class="member-card">
-        <div class="member-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="member-body">
-          <div class="member-name">Casey Williams</div>
-          <div class="member-role">Marketing Lead</div>
-          <p class="member-bio">Drives growth strategy and brand positioning.</p>
-        </div>
-      </div>
-
-      <div class="member-card">
-        <div class="member-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="member-body">
-          <div class="member-name">Riley Zhang</div>
-          <div class="member-role">Frontend Engineer</div>
-          <p class="member-bio">Turns designs into performant, accessible interfaces.</p>
-        </div>
-      </div>
-
-      <div class="member-card">
-        <div class="member-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="member-body">
-          <div class="member-name">Jamie Patel</div>
-          <div class="member-role">Data Analyst</div>
-          <p class="member-bio">Transforms raw data into actionable insights.</p>
-        </div>
-      </div>
-
-      <div class="member-card">
-        <div class="member-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="member-body">
-          <div class="member-name">Avery Nakamura</div>
-          <div class="member-role">DevOps Engineer</div>
-          <p class="member-bio">Keeps infrastructure running and deployments smooth.</p>
-        </div>
-      </div>
-
-      <div class="member-card">
-        <div class="member-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="member-body">
-          <div class="member-name">Drew Sullivan</div>
-          <div class="member-role">Content Strategist</div>
-          <p class="member-bio">Shapes the voice and narrative across all channels.</p>
-        </div>
-      </div>
-
-      <div class="member-card">
-        <div class="member-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="member-body">
-          <div class="member-name">Quinn Torres</div>
-          <div class="member-role">Customer Success</div>
-          <p class="member-bio">Ensures every customer gets maximum value from our product.</p>
-        </div>
-      </div>
-
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="all">All</button>
+      <button class="tab-btn" data-tab="engineering">Engineering</button>
+      <button class="tab-btn" data-tab="design">Design</button>
+      <button class="tab-btn" data-tab="research">Research</button>
+      <button class="tab-btn" data-tab="operations">Operations</button>
+    </div>
+    <div class="member-grid">
+      <a href="team-member.html" class="member-card" data-dept="engineering">
+        <div class="member-avatar">AL</div>
+        <div class="member-name">Alex Lindgren</div>
+        <div class="member-role">Senior Backend Engineer</div>
+        <span class="dept-badge">Engineering</span>
+      </a>
+      <a href="team-member.html" class="member-card" data-dept="design">
+        <div class="member-avatar">EP</div>
+        <div class="member-name">Elena Park</div>
+        <div class="member-role">Lead Product Designer</div>
+        <span class="dept-badge">Design</span>
+      </a>
+      <a href="team-member.html" class="member-card" data-dept="research">
+        <div class="member-avatar">RM</div>
+        <div class="member-name">Raj Mehta</div>
+        <div class="member-role">Data Scientist</div>
+        <span class="dept-badge">Research</span>
+      </a>
+      <a href="team-member.html" class="member-card" data-dept="operations">
+        <div class="member-avatar">KC</div>
+        <div class="member-name">Karen Chen</div>
+        <div class="member-role">Operations Manager</div>
+        <span class="dept-badge">Operations</span>
+      </a>
+      <a href="team-member.html" class="member-card" data-dept="engineering">
+        <div class="member-avatar">DW</div>
+        <div class="member-name">David Walker</div>
+        <div class="member-role">Frontend Engineer</div>
+        <span class="dept-badge">Engineering</span>
+      </a>
+      <a href="team-member.html" class="member-card" data-dept="design">
+        <div class="member-avatar">LT</div>
+        <div class="member-name">Lisa Tanaka</div>
+        <div class="member-role">UX Researcher</div>
+        <span class="dept-badge">Design</span>
+      </a>
+      <a href="team-member.html" class="member-card" data-dept="research">
+        <div class="member-avatar">NG</div>
+        <div class="member-name">Nathan Gray</div>
+        <div class="member-role">ML Engineer</div>
+        <span class="dept-badge">Research</span>
+      </a>
+      <a href="team-member.html" class="member-card" data-dept="operations">
+        <div class="member-avatar">AO</div>
+        <div class="member-name">Amara Osei</div>
+        <div class="member-role">People and Culture Lead</div>
+        <span class="dept-badge">Operations</span>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- VALUES -->
-<section class="values">
+<!-- STATS BAND -->
+<section class="stats-band">
   <div class="container">
-    <div class="values-header">
-      <h2 class="heading-lg">What drives us</h2>
-      <p class="body-text">Our core values shape how we work, build, and grow together as a team.</p>
+    <div class="stats-grid">
+      <div>
+        <div class="stat-value">25+</div>
+        <div class="stat-label">Team Members</div>
+      </div>
+      <div>
+        <div class="stat-value">8</div>
+        <div class="stat-label">Countries</div>
+      </div>
+      <div>
+        <div class="stat-value">4</div>
+        <div class="stat-label">Departments</div>
+      </div>
+      <div>
+        <div class="stat-value">3</div>
+        <div class="stat-label">Years Building</div>
+      </div>
     </div>
-    <div class="values-grid">
-      <div class="value-card">
-        <div class="value-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-        <h3 class="value-title">Innovation</h3>
-        <p class="value-text">We push boundaries and challenge conventional thinking. Every problem is an opportunity to build something better than what existed before.</p>
+  </div>
+</section>
+
+<!-- CULTURE -->
+<section class="culture">
+  <div class="container">
+    <div class="culture-grid">
+      <div class="culture-text">
+        <h2 class="heading-lg">Our Culture</h2>
+        <p class="body-text">We believe the best work happens when talented people are given autonomy, context, and trust. Our team operates with full transparency -- every metric, decision, and roadmap item is visible to everyone.</p>
+        <p class="body-text">We hire people who care deeply about craft. Whether it is a data pipeline or a product interface, we sweat the details because our customers depend on precision. We are remote-first, asynchronous by default, and intentional about the time we spend together.</p>
       </div>
-      <div class="value-card">
-        <div class="value-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
-        <h3 class="value-title">Collaboration</h3>
-        <p class="value-text">Great work happens when diverse minds come together. We believe in open communication, shared ownership, and lifting each other up.</p>
-      </div>
-      <div class="value-card">
-        <div class="value-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-2-2m0 0l2-2m-2 2h12M22 12A10 10 0 112 12a10 10 0 0120 0z"/></svg></div>
-        <h3 class="value-title">Excellence</h3>
-        <p class="value-text">We hold ourselves to the highest standard in everything we ship. Details matter, craft matters, and our users deserve our best work.</p>
+      <div class="culture-images">
+        <div class="culture-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="culture-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="culture-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <div class="culture-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- OPEN POSITIONS CTA -->
-<section class="cta">
+<section class="positions">
   <div class="container">
-    <h2 class="heading-md">Join the team</h2>
-    <p class="body-text">We're always looking for talented people.</p>
-    <div class="cta-buttons">
-      <a href="#" class="btn btn-md btn-primary">View open positions</a>
-      <a href="#" class="btn btn-md btn-outline">Learn about culture</a>
-    </div>
-  </div>
-</section>
-
-<!-- NEWSLETTER -->
-<section class="newsletter">
-  <div class="container">
-    <div class="newsletter-inner">
-      <div class="newsletter-text">
-        <h2 class="newsletter-heading">Stay in the loop</h2>
-        <p class="newsletter-desc">Get the latest news, updates, and team highlights delivered to your inbox.</p>
+    <div class="positions-card">
+      <div class="positions-header">
+        <h2 class="heading-md">Join Our Team</h2>
+        <p class="body-text">We're always looking for talented people who want to build the future of real estate intelligence.</p>
       </div>
-      <form class="newsletter-form" onsubmit="return false;">
-        <input type="email" class="newsletter-input" placeholder="Enter your email">
-        <button type="submit" class="btn btn-md btn-primary">Subscribe</button>
-      </form>
+      <div class="job-row">
+        <div class="job-title">Senior Full-Stack Engineer</div>
+        <span class="dept-badge">Engineering</span>
+        <span class="job-location">Remote</span>
+        <a href="#" class="job-apply">Apply</a>
+      </div>
+      <div class="job-row">
+        <div class="job-title">Product Designer</div>
+        <span class="dept-badge">Design</span>
+        <span class="job-location">New York, NY</span>
+        <a href="#" class="job-apply">Apply</a>
+      </div>
+      <div class="job-row">
+        <div class="job-title">Data Research Analyst</div>
+        <span class="dept-badge">Research</span>
+        <span class="job-location">Remote</span>
+        <a href="#" class="job-apply">Apply</a>
+      </div>
+      <div class="positions-footer">
+        <a href="#" class="btn btn-md btn-primary">View All Positions</a>
+      </div>
     </div>
   </div>
 </section>
@@ -407,6 +404,24 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
     </div>
   </div>
 </footer>
+
+<script>
+// Department tab filtering
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var tab = btn.getAttribute('data-tab');
+    document.querySelectorAll('.member-card').forEach(function(card) {
+      if (tab === 'all' || card.getAttribute('data-dept') === tab) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+</script>
 
 </body>
 </html>

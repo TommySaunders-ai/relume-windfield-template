@@ -138,13 +138,6 @@ ul { list-style: none; }
   border-color: var(--wf-border-strong);
 }
 .btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
-.btn-ghost {
-  background: transparent;
-  color: var(--wf-fg-muted);
-  padding: 0;
-  height: auto;
-}
-.btn-ghost:hover { color: var(--wf-fg); }
 
 /* ── NAVBAR ── */
 .navbar {
@@ -178,7 +171,6 @@ ul { list-style: none; }
   transition: color var(--wf-dur);
 }
 .navbar-link:hover { color: var(--wf-fg); }
-.navbar-link.active { color: var(--wf-fg); }
 .navbar-actions {
   display: flex;
   align-items: center;
@@ -206,7 +198,7 @@ ul { list-style: none; }
   pointer-events: none;
 }
 .hero-download .container { position: relative; z-index: 1; }
-.hero-grid {
+.hero-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 64px;
@@ -214,352 +206,17 @@ ul { list-style: none; }
 }
 .hero-left .heading-xl { margin-bottom: 20px; }
 .hero-description {
-  font-size: 18px;
-  color: var(--wf-fg-muted);
-  line-height: 1.6;
-  margin-bottom: 32px;
-}
-.hero-bullets {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.hero-bullet {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 16px;
-  color: var(--wf-fg-muted);
-  line-height: 1.5;
-}
-.hero-bullet svg {
-  width: 20px;
-  height: 20px;
-  color: var(--wf-brand);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-/* ── FORM CARD ── */
-.form-card {
-  background: var(--wf-surface);
-  border: 1px solid var(--wf-border);
-  border-radius: var(--wf-r-lg);
-  padding: 32px;
-}
-.form-card-title {
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  margin-bottom: 24px;
-  color: var(--wf-fg);
-}
-.form-group {
-  margin-bottom: 16px;
-}
-.form-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--wf-fg-muted);
-  margin-bottom: 6px;
-}
-.form-input {
-  width: 100%;
-  height: 44px;
-  padding: 0 14px;
-  background: var(--wf-bg);
-  border: 1px solid var(--wf-border);
-  border-radius: var(--wf-r-md);
-  font-size: 14px;
-  color: var(--wf-fg);
-  font-family: var(--font-sans);
-  transition: border-color var(--wf-dur) var(--wf-ease);
-}
-.form-input::placeholder { color: var(--wf-fg-faint); }
-.form-input:hover { border-color: var(--wf-border-strong); }
-.form-input:focus { outline: none; border-color: var(--wf-brand); }
-.form-card .btn-primary {
-  width: 100%;
-  margin-top: 8px;
-}
-.form-privacy {
-  font-size: 12px;
-  color: var(--wf-fg-subtle);
-  margin-top: 16px;
-  text-align: center;
-  line-height: 1.5;
-}
-
-/* ── WHAT'S INSIDE ── */
-.whats-inside {
-  padding: 80px 0;
-  border-top: 1px solid var(--wf-border);
-}
-.whats-inside-header {
-  text-align: center;
-  margin-bottom: 48px;
-}
-.whats-inside-header .heading-md { margin-bottom: 12px; }
-.chapter-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-.chapter-card {
-  background: var(--wf-surface);
-  border: 1px solid var(--wf-border);
-  border-radius: var(--wf-r-lg);
-  padding: 32px;
-  transition: all var(--wf-dur) var(--wf-ease);
-}
-.chapter-card:hover {
-  border-color: var(--wf-brand-border);
-  transform: translateY(-1px);
-}
-.chapter-badge {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--wf-r-md);
-  background: var(--wf-brand-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--wf-brand);
-  font-family: var(--font-mono);
-}
-.chapter-card h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-.chapter-card p {
-  font-size: 14px;
-  color: var(--wf-fg-muted);
-  line-height: 1.6;
-}
-
-/* ── SOCIAL PROOF / LOGO BAR ── */
-.logo-bar {
-  padding: 64px 0;
-  border-top: 1px solid var(--wf-border);
-}
-.logo-bar-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-.logo-bar-header p {
-  font-size: 14px;
-  color: var(--wf-fg-subtle);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-.logo-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 48px;
-  flex-wrap: wrap;
-}
-.logo-item {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--wf-fg-faint);
-  letter-spacing: -0.01em;
-  transition: color var(--wf-dur);
-}
-.logo-item:hover { color: var(--wf-fg-subtle); }
-
-/* ── PREVIEW SECTION ── */
-.preview-section {
-  padding: 80px 0;
-  border-top: 1px solid var(--wf-border);
-}
-.preview-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
-}
-.preview-image {
-  aspect-ratio: 3 / 4;
-  background: var(--wf-surface);
-  border: 1px solid var(--wf-border);
-  border-radius: var(--wf-r-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-.preview-image-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  color: var(--wf-fg-faint);
-}
-.preview-image-placeholder svg { width: 48px; height: 48px; }
-.preview-image-placeholder span { font-size: 14px; }
-.preview-right .heading-lg { margin-bottom: 16px; }
-.preview-right .body-text { margin-bottom: 28px; }
-.preview-bullets {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 32px;
-}
-.preview-bullet {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 15px;
-  color: var(--wf-fg-muted);
-  line-height: 1.5;
-}
-.preview-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--wf-brand);
-  flex-shrink: 0;
-  margin-top: 7px;
-}
-
-/* ── TESTIMONIAL ── */
-.testimonial-section {
-  padding: 80px 0;
-  border-top: 1px solid var(--wf-border);
-}
-.testimonial-centered {
-  max-width: 640px;
-  margin: 0 auto;
-  text-align: center;
-}
-.testimonial-stars {
-  display: flex;
-  gap: 4px;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-.testimonial-stars svg { width: 20px; height: 20px; color: var(--wf-brand); }
-.testimonial-quote {
-  font-size: 20px;
-  font-style: italic;
-  color: var(--wf-fg-muted);
-  line-height: 1.6;
-  margin-bottom: 28px;
-}
-.testimonial-author-centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-.testimonial-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--wf-surface-active);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--wf-fg-subtle);
-  flex-shrink: 0;
-}
-.testimonial-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--wf-fg);
-}
-.testimonial-role {
-  font-size: 13px;
-  color: var(--wf-fg-subtle);
-}
-
-/* ── FAQ ACCORDION ── */
-.faq-section {
-  padding: 80px 0;
-  border-top: 1px solid var(--wf-border);
-}
-.faq-section-header {
-  text-align: center;
-  margin-bottom: 48px;
-}
-.faq-section-header .heading-md { margin-bottom: 12px; }
-.faq-list {
-  max-width: 720px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-}
-.faq-item {
-  border-bottom: 1px solid var(--wf-border);
-}
-.faq-item:first-child {
-  border-top: 1px solid var(--wf-border);
-}
-.faq-trigger {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--wf-fg);
-  text-align: left;
-  cursor: pointer;
-  transition: color var(--wf-dur);
-}
-.faq-trigger:hover { color: var(--wf-brand); }
-.faq-trigger svg {
-  width: 20px;
-  height: 20px;
-  color: var(--wf-fg-subtle);
-  flex-shrink: 0;
-  transition: transform 200ms var(--wf-ease);
-}
-.faq-item.open .faq-trigger svg {
-  transform: rotate(45deg);
-}
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 300ms var(--wf-ease);
-}
-.faq-answer-inner {
-  padding: 0 0 20px;
-  font-size: 14px;
+  font-size: 17px;
   color: var(--wf-fg-muted);
   line-height: 1.7;
+  margin-bottom: 32px;
 }
-
-/* ── FINAL CTA ── */
-.final-cta {
-  padding: 80px 0;
-  background: var(--wf-brand-muted);
-  border-top: 1px solid var(--wf-brand-border);
-  border-bottom: 1px solid var(--wf-brand-border);
-}
-.final-cta-inner {
-  max-width: 560px;
-  margin: 0 auto;
-  text-align: center;
-}
-.final-cta .heading-md { margin-bottom: 12px; }
-.final-cta .body-text { margin-bottom: 32px; }
-.final-cta-form {
+.hero-form {
   display: flex;
   gap: 12px;
-  max-width: 480px;
-  margin: 0 auto;
+  margin-bottom: 16px;
 }
-.final-cta-input {
+.hero-input {
   flex: 1;
   height: 52px;
   padding: 0 20px;
@@ -571,9 +228,402 @@ ul { list-style: none; }
   font-family: var(--font-sans);
   transition: border-color var(--wf-dur) var(--wf-ease);
 }
-.final-cta-input::placeholder { color: var(--wf-fg-faint); }
-.final-cta-input:hover { border-color: var(--wf-border-strong); }
-.final-cta-input:focus { outline: none; border-color: var(--wf-brand); }
+.hero-input::placeholder { color: var(--wf-fg-faint); }
+.hero-input:hover { border-color: var(--wf-border-strong); }
+.hero-input:focus { outline: none; border-color: var(--wf-brand); }
+.hero-trust {
+  font-size: 13px;
+  color: var(--wf-fg-subtle);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero-trust svg { width: 14px; height: 14px; color: var(--wf-brand); flex-shrink: 0; }
+
+/* ── Book Cover ── */
+.book-cover {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 48px 40px;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--wf-shadow-lg);
+  transition: all var(--wf-dur) var(--wf-ease);
+  max-width: 400px;
+  margin-left: auto;
+}
+.book-cover:hover {
+  border-color: var(--wf-brand-border);
+  transform: translateY(-4px);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+}
+.book-cover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--wf-brand);
+}
+.book-cover-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--wf-brand);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.book-cover-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--wf-fg);
+  margin-bottom: 16px;
+}
+.book-cover-subtitle {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+.book-cover-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+.book-cover-line {
+  height: 2px;
+  border-radius: 1px;
+  background: var(--wf-border);
+}
+.book-cover-line:nth-child(1) { width: 100%; }
+.book-cover-line:nth-child(2) { width: 85%; }
+.book-cover-line:nth-child(3) { width: 92%; }
+.book-cover-line:nth-child(4) { width: 78%; }
+.book-cover-line:nth-child(5) { width: 88%; }
+.book-cover-line:nth-child(6) { width: 65%; }
+.book-cover-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--wf-border);
+  margin-top: 24px;
+}
+.book-cover-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--wf-r-sm);
+  background: var(--wf-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.book-cover-mark svg { width: 16px; height: 16px; color: var(--wf-brand-fg); }
+.book-cover-brand {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wf-fg-subtle);
+  letter-spacing: -0.01em;
+}
+
+/* ── WHAT'S INSIDE ── */
+.whats-inside {
+  padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.whats-inside-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.whats-inside-header .heading-md { margin-bottom: 12px; }
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.benefit-item {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 32px;
+  transition: all var(--wf-dur) var(--wf-ease);
+}
+.benefit-item:hover {
+  border-color: var(--wf-brand-border);
+  transform: translateY(-1px);
+}
+.benefit-number {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--wf-brand-muted);
+  border: 1px solid var(--wf-brand-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-brand);
+  margin-bottom: 20px;
+}
+.benefit-item h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.benefit-item p {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+}
+
+/* ── PREVIEW CARDS ── */
+.preview-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.preview-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.preview-header .heading-md { margin-bottom: 12px; }
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.preview-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  overflow: hidden;
+  transition: all var(--wf-dur) var(--wf-ease);
+}
+.preview-card:hover {
+  border-color: var(--wf-brand-border);
+  transform: translateY(-2px);
+  box-shadow: var(--wf-shadow-md);
+}
+.preview-page {
+  aspect-ratio: 3 / 4;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-bottom: 1px solid var(--wf-border);
+}
+.preview-page-chapter {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--wf-brand);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.preview-page-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  line-height: 1.3;
+}
+.preview-page-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.preview-page-line {
+  height: 2px;
+  border-radius: 1px;
+  background: var(--wf-border-subtle);
+}
+.preview-page-line:nth-child(odd) { width: 100%; }
+.preview-page-line:nth-child(even) { width: 80%; }
+.preview-page-block {
+  width: 100%;
+  height: 40px;
+  border-radius: var(--wf-r-sm);
+  background: var(--wf-brand-muted);
+  border: 1px solid var(--wf-brand-border);
+}
+.preview-meta {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.preview-meta-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-fg);
+}
+.preview-meta-pages {
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+  font-family: var(--font-mono);
+}
+
+/* ── AUTHOR ── */
+.author-section {
+  padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.author-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.author-avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--wf-surface);
+  border: 2px solid var(--wf-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.author-avatar svg { width: 64px; height: 64px; color: var(--wf-fg-faint); }
+.author-info .kicker { margin-bottom: 8px; }
+.author-name {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.author-role {
+  font-size: 16px;
+  color: var(--wf-fg-muted);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.author-credentials {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.author-credential {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--wf-fg-muted);
+}
+.author-credential svg {
+  width: 20px;
+  height: 20px;
+  color: var(--wf-brand);
+  flex-shrink: 0;
+}
+
+/* ── SOCIAL PROOF ── */
+.social-proof {
+  padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.social-proof-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.social-proof-header .heading-md { margin-bottom: 12px; }
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.testimonial-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 28px;
+  transition: all var(--wf-dur) var(--wf-ease);
+}
+.testimonial-card:hover {
+  border-color: var(--wf-brand-border);
+  transform: translateY(-1px);
+}
+.testimonial-stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+.testimonial-stars svg { width: 16px; height: 16px; color: var(--wf-brand); }
+.testimonial-quote {
+  font-size: 15px;
+  font-style: italic;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--wf-surface-active);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-fg-subtle);
+  flex-shrink: 0;
+}
+.testimonial-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-fg);
+}
+.testimonial-role {
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+
+/* ── FINAL CTA ── */
+.final-cta {
+  padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.final-cta-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+  background: var(--wf-brand-muted);
+  border: 1px solid var(--wf-brand-border);
+  border-radius: var(--wf-r-lg);
+  padding: 56px 48px;
+}
+.final-cta-inner .heading-md { margin-bottom: 12px; }
+.final-cta-inner .body-text { margin-bottom: 32px; }
+.final-cta-form {
+  display: flex;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto 16px;
+}
+.final-cta-note {
+  font-size: 13px;
+  color: var(--wf-fg-subtle);
+}
 
 /* ── FOOTER ── */
 .footer {
@@ -655,38 +705,41 @@ ul { list-style: none; }
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .container { padding: 0 24px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-  .chapter-grid { grid-template-columns: 1fr 1fr; }
-  .chapter-grid .chapter-card:last-child { grid-column: span 2; }
-  .preview-grid { grid-template-columns: 1fr; gap: 40px; }
-  .preview-image { max-width: 400px; margin: 0 auto; }
-  .logo-row { gap: 32px; }
+  .hero-split { gap: 40px; }
+  .benefits-grid { grid-template-columns: 1fr 1fr; }
+  .preview-grid { grid-template-columns: 1fr 1fr; }
+  .preview-grid .preview-card:last-child { grid-column: span 2; max-width: 50%; margin: 0 auto; }
+  .testimonial-grid { grid-template-columns: 1fr 1fr; }
+  .testimonial-grid .testimonial-card:last-child { grid-column: span 2; }
+  .author-grid { gap: 40px; }
   .footer-top { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 768px) {
   .container { padding: 0 20px; }
-  .section { padding: 56px 0; }
   .heading-xl { font-size: 36px; }
   .heading-lg { font-size: 32px; }
   .heading-md { font-size: 26px; }
   .navbar-links { display: none; }
   .mobile-toggle { display: flex; }
   .hero-download { padding: 64px 0 56px; }
-  .hero-description { font-size: 16px; }
-  .form-card { padding: 24px; }
-  .chapter-grid { grid-template-columns: 1fr; }
-  .chapter-grid .chapter-card:last-child { grid-column: span 1; }
+  .hero-split { grid-template-columns: 1fr; }
+  .hero-form { flex-direction: column; }
+  .book-cover { max-width: 320px; margin: 0 auto; }
+  .benefits-grid { grid-template-columns: 1fr; }
+  .preview-grid { grid-template-columns: 1fr; }
+  .preview-grid .preview-card:last-child { grid-column: span 1; max-width: 100%; }
+  .author-grid { grid-template-columns: 1fr; text-align: center; }
+  .author-avatar { margin: 0 auto; width: 160px; height: 160px; }
+  .author-credentials { align-items: center; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+  .testimonial-grid .testimonial-card:last-child { grid-column: span 1; }
   .whats-inside,
-  .logo-bar,
   .preview-section,
-  .testimonial-section,
-  .faq-section,
+  .author-section,
+  .social-proof,
   .final-cta { padding: 56px 0; }
-  .preview-image { max-width: 100%; }
-  .testimonial-quote { font-size: 17px; }
-  .logo-row { gap: 24px; }
-  .logo-item { font-size: 15px; }
+  .final-cta-inner { padding: 40px 24px; }
   .final-cta-form { flex-direction: column; }
   .footer-top { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
@@ -706,11 +759,9 @@ ul { list-style: none; }
       <a href="product.html" class="navbar-link">Product</a>
       <a href="pricing.html" class="navbar-link">Pricing</a>
       <a href="blog-home.html" class="navbar-link">Blog</a>
-      <a href="free-download.html" class="navbar-link active">Free Download</a>
       <a href="contact-us.html" class="navbar-link">Contact</a>
     </div>
     <div class="navbar-actions">
-      <a href="#" class="btn btn-ghost btn-sm">Log in</a>
       <a href="contact-us.html" class="btn btn-sm btn-primary">Get Started</a>
     </div>
     <button class="mobile-toggle" aria-label="Toggle menu">
@@ -719,48 +770,47 @@ ul { list-style: none; }
   </div>
 </nav>
 
-<!-- ═══════════════ HERO (2-COLUMN) ═══════════════ -->
+<!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero-download">
   <div class="container">
-    <div class="hero-grid">
+    <div class="hero-split">
       <div class="hero-left">
-        <p class="kicker">Free Resource</p>
-        <h1 class="heading-xl">Download your free guide to property intelligence</h1>
-        <p class="hero-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare.</p>
-        <div class="hero-bullets">
-          <div class="hero-bullet">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Learn proven frameworks for data-driven property analysis and market positioning</span>
-          </div>
-          <div class="hero-bullet">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Discover AI-powered strategies used by top-performing real estate professionals</span>
-          </div>
-          <div class="hero-bullet">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Get actionable templates and checklists you can implement immediately</span>
-          </div>
-        </div>
+        <p class="kicker">Free Download</p>
+        <h1 class="heading-xl">The Complete Property Intelligence Playbook</h1>
+        <p class="hero-description">A comprehensive guide to leveraging AI-powered analytics, market intelligence, and data pipelines to make smarter real estate decisions. From competitive analysis to automated reporting -- everything you need to build a modern property intelligence operation.</p>
+        <form class="hero-form" onsubmit="event.preventDefault();">
+          <input type="email" class="hero-input" placeholder="Enter your email address" required>
+          <button type="submit" class="btn btn-lg btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Free Guide
+          </button>
+        </form>
+        <p class="hero-trust">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Join 2,100+ professionals who downloaded this guide
+        </p>
       </div>
       <div class="hero-right">
-        <div class="form-card">
-          <h2 class="form-card-title">Get instant access</h2>
-          <form onsubmit="event.preventDefault();">
-            <div class="form-group">
-              <label class="form-label" for="heroName">Name</label>
-              <input type="text" id="heroName" class="form-input" placeholder="Your full name">
+        <div class="book-cover">
+          <div>
+            <div class="book-cover-badge">Windfield Research</div>
+            <div class="book-cover-title">Property Intelligence Playbook</div>
+            <div class="book-cover-subtitle">AI-Powered Frameworks for Modern Real Estate Operations</div>
+          </div>
+          <div class="book-cover-lines">
+            <div class="book-cover-line"></div>
+            <div class="book-cover-line"></div>
+            <div class="book-cover-line"></div>
+            <div class="book-cover-line"></div>
+            <div class="book-cover-line"></div>
+            <div class="book-cover-line"></div>
+          </div>
+          <div class="book-cover-footer">
+            <div class="book-cover-mark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="heroEmail">Email</label>
-              <input type="email" id="heroEmail" class="form-input" placeholder="you@company.com" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="heroCompany">Company</label>
-              <input type="text" id="heroCompany" class="form-input" placeholder="Your company name">
-            </div>
-            <button type="submit" class="btn btn-lg btn-primary">Download now</button>
-            <p class="form-privacy">By downloading, you agree to our Privacy Policy. We will never share your information.</p>
-          </form>
+            <div class="book-cover-brand">Windfield IO</div>
+          </div>
         </div>
       </div>
     </div>
@@ -771,174 +821,223 @@ ul { list-style: none; }
 <section class="whats-inside">
   <div class="container">
     <div class="whats-inside-header">
-      <p class="kicker">Contents</p>
-      <h2 class="heading-md">What's inside</h2>
-      <p class="body-text">A comprehensive breakdown of everything covered in the guide.</p>
+      <p class="kicker">Inside the Guide</p>
+      <h2 class="heading-md">What You'll Learn</h2>
+      <p class="body-text">Six essential frameworks distilled from years of working with enterprise real estate teams.</p>
     </div>
-    <div class="chapter-grid">
+    <div class="benefits-grid">
 
-      <div class="chapter-card">
-        <div class="chapter-badge">01</div>
-        <h3>Market Analysis Fundamentals</h3>
-        <p>Learn the core principles of real estate market analysis, including key metrics, data sources, and frameworks used by industry leaders to identify opportunities before the competition.</p>
+      <div class="benefit-item">
+        <div class="benefit-number">01</div>
+        <h3>Market Analysis Framework</h3>
+        <p>A repeatable process for evaluating market conditions, identifying trends, and scoring opportunities using quantitative and qualitative data sources.</p>
       </div>
 
-      <div class="chapter-card">
-        <div class="chapter-badge">02</div>
-        <h3>AI-Powered Intelligence</h3>
-        <p>Discover how artificial intelligence is transforming property intelligence, from automated valuation models to predictive market analytics that surface hidden insights at scale.</p>
+      <div class="benefit-item">
+        <div class="benefit-number">02</div>
+        <h3>AI-Powered Property Scoring</h3>
+        <p>How to build and calibrate a scoring model that ranks properties by investment potential, factoring in location signals, financial metrics, and market momentum.</p>
       </div>
 
-      <div class="chapter-card">
-        <div class="chapter-badge">03</div>
-        <h3>Implementation Playbook</h3>
-        <p>A step-by-step guide to implementing data-driven strategies in your organization, complete with templates, checklists, and real-world case studies from top-performing teams.</p>
+      <div class="benefit-item">
+        <div class="benefit-number">03</div>
+        <h3>Data Pipeline Architecture</h3>
+        <p>Design patterns for ingesting, normalizing, and enriching property data from multiple sources into a unified intelligence layer your team can trust.</p>
+      </div>
+
+      <div class="benefit-item">
+        <div class="benefit-number">04</div>
+        <h3>Competitive Intelligence</h3>
+        <p>Systematic approaches to tracking competitor activity, pricing shifts, and market positioning so you can spot advantages before they become obvious.</p>
+      </div>
+
+      <div class="benefit-item">
+        <div class="benefit-number">05</div>
+        <h3>Report Automation</h3>
+        <p>Templates and workflows for generating client-ready market reports, portfolio summaries, and performance dashboards without manual data wrangling.</p>
+      </div>
+
+      <div class="benefit-item">
+        <div class="benefit-number">06</div>
+        <h3>ROI Calculator Template</h3>
+        <p>A ready-to-use financial model for projecting returns across different property types, hold periods, and market scenarios with built-in sensitivity analysis.</p>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ SOCIAL PROOF / LOGO BAR ═══════════════ -->
-<section class="logo-bar">
-  <div class="container">
-    <div class="logo-bar-header">
-      <p>Trusted by 10,000+ professionals</p>
-    </div>
-    <div class="logo-row">
-      <span class="logo-item">Webflow</span>
-      <span class="logo-item">Relume</span>
-      <span class="logo-item">Webflow</span>
-      <span class="logo-item">Relume</span>
-      <span class="logo-item">Webflow</span>
-      <span class="logo-item">Relume</span>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ PREVIEW SECTION ═══════════════ -->
+<!-- ═══════════════ PREVIEW ═══════════════ -->
 <section class="preview-section">
   <div class="container">
+    <div class="preview-header">
+      <p class="kicker">Sneak Peek</p>
+      <h2 class="heading-md">Preview the Playbook</h2>
+      <p class="body-text">Three chapters from the guide -- formatted, actionable, and ready to deploy.</p>
+    </div>
     <div class="preview-grid">
-      <div class="preview-image">
-        <div class="preview-image-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="3" width="20" height="18" rx="2"/>
-            <path d="M2 15l5-5c.6-.6 1.4-.6 2 0l5 5"/>
-            <path d="M14 13l2-2c.6-.6 1.4-.6 2 0l4 4"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-          </svg>
-          <span>Guide Cover Preview</span>
+
+      <div class="preview-card">
+        <div class="preview-page">
+          <div class="preview-page-chapter">Chapter 01</div>
+          <div class="preview-page-title">Building Your Market Intelligence Stack</div>
+          <div class="preview-page-lines">
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-block"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+          </div>
+        </div>
+        <div class="preview-meta">
+          <span class="preview-meta-title">Intelligence Stack</span>
+          <span class="preview-meta-pages">18 pages</span>
         </div>
       </div>
-      <div class="preview-right">
-        <p class="kicker">Sneak Peek</p>
-        <h2 class="heading-lg">A sneak peek inside</h2>
-        <p class="body-text">This guide distills years of industry experience into a practical resource you can start using today. From foundational concepts to advanced AI-powered strategies, every chapter is designed for immediate impact.</p>
-        <div class="preview-bullets">
-          <div class="preview-bullet">
-            <span class="preview-dot"></span>
-            <span>20+ pages of actionable frameworks and strategies</span>
-          </div>
-          <div class="preview-bullet">
-            <span class="preview-dot"></span>
-            <span>Real-world case studies from top-performing teams</span>
-          </div>
-          <div class="preview-bullet">
-            <span class="preview-dot"></span>
-            <span>Downloadable templates and implementation checklists</span>
-          </div>
-          <div class="preview-bullet">
-            <span class="preview-dot"></span>
-            <span>Exclusive data insights not available anywhere else</span>
+
+      <div class="preview-card">
+        <div class="preview-page">
+          <div class="preview-page-chapter">Chapter 03</div>
+          <div class="preview-page-title">Scoring Models and Decision Frameworks</div>
+          <div class="preview-page-lines">
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-block"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-block"></div>
           </div>
         </div>
-        <a href="#hero-form" class="btn btn-lg btn-primary">Download free</a>
+        <div class="preview-meta">
+          <span class="preview-meta-title">Decision Frameworks</span>
+          <span class="preview-meta-pages">24 pages</span>
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <div class="preview-page">
+          <div class="preview-page-chapter">Chapter 05</div>
+          <div class="preview-page-title">Automated Reporting and Client Deliverables</div>
+          <div class="preview-page-lines">
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-block"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+            <div class="preview-page-line"></div>
+          </div>
+        </div>
+        <div class="preview-meta">
+          <span class="preview-meta-title">Report Automation</span>
+          <span class="preview-meta-pages">21 pages</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ AUTHOR ═══════════════ -->
+<section class="author-section">
+  <div class="container">
+    <div class="author-grid">
+      <div class="author-avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="author-info">
+        <p class="kicker">About the Author</p>
+        <h2 class="author-name">Windfield Research Team</h2>
+        <p class="author-role">Our research division combines deep real estate domain expertise with modern data engineering and applied AI. This playbook distills the exact frameworks we use with enterprise clients every day.</p>
+        <div class="author-credentials">
+          <div class="author-credential">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            9+ years in real estate intelligence
+          </div>
+          <div class="author-credential">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            40+ enterprise clients served
+          </div>
+          <div class="author-credential">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            12 AI workflows in production
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ TESTIMONIAL ═══════════════ -->
-<section class="testimonial-section">
+<!-- ═══════════════ SOCIAL PROOF ═══════════════ -->
+<section class="social-proof">
   <div class="container">
-    <div class="testimonial-centered">
-      <div class="testimonial-stars">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      </div>
-      <p class="testimonial-quote">"This guide completely changed how our team approaches market analysis. The AI-powered frameworks alone saved us 15+ hours per week. It's the single best free resource I've found in the property intelligence space."</p>
-      <div class="testimonial-author-centered">
-        <div class="testimonial-avatar">SC</div>
-        <div style="text-align: left;">
-          <div class="testimonial-name">Sarah Chen</div>
-          <div class="testimonial-role">VP of Operations, Meridian Group</div>
-        </div>
-      </div>
+    <div class="social-proof-header">
+      <p class="kicker">Reader Feedback</p>
+      <h2 class="heading-md">What Professionals Are Saying</h2>
+      <p class="body-text">Real feedback from real estate operators who put the playbook to work.</p>
     </div>
-  </div>
-</section>
+    <div class="testimonial-grid">
 
-<!-- ═══════════════ FAQ ACCORDION ═══════════════ -->
-<section class="faq-section">
-  <div class="container">
-    <div class="faq-section-header">
-      <p class="kicker">FAQ</p>
-      <h2 class="heading-md">Frequently Asked Questions</h2>
-      <p class="body-text">Everything you need to know about the free guide.</p>
-    </div>
-    <div class="faq-list">
-
-      <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          Is this guide really free?
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">Yes, 100% free. We created this guide to help professionals get started with data-driven property intelligence. There are no hidden fees, upsells, or paywalls. Just enter your email and the guide is yours instantly.</div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-quote">"The scoring model alone saved our team 15 hours per week on property evaluation. We went from gut-feel decisions to data-backed conviction overnight."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">MK</div>
+          <div>
+            <div class="testimonial-name">Marcus Klein</div>
+            <div class="testimonial-role">VP of Acquisitions, Meridian Capital</div>
+          </div>
         </div>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          What format is the guide in?
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">The guide is delivered as a high-quality PDF that you can read on any device. It is optimized for both screen reading and printing, so you can reference it however works best for your workflow.</div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-quote">"Finally, a guide that bridges the gap between real estate fundamentals and modern data infrastructure. The pipeline architecture chapter is worth the download alone."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SR</div>
+          <div>
+            <div class="testimonial-name">Sarah Reeves</div>
+            <div class="testimonial-role">Director of Analytics, Blackstone Realty</div>
+          </div>
         </div>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          Will I receive marketing emails after downloading?
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">We may send you occasional updates about new resources and platform features, but you can unsubscribe at any time with a single click. We respect your inbox and never send more than one email per week.</div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          Who is this guide designed for?
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">This guide is designed for real estate professionals, property managers, analysts, and anyone looking to leverage data and AI for smarter property decisions. Whether you are just getting started or are a seasoned professional, you will find actionable insights.</div>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          Can I share this guide with my team?
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">Absolutely. We encourage you to share the guide with colleagues and team members. We just ask that each person downloads their own copy so we can send them updates when new editions are released.</div>
+        <p class="testimonial-quote">"We implemented the ROI calculator within a week of downloading. Our investor presentations went from good to bulletproof. Highly recommended for any serious operator."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">JT</div>
+          <div>
+            <div class="testimonial-name">James Torres</div>
+            <div class="testimonial-role">Managing Partner, Atlas Property Group</div>
+          </div>
         </div>
       </div>
 
@@ -950,12 +1049,16 @@ ul { list-style: none; }
 <section class="final-cta">
   <div class="container">
     <div class="final-cta-inner">
-      <h2 class="heading-md">Ready to get started?</h2>
-      <p class="body-text">Download the free guide and start making smarter property decisions today.</p>
+      <h2 class="heading-md">Get Your Free Copy Today</h2>
+      <p class="body-text">Instant access to 80+ pages of actionable property intelligence frameworks. No credit card required.</p>
       <form class="final-cta-form" onsubmit="event.preventDefault();">
-        <input type="email" class="final-cta-input" placeholder="Enter your email address" required>
-        <button type="submit" class="btn btn-lg btn-primary">Get your free copy</button>
+        <input type="email" class="hero-input" placeholder="Enter your email address" required>
+        <button type="submit" class="btn btn-lg btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Free Guide
+        </button>
       </form>
+      <p class="final-cta-note">Instant access. No credit card required.</p>
     </div>
   </div>
 </section>
@@ -1020,27 +1123,6 @@ ul { list-style: none; }
     </div>
   </div>
 </footer>
-
-<script>
-/* ── FAQ Accordion ── */
-function toggleFaq(trigger) {
-  var item = trigger.parentElement;
-  var answer = item.querySelector('.faq-answer');
-  var isOpen = item.classList.contains('open');
-
-  // Close all
-  document.querySelectorAll('.faq-item').forEach(function(el) {
-    el.classList.remove('open');
-    el.querySelector('.faq-answer').style.maxHeight = null;
-  });
-
-  // Open clicked if it was closed
-  if (!isOpen) {
-    item.classList.add('open');
-    answer.style.maxHeight = answer.scrollHeight + 'px';
-  }
-}
-</script>
 
 </body>
 </html>

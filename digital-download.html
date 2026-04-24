@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Download — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Windfield IO Design Tokens ── */
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-r-sm: 6px;
+  --wf-r-md: 8px;
+  --wf-r-lg: 12px;
+  --wf-r-pill: 9999px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+
+/* ── Utilities ── */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.container-sm { max-width: 768px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 80px 0; }
+.text-center { text-align: center; }
+.kicker {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-brand);
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+}
+.heading-xl {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--wf-fg);
+}
+.heading-lg {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.heading-md {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.heading-sm {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+.body-lg { font-size: 18px; line-height: 1.65; color: var(--wf-fg-muted); }
+.body-md { font-size: 15px; line-height: 1.65; color: var(--wf-fg-muted); }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn-lg { height: 52px; padding: 0 32px; font-size: 16px; }
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-sm { height: 36px; padding: 0 16px; font-size: 13px; }
+.btn-primary { background: var(--wf-brand); color: var(--wf-brand-fg); }
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-outline { background: transparent; color: var(--wf-fg); border-color: var(--wf-border-strong); }
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+.btn-ghost { background: transparent; color: var(--wf-fg-muted); }
+.btn-ghost:hover { color: var(--wf-fg); }
+.btn-full { width: 100%; justify-content: center; }
+.btn svg { width: 18px; height: 18px; }
+
+/* ── Navbar ── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--wf-bg);
+  border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wf-fg);
+  letter-spacing: -0.02em;
+}
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+}
+.navbar-link {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link.active { color: var(--wf-fg); }
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 16px;
+}
+.mobile-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  color: var(--wf-fg);
+}
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ── Hero ── */
+.hero {
+  padding: 80px 0 64px;
+  border-bottom: 1px solid var(--wf-border);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.hero-left .heading-xl { margin-bottom: 16px; }
+.hero-desc {
+  font-size: 17px;
+  color: var(--wf-fg-muted);
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.price-current {
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--wf-fg);
+}
+.price-original {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--wf-fg-faint);
+  text-decoration: line-through;
+}
+.price-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--wf-brand);
+  background: var(--wf-brand-muted);
+  border: 1px solid var(--wf-brand-border);
+  border-radius: var(--wf-r-pill);
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.trust-row {
+  display: flex;
+  gap: 24px;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--wf-fg-subtle);
+}
+.trust-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--wf-fg-faint);
+  flex-shrink: 0;
+}
+
+/* Product Mockup */
+.product-mockup {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 40px 32px;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.product-mockup::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--wf-brand), transparent);
+}
+.mockup-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--wf-r-lg);
+  background: var(--wf-brand-muted);
+  border: 1px solid var(--wf-brand-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.mockup-icon svg { width: 28px; height: 28px; color: var(--wf-brand); }
+.mockup-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.mockup-subtitle {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  text-align: center;
+  margin-bottom: 32px;
+}
+.mockup-lines {
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mockup-line {
+  height: 8px;
+  background: var(--wf-border-subtle);
+  border-radius: 4px;
+}
+.mockup-line:nth-child(1) { width: 100%; }
+.mockup-line:nth-child(2) { width: 80%; }
+.mockup-line:nth-child(3) { width: 60%; }
+.mockup-line:nth-child(4) { width: 90%; }
+.mockup-line:nth-child(5) { width: 45%; }
+.mockup-version {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--wf-fg-faint);
+}
+.mockup-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--wf-brand);
+  text-transform: uppercase;
+}
+
+/* ── Stats Bar ── */
+.stats-bar {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--wf-border);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--wf-fg);
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+}
+
+/* ── What's Included ── */
+.included-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 48px;
+}
+.included-item {
+  display: flex;
+  gap: 16px;
+}
+.included-check {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--wf-brand);
+}
+.included-check svg { width: 24px; height: 24px; }
+.included-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 4px;
+}
+.included-desc {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.55;
+}
+
+/* ── Product Preview (Tabs) ── */
+.preview-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--wf-border);
+  margin-bottom: 32px;
+}
+.preview-tab {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--wf-fg-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--wf-dur);
+}
+.preview-tab:hover { color: var(--wf-fg); }
+.preview-tab.active {
+  color: var(--wf-fg);
+  border-bottom-color: var(--wf-brand);
+}
+.preview-panel {
+  display: none;
+}
+.preview-panel.active {
+  display: block;
+}
+.preview-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 32px;
+  min-height: 360px;
+}
+.preview-header-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--wf-border-subtle);
+}
+.preview-col-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--wf-fg-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex: 1;
+}
+.preview-row {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--wf-border-subtle);
+  align-items: center;
+}
+.preview-row:last-child { border-bottom: none; }
+.preview-cell {
+  flex: 1;
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+}
+.preview-cell:first-child {
+  color: var(--wf-fg);
+  font-weight: 500;
+}
+.preview-cell-tag {
+  display: inline-flex;
+  height: 24px;
+  padding: 0 10px;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--wf-r-sm);
+  background: var(--wf-brand-muted);
+  color: var(--wf-brand);
+  border: 1px solid var(--wf-brand-border);
+}
+.preview-chart-area {
+  margin-top: 24px;
+  height: 120px;
+  background: var(--wf-bg);
+  border: 1px solid var(--wf-border-subtle);
+  border-radius: var(--wf-r-md);
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding: 16px;
+}
+.chart-bar {
+  flex: 1;
+  background: var(--wf-brand-muted);
+  border: 1px solid var(--wf-brand-border);
+  border-radius: 3px 3px 0 0;
+  transition: background var(--wf-dur);
+}
+.chart-bar:hover {
+  background: var(--wf-brand-border-strong);
+}
+
+/* ── Pricing Tiers ── */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.pricing-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.pricing-card.featured {
+  border-color: var(--wf-brand-border-strong);
+  box-shadow: 0 0 0 1px var(--wf-brand-border), var(--wf-shadow-lg);
+}
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 24px;
+  padding: 0 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  background: var(--wf-brand);
+  color: var(--wf-brand-fg);
+  border-radius: var(--wf-r-pill);
+  white-space: nowrap;
+}
+.pricing-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 8px;
+}
+.pricing-price {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--wf-fg);
+  margin-bottom: 8px;
+}
+.pricing-desc {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.pricing-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex: 1;
+}
+.pricing-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+}
+.pricing-feature svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.pricing-feature .check { color: var(--wf-brand); }
+.pricing-feature .x-mark { color: var(--wf-fg-faint); }
+.pricing-feature.disabled {
+  color: var(--wf-fg-faint);
+}
+
+/* ── Testimonials ── */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.testimonial-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 28px;
+}
+.testimonial-stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+.testimonial-stars svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--wf-brand);
+}
+.testimonial-text {
+  font-size: 15px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--wf-bg);
+  border: 1px solid var(--wf-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-fg-subtle);
+}
+.testimonial-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-fg);
+}
+.testimonial-role {
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+
+/* ── FAQ ── */
+.faq-list {
+  max-width: 768px;
+  margin: 48px auto 0;
+}
+.faq-item {
+  border-bottom: 1px solid var(--wf-border);
+}
+.faq-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--wf-fg);
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--wf-dur);
+}
+.faq-trigger:hover { color: var(--wf-brand); }
+.faq-trigger svg {
+  width: 20px;
+  height: 20px;
+  color: var(--wf-fg-faint);
+  transition: transform var(--wf-dur) var(--wf-ease);
+  flex-shrink: 0;
+}
+.faq-item.open .faq-trigger svg {
+  transform: rotate(45deg);
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 300ms var(--wf-ease);
+}
+.faq-answer-inner {
+  padding-bottom: 20px;
+  font-size: 15px;
+  color: var(--wf-fg-muted);
+  line-height: 1.65;
+}
+
+/* ── Guarantee ── */
+.guarantee {
+  padding: 80px 0;
+  text-align: center;
+}
+.guarantee-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 24px;
+  border-radius: var(--wf-r-lg);
+  background: var(--wf-brand-muted);
+  border: 1px solid var(--wf-brand-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.guarantee-icon svg {
+  width: 32px;
+  height: 32px;
+  color: var(--wf-brand);
+}
+.guarantee p {
+  max-width: 520px;
+  margin: 16px auto 0;
+  font-size: 15px;
+  color: var(--wf-fg-muted);
+  line-height: 1.65;
+}
+
+/* ── Final CTA ── */
+.final-cta {
+  padding: 0 0 80px;
+}
+.cta-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  padding: 56px 40px;
+  text-align: center;
+}
+.cta-card .heading-md { margin-bottom: 8px; }
+.cta-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.cta-price {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.cta-price-old {
+  font-size: 20px;
+  color: var(--wf-fg-faint);
+  text-decoration: line-through;
+}
+.cta-note {
+  font-size: 13px;
+  color: var(--wf-fg-subtle);
+  margin-top: 16px;
+}
+.cta-note svg {
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+  margin-right: 4px;
+}
+
+/* ── Footer ── */
+.footer {
+  border-top: 1px solid var(--wf-border);
+  padding: 56px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+}
+.footer-brand .navbar-logo { margin-bottom: 16px; }
+.footer-bio {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.footer-socials { display: flex; gap: 12px; }
+.footer-social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--wf-r-md);
+  border: 1px solid var(--wf-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--wf-dur);
+  color: var(--wf-fg-subtle);
+}
+.footer-social-link:hover {
+  border-color: var(--wf-brand-border);
+  color: var(--wf-brand);
+}
+.footer-social-link svg { width: 16px; height: 16px; }
+.footer-col-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 16px;
+}
+.footer-links { display: flex; flex-direction: column; gap: 10px; }
+.footer-link {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid var(--wf-border);
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+.footer-legal { display: flex; gap: 24px; }
+.footer-legal a {
+  color: var(--wf-fg-subtle);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--wf-dur);
+}
+.footer-legal a:hover { color: var(--wf-fg); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .included-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+  .testimonial-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .trust-row { flex-wrap: wrap; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .section { padding: 56px 0; }
+  .heading-xl { font-size: 36px; }
+  .heading-lg { font-size: 32px; }
+  .heading-md { font-size: 26px; }
+  .navbar-links { display: none; }
+  .mobile-toggle { display: flex; }
+  .hero { padding: 56px 0 48px; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+  .price-current { font-size: 40px; }
+  .product-mockup { min-height: 360px; padding: 32px 24px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .preview-tabs { overflow-x: auto; }
+  .preview-tab { padding: 12px 16px; font-size: 13px; }
+  .pricing-grid { margin-top: 32px; }
+  .pricing-card { padding: 24px; }
+  .guarantee { padding: 56px 0; }
+  .cta-card { padding: 40px 24px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="navbar-inner container">
+    <a href="index.html" class="navbar-logo">Windfield</a>
+    <div class="navbar-links">
+      <a href="index.html" class="navbar-link">Home</a>
+      <a href="about.html" class="navbar-link">About</a>
+      <a href="portfolio.html" class="navbar-link">Portfolio</a>
+      <a href="product.html" class="navbar-link active">Product</a>
+      <a href="pricing.html" class="navbar-link">Pricing</a>
+      <a href="blog-home.html" class="navbar-link">Blog</a>
+      <a href="contact-us.html" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="contact-us.html" class="btn btn-sm btn-primary">Get Started</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <p class="kicker">Digital Product</p>
+        <h1 class="heading-xl">The Windfield Property Analysis Template Kit</h1>
+        <p class="hero-desc">Everything you need to analyze, score, and present real estate investment opportunities. 47 battle-tested templates used by over 2,400 professionals.</p>
+
+        <div class="price-row">
+          <span class="price-current">$49</span>
+          <span class="price-original">$99</span>
+          <span class="price-badge">50% OFF</span>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#pricing" class="btn btn-lg btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Buy Now &mdash; Instant Download
+          </a>
+          <a href="#preview" class="btn btn-lg btn-outline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Preview Contents
+          </a>
+        </div>
+
+        <div class="trust-row">
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            SSL Secure Checkout
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Instant Delivery
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            30-Day Money-Back
+          </div>
+        </div>
+      </div>
+
+      <div class="product-mockup">
+        <span class="mockup-badge">Digital Download</span>
+        <div class="mockup-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="mockup-title">Property Analysis<br>Template Kit</div>
+        <div class="mockup-subtitle">47 Templates &middot; Spreadsheets &middot; Documents</div>
+        <div class="mockup-lines">
+          <div class="mockup-line"></div>
+          <div class="mockup-line"></div>
+          <div class="mockup-line"></div>
+          <div class="mockup-line"></div>
+          <div class="mockup-line"></div>
+        </div>
+        <span class="mockup-version">v2.4</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PRODUCT STATS ═══════════════ -->
+<section class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-value">2,400+</div>
+        <div class="stat-label">Downloads</div>
+      </div>
+      <div>
+        <div class="stat-value">4.9/5</div>
+        <div class="stat-label">Rating</div>
+      </div>
+      <div>
+        <div class="stat-value">47</div>
+        <div class="stat-label">Templates</div>
+      </div>
+      <div>
+        <div class="stat-value">Instant</div>
+        <div class="stat-label">Access</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ WHAT'S INCLUDED ═══════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="text-center">
+      <p class="kicker">What You Get</p>
+      <h2 class="heading-lg">Everything included in the kit</h2>
+    </div>
+    <div class="included-grid">
+
+      <div class="included-item">
+        <div class="included-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="included-title">Market Analysis Templates</div>
+          <div class="included-desc">Comprehensive market research frameworks covering demographics, competition mapping, and demand forecasting for any property type.</div>
+        </div>
+      </div>
+
+      <div class="included-item">
+        <div class="included-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="included-title">Property Scoring Sheets</div>
+          <div class="included-desc">Weighted scoring matrices to objectively evaluate and compare investment opportunities across 15+ key performance indicators.</div>
+        </div>
+      </div>
+
+      <div class="included-item">
+        <div class="included-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="included-title">Financial Modeling Workbook</div>
+          <div class="included-desc">Pre-built financial models with cash flow projections, cap rate analysis, IRR calculations, and sensitivity tables ready to customize.</div>
+        </div>
+      </div>
+
+      <div class="included-item">
+        <div class="included-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="included-title">Due Diligence Checklist</div>
+          <div class="included-desc">Step-by-step checklist covering legal, environmental, structural, and financial due diligence. Never miss a critical review item.</div>
+        </div>
+      </div>
+
+      <div class="included-item">
+        <div class="included-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="included-title">Investor Pitch Deck</div>
+          <div class="included-desc">Professional presentation template with 24 slides covering market opportunity, financial projections, team, and exit strategy.</div>
+        </div>
+      </div>
+
+      <div class="included-item">
+        <div class="included-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <div class="included-title">CRM Setup Guide</div>
+          <div class="included-desc">Complete guide to configuring your property CRM with custom fields, automations, and pipeline stages tailored for real estate workflows.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PRODUCT PREVIEW ═══════════════ -->
+<section id="preview" class="section" style="padding-top:0">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:40px">
+      <p class="kicker">Preview</p>
+      <h2 class="heading-lg">See what is inside</h2>
+    </div>
+
+    <div class="preview-tabs">
+      <button class="preview-tab active" onclick="switchTab(this, 'tab-templates')">Templates</button>
+      <button class="preview-tab" onclick="switchTab(this, 'tab-spreadsheets')">Spreadsheets</button>
+      <button class="preview-tab" onclick="switchTab(this, 'tab-documents')">Documents</button>
+      <button class="preview-tab" onclick="switchTab(this, 'tab-bonus')">Bonus</button>
+    </div>
+
+    <!-- Templates Tab -->
+    <div id="tab-templates" class="preview-panel active">
+      <div class="preview-card">
+        <div class="preview-header-row">
+          <span class="preview-col-label">Template Name</span>
+          <span class="preview-col-label">Category</span>
+          <span class="preview-col-label">Format</span>
+          <span class="preview-col-label">Status</span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Market Opportunity Analysis</span>
+          <span class="preview-cell">Research</span>
+          <span class="preview-cell">.xlsx</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Competitive Landscape Map</span>
+          <span class="preview-cell">Strategy</span>
+          <span class="preview-cell">.xlsx</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Investment Scoring Matrix</span>
+          <span class="preview-cell">Analysis</span>
+          <span class="preview-cell">.xlsx</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Property Comparison Tool</span>
+          <span class="preview-cell">Analysis</span>
+          <span class="preview-cell">.xlsx</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Demand Forecast Model</span>
+          <span class="preview-cell">Research</span>
+          <span class="preview-cell">.xlsx</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spreadsheets Tab -->
+    <div id="tab-spreadsheets" class="preview-panel">
+      <div class="preview-card">
+        <div class="preview-header-row">
+          <span class="preview-col-label">Spreadsheet</span>
+          <span class="preview-col-label">Sheets</span>
+          <span class="preview-col-label">Formulas</span>
+          <span class="preview-col-label">Status</span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Cash Flow Projections</span>
+          <span class="preview-cell">4 sheets</span>
+          <span class="preview-cell">120+</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Cap Rate Calculator</span>
+          <span class="preview-cell">2 sheets</span>
+          <span class="preview-cell">45+</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">IRR & Sensitivity Analysis</span>
+          <span class="preview-cell">3 sheets</span>
+          <span class="preview-cell">85+</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Operating Expense Tracker</span>
+          <span class="preview-cell">2 sheets</span>
+          <span class="preview-cell">60+</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-chart-area">
+          <div class="chart-bar" style="height:40%"></div>
+          <div class="chart-bar" style="height:65%"></div>
+          <div class="chart-bar" style="height:50%"></div>
+          <div class="chart-bar" style="height:80%"></div>
+          <div class="chart-bar" style="height:70%"></div>
+          <div class="chart-bar" style="height:55%"></div>
+          <div class="chart-bar" style="height:90%"></div>
+          <div class="chart-bar" style="height:60%"></div>
+          <div class="chart-bar" style="height:75%"></div>
+          <div class="chart-bar" style="height:45%"></div>
+          <div class="chart-bar" style="height:85%"></div>
+          <div class="chart-bar" style="height:70%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documents Tab -->
+    <div id="tab-documents" class="preview-panel">
+      <div class="preview-card">
+        <div class="preview-header-row">
+          <span class="preview-col-label">Document</span>
+          <span class="preview-col-label">Pages</span>
+          <span class="preview-col-label">Format</span>
+          <span class="preview-col-label">Status</span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Due Diligence Checklist</span>
+          <span class="preview-cell">12 pages</span>
+          <span class="preview-cell">.pdf / .docx</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Investor Pitch Deck</span>
+          <span class="preview-cell">24 slides</span>
+          <span class="preview-cell">.pptx</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Property Brief Template</span>
+          <span class="preview-cell">6 pages</span>
+          <span class="preview-cell">.pdf / .docx</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">CRM Setup Guide</span>
+          <span class="preview-cell">18 pages</span>
+          <span class="preview-cell">.pdf</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Investment Memo Template</span>
+          <span class="preview-cell">8 pages</span>
+          <span class="preview-cell">.docx</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bonus Tab -->
+    <div id="tab-bonus" class="preview-panel">
+      <div class="preview-card">
+        <div class="preview-header-row">
+          <span class="preview-col-label">Bonus Resource</span>
+          <span class="preview-col-label">Type</span>
+          <span class="preview-col-label">Value</span>
+          <span class="preview-col-label">Status</span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Market Data API Access</span>
+          <span class="preview-cell">Tool</span>
+          <span class="preview-cell">$29/mo value</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Video Walkthrough Series</span>
+          <span class="preview-cell">Video</span>
+          <span class="preview-cell">3.5 hours</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Quarterly Template Updates</span>
+          <span class="preview-cell">Updates</span>
+          <span class="preview-cell">Lifetime</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-cell">Private Community Access</span>
+          <span class="preview-cell">Community</span>
+          <span class="preview-cell">Priceless</span>
+          <span class="preview-cell"><span class="preview-cell-tag">Included</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PRICING TIERS ═══════════════ -->
+<section id="pricing" class="section" style="border-top:1px solid var(--wf-border)">
+  <div class="container">
+    <div class="text-center">
+      <p class="kicker">Pricing</p>
+      <h2 class="heading-lg">Choose your package</h2>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- Starter -->
+      <div class="pricing-card">
+        <div class="pricing-title">Starter</div>
+        <div class="pricing-price">$29</div>
+        <div class="pricing-desc">Get started with the essentials for individual property analysis.</div>
+        <div class="pricing-features">
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            12 core templates
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Email support
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            1 user license
+          </div>
+          <div class="pricing-feature disabled">
+            <svg class="x-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Bonus content
+          </div>
+          <div class="pricing-feature disabled">
+            <svg class="x-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Custom templates
+          </div>
+          <div class="pricing-feature disabled">
+            <svg class="x-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            White-label rights
+          </div>
+        </div>
+        <a href="#" class="btn btn-md btn-outline btn-full">Get Starter</a>
+      </div>
+
+      <!-- Professional (Featured) -->
+      <div class="pricing-card featured">
+        <span class="pricing-badge">Most Popular</span>
+        <div class="pricing-title">Professional</div>
+        <div class="pricing-price">$49</div>
+        <div class="pricing-desc">The complete toolkit for serious real estate professionals.</div>
+        <div class="pricing-features">
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            All 47 templates
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Priority support
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            5 user licenses
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Bonus content included
+          </div>
+          <div class="pricing-feature disabled">
+            <svg class="x-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Custom templates
+          </div>
+          <div class="pricing-feature disabled">
+            <svg class="x-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            White-label rights
+          </div>
+        </div>
+        <a href="#" class="btn btn-md btn-primary btn-full">Get Professional</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="pricing-card">
+        <div class="pricing-title">Enterprise</div>
+        <div class="pricing-price">$149</div>
+        <div class="pricing-desc">Full access plus custom branding and dedicated support for teams.</div>
+        <div class="pricing-features">
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Everything in Professional
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Dedicated support
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Unlimited user licenses
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Bonus content included
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Custom templates on request
+          </div>
+          <div class="pricing-feature">
+            <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            White-label rights
+          </div>
+        </div>
+        <a href="#" class="btn btn-md btn-outline btn-full">Get Enterprise</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIALS ═══════════════ -->
+<section class="section" style="border-top:1px solid var(--wf-border)">
+  <div class="container">
+    <div class="text-center">
+      <p class="kicker">Testimonials</p>
+      <h2 class="heading-lg">Trusted by real estate professionals</h2>
+    </div>
+
+    <div class="testimonial-grid">
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-text">"The financial modeling workbook alone saved me 40+ hours. Every formula is pre-built and the sensitivity analysis tables are exactly what my investors needed to see."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">MR</div>
+          <div>
+            <div class="testimonial-name">Marcus Rivera</div>
+            <div class="testimonial-role">Real Estate Investment Analyst</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-text">"I used the pitch deck template to close a $2.4M raise. The professional layout and data visualization made the difference. Worth every penny and then some."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SK</div>
+          <div>
+            <div class="testimonial-name">Sarah Kim</div>
+            <div class="testimonial-role">Managing Partner, Apex Capital</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-text">"Our team of five uses this daily. The due diligence checklist caught issues our previous process missed entirely. The CRM guide streamlined our entire pipeline."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">JT</div>
+          <div>
+            <div class="testimonial-name">James Thompson</div>
+            <div class="testimonial-role">Director of Acquisitions, Sterling RE</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section class="section" style="border-top:1px solid var(--wf-border)">
+  <div class="container">
+    <div class="text-center">
+      <p class="kicker">FAQ</p>
+      <h2 class="heading-lg">Frequently asked questions</h2>
+    </div>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          What file formats are included?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">The kit includes .xlsx spreadsheets (compatible with Excel and Google Sheets), .docx documents (compatible with Word and Google Docs), .pptx presentations (compatible with PowerPoint and Google Slides), and .pdf files for reference guides and checklists.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Do I get free updates?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Yes. All purchases include lifetime access to updates. We release quarterly updates with new templates, improved formulas, and additional content based on customer feedback and market changes.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          What is your refund policy?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">We offer a 30-day money-back guarantee. If the templates do not meet your expectations for any reason, contact our support team within 30 days of purchase for a full refund. No questions asked.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Can I use these templates for client work?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Starter and Professional licenses allow you to use templates for your own work and client deliverables. However, you cannot resell or redistribute the templates themselves. The Enterprise license includes white-label rights, allowing you to rebrand templates for client-facing use.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          How many team members can use the templates?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">The Starter plan covers 1 user. Professional covers up to 5 team members. Enterprise includes unlimited user licenses for your entire organization. Each license allows the designated users to access, edit, and use all included templates.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Is this a one-time purchase or subscription?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">This is a one-time purchase with lifetime access. You pay once and get all current templates plus all future updates at no additional cost. There are no recurring charges, hidden fees, or subscription requirements.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MONEY-BACK GUARANTEE ═══════════════ -->
+<section class="guarantee">
+  <div class="container">
+    <div class="guarantee-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+    </div>
+    <h2 class="heading-md">30-Day Money-Back Guarantee</h2>
+    <p>We stand behind the quality of every template in this kit. If the Windfield Property Analysis Template Kit does not meet your expectations within 30 days of purchase, contact us for a full refund. No hoops, no hassle, no risk.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ FINAL CTA ═══════════════ -->
+<section class="final-cta">
+  <div class="container">
+    <div class="cta-card">
+      <h2 class="heading-md">The Windfield Property Analysis Template Kit</h2>
+      <div class="cta-price-row">
+        <span class="cta-price">$49</span>
+        <span class="cta-price-old">$99</span>
+        <span class="price-badge">50% OFF</span>
+      </div>
+      <a href="#" class="btn btn-lg btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Buy Now &mdash; Instant Download
+      </a>
+      <p class="cta-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Secure checkout powered by Stripe
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="navbar-logo">Windfield</a>
+        <p class="footer-bio">AI-powered property intelligence and operational tools built for modern real estate professionals. Data-driven strategies for smarter decisions.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social-link" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" class="footer-social-link" aria-label="X">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+          </a>
+          <a href="#" class="footer-social-link" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Platform</div>
+        <div class="footer-links">
+          <a href="product.html" class="footer-link">Features</a>
+          <a href="pricing.html" class="footer-link">Pricing</a>
+          <a href="#" class="footer-link">Integrations</a>
+          <a href="#" class="footer-link">Changelog</a>
+          <a href="#" class="footer-link">Documentation</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Tools</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Market Intelligence</a>
+          <a href="#" class="footer-link">Property Analytics</a>
+          <a href="#" class="footer-link">AI Automation</a>
+          <a href="#" class="footer-link">Brand Builder</a>
+          <a href="#" class="footer-link">CRM</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="about.html" class="footer-link">About</a>
+          <a href="blog-home.html" class="footer-link">Blog</a>
+          <a href="contact-us.html" class="footer-link">Contact</a>
+          <a href="#" class="footer-link">Careers</a>
+          <a href="#" class="footer-link">Partners</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>2026 Windfield. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Tab Switching ── */
+function switchTab(tab, panelId) {
+  document.querySelectorAll('.preview-tab').forEach(function(t) {
+    t.classList.remove('active');
+  });
+  document.querySelectorAll('.preview-panel').forEach(function(p) {
+    p.classList.remove('active');
+  });
+  tab.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+/* ── FAQ Accordion ── */
+function toggleFaq(trigger) {
+  var item = trigger.parentElement;
+  var answer = item.querySelector('.faq-answer');
+  var isOpen = item.classList.contains('open');
+
+  document.querySelectorAll('.faq-item').forEach(function(el) {
+    el.classList.remove('open');
+    el.querySelector('.faq-answer').style.maxHeight = null;
+  });
+
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+</script>
+
+</body>
+</html>

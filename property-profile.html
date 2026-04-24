@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Profile — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-brand-border:rgba(29,185,84,0.20);--wf-brand-border-strong:rgba(29,185,84,0.35);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-blue:#4589FF;--wf-teal:#08BDBA;--wf-green:#42BE65;--wf-red:#E85D4A;--wf-purple:#BE95FF;--wf-orange:#FF832B;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}img{max-width:100%;display:block}
+
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.section{padding:80px 0}
+.text-center{text-align:center}
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-lg{height:48px;padding:0 32px;font-size:15px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.btn-ghost{background:transparent;color:var(--wf-fg-muted);border-color:transparent}
+.btn-ghost:hover{color:var(--wf-fg);background:var(--wf-surface)}
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ph svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 12px;border-radius:var(--wf-r-sm);letter-spacing:0.01em}
+.badge-green{background:rgba(66,190,101,0.12);color:var(--wf-green)}
+.badge-blue{background:rgba(69,137,255,0.12);color:var(--wf-blue)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-right{display:flex;align-items:center;gap:12px}
+.menu-btn{display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;background:var(--wf-brand);color:var(--wf-brand-fg);font-size:13px;font-weight:600;border-radius:var(--wf-r-md);transition:background var(--wf-dur)}
+.menu-btn:hover{background:var(--wf-brand-hover)}
+.hamburger{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--wf-border);border-radius:var(--wf-r-md);color:var(--wf-fg-muted);transition:all var(--wf-dur)}
+.hamburger:hover{border-color:var(--wf-border-strong);color:var(--wf-fg)}
+.hamburger svg{width:18px;height:18px}
+.nav-links{display:flex;align-items:center;gap:16px;margin-right:auto;margin-left:32px}
+.nav-link{font-size:13px;color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
+.nav-link:hover{color:var(--wf-fg)}
+.nav-link.active{color:var(--wf-fg)}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-subtle)}
+.breadcrumb a{color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
+.breadcrumb a:hover{color:var(--wf-fg)}
+.breadcrumb-sep{color:var(--wf-fg-faint)}
+.breadcrumb-current{color:var(--wf-fg-muted)}
+
+/* Property Hero */
+.property-hero{position:relative;aspect-ratio:21/9;width:100%;background:var(--wf-surface);border-bottom:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.property-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(9,9,11,0.95) 0%,rgba(9,9,11,0.5) 40%,rgba(9,9,11,0.1) 100%)}
+.hero-ghost{position:absolute;font-size:120px;font-weight:800;color:rgba(255,255,255,0.03);letter-spacing:-0.04em;user-select:none}
+.hero-content{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:0 0 40px}
+.hero-badges{display:flex;gap:8px;margin-bottom:16px}
+.hero-title{font-size:48px;font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:8px}
+.hero-address{font-size:16px;color:var(--wf-fg-muted);margin-bottom:20px}
+.hero-quickstats{display:flex;gap:24px;margin-bottom:24px}
+.hero-stat{font-size:14px;font-weight:600;color:var(--wf-fg);display:flex;align-items:center;gap:6px}
+.hero-stat-dot{width:4px;height:4px;border-radius:50%;background:var(--wf-fg-faint)}
+.hero-actions{display:flex;gap:12px;align-items:center}
+.hero-img-icon{position:absolute;z-index:1}
+.hero-img-icon svg{width:64px;height:64px;color:var(--wf-fg-faint)}
+
+/* Key Metrics Bar */
+.metrics-bar{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);padding:24px 0}
+.metrics-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.metric-item{text-align:center}
+.metric-label{font-size:12px;font-weight:500;color:var(--wf-fg-subtle);letter-spacing:0.02em;margin-bottom:4px}
+.metric-value{font-size:22px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em;font-family:var(--font-mono)}
+
+/* Property Details */
+.details-section{padding:64px 0}
+.details-grid{display:grid;grid-template-columns:1fr 0.65fr;gap:48px;align-items:start}
+.details-title{font-size:28px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
+.details-body p{font-size:15px;color:var(--wf-fg-muted);line-height:1.75;margin-bottom:16px}
+.features-title{font-size:20px;font-weight:700;margin-top:40px;margin-bottom:20px}
+.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.feature-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--wf-fg-muted)}
+.feature-item svg{width:18px;height:18px;color:var(--wf-brand);flex-shrink:0}
+
+/* Sidebar */
+.sidebar-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px;position:sticky;top:88px}
+.agent-section{margin-bottom:24px}
+.agent-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.agent-avatar{width:48px;height:48px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.agent-avatar svg{width:24px;height:24px;color:var(--wf-fg-faint)}
+.agent-name{font-size:15px;font-weight:600;color:var(--wf-fg)}
+.agent-title{font-size:13px;color:var(--wf-fg-subtle)}
+.agent-contact{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.agent-contact-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-muted)}
+.agent-contact-item svg{width:16px;height:16px;color:var(--wf-fg-subtle);flex-shrink:0}
+.sidebar-divider{height:1px;background:var(--wf-border);margin:24px 0}
+.quick-facts-title{font-size:14px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.fact-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--wf-border-subtle)}
+.fact-label{font-size:13px;color:var(--wf-fg-subtle)}
+.fact-value{font-size:13px;color:var(--wf-fg);font-weight:500}
+
+/* Photo Gallery */
+.gallery-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.gallery-heading{font-size:28px;font-weight:700;letter-spacing:-0.02em;margin-bottom:24px}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.gallery-grid .gallery-item:nth-child(1),.gallery-grid .gallery-item:nth-child(2){aspect-ratio:2/1}
+.gallery-grid .gallery-item:nth-child(n+3){aspect-ratio:3/2}
+.gallery-item{position:relative;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.gallery-item svg{width:40px;height:40px;color:var(--wf-fg-faint)}
+.gallery-badge{position:absolute;bottom:12px;left:12px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(9,9,11,0.75);color:var(--wf-fg);backdrop-filter:blur(8px);border:1px solid var(--wf-border)}
+
+/* Floor Plans / Availability */
+.availability-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.availability-table{width:100%;border-collapse:collapse;margin-top:24px}
+.availability-table th{text-align:left;font-size:12px;font-weight:600;color:var(--wf-fg-subtle);letter-spacing:0.03em;text-transform:uppercase;padding:12px 16px;border-bottom:1px solid var(--wf-border-strong)}
+.availability-table td{font-size:14px;color:var(--wf-fg-muted);padding:16px;border-bottom:1px solid var(--wf-border-subtle)}
+.availability-table tr:hover td{background:var(--wf-surface);color:var(--wf-fg)}
+.availability-table .status-available{color:var(--wf-green);font-weight:500}
+.availability-table .status-leased{color:var(--wf-fg-faint);font-weight:500}
+.availability-table .view-link{color:var(--wf-brand);font-weight:500;font-size:13px;transition:color var(--wf-dur)}
+.availability-table .view-link:hover{color:var(--wf-brand-hover)}
+.avail-btn-wrap{margin-top:24px}
+
+/* Location & Amenities */
+.location-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.map-placeholder{aspect-ratio:4/3;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center}
+.map-placeholder svg{width:56px;height:56px;color:var(--wf-fg-faint)}
+.neighborhood-title{font-size:20px;font-weight:700;margin-bottom:12px}
+.neighborhood-desc{font-size:14px;color:var(--wf-fg-muted);line-height:1.7;margin-bottom:20px}
+.amenity-pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:6px 14px;border-radius:20px;background:var(--wf-surface);border:1px solid var(--wf-border);color:var(--wf-fg-muted);transition:all var(--wf-dur)}
+.pill:hover{border-color:var(--wf-border-strong);color:var(--wf-fg)}
+
+/* Market Context */
+.market-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:24px}
+.market-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px}
+.market-card-title{font-size:16px;font-weight:700;margin-bottom:16px}
+.market-stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--wf-border-subtle)}
+.market-stat-label{font-size:13px;color:var(--wf-fg-subtle)}
+.market-stat-value{font-size:13px;font-weight:600;color:var(--wf-fg)}
+.comp-item{padding:12px 0;border-bottom:1px solid var(--wf-border-subtle)}
+.comp-item:last-child{border-bottom:none}
+.comp-name{font-size:14px;font-weight:600;color:var(--wf-fg);margin-bottom:2px}
+.comp-detail{font-size:12px;color:var(--wf-fg-subtle)}
+.highlight-item{display:flex;gap:10px;padding:10px 0}
+.highlight-item svg{width:18px;height:18px;color:var(--wf-brand);flex-shrink:0;margin-top:2px}
+.highlight-text{font-size:14px;color:var(--wf-fg-muted);line-height:1.5}
+
+/* Related Properties */
+.related-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:24px}
+.prop-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;transition:all var(--wf-dur) var(--wf-ease)}
+.prop-card:hover{border-color:var(--wf-border-strong);transform:translateY(-2px)}
+.prop-card-img{aspect-ratio:16/10;background:var(--wf-surface-active);display:flex;align-items:center;justify-content:center;position:relative}
+.prop-card-img svg{width:40px;height:40px;color:var(--wf-fg-faint)}
+.prop-card-body{padding:20px}
+.prop-card-badge{position:absolute;top:12px;left:12px}
+.prop-card-name{font-size:16px;font-weight:700;color:var(--wf-fg);margin-bottom:4px}
+.prop-card-address{font-size:13px;color:var(--wf-fg-subtle);margin-bottom:12px}
+.prop-card-meta{display:flex;gap:16px;font-size:13px;color:var(--wf-fg-muted)}
+.prop-card-meta span{font-weight:500}
+
+/* CTA Band */
+.cta-band{padding:80px 0;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);text-align:center}
+.cta-heading{font-size:36px;font-weight:700;letter-spacing:-0.02em;margin-bottom:12px}
+.cta-sub{font-size:16px;color:var(--wf-fg-muted);margin-bottom:28px}
+.cta-actions{display:flex;gap:12px;justify-content:center}
+
+/* Footer */
+.footer{border-top:1px solid var(--wf-border);padding:40px 0 0;background:var(--wf-bg)}
+.footer-top{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;padding-bottom:24px;border-bottom:1px solid var(--wf-border)}
+.footer-subscribe-label{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.footer-form{display:flex;gap:8px}
+.footer-input{height:40px;padding:0 12px;width:240px;background:var(--wf-bg-elevated);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:13px;color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-input::placeholder{color:var(--wf-fg-faint)}.footer-input:hover{border-color:var(--wf-border-strong)}.footer-input:focus{outline:none;border-color:var(--wf-brand)}
+.footer-disclaimer{font-size:11px;color:var(--wf-fg-faint);margin-top:6px;line-height:1.5}
+.footer-disclaimer a{text-decoration:underline;text-underline-offset:2px}
+.footer-mid{display:flex;align-items:center;gap:24px;padding:16px 0;border-bottom:1px solid var(--wf-border)}
+.footer-mid-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.footer-mid-link:hover{color:var(--wf-fg)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:16px 0;font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg)}
+
+/* Responsive */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .metrics-grid{grid-template-columns:repeat(3,1fr);gap:20px}
+  .details-grid,.location-grid{grid-template-columns:1fr}
+  .market-grid,.related-grid{grid-template-columns:1fr 1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr}
+  .hero-title{font-size:36px}
+  .sidebar-card{position:static}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .nav-links{display:none}
+  .hero-title{font-size:28px}
+  .hero-quickstats{flex-wrap:wrap;gap:12px}
+  .hero-actions{flex-wrap:wrap}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .features-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr}
+  .gallery-grid .gallery-item:nth-child(1),.gallery-grid .gallery-item:nth-child(2){aspect-ratio:16/9}
+  .market-grid,.related-grid{grid-template-columns:1fr}
+  .availability-table{display:block;overflow-x:auto}
+  .cta-heading{font-size:28px}
+  .cta-actions{flex-direction:column;align-items:center}
+  .footer-top{flex-direction:column}.footer-input{width:100%}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Logo</a>
+    <div class="nav-links">
+      <a href="home-v1.html" class="nav-link">Home v1</a>
+      <a href="home-v2.html" class="nav-link">Home v2</a>
+      <a href="index.html" class="nav-link">Home v3</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="pricing-v2.html" class="nav-link">Pricing v2</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="blog-post.html" class="nav-link">Blog Post</a>
+      <a href="portfolio.html" class="nav-link active">Portfolio</a>
+    </div>
+    <div class="navbar-right">
+      <button class="menu-btn">Menu</button>
+      <button class="hamburger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+    <a href="portfolio.html">Portfolio</a>
+    <span class="breadcrumb-sep"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+    <span class="breadcrumb-current">Meridian Tower</span>
+  </div>
+</div>
+
+<!-- PROPERTY HERO -->
+<div class="property-hero">
+  <span class="hero-ghost">Meridian Tower</span>
+  <span class="hero-img-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
+  <div class="hero-content">
+    <div class="container">
+      <div class="hero-badges">
+        <span class="badge badge-green"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="currentColor"/></svg>Active Listing</span>
+        <span class="badge badge-blue">Class A Office</span>
+      </div>
+      <h1 class="hero-title">Meridian Tower</h1>
+      <p class="hero-address">200 Commerce Street, Suite 1400, Kansas City, MO 64105</p>
+      <div class="hero-quickstats">
+        <span class="hero-stat">285,000 SF</span>
+        <span class="hero-stat"><span class="hero-stat-dot"></span>32 Floors</span>
+        <span class="hero-stat"><span class="hero-stat-dot"></span>Built 2019</span>
+        <span class="hero-stat"><span class="hero-stat-dot"></span>LEED Gold</span>
+      </div>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-md btn-primary">Schedule Tour</a>
+        <a href="#" class="btn btn-md btn-outline">Download Brochure</a>
+        <button class="btn btn-md btn-ghost" aria-label="Share">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY METRICS BAR -->
+<section class="metrics-bar">
+  <div class="container">
+    <div class="metrics-grid">
+      <div class="metric-item">
+        <div class="metric-label">Asking Price</div>
+        <div class="metric-value">$142M</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-label">Price / SF</div>
+        <div class="metric-value">$498</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-label">Cap Rate</div>
+        <div class="metric-value">6.2%</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-label">Occupancy</div>
+        <div class="metric-value">94%</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-label">NOI</div>
+        <div class="metric-value">$8.8M</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-label">Year Built</div>
+        <div class="metric-value">2019</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROPERTY DETAILS -->
+<section class="details-section">
+  <div class="container">
+    <div class="details-grid">
+      <!-- Left column: Overview + Features -->
+      <div>
+        <h2 class="details-title">Overview</h2>
+        <div class="details-body">
+          <p>Meridian Tower is a premier Class A office building located in the heart of Kansas City's thriving downtown corridor. Completed in 2019, this 32-story tower represents the newest addition to the city's skyline and offers best-in-class amenities for today's modern workforce.</p>
+          <p>The property features 285,000 square feet of leasable space with efficient floor plates averaging 9,200 square feet per floor. Floor-to-ceiling windows on all sides provide panoramic views of the downtown core, the Missouri River, and the surrounding metropolitan area.</p>
+          <p>Current occupancy stands at 94% with a diversified tenant roster including financial services, technology, and professional services firms. The remaining availability is concentrated on premium upper floors, presenting an opportunity for tenants seeking flagship space or investors looking to capture upside through lease-up.</p>
+          <p>The building achieved LEED Gold certification at delivery and maintains best-in-class energy performance, positioning it favorably for ESG-focused institutional investors and corporate tenants with sustainability mandates.</p>
+        </div>
+
+        <h3 class="features-title">Building Features</h3>
+        <div class="features-grid">
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Floor-to-ceiling windows
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Fiber optic infrastructure
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            24/7 security
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            On-site parking garage
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Rooftop terrace
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Conference center
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Tenant lounge
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Fitness center
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            High-speed elevators
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Emergency generator
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Ground-floor retail
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            EV charging stations
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: Sidebar -->
+      <div>
+        <div class="sidebar-card">
+          <div class="agent-section">
+            <div class="agent-header">
+              <div class="agent-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div>
+                <div class="agent-name">Marcus Chen</div>
+                <div class="agent-title">Senior Vice President, Office Advisory</div>
+              </div>
+            </div>
+            <div class="agent-contact">
+              <div class="agent-contact-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                (816) 555-0142
+              </div>
+              <div class="agent-contact-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+                m.chen@windfield.com
+              </div>
+            </div>
+            <a href="#" class="btn btn-md btn-primary" style="width:100%;justify-content:center">Contact Agent</a>
+          </div>
+
+          <div class="sidebar-divider"></div>
+
+          <div class="quick-facts-title">Quick Facts</div>
+          <div class="fact-row">
+            <span class="fact-label">Property Type</span>
+            <span class="fact-value">Office</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Building Class</span>
+            <span class="fact-value">Class A</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Total SF</span>
+            <span class="fact-value">285,000</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Available SF</span>
+            <span class="fact-value">17,100</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Floor Plate</span>
+            <span class="fact-value">9,200 SF</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Ceiling Height</span>
+            <span class="fact-value">10' 6"</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-label">Parking Ratio</span>
+            <span class="fact-value">3.2/1,000 SF</span>
+          </div>
+          <div class="fact-row" style="border-bottom:none">
+            <span class="fact-label">Zoning</span>
+            <span class="fact-value">CBD-2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO GALLERY -->
+<section class="gallery-section">
+  <div class="container">
+    <h2 class="gallery-heading">Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="gallery-badge">Lobby</span>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="gallery-badge">Floor Plan</span>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="gallery-badge">Rooftop</span>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="gallery-badge">Conference</span>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="gallery-badge">Exterior</span>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="gallery-badge">Parking</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOOR PLANS / AVAILABILITY -->
+<section class="availability-section">
+  <div class="container">
+    <h2 class="gallery-heading">Availability</h2>
+    <table class="availability-table">
+      <thead>
+        <tr>
+          <th>Floor</th>
+          <th>SF Available</th>
+          <th>Rate / SF</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Floor 28</td>
+          <td>12,500 SF</td>
+          <td>$52 / SF</td>
+          <td>Full Floor</td>
+          <td class="status-available">Available</td>
+          <td><a href="#" class="view-link">View Details</a></td>
+        </tr>
+        <tr>
+          <td>Floor 26</td>
+          <td>4,600 SF</td>
+          <td>$48 / SF</td>
+          <td>Partial Floor</td>
+          <td class="status-available">Available</td>
+          <td><a href="#" class="view-link">View Details</a></td>
+        </tr>
+        <tr>
+          <td>Floor 22</td>
+          <td>9,200 SF</td>
+          <td>$50 / SF</td>
+          <td>Full Floor</td>
+          <td class="status-available">Available</td>
+          <td><a href="#" class="view-link">View Details</a></td>
+        </tr>
+        <tr>
+          <td>Floor 15</td>
+          <td>3,200 SF</td>
+          <td>$45 / SF</td>
+          <td>Suite</td>
+          <td class="status-leased">Under LOI</td>
+          <td><a href="#" class="view-link">View Details</a></td>
+        </tr>
+        <tr>
+          <td>Floor 8</td>
+          <td>6,800 SF</td>
+          <td>$44 / SF</td>
+          <td>Partial Floor</td>
+          <td class="status-available">Available</td>
+          <td><a href="#" class="view-link">View Details</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="avail-btn-wrap">
+      <a href="#" class="btn btn-md btn-outline">Download Full Availability</a>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION & AMENITIES -->
+<section class="location-section">
+  <div class="container">
+    <h2 class="gallery-heading">Location &amp; Amenities</h2>
+    <div class="location-grid">
+      <div class="map-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div>
+        <h3 class="neighborhood-title">Neighborhood</h3>
+        <p class="neighborhood-desc">Meridian Tower is situated in the heart of Kansas City's Central Business District, surrounded by dining, entertainment, and cultural attractions. The Power & Light District is a two-block walk, providing tenants with immediate access to over 50 restaurants, bars, and entertainment venues. The Kansas City Streetcar stops directly in front of the building, connecting the CBD to the River Market and Crown Center corridors.</p>
+        <div class="amenity-pills">
+          <span class="pill">Downtown Core</span>
+          <span class="pill">Walk Score: 92</span>
+          <span class="pill">Transit Score: 88</span>
+          <span class="pill">Interstate Access</span>
+          <span class="pill">Airport: 25 min</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET CONTEXT -->
+<section class="market-section">
+  <div class="container">
+    <h2 class="gallery-heading">Market Context</h2>
+    <div class="market-grid">
+      <!-- Market Overview -->
+      <div class="market-card">
+        <div class="market-card-title">Market Overview</div>
+        <div class="market-stat">
+          <span class="market-stat-label">Submarket Vacancy</span>
+          <span class="market-stat-value">12.4%</span>
+        </div>
+        <div class="market-stat">
+          <span class="market-stat-label">Class A Vacancy</span>
+          <span class="market-stat-value">8.7%</span>
+        </div>
+        <div class="market-stat">
+          <span class="market-stat-label">Avg Asking Rent</span>
+          <span class="market-stat-value">$38 / SF</span>
+        </div>
+        <div class="market-stat">
+          <span class="market-stat-label">YoY Rent Growth</span>
+          <span class="market-stat-value" style="color:var(--wf-green)">+3.2%</span>
+        </div>
+        <div class="market-stat">
+          <span class="market-stat-label">Under Construction</span>
+          <span class="market-stat-value">420K SF</span>
+        </div>
+      </div>
+
+      <!-- Comparable Properties -->
+      <div class="market-card">
+        <div class="market-card-title">Comparable Properties</div>
+        <div class="comp-item">
+          <div class="comp-name">One Kansas City Place</div>
+          <div class="comp-detail">412,000 SF -- $465 / SF -- 91% Occupied</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-name">Town Pavilion</div>
+          <div class="comp-detail">980,000 SF -- $385 / SF -- 88% Occupied</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-name">Commerce Tower</div>
+          <div class="comp-detail">620,000 SF -- $420 / SF -- 93% Occupied</div>
+        </div>
+      </div>
+
+      <!-- Investment Highlights -->
+      <div class="market-card">
+        <div class="market-card-title">Investment Highlights</div>
+        <div class="highlight-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          <span class="highlight-text">Below-replacement-cost basis at $498/SF with 6% upside to market rents on near-term rollovers</span>
+        </div>
+        <div class="highlight-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          <span class="highlight-text">Weighted average lease term of 7.2 years with 82% investment-grade credit tenancy</span>
+        </div>
+        <div class="highlight-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          <span class="highlight-text">LEED Gold certification and minimal near-term capital requirements drive strong risk-adjusted returns</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RELATED PROPERTIES -->
+<section class="related-section">
+  <div class="container">
+    <h2 class="gallery-heading">Similar Properties</h2>
+    <div class="related-grid">
+      <!-- Property Card 1 -->
+      <a href="property-profile.html" class="prop-card">
+        <div class="prop-card-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span class="badge badge-blue prop-card-badge">Class A Office</span>
+        </div>
+        <div class="prop-card-body">
+          <div class="prop-card-name">One Kansas City Place</div>
+          <div class="prop-card-address">1200 Main Street, Kansas City, MO</div>
+          <div class="prop-card-meta">
+            <span>412,000 SF</span>
+            <span>$192M</span>
+          </div>
+        </div>
+      </a>
+      <!-- Property Card 2 -->
+      <a href="property-profile.html" class="prop-card">
+        <div class="prop-card-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span class="badge badge-blue prop-card-badge">Class A Office</span>
+        </div>
+        <div class="prop-card-body">
+          <div class="prop-card-name">Commerce Tower</div>
+          <div class="prop-card-address">911 Main Street, Kansas City, MO</div>
+          <div class="prop-card-meta">
+            <span>620,000 SF</span>
+            <span>$260M</span>
+          </div>
+        </div>
+      </a>
+      <!-- Property Card 3 -->
+      <a href="property-profile.html" class="prop-card">
+        <div class="prop-card-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span class="badge badge-blue prop-card-badge">Class B+ Office</span>
+        </div>
+        <div class="prop-card-body">
+          <div class="prop-card-name">Town Pavilion</div>
+          <div class="prop-card-address">1100 Walnut Street, Kansas City, MO</div>
+          <div class="prop-card-meta">
+            <span>980,000 SF</span>
+            <span>$377M</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div class="container">
+    <h2 class="cta-heading">Interested in this property?</h2>
+    <p class="cta-sub">Connect with our team to schedule a tour or request detailed investment materials.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn btn-lg btn-primary">Schedule a Tour</a>
+      <a href="#" class="btn btn-lg btn-outline">Request Information</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="navbar-logo">Logo</div>
+      <div>
+        <div class="footer-subscribe-label">Subscribe</div>
+        <div class="footer-form">
+          <input type="email" class="footer-input" placeholder="Enter your email">
+          <button class="btn btn-sm btn-outline">Subscribe</button>
+        </div>
+        <p class="footer-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a>.</p>
+      </div>
+    </div>
+    <div class="footer-mid">
+      <a href="#" class="footer-mid-link">Link One</a>
+      <a href="#" class="footer-mid-link">Link Two</a>
+      <a href="#" class="footer-mid-link">Link Three</a>
+      <a href="#" class="footer-mid-link">Link Four</a>
+      <a href="#" class="footer-mid-link">Link Five</a>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookies Settings</a>
+      </div>
+      <span>&copy; 2023 Relume. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
