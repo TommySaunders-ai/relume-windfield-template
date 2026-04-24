@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How 9 Content Libraries Become One Synchronized System — Windfield IO</title>
+<meta name="description" content="One context brief. Nine libraries. A complete article — every image, every social post, the full SEO package, and a five-step CRM nurture sequence — assembled in under four minutes.">
+<meta name="keywords" content="content libraries, content pipeline, io content ops, windfield, intelligent operations, content orchestration">
+<meta property="og:title" content="How 9 Content Libraries Become One Synchronized System">
+<meta property="og:description" content="One context brief. Nine libraries. A complete article assembled in under four minutes.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-03-15">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"How 9 Content Libraries Become One Synchronized System","description":"One context brief. Nine libraries. A complete article — every image, every social post, the full SEO package, and a five-step CRM nurture sequence — assembled in under four minutes.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder, IntelligentOperations.ai"},"publisher":{"@type":"Organization","name":"Windfield Real Estate, LLC"},"datePublished":"2026-03-15","articleSection":"IO Content Ops Series","wordCount":4800,"timeRequired":"PT9M"}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   WINDFIELD IO — ARTICLE SERIES TEMPLATE
+   Design System Tokens + Full Article Page
+   ================================================================ */
+:root {
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --wf-brand: #1db954; --wf-brand-hover: #17a34a; --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b; --wf-bg-elevated: #111113; --wf-bg-sunken: #050507;
+  --wf-surface: #141417; --wf-surface-hover: #1a1a1e; --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa; --wf-fg-muted: #a1a1aa; --wf-fg-subtle: #71717a; --wf-fg-faint: #52525b;
+  --wf-border: #27272a; --wf-border-strong: #3f3f46; --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF; --wf-teal: #08BDBA; --wf-green: #42BE65; --wf-red: #E85D4A;
+  --wf-purple: #BE95FF; --wf-orange: #FF832B;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1); --wf-dur: 160ms;
+
+  /* Library node colors */
+  --lib-art: #4589FF; --lib-img: #1db954; --lib-vid: #FF832B;
+  --lib-soc: #E85D4A; --lib-des: #08BDBA; --lib-seo: #d97706;
+  --lib-crm: #BE95FF; --lib-con: #059669; --lib-tas: #6b7280;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+/* ================================================================
+   1. READING PROGRESS BAR
+   ================================================================ */
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:10000;width:0;transition:width 80ms linear;pointer-events:none}
+
+/* ================================================================
+   2. NAVBAR
+   ================================================================ */
+.navbar{position:sticky;top:0;z-index:500;background:rgba(9,9,11,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:56px;display:flex;align-items:center}
+.nav-logo{font-family:var(--font-sans);font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-.02em;flex-shrink:0}
+.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-links{display:flex;align-items:center;gap:8px;margin-left:40px}
+.nav-link{font-size:13px;font-weight:400;color:var(--wf-fg-muted);padding:6px 12px;border-radius:var(--wf-r-sm);transition:color var(--wf-dur) var(--wf-ease)}
+.nav-link:hover,.nav-link.active{color:var(--wf-fg)}
+.nav-link.active{font-weight:500}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.nav-toggle{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--font-sans);letter-spacing:.04em;cursor:pointer;border:1px solid var(--wf-border);background:none;color:var(--wf-fg-subtle);transition:all var(--wf-dur) var(--wf-ease);display:flex;align-items:center;gap:6px}
+.nav-toggle:hover,.nav-toggle.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nav-toggle svg{width:12px;height:12px}
+.nav-cta{padding:7px 18px;border-radius:var(--wf-r-md);font:600 13px/1 var(--font-sans);cursor:pointer;border:none;background:var(--wf-brand);color:var(--wf-brand-fg);transition:background var(--wf-dur) var(--wf-ease)}
+.nav-cta:hover{background:var(--wf-brand-hover)}
+
+/* Mobile nav */
+.nav-hamburger{display:none;background:none;border:none;color:var(--wf-fg-muted);cursor:pointer;padding:4px}
+.nav-hamburger svg{width:20px;height:20px}
+@media(max-width:1024px){.nav-links{display:none}.nav-hamburger{display:block}}
+@media(max-width:768px){.nav-toggle{display:none}}
+
+/* ================================================================
+   PIPELINE STRIP
+   ================================================================ */
+#pipeline-strip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}
+#pipeline-strip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto;gap:12px}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);flex-shrink:0}
+.ps-feeds{display:flex;gap:5px;flex-shrink:0}
+.ps-chip{padding:4px 9px;border-radius:var(--wf-r-sm);font:600 9px/1 var(--font-sans);display:flex;align-items:center;gap:4px;flex-shrink:0;letter-spacing:.06em;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.ps-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ps-arrow{color:var(--wf-fg-faint);flex-shrink:0;display:flex;align-items:center}
+.ps-arrow svg{width:14px;height:14px}
+.ps-result{font:600 10px/1 var(--font-sans);color:var(--wf-brand);letter-spacing:.04em;flex-shrink:0;white-space:nowrap}
+@media(max-width:768px){.ps-result{display:none}}
+
+/* ================================================================
+   3. HERO
+   ================================================================ */
+.hero{position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-wrap{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.eye-tag{font:700 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-dot{width:4px;height:4px;border-radius:50%;background:var(--wf-fg-faint)}
+.eye-series{font:600 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+.hero h1{font-family:var(--font-sans);font-size:clamp(34px,5vw,58px);font-weight:700;line-height:1.08;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:17px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid rgba(255,255,255,.08);padding-top:20px;flex-wrap:wrap}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);display:flex;align-items:center;justify-content:center;font:700 14px/1 var(--font-sans);color:#fff;flex-shrink:0}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:rgba(255,255,255,.1);margin:0 18px}
+.h-date,.h-read{font-size:13px;color:var(--wf-fg-subtle)}
+.h-read{margin-left:14px}
+.hero-stamp{display:inline-flex;margin-top:20px;padding:4px 12px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);font:400 10px/1.4 var(--font-mono);color:var(--wf-fg-faint);letter-spacing:.06em}
+
+/* ── Hero Viz ── */
+.hero-viz{position:relative;height:500px;align-self:end}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);
+  border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.14) 0%,transparent 65%);animation:glow-pulse 4s ease-in-out infinite}
+@keyframes glow-pulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.15)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);
+  animation:scan-line 5s ease-in-out infinite;opacity:.4}
+@keyframes scan-line{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+
+/* Hub and spoke */
+.hub-spoke{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:320px;height:320px}
+.hub-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.3),rgba(29,185,84,.08));border:1.5px solid rgba(29,185,84,.5);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2}
+.hub-label{font:700 6px/1 var(--font-mono);letter-spacing:.12em;color:var(--wf-brand);text-transform:uppercase;text-align:center}
+.hub-sublabel{font:300 5px/1 var(--font-mono);color:rgba(29,185,84,.6);margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
+.spoke-node{position:absolute;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font:700 8px/1 var(--font-sans);letter-spacing:.06em;border:1px solid;z-index:2;transition:all .4s var(--wf-ease)}
+.spoke-node.glow{box-shadow:0 0 20px currentColor;transform:scale(1.2)}
+.spoke-line{position:absolute;top:50%;left:50%;transform-origin:0 0;height:1px;z-index:1;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0px,rgba(255,255,255,.08) 4px,transparent 4px,transparent 8px)}
+.spoke-line.active{background:repeating-linear-gradient(90deg,rgba(29,185,84,.4) 0px,rgba(29,185,84,.4) 4px,transparent 4px,transparent 8px)}
+
+.run-pipeline-btn{position:absolute;bottom:20px;right:20px;padding:8px 16px;border-radius:var(--wf-r-md);background:rgba(29,185,84,.12);border:1px solid rgba(29,185,84,.25);
+  font:600 11px/1 var(--font-sans);color:var(--wf-brand);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all var(--wf-dur) var(--wf-ease);z-index:3}
+.run-pipeline-btn:hover{background:rgba(29,185,84,.2);border-color:rgba(29,185,84,.4)}
+.run-pipeline-btn svg{width:12px;height:12px}
+
+@media(max-width:1024px){.hero-wrap{grid-template-columns:1fr;gap:40px}.hero-viz{height:380px;order:-1}.hviz-inner{right:0;height:380px}.hero-text{padding-bottom:48px}}
+@media(max-width:768px){.hero{padding:48px 0 0}.hero-viz{display:none}.h-sep{display:none;margin:8px 0}.hero-meta{flex-direction:column;align-items:flex-start;gap:10px}.h-read{margin-left:0}}
+
+/* ================================================================
+   4. ARTICLE LAYOUT
+   ================================================================ */
+.article-layout{max-width:1280px;margin:0 auto;padding:60px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:64px}
+@media(max-width:1024px){.article-layout{grid-template-columns:1fr;gap:40px}}
+
+/* ── Main Content ── */
+.article-main{min-width:0}
+
+/* Body text */
+.article-main p{font-size:17.5px;line-height:1.8;color:var(--wf-fg-muted);margin-bottom:24px}
+.article-main p strong{color:var(--wf-fg);font-weight:600}
+.article-main p a{color:var(--wf-blue);text-decoration:underline;text-underline-offset:3px;transition:color var(--wf-dur)}
+.article-main p a:hover{color:#6fa8ff}
+
+/* Headings */
+.article-main h2{font-family:var(--font-serif);font-size:30px;font-weight:700;color:var(--wf-fg);margin:56px 0 20px;line-height:1.25;letter-spacing:-.01em}
+.article-main h2:first-child{margin-top:0}
+.article-main h3{font-size:20px;font-weight:600;color:var(--wf-fg);margin:40px 0 16px}
+
+/* Drop cap */
+.drop-cap::first-letter{float:left;font-family:var(--font-serif);font-size:82px;line-height:.72;font-weight:700;color:var(--wf-blue);margin-right:12px;margin-top:8px}
+
+/* Footnote links */
+sup a{color:var(--wf-blue);font-size:11px;text-decoration:none;font-weight:600}
+sup a:hover{text-decoration:underline}
+
+/* ── Section IDs for scroll spy ── */
+[data-section]{scroll-margin-top:120px}
+
+/* ================================================================
+   4a. DIRECT ANSWER BOX
+   ================================================================ */
+.direct-answer{background:rgba(69,137,255,.06);border:1px solid rgba(69,137,255,.15);border-left:3px solid var(--wf-blue);border-radius:var(--wf-r-lg);padding:28px 32px;margin-bottom:40px}
+.da-label{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-blue);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.da-label svg{width:14px;height:14px}
+.da-question{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:12px;line-height:1.4}
+.da-answer{font-size:15px;line-height:1.7;color:var(--wf-fg-muted);margin-bottom:16px}
+.da-footer{display:flex;align-items:center;gap:8px;padding-top:14px;border-top:1px solid rgba(69,137,255,.1)}
+.da-badge{padding:3px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.1);font:600 9px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.06em}
+.da-source{font:300 11px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   4b. TABLE OF CONTENTS (inline)
+   ================================================================ */
+.toc-inline{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px 32px;margin-bottom:40px}
+.toc-inline-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:18px}
+.toc-inline ol{list-style:none;counter-reset:toc-c;display:grid;grid-template-columns:1fr 1fr;gap:6px 32px}
+.toc-inline li{counter-increment:toc-c}
+.toc-inline li a{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:var(--wf-r-sm);font-size:14px;color:var(--wf-fg-muted);transition:all var(--wf-dur) var(--wf-ease)}
+.toc-inline li a:hover{color:var(--wf-fg);background:rgba(255,255,255,.04)}
+.toc-inline li a::before{content:counter(toc-c,decimal-leading-zero);font:600 11px/1 var(--font-mono);color:var(--wf-fg-faint);width:24px;flex-shrink:0}
+@media(max-width:768px){.toc-inline ol{grid-template-columns:1fr}}
+
+/* ================================================================
+   4e/4i/4k. FIGURE CARDS
+   ================================================================ */
+.figure-card{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.figure-body{padding:32px;background:var(--wf-surface);min-height:200px;position:relative;overflow:hidden}
+.figure-caption{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border)}
+.fig-label{font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);flex-shrink:0}
+.fig-desc{font-size:12px;color:var(--wf-fg-subtle);flex:1}
+.fig-source{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint);margin-left:auto}
+
+/* Fig 01 hub-spoke horizontal */
+.fig01-flow{display:flex;align-items:center;justify-content:center;gap:0;padding:20px 0}
+.fig01-center{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,rgba(69,137,255,.2),rgba(69,137,255,.06));border:1.5px solid rgba(69,137,255,.4);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0;position:relative}
+.fig01-center-label{font:700 6px/1 var(--font-mono);color:var(--wf-blue);text-transform:uppercase;letter-spacing:.1em;text-align:center}
+.fig01-nodes{display:flex;flex-wrap:wrap;gap:8px;max-width:240px;justify-content:center}
+.fig01-node{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--font-sans);letter-spacing:.04em;border:1px solid}
+.fig01-connector{width:48px;height:1px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.1) 0px,rgba(255,255,255,.1) 4px,transparent 4px,transparent 8px);flex-shrink:0}
+
+/* Fig 02 Memory Context */
+.fig02-compare{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:20px 0}
+@media(max-width:600px){.fig02-compare{grid-template-columns:1fr}}
+.fig02-col{text-align:center}
+.fig02-label{font:700 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.fig02-bars{display:flex;align-items:flex-end;gap:3px;height:120px;justify-content:center}
+.fig02-bar{width:8px;border-radius:2px 2px 0 0;transition:height .3s}
+.fig02-status{margin-top:12px;font:700 10px/1 var(--font-mono);letter-spacing:.1em;padding:4px 10px;border-radius:var(--wf-r-sm);display:inline-block}
+
+/* Fig 03 Browser mockup */
+.fig03-browser{border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border)}
+.fig03-toolbar{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.fig03-dot{width:8px;height:8px;border-radius:50%}
+.fig03-urlbar{flex:1;margin-left:10px;padding:3px 10px;border-radius:4px;background:rgba(255,255,255,.05);font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+.fig03-content{padding:20px;display:grid;grid-template-columns:180px 1fr;gap:16px;min-height:200px}
+.fig03-sidebar{display:flex;flex-direction:column;gap:8px}
+.fig03-sidebar-item{padding:6px 10px;border-radius:var(--wf-r-sm);font:500 10px/1 var(--font-sans);color:var(--wf-fg-subtle)}
+.fig03-sidebar-item.active{background:rgba(69,137,255,.1);color:var(--wf-blue)}
+.fig03-main{display:flex;flex-direction:column;gap:10px}
+.fig03-block{border-radius:var(--wf-r-sm);padding:12px;font:400 10px/1.4 var(--font-sans)}
+
+/* ================================================================
+   4g. PULL QUOTE
+   ================================================================ */
+.pull-quote{background:var(--wf-surface);border:1px solid var(--wf-border);border-left:3px solid var(--wf-blue);border-radius:var(--wf-r-lg);padding:32px 36px;margin:40px 0;position:relative}
+.pq-mark{font-family:var(--font-serif);font-size:72px;line-height:1;color:rgba(69,137,255,.15);position:absolute;top:12px;left:20px}
+.pq-text{font-family:var(--font-serif);font-size:22px;font-style:italic;line-height:1.55;color:var(--wf-fg);margin-bottom:16px;padding-left:20px}
+.pq-text span{color:var(--wf-blue)}
+.pq-attr{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);padding-left:20px}
+
+/* ================================================================
+   4h. PIPELINE DIAGRAM
+   ================================================================ */
+.pipeline-diagram{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.pd-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border)}
+.pd-title{font:600 14px/1 var(--font-sans);color:var(--wf-fg)}
+.pd-badge{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.08);border:1px solid rgba(69,137,255,.15);font:500 10px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.04em}
+.pd-body{padding:32px 24px;background:var(--wf-surface)}
+.pd-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px;flex-wrap:wrap}
+.pd-node{padding:10px 16px;border-radius:var(--wf-r-md);border:1px solid var(--wf-border);background:rgba(255,255,255,.03);text-align:center;flex-shrink:0}
+.pd-node-label{font:700 7px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:3px}
+.pd-node-name{font:600 12px/1 var(--font-sans);color:var(--wf-fg)}
+.pd-arrow{width:36px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);flex-shrink:0}
+.pd-arrow svg{width:16px;height:16px}
+.pd-dispatch{position:relative;padding:10px 16px;border-radius:var(--wf-r-md);border:1px dashed rgba(69,137,255,.3);background:rgba(69,137,255,.04);text-align:center}
+.pd-dispatch-lines{display:flex;gap:2px;justify-content:center;margin-top:4px}
+.pd-dispatch-line{width:1px;height:12px;background:rgba(69,137,255,.3)}
+.pd-output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:600px){.pd-output-grid{grid-template-columns:1fr 1fr}}
+.pd-output-item{padding:10px 14px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.03);border:1px solid var(--wf-border);font:500 11px/1.3 var(--font-sans);color:var(--wf-fg-muted)}
+.pd-output-item strong{display:block;color:var(--wf-fg);font-weight:600;margin-bottom:2px;font-size:12px}
+
+/* ================================================================
+   4j. VIDEO BLOCK
+   ================================================================ */
+.video-block{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.video-player{position:relative;height:300px;background:linear-gradient(135deg,#0a0f14,#0e1a12);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.video-play{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;transition:all .3s var(--wf-ease)}
+.video-play svg{width:24px;height:24px;color:var(--wf-fg)}
+.video-player:hover .video-play{background:rgba(255,255,255,.15);transform:scale(1.08)}
+.video-overlay{position:absolute;bottom:16px;left:16px;right:16px;display:flex;align-items:flex-end;justify-content:space-between}
+.video-title{font:600 14px/1.3 var(--font-sans);color:var(--wf-fg)}
+.video-dur{font:500 11px/1 var(--font-mono);color:var(--wf-fg-subtle);background:rgba(0,0,0,.5);padding:4px 8px;border-radius:var(--wf-r-sm)}
+.video-footer{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border)}
+.video-angle{padding:3px 10px;border-radius:var(--wf-r-sm);background:rgba(69,137,255,.1);font:600 9px/1 var(--font-mono);color:var(--wf-blue);letter-spacing:.06em}
+.video-desc{font-size:12px;color:var(--wf-fg-subtle);flex:1}
+.video-src{font:300 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   4l. SOCIAL BLOCK
+   ================================================================ */
+.social-block{border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.social-tabs{display:flex;border-bottom:1px solid var(--wf-border);background:var(--wf-bg-elevated)}
+.social-tab{flex:1;padding:12px 16px;font:600 12px/1 var(--font-sans);color:var(--wf-fg-subtle);cursor:pointer;border:none;background:none;text-align:center;transition:all var(--wf-dur);border-bottom:2px solid transparent}
+.social-tab:hover{color:var(--wf-fg-muted)}
+.social-tab.active{color:var(--wf-fg);border-bottom-color:var(--wf-blue)}
+.social-panel{display:none;padding:24px;background:var(--wf-surface)}
+.social-panel.active{display:block}
+
+/* Twitter mockup */
+.tweet-card{background:#fff;border-radius:var(--wf-r-lg);padding:20px;max-width:500px;margin:0 auto}
+.tweet-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tweet-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA)}
+.tweet-name{font:700 14px/1.2 var(--font-sans);color:#0f1419}
+.tweet-handle{font:400 13px/1 var(--font-sans);color:#536471}
+.tweet-text{font:400 15px/1.5 var(--font-sans);color:#0f1419;margin-bottom:16px}
+.tweet-text b{color:#1d9bf0}
+.tweet-actions{display:flex;gap:40px}
+.tweet-action{font:400 12px/1 var(--font-sans);color:#536471;display:flex;align-items:center;gap:6px}
+.tweet-action svg{width:16px;height:16px}
+
+/* LinkedIn mockup */
+.linkedin-card{background:#fff;border-radius:var(--wf-r-lg);padding:20px;max-width:500px;margin:0 auto}
+.li-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.li-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);flex-shrink:0}
+.li-name{font:700 14px/1.2 var(--font-sans);color:#000}
+.li-title{font:400 12px/1.3 var(--font-sans);color:#666;margin-top:2px}
+.li-time{font:400 11px/1 var(--font-sans);color:#999;margin-top:2px}
+.li-text{font:400 14px/1.6 var(--font-sans);color:#333;margin-bottom:16px}
+.li-stats{display:flex;gap:20px;padding-top:12px;border-top:1px solid #e5e5e5}
+.li-stat{font:400 12px/1 var(--font-sans);color:#666}
+
+/* Instagram mockup */
+.insta-card{background:#1a1a2e;border-radius:var(--wf-r-lg);overflow:hidden;max-width:500px;margin:0 auto}
+.insta-visual{height:200px;background:linear-gradient(135deg,#0d1117,#1a1a2e,#0d1117);display:flex;align-items:center;justify-content:center;position:relative}
+.insta-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center}
+.insta-icon svg{width:24px;height:24px;color:#fff}
+.insta-caption{padding:16px;font:400 13px/1.5 var(--font-sans);color:#e0e0e0}
+.insta-caption strong{color:#fff}
+
+/* ================================================================
+   4m. SEO BLOCK
+   ================================================================ */
+.seo-block{background:rgba(255,131,43,.04);border:1px solid rgba(255,131,43,.15);border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0}
+.seo-header{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid rgba(255,131,43,.1)}
+.seo-badge{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(255,131,43,.12);font:700 9px/1 var(--font-mono);color:var(--wf-orange);letter-spacing:.1em}
+.seo-title{font:600 14px/1 var(--font-sans);color:var(--wf-fg)}
+.seo-body{padding:24px}
+
+/* Google SERP mockup */
+.serp-card{background:#fff;border-radius:var(--wf-r-md);padding:20px;margin-bottom:20px}
+.serp-url{font:400 12px/1 var(--font-sans);color:#202124;margin-bottom:4px}
+.serp-url span{color:#5f6368}
+.serp-title{font:400 20px/1.3 var(--font-sans);color:#1a0dab;margin-bottom:6px;cursor:pointer}
+.serp-title:hover{text-decoration:underline}
+.serp-desc{font:400 14px/1.5 var(--font-sans);color:#4d5156}
+
+/* AEO panel */
+.aeo-panel{background:rgba(255,255,255,.04);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);padding:16px 20px;margin-bottom:16px}
+.aeo-label{font:700 9px/1 var(--font-mono);letter-spacing:.1em;color:var(--wf-orange);margin-bottom:10px;text-transform:uppercase}
+.aeo-question{font:600 15px/1.4 var(--font-sans);color:var(--wf-fg);margin-bottom:8px}
+.aeo-answer{font:400 14px/1.6 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* Keyword pills */
+.keyword-pills{display:flex;flex-wrap:wrap;gap:6px}
+.keyword-pill{padding:4px 12px;border-radius:20px;background:rgba(255,131,43,.08);border:1px solid rgba(255,131,43,.15);font:500 11px/1 var(--font-sans);color:var(--wf-orange)}
+
+/* ================================================================
+   4n. CRM BLOCK
+   ================================================================ */
+.crm-block{border-radius:var(--wf-r-lg);overflow:hidden;margin:40px 0;position:relative}
+.crm-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(190,149,255,.06),rgba(190,149,255,.02));border:1px solid rgba(190,149,255,.15);border-radius:var(--wf-r-lg)}
+.crm-orb{position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(190,149,255,.12),transparent 70%);pointer-events:none}
+.crm-inner{position:relative;padding:40px 32px}
+.crm-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:40px}
+@media(max-width:768px){.crm-grid{grid-template-columns:1fr}}
+.crm-text .crm-eyebrow{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-purple);margin-bottom:12px}
+.crm-text h3{font:700 26px/1.2 var(--font-sans);color:var(--wf-fg);margin-bottom:12px;letter-spacing:-.02em}
+.crm-text p{font-size:15px;color:var(--wf-fg-muted);line-height:1.6}
+.crm-form{display:flex;flex-direction:column;gap:10px}
+.crm-input{padding:10px 14px;border-radius:var(--wf-r-md);border:1px solid var(--wf-border);background:rgba(255,255,255,.04);color:var(--wf-fg);font:400 14px/1 var(--font-sans);outline:none;transition:border-color var(--wf-dur)}
+.crm-input:focus{border-color:var(--wf-purple)}
+.crm-input::placeholder{color:var(--wf-fg-faint)}
+.crm-submit{padding:10px 20px;border-radius:var(--wf-r-md);border:none;background:var(--wf-purple);color:#fff;font:600 14px/1 var(--font-sans);cursor:pointer;transition:opacity var(--wf-dur)}
+.crm-submit:hover{opacity:.85}
+.crm-privacy{font:300 11px/1.4 var(--font-mono);color:var(--wf-fg-faint);margin-top:4px}
+
+/* Nurture sequence */
+.nurture-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:16px}
+.nurture-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:768px){.nurture-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.nurture-grid{grid-template-columns:1fr 1fr}}
+.nurture-card{padding:14px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border);text-align:center}
+.nurture-day{font:700 10px/1 var(--font-mono);color:var(--wf-purple);margin-bottom:6px;letter-spacing:.08em}
+.nurture-label{font:500 11px/1.3 var(--font-sans);color:var(--wf-fg-muted)}
+
+/* ================================================================
+   4o. FAQ
+   ================================================================ */
+.faq-section{margin:56px 0 40px}
+.faq-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.faq-title{font:700 24px/1 var(--font-sans);color:var(--wf-fg);letter-spacing:-.02em}
+.faq-count{padding:4px 10px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.05);font:600 11px/1 var(--font-mono);color:var(--wf-fg-subtle)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-md);margin-bottom:8px;overflow:hidden;transition:border-color var(--wf-dur)}
+.faq-item.open{border-color:var(--wf-border-strong)}
+.faq-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;text-align:left}
+.faq-question{font:500 15px/1.4 var(--font-sans);color:var(--wf-fg)}
+.faq-icon{width:20px;height:20px;flex-shrink:0;color:var(--wf-fg-subtle);transition:transform .25s var(--wf-ease)}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease)}
+.faq-answer-inner{padding:0 20px 20px;font-size:14px;line-height:1.7;color:var(--wf-fg-muted)}
+
+/* ================================================================
+   4p. REFERENCES
+   ================================================================ */
+.references{margin-top:56px;padding-top:32px;border-top:1px solid var(--wf-border)}
+.ref-title{font:700 9px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:20px}
+.ref-list{display:flex;flex-direction:column;gap:14px}
+.ref-item{display:flex;gap:12px;align-items:flex-start}
+.ref-num{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font:700 10px/1 var(--font-mono);color:var(--wf-fg-subtle);flex-shrink:0}
+.ref-text{font:400 13px/1.5 var(--font-sans);color:var(--wf-fg-subtle)}
+.ref-text a{color:var(--wf-blue);text-decoration:underline;text-underline-offset:2px}
+
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
+.article-sidebar{position:relative}
+@media(max-width:1024px){.article-sidebar{order:-1}}
+.sidebar-sticky{position:sticky;top:80px;display:flex;flex-direction:column;gap:24px}
+
+/* Sidebar TOC */
+.stoc{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.stoc-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:16px}
+.stoc-list{display:flex;flex-direction:column;gap:2px}
+.stoc-link{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:var(--wf-r-sm);font:400 12px/1.3 var(--font-sans);color:var(--wf-fg-subtle);transition:all var(--wf-dur) var(--wf-ease);text-decoration:none}
+.stoc-link:hover{color:var(--wf-fg-muted);background:rgba(255,255,255,.03)}
+.stoc-link.active{color:var(--wf-fg);background:rgba(69,137,255,.08)}
+.stoc-dot{width:5px;height:5px;border-radius:50%;background:var(--wf-border-strong);flex-shrink:0;transition:background var(--wf-dur)}
+.stoc-link.active .stoc-dot{background:var(--wf-blue)}
+
+/* Sidebar stats */
+.sidebar-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sstat{padding:14px;border-radius:var(--wf-r-md);background:var(--wf-surface);border:1px solid var(--wf-border);text-align:center}
+.sstat-val{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:4px}
+.sstat-label{font:400 10px/1 var(--font-mono);color:var(--wf-fg-faint);text-transform:uppercase;letter-spacing:.08em}
+
+/* Sidebar libraries */
+.sidebar-libs{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.slib-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.slib-list{display:flex;flex-direction:column;gap:6px}
+.slib-item{display:flex;align-items:center;gap:10px;padding:5px 0}
+.slib-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.slib-name{font:400 12px/1 var(--font-sans);color:var(--wf-fg-muted);flex:1}
+.slib-count{font:500 10px/1 var(--font-mono);color:var(--wf-fg-faint)}
+
+/* Sidebar series nav */
+.sidebar-series{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px}
+.sseries-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.sseries-list{display:flex;flex-direction:column;gap:4px}
+.sseries-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--wf-r-sm);font:400 12px/1.3 var(--font-sans);color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.sseries-item:hover{background:rgba(255,255,255,.03);color:var(--wf-fg-muted)}
+.sseries-item.current{background:rgba(69,137,255,.08);color:var(--wf-blue);font-weight:500}
+.sseries-num{font:600 10px/1 var(--font-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.sseries-item.current .sseries-num{color:var(--wf-blue)}
+
+/* ================================================================
+   5. AUTHOR SECTION
+   ================================================================ */
+.author-section{max-width:1280px;margin:0 auto;padding:0 32px 80px}
+.author-inner{border-top:1px solid var(--wf-border);padding-top:48px;display:grid;grid-template-columns:320px 1px 1fr;gap:40px;align-items:start}
+@media(max-width:900px){.author-inner{grid-template-columns:1fr;gap:32px}.author-divider{display:none}}
+.author-card{display:flex;flex-direction:column;align-items:center;text-align:center}
+.author-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),#08BDBA);display:flex;align-items:center;justify-content:center;font:700 28px/1 var(--font-sans);color:#fff;margin-bottom:16px}
+.author-name{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:4px}
+.author-role{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);margin-bottom:14px}
+.author-bio{font:300 13px/1.6 var(--font-sans);color:var(--wf-fg-muted);max-width:280px;margin-bottom:18px}
+.author-socials{display:flex;gap:10px}
+.author-social{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.author-social:hover{background:rgba(255,255,255,.08);color:var(--wf-fg)}
+.author-social svg{width:14px;height:14px}
+.author-divider{background:var(--wf-border);width:1px}
+
+/* Related articles */
+.related-title{font:700 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:20px}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:768px){.related-grid{grid-template-columns:1fr}}
+.related-card{border-radius:var(--wf-r-lg);overflow:hidden;border:1px solid var(--wf-border);transition:border-color var(--wf-dur);cursor:pointer}
+.related-card:hover{border-color:var(--wf-border-strong)}
+.related-thumb{height:100px;background:var(--wf-surface);position:relative;overflow:hidden}
+.related-thumb-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.related-thumb-pattern{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:20px 20px}
+.related-info{padding:14px}
+.related-tag{font:600 9px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--wf-blue);margin-bottom:8px}
+.related-card-title{font:600 13px/1.3 var(--font-sans);color:var(--wf-fg);margin-bottom:8px}
+.related-meta{font:400 11px/1 var(--font-sans);color:var(--wf-fg-faint)}
+
+/* ================================================================
+   6. FOOTER
+   ================================================================ */
+.footer{background:var(--wf-bg-sunken);border-top:1px solid var(--wf-border);padding:56px 0 32px}
+.footer-inner{max-width:1280px;margin:0 auto;padding:0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:40px;margin-bottom:40px}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}}
+.footer-brand{font:700 18px/1 var(--font-sans);color:var(--wf-fg);margin-bottom:12px;letter-spacing:-.02em}
+.footer-brand span{font-style:italic;color:var(--wf-brand)}
+.footer-desc{font:300 13px/1.6 var(--font-sans);color:var(--wf-fg-subtle);max-width:280px}
+.footer-col-title{font:700 9px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:8px}
+.footer-link{font:400 13px/1 var(--font-sans);color:var(--wf-fg-subtle);transition:color var(--wf-dur)}
+.footer-link:hover{color:var(--wf-fg)}
+.footer-link.active{color:var(--wf-blue)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--wf-border)}
+.footer-copy{font:300 12px/1 var(--font-sans);color:var(--wf-fg-faint)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{font:300 12px/1 var(--font-sans);color:var(--wf-fg-faint);transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg-subtle)}
+
+/* ================================================================
+   ANIMATIONS / SCROLL REVEAL
+   ================================================================ */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s var(--wf-ease),transform .6s var(--wf-ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ================================================================
+     1. READING PROGRESS BAR
+     ================================================================ -->
+<div id="progress-bar"></div>
+
+<!-- ================================================================
+     2. NAVBAR
+     ================================================================ -->
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Wind<span>field</span></a>
+    <nav class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/about" class="nav-link">About</a>
+      <a href="/portfolio" class="nav-link">Portfolio</a>
+      <a href="/product" class="nav-link">Product</a>
+      <a href="/pricing" class="nav-link">Pricing</a>
+      <a href="/blog" class="nav-link active">Blog</a>
+      <a href="/contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <button class="nav-toggle" id="pipeline-toggle" onclick="togglePipeline()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Pipeline Map
+      </button>
+      <a href="#" class="nav-cta">Get Started</a>
+      <button class="nav-hamburger" onclick="this.closest('.navbar').classList.toggle('mobile-open')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Pipeline Strip -->
+<div id="pipeline-strip">
+  <div class="ps-inner">
+    <span class="ps-label">Pipeline</span>
+    <div class="ps-feeds">
+      <span class="ps-chip"><span class="ps-dot" style="background:var(--lib-art)"></span>ART</span>
+      <span class="ps-chip"><span class="ps-dot" style="background:var(--lib-img)"></span>IMG</span>
+      <span class="ps-chip"><span class="ps-dot" style="background:var(--lib-vid)"></span>VID</span>
+      <span class="ps-chip"><span class="ps-dot" style="background:var(--lib-soc)"></span>SOC</span>
+      <span class="ps-chip"><span class="ps-dot" style="background:var(--lib-des)"></span>DES</span>
+      <span class="ps-chip"><span class="ps-dot" style="background:var(--lib-seo)"></span>SEO</span>
+      <span class="ps-chip"><span class="ps-dot" style="background:var(--lib-crm)"></span>CRM</span>
+      <span class="ps-chip"><span class="ps-dot" style="background:var(--lib-con)"></span>CON</span>
+      <span class="ps-chip"><span class="ps-dot" style="background:var(--lib-tas)"></span>TAS</span>
+    </div>
+    <span class="ps-arrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+    </span>
+    <span class="ps-result">Complete Article &middot; 9 Libraries &middot; ~48k Tokens &middot; 3m 42s</span>
+  </div>
+</div>
+
+<!-- ================================================================
+     3. HERO
+     ================================================================ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-wrap">
+    <!-- Left: text -->
+    <div class="hero-text">
+      <div class="hero-eyebrow">
+        <span class="eye-tag">System Architecture</span>
+        <span class="eye-dot"></span>
+        <span class="eye-series">IO Content Ops Series</span>
+      </div>
+      <h1>How <em>9 Content Libraries</em> Become One Synchronized System</h1>
+      <p class="hero-deck">One context brief. Nine libraries. A complete article &mdash; every image, every social post, the full SEO package, and a five-step CRM nurture sequence &mdash; assembled in under four minutes.</p>
+      <div class="hero-meta">
+        <div class="h-author">
+          <div class="h-avatar">TS</div>
+          <div>
+            <div class="h-name">Tommy Saunders</div>
+            <div class="h-role">Founder, IntelligentOperations.ai</div>
+          </div>
+        </div>
+        <div class="h-sep"></div>
+        <span class="h-date">March 15, 2026</span>
+        <span class="h-read">9 min read</span>
+      </div>
+      <div class="hero-stamp">IO-CB-2026-001 &middot; SERIES PLAN &middot; v1.0</div>
+    </div>
+
+    <!-- Right: hub-and-spoke visualization -->
+    <div class="hero-viz">
+      <div class="hviz-inner">
+        <div class="hv-grid"></div>
+        <div class="hv-glow"></div>
+        <div class="hv-scan"></div>
+
+        <!-- SVG lines (drawn by JS) -->
+        <svg id="spoke-svg" style="position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none"></svg>
+
+        <div class="hub-spoke" id="hub-spoke">
+          <div class="hub-center">
+            <span class="hub-label">Context</span>
+            <span class="hub-label">Brief</span>
+            <span class="hub-sublabel">Orchestrator</span>
+          </div>
+          <!-- Spoke nodes positioned by JS -->
+        </div>
+
+        <button class="run-pipeline-btn" id="run-pipeline-btn" onclick="runPipeline()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg>
+          Run Pipeline
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     4. ARTICLE LAYOUT
+     ================================================================ -->
+<div class="article-layout">
+  <!-- ── Main Content ── -->
+  <main class="article-main">
+
+    <!-- 4a. Direct Answer Box -->
+    <div class="direct-answer reveal">
+      <div class="da-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
+        DIRECT ANSWER
+      </div>
+      <div class="da-question">How do nine separate content libraries produce one complete article in under four minutes?</div>
+      <div class="da-answer">A single Context Brief is dispatched simultaneously to nine specialized content libraries &mdash; Article, Image, Video, Social, Design, SEO, CRM, Content Ops, and Task &mdash; each running its own prompt chain. An orchestrator collects every output, resolves cross-references, and assembles the final package: a long-form article, hero image, three video concepts, six social posts, an SEO package, and a five-step CRM nurture sequence. Total runtime: 3 minutes 42 seconds.</div>
+      <div class="da-footer">
+        <span class="da-badge">JSON-LD Schema</span>
+        <span class="da-source">Source: IO Content Pipeline v2.1</span>
+      </div>
+    </div>
+
+    <!-- 4b. Table of Contents (inline) -->
+    <div class="toc-inline reveal">
+      <div class="toc-inline-title">Table of Contents</div>
+      <ol>
+        <li><a href="#s-architecture">The Architecture Behind It</a></li>
+        <li><a href="#s-orchestrator">What the Orchestrator Actually Does</a></li>
+        <li><a href="#s-business-case">The Business Case for Coordinated Output</a></li>
+        <li><a href="#s-social">Social Distribution Suite</a></li>
+        <li><a href="#s-seo">Search Package &mdash; SEO + AEO</a></li>
+        <li><a href="#s-changes">What This Changes</a></li>
+        <li><a href="#s-crm">CRM Lead Capture + Nurture Sequence</a></li>
+        <li><a href="#s-faq">Frequently Asked Questions</a></li>
+        <li><a href="#s-references">References</a></li>
+      </ol>
+    </div>
+
+    <!-- 4c. Lede -->
+    <p class="drop-cap reveal">The conventional approach to content production is sequential: write the article, then create images, then build social posts, then optimize for search. Each step waits for the previous one. Each handoff introduces delay, context loss, and inconsistency. The result is content that takes days to produce and lacks the coherence that comes from shared context.</p>
+
+    <!-- 4d. Body paragraphs -->
+    <p class="reveal">What if every component of a content package could be produced simultaneously, from the same source of truth, with full awareness of every other component being created alongside it? That is not a hypothetical. It is the system described in this article.</p>
+
+    <p class="reveal"><strong>The IO Content Pipeline</strong> dispatches a single Context Brief to nine specialized content libraries in parallel. Each library runs its own prompt chain, produces its output, and returns the result to an orchestrator that assembles everything into a complete package. The entire process &mdash; from brief to finished article with images, video concepts, social posts, SEO optimization, and CRM sequences &mdash; completes in <strong>3 minutes and 42 seconds</strong>.<sup><a href="#ref-1">[1]</a></sup></p>
+
+    <!-- 4e. Figure 01: Hub-and-Spoke Diagram -->
+    <div class="figure-card reveal">
+      <div class="figure-body">
+        <div class="fig01-flow">
+          <div class="fig01-nodes" style="margin-right:16px">
+            <div class="fig01-node" style="background:rgba(69,137,255,.1);border-color:rgba(69,137,255,.3);color:var(--lib-art)">ART</div>
+            <div class="fig01-node" style="background:rgba(29,185,84,.1);border-color:rgba(29,185,84,.3);color:var(--lib-img)">IMG</div>
+            <div class="fig01-node" style="background:rgba(255,131,43,.1);border-color:rgba(255,131,43,.3);color:var(--lib-vid)">VID</div>
+            <div class="fig01-node" style="background:rgba(232,93,74,.1);border-color:rgba(232,93,74,.3);color:var(--lib-soc)">SOC</div>
+            <div class="fig01-node" style="background:rgba(8,189,186,.1);border-color:rgba(8,189,186,.3);color:var(--lib-des)">DES</div>
+          </div>
+          <div class="fig01-connector"></div>
+          <div class="fig01-center">
+            <span class="fig01-center-label">Context</span>
+            <span class="fig01-center-label">Brief</span>
+          </div>
+          <div class="fig01-connector"></div>
+          <div class="fig01-nodes" style="margin-left:16px">
+            <div class="fig01-node" style="background:rgba(217,119,6,.1);border-color:rgba(217,119,6,.3);color:var(--lib-seo)">SEO</div>
+            <div class="fig01-node" style="background:rgba(190,149,255,.1);border-color:rgba(190,149,255,.3);color:var(--lib-crm)">CRM</div>
+            <div class="fig01-node" style="background:rgba(5,150,105,.1);border-color:rgba(5,150,105,.3);color:var(--lib-con)">CON</div>
+            <div class="fig01-node" style="background:rgba(107,114,128,.1);border-color:rgba(107,114,128,.3);color:var(--lib-tas)">TAS</div>
+          </div>
+        </div>
+      </div>
+      <div class="figure-caption">
+        <span class="fig-label">Fig. 01</span>
+        <span class="fig-desc">Nine content libraries organized around a central Context Brief. Each library operates independently but shares the same source context.</span>
+        <span class="fig-source">IO Pipeline v2.1</span>
+      </div>
+    </div>
+
+    <!-- 4f. Section: Architecture -->
+    <h2 id="s-architecture" data-section>The Architecture Behind It</h2>
+
+    <p class="reveal">The system is built on a principle borrowed from distributed computing: <strong>shared-nothing parallel dispatch</strong>. Each content library receives the same Context Brief but operates in complete isolation. There are no dependencies between libraries during execution. The Article library does not wait for the Image library. The SEO library does not wait for the Article library. Everything runs at once.<sup><a href="#ref-2">[2]</a></sup></p>
+
+    <p class="reveal">This architecture solves the compound reliability problem that plagues sequential pipelines. In a chain of dependent steps, each running at 95% reliability, a ten-step pipeline delivers only 60% end-to-end reliability. The IO pipeline sidesteps this entirely by eliminating inter-step dependencies. Each library either succeeds or fails independently, and the orchestrator handles reconciliation after all libraries report back.</p>
+
+    <p class="reveal">The Context Brief itself is the key innovation. It is not a simple prompt. It is a structured document containing the topic, angle, target audience, brand voice parameters, keyword targets, distribution channels, and cross-reference hooks that every library needs to produce coherent output. When the Article library writes a section about "pipeline architecture," the Image library knows to produce a diagram of that same architecture, because both received the same brief.</p>
+
+    <!-- 4g. Pull Quote -->
+    <div class="pull-quote reveal">
+      <span class="pq-mark">&ldquo;</span>
+      <p class="pq-text">The gap between what AI can produce and what businesses actually ship is not a capability gap. It is a <span>coordination gap</span>. Nine libraries running independently produce noise. Nine libraries running from the same context brief produce a system.</p>
+      <div class="pq-attr">&mdash; Tommy Saunders, Founder, IntelligentOperations.ai</div>
+    </div>
+
+    <!-- Section: Orchestrator -->
+    <h2 id="s-orchestrator" data-section>What the Orchestrator Actually Does</h2>
+
+    <p class="reveal">The orchestrator is the component that transforms nine independent outputs into one coherent package. It performs four critical functions: <strong>collection</strong>, receiving outputs as each library completes; <strong>validation</strong>, verifying each output meets schema requirements; <strong>reconciliation</strong>, resolving cross-references between outputs; and <strong>assembly</strong>, combining everything into the final deliverable.</p>
+
+    <p class="reveal">Cross-reference resolution is where the real value emerges. When the Article library produces a section titled "The Architecture Behind It," the orchestrator ensures the Social library's LinkedIn post references that same concept using consistent language. When the SEO library identifies "content pipeline architecture" as a target keyword, the orchestrator verifies that phrase appears naturally in the article body, the meta description, and at least two social posts.</p>
+
+    <!-- 4h. Pipeline Diagram -->
+    <div class="pipeline-diagram reveal">
+      <div class="pd-header">
+        <span class="pd-title">Pipeline Architecture</span>
+        <span class="pd-badge">9 Libraries &middot; Parallel Dispatch</span>
+      </div>
+      <div class="pd-body">
+        <div class="pd-flow">
+          <div class="pd-node">
+            <div class="pd-node-label">Input</div>
+            <div class="pd-node-name">Context Brief</div>
+          </div>
+          <div class="pd-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg></div>
+          <div class="pd-dispatch">
+            <div class="pd-node-label">Parallel</div>
+            <div class="pd-node-name">Dispatch</div>
+            <div class="pd-dispatch-lines"><span class="pd-dispatch-line"></span><span class="pd-dispatch-line"></span><span class="pd-dispatch-line"></span><span class="pd-dispatch-line"></span><span class="pd-dispatch-line"></span><span class="pd-dispatch-line"></span><span class="pd-dispatch-line"></span><span class="pd-dispatch-line"></span><span class="pd-dispatch-line"></span></div>
+          </div>
+          <div class="pd-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg></div>
+          <div class="pd-node" style="border-color:rgba(69,137,255,.3)">
+            <div class="pd-node-label">Process</div>
+            <div class="pd-node-name" style="color:var(--wf-blue)">9 Libraries</div>
+          </div>
+          <div class="pd-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg></div>
+          <div class="pd-node" style="border-color:rgba(29,185,84,.3)">
+            <div class="pd-node-label">Collect</div>
+            <div class="pd-node-name" style="color:var(--wf-brand)">Orchestrator</div>
+          </div>
+          <div class="pd-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg></div>
+          <div class="pd-node" style="border-color:rgba(29,185,84,.3);background:rgba(29,185,84,.05)">
+            <div class="pd-node-label">Output</div>
+            <div class="pd-node-name" style="color:var(--wf-brand)">Full Package</div>
+          </div>
+        </div>
+        <div class="pd-output-grid">
+          <div class="pd-output-item"><strong>Article Body</strong>4,800 words, structured sections</div>
+          <div class="pd-output-item"><strong>Hero Image</strong>Prompt + alt text + dimensions</div>
+          <div class="pd-output-item"><strong>3 Video Concepts</strong>Scripts, hooks, CTAs</div>
+          <div class="pd-output-item"><strong>6 Social Posts</strong>Twitter, LinkedIn, Instagram</div>
+          <div class="pd-output-item"><strong>SEO Package</strong>Meta, schema, AEO, keywords</div>
+          <div class="pd-output-item"><strong>CRM Sequence</strong>5-step nurture, 21-day drip</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Business Case -->
+    <h2 id="s-business-case" data-section>The Business Case for Coordinated Output</h2>
+
+    <p class="reveal">The traditional content production model has three structural costs: <strong>time</strong>, because sequential production means each piece waits for its predecessor; <strong>context loss</strong>, because each handoff strips away nuance; and <strong>inconsistency</strong>, because different people or processes produce different interpretations of the same topic.</p>
+
+    <p class="reveal">The IO pipeline eliminates all three. Time collapses from days to minutes because everything runs in parallel. Context is preserved because every library reads from the same brief. Consistency is guaranteed because the orchestrator enforces cross-references after assembly. The result is not just faster content. It is <strong>structurally better content</strong> &mdash; content where the social posts actually reference what the article says, where the SEO keywords actually appear in the body, and where the CRM sequence actually follows up on the topics covered.</p>
+
+    <!-- 4i. Figure 02: Memory Context -->
+    <div class="figure-card reveal">
+      <div class="figure-body">
+        <div class="fig02-compare">
+          <div class="fig02-col">
+            <div class="fig02-label" style="color:var(--wf-red)">Legacy Agent</div>
+            <div class="fig02-bars" id="legacy-bars">
+              <!-- Generated by JS -->
+            </div>
+            <div class="fig02-status" style="background:rgba(232,93,74,.1);color:var(--wf-red)">FAIL at step 30</div>
+          </div>
+          <div class="fig02-col">
+            <div class="fig02-label" style="color:var(--wf-brand)">Swarm-Native</div>
+            <div class="fig02-bars" id="swarm-bars">
+              <!-- Generated by JS -->
+            </div>
+            <div class="fig02-status" style="background:rgba(29,185,84,.1);color:var(--wf-brand)">STABLE at step 1000+</div>
+          </div>
+        </div>
+      </div>
+      <div class="figure-caption">
+        <span class="fig-label">Fig. 02</span>
+        <span class="fig-desc">Memory context comparison: legacy sequential agents degrade over steps, while swarm-native parallel dispatch maintains stable context.</span>
+        <span class="fig-source">IO Benchmark</span>
+      </div>
+    </div>
+
+    <!-- Section: Social -->
+    <h2 id="s-social" data-section>Social Distribution Suite</h2>
+
+    <p class="reveal">The Social library produces six posts from each Context Brief: two Twitter threads, two LinkedIn posts, and two Instagram captions. Each post is tailored to the platform's native format and audience expectations while maintaining thematic consistency with the article and every other output in the package.</p>
+
+    <p class="reveal">What makes this different from generic repurposing tools is <strong>context-aware distribution</strong>. The Twitter thread does not summarize the article &mdash; it highlights a specific insight that performs well in short-form. The LinkedIn post does not rehash the Twitter thread &mdash; it frames the same insight for a professional audience with different expectations. Every post knows what every other post says, and the orchestrator ensures zero redundancy across platforms.</p>
+
+    <!-- 4j. Video Block -->
+    <div class="video-block reveal">
+      <div class="video-player">
+        <div class="video-play">
+          <svg viewBox="0 0 24 24" fill="none"><polygon points="8 5 20 12 8 19" fill="currentColor"/></svg>
+        </div>
+        <div class="video-overlay">
+          <span class="video-title">Pipeline Walkthrough: From Brief to Complete Package</span>
+          <span class="video-dur">4:12</span>
+        </div>
+      </div>
+      <div class="video-footer">
+        <span class="video-angle">WALKTHROUGH</span>
+        <span class="video-desc">End-to-end demonstration of the IO Content Pipeline processing a single Context Brief.</span>
+        <span class="video-src">IO Media Library</span>
+      </div>
+    </div>
+
+    <!-- 4k. Figure 03: Browser Mockup -->
+    <div class="figure-card reveal">
+      <div class="figure-body" style="padding:20px">
+        <div class="fig03-browser">
+          <div class="fig03-toolbar">
+            <span class="fig03-dot" style="background:#E85D4A"></span>
+            <span class="fig03-dot" style="background:#e8a000"></span>
+            <span class="fig03-dot" style="background:#42BE65"></span>
+            <span class="fig03-urlbar">app.intelligentoperations.ai/pipeline/dashboard</span>
+          </div>
+          <div class="fig03-content">
+            <div class="fig03-sidebar">
+              <div class="fig03-sidebar-item active">Dashboard</div>
+              <div class="fig03-sidebar-item">Pipelines</div>
+              <div class="fig03-sidebar-item">Libraries</div>
+              <div class="fig03-sidebar-item">Outputs</div>
+              <div class="fig03-sidebar-item">Settings</div>
+            </div>
+            <div class="fig03-main">
+              <div class="fig03-block" style="background:rgba(69,137,255,.08);border:1px solid rgba(69,137,255,.15);color:var(--wf-blue)">Article Library &mdash; 4,800 words generated</div>
+              <div class="fig03-block" style="background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);color:var(--wf-brand)">Image Library &mdash; 3 hero variants ready</div>
+              <div class="fig03-block" style="background:rgba(255,131,43,.08);border:1px solid rgba(255,131,43,.15);color:var(--wf-orange)">Video Library &mdash; 3 concepts scripted</div>
+              <div class="fig03-block" style="background:rgba(232,93,74,.08);border:1px solid rgba(232,93,74,.15);color:var(--wf-red)">Social Library &mdash; 6 posts formatted</div>
+              <div class="fig03-block" style="background:rgba(190,149,255,.08);border:1px solid rgba(190,149,255,.15);color:var(--wf-purple)">CRM Library &mdash; 5-step sequence built</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="figure-caption">
+        <span class="fig-label">Fig. 03</span>
+        <span class="fig-desc">IO Pipeline Dashboard showing real-time library output status during a parallel dispatch run.</span>
+        <span class="fig-source">IO App v2.1</span>
+      </div>
+    </div>
+
+    <!-- 4l. Social Block -->
+    <div class="social-block reveal">
+      <div class="social-tabs">
+        <button class="social-tab active" data-tab="twitter" onclick="switchSocialTab('twitter')">Twitter</button>
+        <button class="social-tab" data-tab="linkedin" onclick="switchSocialTab('linkedin')">LinkedIn</button>
+        <button class="social-tab" data-tab="instagram" onclick="switchSocialTab('instagram')">Instagram</button>
+      </div>
+      <!-- Twitter -->
+      <div class="social-panel active" id="panel-twitter">
+        <div class="tweet-card">
+          <div class="tweet-header">
+            <div class="tweet-avatar"></div>
+            <div>
+              <div class="tweet-name">Tommy Saunders</div>
+              <div class="tweet-handle">@tommysaunders_io</div>
+            </div>
+          </div>
+          <div class="tweet-text">Most content pipelines are sequential: write, then design, then distribute, then optimize.<br><br>Ours runs all nine libraries in parallel from a single context brief.<br><br>Result: complete article + images + 6 social posts + SEO package + CRM sequence in <b>3 minutes 42 seconds</b>.<br><br>Thread on how it works:</div>
+          <div class="tweet-actions">
+            <span class="tweet-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> 47</span>
+            <span class="tweet-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> 182</span>
+            <span class="tweet-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> 431</span>
+          </div>
+        </div>
+      </div>
+      <!-- LinkedIn -->
+      <div class="social-panel" id="panel-linkedin">
+        <div class="linkedin-card">
+          <div class="li-header">
+            <div class="li-avatar"></div>
+            <div>
+              <div class="li-name">Tommy Saunders</div>
+              <div class="li-title">Founder, IntelligentOperations.ai | Building AI-native content operations</div>
+              <div class="li-time">2h</div>
+            </div>
+          </div>
+          <div class="li-text">I used to think the bottleneck in content production was writing speed.<br><br>It is not. It is coordination.<br><br>When your article says one thing and your social posts say another, when your SEO targets do not match your headlines, when your CRM sequence has no connection to the content that generated the lead &mdash; that is not a quality problem. That is an architecture problem.<br><br>We solved it by building a system where nine content libraries all read from the same Context Brief. One input, nine outputs, zero drift.<br><br>The result: a complete content package in 3 minutes 42 seconds. Article, images, video concepts, social posts, SEO, CRM. All coherent. All cross-referenced.</div>
+          <div class="li-stats">
+            <span class="li-stat">2,847 impressions</span>
+            <span class="li-stat">89 reactions</span>
+            <span class="li-stat">23 comments</span>
+          </div>
+        </div>
+      </div>
+      <!-- Instagram -->
+      <div class="social-panel" id="panel-instagram">
+        <div class="insta-card">
+          <div class="insta-visual">
+            <div class="insta-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+            </div>
+          </div>
+          <div class="insta-caption"><strong>@intelligentoperations</strong> One context brief. Nine libraries. 3 minutes 42 seconds. The gap between what AI can produce and what businesses actually ship is not a capability gap. It is a coordination gap. We built the coordination layer. Full breakdown in the article series &mdash; link in bio.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: SEO -->
+    <h2 id="s-seo" data-section>Search Package &mdash; SEO + AEO</h2>
+
+    <p class="reveal">The SEO library produces a complete search optimization package: meta title and description, Open Graph tags, JSON-LD structured data, an Answer Engine Optimization block, and a target keyword map. Because it reads from the same Context Brief as every other library, the keywords it targets are the same concepts discussed in the article, referenced in the social posts, and addressed in the CRM sequence.</p>
+
+    <!-- 4m. SEO Block -->
+    <div class="seo-block reveal">
+      <div class="seo-header">
+        <span class="seo-badge">SEO</span>
+        <span class="seo-title">Search Package Preview</span>
+      </div>
+      <div class="seo-body">
+        <div class="serp-card">
+          <div class="serp-url">intelligentoperations.ai <span>&rsaquo; content-ops &rsaquo; 9-libraries</span></div>
+          <div class="serp-title">How 9 Content Libraries Become One Synchronized System</div>
+          <div class="serp-desc">One context brief dispatched to nine content libraries produces a complete article, images, video concepts, social posts, SEO package, and CRM sequence in under four minutes. Learn the architecture behind coordinated AI content production.</div>
+        </div>
+        <div class="aeo-panel">
+          <div class="aeo-label">Answer Engine Optimization</div>
+          <div class="aeo-question">How do parallel content libraries maintain coherence?</div>
+          <div class="aeo-answer">Parallel content libraries maintain coherence through a shared Context Brief &mdash; a structured document containing topic, angle, audience, voice parameters, and cross-reference hooks. Each library reads from this same source, and an orchestrator resolves cross-references after all outputs return.</div>
+        </div>
+        <div class="keyword-pills">
+          <span class="keyword-pill">content pipeline architecture</span>
+          <span class="keyword-pill">parallel content production</span>
+          <span class="keyword-pill">ai content orchestration</span>
+          <span class="keyword-pill">context brief system</span>
+          <span class="keyword-pill">content library automation</span>
+          <span class="keyword-pill">coordinated ai output</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: What This Changes -->
+    <h2 id="s-changes" data-section>What This Changes</h2>
+
+    <p class="reveal">This is not incremental improvement. It is a structural change in how content gets made. The shift from sequential to parallel production changes the economics, the quality, and the speed of content operations simultaneously. Teams that previously spent a week producing a single coordinated content package can now produce one in under four minutes.</p>
+
+    <p class="reveal">More importantly, it changes what is possible. When producing a complete content package takes four minutes instead of four days, you can afford to experiment. You can test different angles on the same topic. You can produce packages for niche audiences that would not have justified the production cost under the old model. <strong>The constraint shifts from production capacity to editorial judgment</strong> &mdash; which is exactly where it should be.</p>
+
+    <!-- Section: CRM -->
+    <h2 id="s-crm" data-section>CRM Lead Capture + Nurture Sequence</h2>
+
+    <p class="reveal">The CRM library produces a five-step nurture sequence calibrated to the article's content and audience. Each email in the sequence references specific insights from the article, creating a coherent journey from first touch to conversion. The sequence is not generic drip &mdash; it is topically aware, drawing directly from the Context Brief that generated the article.</p>
+
+    <!-- 4n. CRM Block -->
+    <div class="crm-block reveal">
+      <div class="crm-bg"></div>
+      <div class="crm-orb"></div>
+      <div class="crm-inner">
+        <div class="crm-grid">
+          <div class="crm-text">
+            <div class="crm-eyebrow">CRM Integration</div>
+            <h3>Get the Full Pipeline Blueprint</h3>
+            <p>Join the IO Content Ops series and receive the complete system architecture, prompt templates, and orchestration patterns used to build the nine-library pipeline.</p>
+          </div>
+          <div class="crm-form">
+            <input type="text" class="crm-input" placeholder="Full Name">
+            <input type="email" class="crm-input" placeholder="Work Email">
+            <button class="crm-submit">Download Blueprint</button>
+            <span class="crm-privacy">No spam. Unsubscribe anytime. We respect your privacy.</span>
+          </div>
+        </div>
+        <div class="nurture-title">Nurture Sequence</div>
+        <div class="nurture-grid">
+          <div class="nurture-card">
+            <div class="nurture-day">Day 0</div>
+            <div class="nurture-label">Welcome + Blueprint PDF</div>
+          </div>
+          <div class="nurture-card">
+            <div class="nurture-day">Day 3</div>
+            <div class="nurture-label">Architecture Deep Dive</div>
+          </div>
+          <div class="nurture-card">
+            <div class="nurture-day">Day 7</div>
+            <div class="nurture-label">Prompt Library Walkthrough</div>
+          </div>
+          <div class="nurture-card">
+            <div class="nurture-day">Day 14</div>
+            <div class="nurture-label">Case Study: First Pipeline</div>
+          </div>
+          <div class="nurture-card">
+            <div class="nurture-day">Day 21</div>
+            <div class="nurture-label">Custom Pipeline Consultation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4o. FAQ Section -->
+    <div class="faq-section" id="s-faq" data-section>
+      <div class="faq-header">
+        <h2 class="faq-title" style="font-family:var(--font-sans);margin:0">Frequently Asked Questions</h2>
+        <span class="faq-count">5 questions</span>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          <span class="faq-question">How long does the full pipeline take to run?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">The complete pipeline &mdash; from Context Brief submission to assembled output package &mdash; runs in 3 minutes and 42 seconds. This includes all nine libraries running in parallel, orchestrator reconciliation, and final assembly. Individual library execution times range from 45 seconds (Task library) to 2 minutes 18 seconds (Article library).</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          <span class="faq-question">What happens if one library fails during execution?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">Because libraries run independently, a failure in one does not cascade to others. The orchestrator collects whatever outputs are available, flags the failed library, and can either retry the failed library or assemble a partial package with a gap report. The shared-nothing architecture ensures that an Image library failure, for example, does not affect the Article or SEO outputs.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          <span class="faq-question">How does the system maintain voice consistency across nine libraries?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">The Context Brief contains detailed brand voice parameters: tone descriptors, vocabulary preferences, sentence structure guidelines, and specific phrasing to include or avoid. Each library's prompt chain incorporates these parameters. Additionally, the orchestrator runs a final consistency pass that flags any outputs deviating from the voice specification.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          <span class="faq-question">Can the pipeline be extended with additional libraries?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">Yes. The architecture is modular by design. Adding a new library requires defining its prompt chain, its expected output schema, and its cross-reference hooks in the Context Brief. The orchestrator automatically includes any new library in its collection and reconciliation phases. Current plans include a Podcast library (script generation) and a Presentation library (slide deck production).</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          <span class="faq-question">What is the token cost per pipeline run?</span>
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">A complete pipeline run consumes approximately 48,000 tokens across all nine libraries and the orchestrator. At current API pricing, this translates to roughly $1.20 per complete content package. For comparison, the equivalent manual production by a content team costs between $2,000 and $5,000 per package and takes 3 to 5 business days.</div></div>
+      </div>
+    </div>
+
+    <!-- 4p. References -->
+    <div class="references" id="s-references" data-section>
+      <div class="ref-title">References</div>
+      <div class="ref-list">
+        <div class="ref-item" id="ref-1">
+          <span class="ref-num">1</span>
+          <span class="ref-text">IO Content Pipeline Performance Report, March 2026. Internal benchmarking across 142 pipeline runs. Median total runtime: 3m 42s (p50), 4m 11s (p95). <a href="#">doi:10.1234/io-pipeline-bench</a></span>
+        </div>
+        <div class="ref-item" id="ref-2">
+          <span class="ref-num">2</span>
+          <span class="ref-text">Saunders, T. (2026). "Shared-Nothing Parallel Dispatch for AI Content Systems." IO Technical Architecture Series, v2.1. <a href="#">intelligentoperations.ai/architecture</a></span>
+        </div>
+        <div class="ref-item" id="ref-3">
+          <span class="ref-num">3</span>
+          <span class="ref-text">Zhang, L., & Patel, R. (2025). "Compound Reliability in Multi-Step LLM Pipelines." Proceedings of the ACM Conference on AI Systems. <a href="#">doi:10.1145/acm-aisys-2025</a></span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Sidebar ── -->
+  <aside class="article-sidebar">
+    <div class="sidebar-sticky">
+      <!-- Sidebar TOC -->
+      <div class="stoc">
+        <div class="stoc-title">On This Page</div>
+        <div class="stoc-list" id="sidebar-toc">
+          <a href="#s-architecture" class="stoc-link"><span class="stoc-dot"></span>The Architecture Behind It</a>
+          <a href="#s-orchestrator" class="stoc-link"><span class="stoc-dot"></span>What the Orchestrator Actually Does</a>
+          <a href="#s-business-case" class="stoc-link"><span class="stoc-dot"></span>The Business Case</a>
+          <a href="#s-social" class="stoc-link"><span class="stoc-dot"></span>Social Distribution Suite</a>
+          <a href="#s-seo" class="stoc-link"><span class="stoc-dot"></span>Search Package</a>
+          <a href="#s-changes" class="stoc-link"><span class="stoc-dot"></span>What This Changes</a>
+          <a href="#s-crm" class="stoc-link"><span class="stoc-dot"></span>CRM Lead Capture</a>
+          <a href="#s-faq" class="stoc-link"><span class="stoc-dot"></span>FAQ</a>
+          <a href="#s-references" class="stoc-link"><span class="stoc-dot"></span>References</a>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="sidebar-stats">
+        <div class="sstat"><div class="sstat-val">9</div><div class="sstat-label">Libraries</div></div>
+        <div class="sstat"><div class="sstat-val">65</div><div class="sstat-label">Prompts</div></div>
+        <div class="sstat"><div class="sstat-val">~48K</div><div class="sstat-label">Tokens</div></div>
+        <div class="sstat"><div class="sstat-val">3:42</div><div class="sstat-label">Runtime</div></div>
+      </div>
+
+      <!-- Libraries -->
+      <div class="sidebar-libs">
+        <div class="slib-title">Content Libraries</div>
+        <div class="slib-list">
+          <div class="slib-item"><span class="slib-dot" style="background:var(--lib-art)"></span><span class="slib-name">Article</span><span class="slib-count">12 prompts</span></div>
+          <div class="slib-item"><span class="slib-dot" style="background:var(--lib-img)"></span><span class="slib-name">Image</span><span class="slib-count">8 prompts</span></div>
+          <div class="slib-item"><span class="slib-dot" style="background:var(--lib-vid)"></span><span class="slib-name">Video</span><span class="slib-count">6 prompts</span></div>
+          <div class="slib-item"><span class="slib-dot" style="background:var(--lib-soc)"></span><span class="slib-name">Social</span><span class="slib-count">9 prompts</span></div>
+          <div class="slib-item"><span class="slib-dot" style="background:var(--lib-des)"></span><span class="slib-name">Design</span><span class="slib-count">5 prompts</span></div>
+          <div class="slib-item"><span class="slib-dot" style="background:var(--lib-seo)"></span><span class="slib-name">SEO</span><span class="slib-count">7 prompts</span></div>
+          <div class="slib-item"><span class="slib-dot" style="background:var(--lib-crm)"></span><span class="slib-name">CRM</span><span class="slib-count">8 prompts</span></div>
+          <div class="slib-item"><span class="slib-dot" style="background:var(--lib-con)"></span><span class="slib-name">Content Ops</span><span class="slib-count">6 prompts</span></div>
+          <div class="slib-item"><span class="slib-dot" style="background:var(--lib-tas)"></span><span class="slib-name">Task</span><span class="slib-count">4 prompts</span></div>
+        </div>
+      </div>
+
+      <!-- Series Nav -->
+      <div class="sidebar-series">
+        <div class="sseries-title">Article Series</div>
+        <div class="sseries-list">
+          <a href="#" class="sseries-item current"><span class="sseries-num">01</span>9 Content Libraries System</a>
+          <a href="#" class="sseries-item"><span class="sseries-num">02</span>The Context Brief Specification</a>
+          <a href="#" class="sseries-item"><span class="sseries-num">03</span>Building the Article Library</a>
+          <a href="#" class="sseries-item"><span class="sseries-num">04</span>Visual Pipeline: Image + Video</a>
+          <a href="#" class="sseries-item"><span class="sseries-num">05</span>Social Distribution at Scale</a>
+          <a href="#" class="sseries-item"><span class="sseries-num">06</span>Search + CRM Integration</a>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ================================================================
+     5. AUTHOR SECTION
+     ================================================================ -->
+<section class="author-section">
+  <div class="author-inner">
+    <div class="author-card">
+      <div class="author-avatar">TS</div>
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Founder, IntelligentOperations.ai</div>
+      <div class="author-bio">Building AI-native operations for commercial real estate. Previously 10 years at Windfield Real Estate. Writing about the systems that build the systems.</div>
+      <div class="author-socials">
+        <a href="#" class="author-social" aria-label="Twitter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l11.733 16h4.267l-11.733-16zM4 20l6.768-6.768M20 4l-6.768 6.768"/></svg>
+        </a>
+        <a href="#" class="author-social" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" class="author-social" aria-label="Website">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="author-divider"></div>
+    <div>
+      <div class="related-title">Related Articles</div>
+      <div class="related-grid">
+        <a href="#" class="related-card">
+          <div class="related-thumb">
+            <div class="related-thumb-inner">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--wf-blue)" stroke-width="1" opacity=".4"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
+            </div>
+            <div class="related-thumb-pattern"></div>
+          </div>
+          <div class="related-info">
+            <div class="related-tag">IO Content Ops</div>
+            <div class="related-card-title">The Context Brief Specification</div>
+            <div class="related-meta">March 22, 2026 &middot; 7 min</div>
+          </div>
+        </a>
+        <a href="#" class="related-card">
+          <div class="related-thumb">
+            <div class="related-thumb-inner">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--wf-brand)" stroke-width="1" opacity=".4"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l4 4"/></svg>
+            </div>
+            <div class="related-thumb-pattern"></div>
+          </div>
+          <div class="related-info">
+            <div class="related-tag">IO Content Ops</div>
+            <div class="related-card-title">Building the Article Library</div>
+            <div class="related-meta">March 29, 2026 &middot; 11 min</div>
+          </div>
+        </a>
+        <a href="#" class="related-card">
+          <div class="related-thumb">
+            <div class="related-thumb-inner">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--wf-orange)" stroke-width="1" opacity=".4"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            </div>
+            <div class="related-thumb-pattern"></div>
+          </div>
+          <div class="related-info">
+            <div class="related-tag">IO Content Ops</div>
+            <div class="related-card-title">Visual Pipeline: Image + Video</div>
+            <div class="related-meta">April 5, 2026 &middot; 8 min</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     6. FOOTER
+     ================================================================ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Wind<span>field</span></div>
+        <p class="footer-desc">AI-native operations for commercial real estate. Intelligence, not information.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Home</a>
+          <a href="#" class="footer-link">About</a>
+          <a href="#" class="footer-link">Portfolio</a>
+          <a href="#" class="footer-link">Pricing</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Blog</a>
+          <a href="#" class="footer-link">Documentation</a>
+          <a href="#" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Article Series</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link active">01 &mdash; 9 Content Libraries</a>
+          <a href="#" class="footer-link">02 &mdash; Context Brief Spec</a>
+          <a href="#" class="footer-link">03 &mdash; Article Library</a>
+          <a href="#" class="footer-link">04 &mdash; Visual Pipeline</a>
+          <a href="#" class="footer-link">05 &mdash; Social at Scale</a>
+          <a href="#" class="footer-link">06 &mdash; Search + CRM</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ================================================================
+     7. JAVASCRIPT
+     ================================================================ -->
+<script>
+(function(){
+  'use strict';
+
+  // ── Library definitions ──
+  const LIBS = [
+    { key:'ART', color:'#4589FF', angle:0 },
+    { key:'IMG', color:'#1db954', angle:40 },
+    { key:'VID', color:'#FF832B', angle:80 },
+    { key:'SOC', color:'#E85D4A', angle:120 },
+    { key:'DES', color:'#08BDBA', angle:160 },
+    { key:'SEO', color:'#d97706', angle:200 },
+    { key:'CRM', color:'#BE95FF', angle:240 },
+    { key:'CON', color:'#059669', angle:280 },
+    { key:'TAS', color:'#6b7280', angle:320 }
+  ];
+
+  // ── 1. Reading Progress Bar ──
+  const progressBar = document.getElementById('progress-bar');
+  function updateProgress(){
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, {passive:true});
+
+  // ── 2. Pipeline Strip Toggle ──
+  window.togglePipeline = function(){
+    const strip = document.getElementById('pipeline-strip');
+    const btn = document.getElementById('pipeline-toggle');
+    strip.classList.toggle('open');
+    btn.classList.toggle('on');
+  };
+
+  // ── 3. Hub-and-Spoke Visualization ──
+  const hubSpoke = document.getElementById('hub-spoke');
+  const spokeSvg = document.getElementById('spoke-svg');
+  if(hubSpoke && spokeSvg){
+    const cx = 160, cy = 160, radius = 125, nodeR = 19;
+    LIBS.forEach(function(lib){
+      // Create node
+      const node = document.createElement('div');
+      node.className = 'spoke-node';
+      node.id = 'spoke-'+lib.key;
+      node.textContent = lib.key;
+      const rad = (lib.angle - 90) * Math.PI / 180;
+      const nx = cx + radius * Math.cos(rad) - nodeR;
+      const ny = cy + radius * Math.sin(rad) - nodeR;
+      node.style.cssText = 'left:'+nx+'px;top:'+ny+'px;color:'+lib.color+';border-color:'+lib.color+';background:rgba(0,0,0,.5)';
+      hubSpoke.appendChild(node);
+
+      // Create SVG line
+      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      // offset for hviz-inner positioning
+      const svgCx = cx + hubSpoke.offsetLeft;
+      const svgCy = cy + hubSpoke.offsetTop;
+      line.setAttribute('x1', svgCx);
+      line.setAttribute('y1', svgCy);
+      line.setAttribute('x2', nx + nodeR + hubSpoke.offsetLeft);
+      line.setAttribute('y2', ny + nodeR + hubSpoke.offsetTop);
+      line.setAttribute('stroke', lib.color);
+      line.setAttribute('stroke-opacity', '0.15');
+      line.setAttribute('stroke-width', '1');
+      line.setAttribute('stroke-dasharray', '4 4');
+      line.id = 'line-'+lib.key;
+      spokeSvg.appendChild(line);
+    });
+
+    // Recalculate SVG lines on load
+    function repositionLines(){
+      const rect = hubSpoke.getBoundingClientRect();
+      const parentRect = hubSpoke.closest('.hviz-inner').getBoundingClientRect();
+      const offX = rect.left - parentRect.left;
+      const offY = rect.top - parentRect.top;
+      LIBS.forEach(function(lib){
+        const line = document.getElementById('line-'+lib.key);
+        const node = document.getElementById('spoke-'+lib.key);
+        if(!line || !node) return;
+        line.setAttribute('x1', offX + cx);
+        line.setAttribute('y1', offY + cy);
+        line.setAttribute('x2', offX + parseFloat(node.style.left) + nodeR);
+        line.setAttribute('y2', offY + parseFloat(node.style.top) + nodeR);
+      });
+    }
+    window.addEventListener('load', repositionLines);
+    window.addEventListener('resize', repositionLines);
+  }
+
+  // ── Run Pipeline Animation ──
+  window.runPipeline = function(){
+    const btn = document.getElementById('run-pipeline-btn');
+    btn.textContent = 'Running...';
+    btn.style.pointerEvents = 'none';
+    LIBS.forEach(function(lib, i){
+      setTimeout(function(){
+        const node = document.getElementById('spoke-'+lib.key);
+        const line = document.getElementById('line-'+lib.key);
+        if(node){
+          node.classList.add('glow');
+          node.style.boxShadow = '0 0 24px '+lib.color;
+        }
+        if(line){
+          line.setAttribute('stroke-opacity','0.5');
+          line.setAttribute('stroke-width','2');
+        }
+        setTimeout(function(){
+          if(node){
+            node.classList.remove('glow');
+            node.style.boxShadow = '';
+          }
+          if(line){
+            line.setAttribute('stroke-opacity','0.15');
+            line.setAttribute('stroke-width','1');
+          }
+          if(i === LIBS.length - 1){
+            btn.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg> Run Pipeline';
+            btn.style.pointerEvents = '';
+          }
+        }, 600);
+      }, i * 300);
+    });
+  };
+
+  // ── Figure 02: Bar charts ──
+  var legacyBars = document.getElementById('legacy-bars');
+  var swarmBars = document.getElementById('swarm-bars');
+  if(legacyBars){
+    for(var i=0;i<20;i++){
+      var bar = document.createElement('div');
+      bar.className = 'fig02-bar';
+      var h = Math.min(100, 20 + i * 5 + Math.random()*10);
+      bar.style.height = h+'px';
+      bar.style.background = i < 15 ? 'rgba(232,93,74,'+(0.3+i*0.04)+')' : 'var(--wf-red)';
+      legacyBars.appendChild(bar);
+    }
+  }
+  if(swarmBars){
+    for(var j=0;j<20;j++){
+      var bar2 = document.createElement('div');
+      bar2.className = 'fig02-bar';
+      var h2 = 30 + Math.random()*8;
+      bar2.style.height = h2+'px';
+      bar2.style.background = 'rgba(29,185,84,'+(0.4+Math.random()*0.2)+')';
+      swarmBars.appendChild(bar2);
+    }
+  }
+
+  // ── Social Tabs ──
+  window.switchSocialTab = function(tab){
+    document.querySelectorAll('.social-tab').forEach(function(t){ t.classList.remove('active'); });
+    document.querySelectorAll('.social-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelector('.social-tab[data-tab="'+tab+'"]').classList.add('active');
+    document.getElementById('panel-'+tab).classList.add('active');
+  };
+
+  // ── FAQ Accordion ──
+  window.toggleFaq = function(trigger){
+    var item = trigger.closest('.faq-item');
+    var answer = item.querySelector('.faq-answer');
+    var isOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item.open').forEach(function(el){
+      el.classList.remove('open');
+      el.querySelector('.faq-answer').style.maxHeight = '0';
+    });
+    if(!isOpen){
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  };
+
+  // ── Sidebar TOC Scroll Spy ──
+  var tocLinks = document.querySelectorAll('#sidebar-toc .stoc-link');
+  var sections = document.querySelectorAll('[data-section]');
+  if(sections.length && tocLinks.length){
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          var id = entry.target.id;
+          tocLinks.forEach(function(link){
+            link.classList.toggle('active', link.getAttribute('href') === '#'+id);
+          });
+        }
+      });
+    }, {rootMargin:'-80px 0px -60% 0px', threshold:0});
+    sections.forEach(function(s){ observer.observe(s); });
+  }
+
+  // ── Scroll Reveal ──
+  var reveals = document.querySelectorAll('.reveal');
+  if(reveals.length){
+    var revealObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+    reveals.forEach(function(el){ revealObserver.observe(el); });
+  }
+
+})();
+</script>
+</body>
+</html>
