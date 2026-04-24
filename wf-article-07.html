@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospect Qualification: Scoring, Segmenting, and Relationship Mapping — Windfield Real Estate IO</title>
+<meta name="description" content="How the IO Qualification Agent uses a 14-signal scoring model to rank prospects across 5 tiers, build dynamic segments, and map relationship networks — turning raw lead lists into prioritized pipeline.">
+<meta name="keywords" content="prospect qualification ai, lead scoring commercial real estate, CRE prospect segmentation, relationship mapping ai, qualification agent, windfield real estate intelligence">
+<meta property="og:title" content="Prospect Qualification: Scoring, Segmenting, and Relationship Mapping">
+<meta property="og:description" content="How the IO Qualification Agent uses a 14-signal scoring model to rank prospects across 5 tiers, build dynamic segments, and map relationship networks for commercial real estate pipeline.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-04-12">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Prospect Qualification: Scoring, Segmenting, and Relationship Mapping","description":"How the IO Qualification Agent uses a 14-signal scoring model to rank prospects across 5 tiers, build dynamic segments, and map relationship networks — turning raw lead lists into prioritized commercial real estate pipeline.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"IntelligentOperations.ai"}},"publisher":{"@type":"Organization","name":"IntelligentOperations.ai"},"datePublished":"2026-04-12","articleSection":"Agent Deep Dive","keywords":["prospect qualification","lead scoring","CRE segmentation","relationship mapping","qualification agent","pipeline intelligence"],"wordCount":2800,"timeRequired":"PT9M","isPartOf":{"@type":"CreativeWorkSeries","name":"Windfield CRE Article Series","position":7}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How does the Qualification Agent score prospects?","acceptedAnswer":{"@type":"Answer","text":"The Qualification Agent evaluates each prospect against 14 signals across four categories: firmographic data (company size, revenue, industry vertical, geographic footprint), behavioral signals (website visits, content downloads, email engagement, event attendance), transactional history (past deal volume, average transaction size, time since last transaction), and relationship proximity (shared connections, referral source strength, portfolio overlap with existing clients). Each signal is weighted and combined into a composite score from 0-100, which maps to one of five tiers: On Fire (85-100), Hot (70-84), Warm (50-69), Neutral (25-49), and Cold (0-24)."}},
+{"@type":"Question","name":"What are the five prospect tiers and how are they used?","acceptedAnswer":{"@type":"Answer","text":"The five tiers determine outreach priority and channel strategy. On Fire (85-100) prospects receive immediate personal outreach from a senior broker within 4 hours. Hot (70-84) prospects enter a 3-touch sequence within 48 hours combining email, LinkedIn, and phone. Warm (50-69) prospects receive automated nurture content calibrated to their specific interest signals. Neutral (25-49) prospects are monitored for signal changes that would promote them. Cold (0-24) prospects are archived but re-scored monthly."}},
+{"@type":"Question","name":"How does the segment builder create dynamic audience groups?","acceptedAnswer":{"@type":"Answer","text":"The segment builder creates groups based on composite filters across any combination of the 14 scoring signals plus property preferences, geographic focus, and deal timeline. Segments are dynamic — prospects move in and out automatically as their signals change. The system maintains up to 50 active segments per property portfolio, each feeding its own outreach cadence."}},
+{"@type":"Question","name":"What is the relationship mapper and why does it matter for CRE?","acceptedAnswer":{"@type":"Answer","text":"The relationship mapper identifies connections between prospects, existing clients, and the brokerage team by cross-referencing LinkedIn networks, transaction co-participants, shared property interests, and event co-attendance. It generates a relationship score that modifies the base qualification score by up to 15 points, enough to push a Warm prospect into the Hot tier."}},
+{"@type":"Question","name":"How does the disqualification system prevent wasted outreach?","acceptedAnswer":{"@type":"Answer","text":"Seven disqualification triggers exist: confirmed competitor relationship, regulatory issues, financial distress signals, geographic mismatch, size mismatch, explicit opt-out, and stale engagement (no activity in 180+ days). Any active disqualification flag moves the prospect to a hold queue regardless of score. Flags are re-evaluated monthly and cleared when conditions change."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"IntelligentOperations.ai","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Commercial Real Estate","item":"https://intelligentoperations.ai/cre"},
+{"@type":"ListItem","position":3,"name":"Windfield Series","item":"https://intelligentoperations.ai/cre/windfield-series"},
+{"@type":"ListItem","position":4,"name":"Prospect Qualification","item":"https://intelligentoperations.ai/cre/prospect-qualification-scoring"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-surface:#141417;
+  --wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;
+  --wf-brand:#1db954;--wf-brand-muted:rgba(29,185,84,.12);--wf-brand-border:rgba(29,185,84,.22);
+  --wf-border:#27272a;--wf-border2:rgba(250,250,250,.1);--wf-border3:rgba(250,250,250,.16);
+  --wf-amber:#e8a000;--wf-rose:#e11d48;--wf-purple:#8b5cf6;--wf-cyan:#0891b2;--wf-green:#1db954;
+  --c-tgt:#1db954;--c-enr:#1db954;--c-mkt:#e8a000;--c-out:#e11d48;--c-lin:#0891b2;--c-cnt:#8b5cf6;
+  --tier-fire:#ef4444;--tier-hot:#f97316;--tier-warm:#eab308;--tier-neutral:#6b7280;--tier-cold:#3b82f6;
+  --wf-sans:'Inter',system-ui,-apple-system,sans-serif;--wf-mono:'JetBrains Mono','Fira Code',monospace;
+  --wf-r-sm:6px;--wf-r-md:10px;--wf-r-lg:16px;
+  --wf-ease:cubic-bezier(.25,.46,.45,.94);--wf-spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--wf-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+.src{position:relative}.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-tgt);outline-offset:3px}body.attr .enr{outline:1.5px solid var(--c-enr);outline-offset:3px}body.attr .mkt{outline:1.5px solid var(--c-mkt);outline-offset:3px}body.attr .out{outline:1.5px solid var(--c-out);outline-offset:3px}body.attr .lin{outline:1.5px solid var(--c-lin);outline-offset:3px}body.attr .con{outline:1.5px solid var(--c-cnt);outline-offset:3px}
+.art .src-tag{background:var(--c-tgt);color:#fff}.enr .src-tag{background:var(--c-enr);color:#fff}.mkt .src-tag{background:var(--c-mkt);color:#fff}.out .src-tag{background:var(--c-out);color:#fff}.lin .src-tag{background:var(--c-lin);color:#fff}.con .src-tag{background:var(--c-cnt);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-tgt)}body.attr .enr .ann-c{border-color:var(--c-enr)}body.attr .mkt .ann-c{border-color:var(--c-mkt)}body.attr .out .ann-c{border-color:var(--c-out)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:9999;width:0;transition:width .1s linear}
+
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border);height:52px;display:flex;align-items:center}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center}
+.nav-logo{font-family:var(--wf-sans);font-size:18px;font-weight:700;color:var(--wf-fg);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-rule{width:1px;height:16px;background:var(--wf-border2);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--wf-sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--wf-ease)}
+.nbtn-ghost{background:none;border:1px solid var(--wf-border2);color:var(--wf-fg-subtle)}.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--wf-green);display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+#pstrip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}.ps-chip{padding:4px 10px;border-radius:var(--wf-r-sm);font:600 10px/1 var(--wf-sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}.ps-dot{width:5px;height:5px;border-radius:50%}.ps-arrow{font-size:10px;color:var(--wf-fg-faint);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--wf-sans);color:var(--wf-green);letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+#pipemap{background:var(--wf-surface);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .5s var(--wf-ease)}#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:10px}.pm-title span{font-weight:300;color:var(--wf-fg-subtle)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.5),transparent);animation:pms7 2s ease-in-out infinite;margin:10px 0}
+@keyframes pms7{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}.pm-node-name{font:600 11px/1.2 var(--wf-sans);color:var(--wf-fg)}.pm-node-sub{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:var(--wf-r-sm);text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--wf-border)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}.pm-lib-name{font:700 7px/1 var(--wf-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle)}.pm-lib-count{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--wf-border)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--wf-mono);color:var(--wf-fg-subtle)}.pm-meta-n{font:700 11px/1 var(--wf-mono);color:var(--wf-fg)}
+
+.hero{background:var(--wf-bg);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--wf-border) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}.eye-divider{width:20px;height:1px;background:var(--wf-fg-faint)}.eye-series{font:600 10px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+h1{font-family:var(--wf-sans);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--wf-border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}.h-role{font-size:11px;color:var(--wf-fg-subtle)}.h-sep{width:1px;height:28px;background:var(--wf-border2);margin:0 18px}.h-date{font-size:13px;color:var(--wf-fg-subtle)}.h-read{font-size:13px;color:var(--wf-fg-subtle);margin-left:14px}
+
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);background-size:32px 32px}
+.hv-glow{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(29,185,84,.1) 0%,transparent 65%);animation:gp7 4s ease-in-out infinite}
+@keyframes gp7{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);animation:hvs7 5s ease-in-out infinite;opacity:.4}
+@keyframes hvs7{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+.hv-tier-group{position:absolute;top:12%;left:8%;right:8%;bottom:22%;display:flex;flex-direction:column;justify-content:space-between}
+.hv-tier{display:flex;align-items:center;gap:10px;padding:8px 0}
+.hv-tier-label{font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;width:60px;flex-shrink:0;text-align:right}
+.hv-tier-bar{height:18px;border-radius:3px;position:relative;overflow:hidden}
+.hv-tier-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(255,255,255,.15));animation:shimmer7 3s ease-in-out infinite}
+@keyframes shimmer7{0%,100%{opacity:0}50%{opacity:1}}
+.hv-tier-score{font:700 9px/1 var(--wf-mono);margin-left:8px;flex-shrink:0}
+.hv-tier-count{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-left:4px}
+.hv-bottom-stats{position:absolute;bottom:8%;left:8%;right:8%;display:flex;justify-content:space-between}
+.hv-bs{text-align:center}.hv-bs-n{font:700 18px/1 var(--wf-mono);margin-bottom:3px}
+.hv-bs-l{font:300 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint)}
+.hv-badge7{position:absolute;top:14px;right:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.22)}
+.hv-status7{position:absolute;top:14px;left:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.25)}
+
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}.sidebar{position:sticky;top:72px}
+
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;background:linear-gradient(135deg,var(--wf-brand-muted),rgba(29,185,84,.02));border:1px solid var(--wf-brand-border);border-left:3px solid var(--wf-brand);border-radius:var(--wf-r-md)}
+.dab-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}.dab-label::before{content:'\25B8'}
+.dab-q{font:600 15px/1.4 var(--wf-sans);color:var(--wf-fg);margin-bottom:10px}
+.dab-a{font:300 14px/1.72 var(--wf-sans);color:var(--wf-fg-muted)}.dab-a strong{font-weight:600;color:var(--wf-fg)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}.dab-source{font:300 10px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:var(--wf-brand-muted);color:rgba(29,185,84,.6);border:1px solid var(--wf-brand-border)}
+
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:var(--wf-r-md)}
+.toc-inline-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;text-decoration:none;transition:color .15s}.toc-inline-item:last-child{border-bottom:none}.toc-inline-item:hover{color:var(--wf-fg)}
+.toc-n{font:700 9px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0;padding-top:2px}
+
+.body p{font-size:17.5px;line-height:1.82;color:var(--wf-fg-muted);font-weight:300;margin-bottom:28px}.body p strong{font-weight:600;color:var(--wf-fg)}
+h2.sh{font-family:var(--wf-sans);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--wf-fg);margin:60px 0 20px}
+h3.sh3{font:700 11px/1 var(--wf-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin:40px 0 14px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--wf-fg)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--wf-sans);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--wf-brand)}
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--wf-surface);border-radius:var(--wf-r-md);border:1px solid var(--wf-border);border-left:3px solid var(--wf-brand);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--wf-sans);font-size:150px;font-weight:700;color:var(--wf-brand-muted);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--wf-sans);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--wf-fg);position:relative;z-index:1;margin-bottom:14px}.pq-text em{font-style:italic;color:var(--wf-brand)}
+.pq-attr{font:600 11px/1 var(--wf-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);position:relative;z-index:1}
+
+.score-card{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-brand-border);background:var(--wf-surface)}
+.sc-header{padding:14px 22px;border-bottom:1px solid var(--wf-brand-border);display:flex;align-items:center;gap:12px;background:var(--wf-brand-muted)}
+.sc-title{font:700 10px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.sc-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.sc-body{padding:24px}
+.tier-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--wf-border)}.tier-row:last-child{border-bottom:none}
+.tier-indicator{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.tier-name{font:700 12px/1 var(--wf-sans);width:80px;flex-shrink:0}
+.tier-range{font:300 11px/1 var(--wf-mono);color:var(--wf-fg-subtle);width:60px;flex-shrink:0}
+.tier-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden}
+.tier-bar{height:100%;border-radius:4px}
+.tier-action{font:300 10px/1.4 var(--wf-sans);color:var(--wf-fg-subtle);width:180px;flex-shrink:0;text-align:right}
+@media(max-width:640px){.tier-action{display:none}}
+
+.signal-block{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border2);background:var(--wf-surface)}
+.sig-header{padding:14px 22px;border-bottom:1px solid var(--wf-border);display:flex;align-items:center;gap:12px}
+.sig-title{font:700 10px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.sig-scroll{overflow-x:auto}
+.sig-table{width:100%;border-collapse:collapse;min-width:580px}
+.sig-table th{padding:9px 14px;font:700 7.5px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);text-align:left;border-bottom:1px solid var(--wf-border);background:rgba(255,255,255,.02);white-space:nowrap}
+.sig-table th:first-child{padding-left:20px}
+.sig-table td{padding:12px 14px;border-bottom:1px solid var(--wf-border);font:300 12px/1.5 var(--wf-sans);color:var(--wf-fg-muted);vertical-align:top}
+.sig-table td:first-child{padding-left:20px;font-weight:600;color:var(--wf-fg)}
+.sig-table tr:last-child td{border-bottom:none}.sig-table tr:hover td{background:rgba(255,255,255,.015)}
+
+.callout{margin:40px 0;padding:24px 28px;border-radius:var(--wf-r-md);border:1px solid var(--wf-brand-border);background:var(--wf-brand-muted)}
+.callout-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:10px}
+.callout-text{font:300 14px/1.72 var(--wf-sans);color:var(--wf-fg-muted)}.callout-text strong{font-weight:600;color:var(--wf-fg)}
+
+.rel-map{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border2);background:var(--wf-surface)}
+.rm-header{padding:14px 22px;border-bottom:1px solid var(--wf-border);display:flex;align-items:center;gap:12px}
+.rm-title{font:700 10px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.rm-body{padding:24px;position:relative;min-height:200px}
+.rm-node{position:absolute;padding:8px 12px;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.04);border:1px solid var(--wf-border2);font:600 10px/1.2 var(--wf-sans);color:var(--wf-fg-muted);cursor:pointer;transition:all .2s}
+.rm-node:hover{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.rm-node-label{font:300 7px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-top:3px}
+
+.crm-block{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-brand-border);background:linear-gradient(135deg,var(--wf-surface) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-block::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(29,185,84,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}
+@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(29,185,84,.6);margin-bottom:10px}
+.crm-headline{font-family:var(--wf-sans);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--wf-fg);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--wf-fg-subtle);line-height:1.65}
+.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--wf-border2);border-radius:var(--wf-r-sm);font:300 14px var(--wf-sans);color:var(--wf-fg);outline:none;transition:border-color .15s}
+.crm-inp:focus{border-color:var(--wf-brand-border)}.crm-inp::placeholder{color:var(--wf-fg-faint)}
+.crm-btn{padding:12px;background:var(--wf-brand);border:none;border-radius:var(--wf-r-sm);font:700 13px var(--wf-sans);color:#fff;cursor:pointer;transition:opacity .15s}
+.crm-btn:hover{opacity:.88}.crm-note{font-size:10px;color:var(--wf-fg-faint);text-align:center}
+
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--wf-border2)}
+.faq-head-title{font-family:var(--wf-sans);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--wf-fg)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);overflow:hidden;margin-bottom:8px;transition:border-color .15s}.faq-item.open{border-color:var(--wf-border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--wf-sans);color:var(--wf-fg-muted);gap:12px;transition:color .15s}.faq-q:hover,.faq-item.open .faq-q{color:var(--wf-fg)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--wf-border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wf-fg-subtle);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--wf-brand-muted);border-color:var(--wf-brand-border);color:var(--wf-brand)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease),padding .2s}.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--wf-sans);color:var(--wf-fg-muted)}.faq-a-inner strong{font-weight:600;color:var(--wf-fg)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--wf-mono);color:var(--wf-fg-faint)}.faq-schema-note::before{content:'\25C8';color:rgba(29,185,84,.4);font-size:8px}
+
+.sb-sec{margin-bottom:36px}.sb-sec-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}.toc-item:hover,.toc-item.active{color:var(--wf-fg)}.toc-item.active{color:var(--wf-brand)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:12px}.stat-n{font:700 22px/1 var(--wf-mono);color:var(--wf-fg);margin-bottom:3px}.stat-l{font-size:10px;color:var(--wf-fg-subtle);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm)}.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}.lib-name{font:500 12px/1 var(--wf-sans);color:var(--wf-fg);flex:1}.lib-count{font:normal 10px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.series-nav{display:flex;flex-direction:column;gap:6px}.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);text-decoration:none;transition:all .15s;cursor:pointer}.sn-item:hover{border-color:var(--wf-border2)}.sn-item.current{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.sn-num{font:700 10px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}.sn-item.current .sn-num{color:var(--wf-brand)}.sn-title{font:400 11px/1.35 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}.sn-item.current .sn-title{color:var(--wf-fg)}
+.sn-pill{padding:2px 6px;border-radius:3px;font:700 7px/1 var(--wf-mono);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--wf-border)}.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}.author-name{font-family:var(--wf-sans);font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-.02em}.author-role{font:500 12px/1 var(--wf-sans);color:var(--wf-brand);letter-spacing:.04em;margin-bottom:10px}.author-bio{font-size:13px;color:var(--wf-fg-subtle);line-height:1.7;margin-bottom:14px}.author-links{display:flex;gap:8px}.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--wf-border2);color:var(--wf-fg-subtle);text-decoration:none;transition:all .15s}.author-link:hover{color:var(--wf-fg);border-color:var(--wf-border3)}.author-divider{background:var(--wf-border)}
+.related-label{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:24px}.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}.rel-thumb{height:100px;border-radius:var(--wf-r-sm);margin-bottom:10px;overflow:hidden;position:relative}.rel-thumb-bg{width:100%;height:100%;position:relative}.rt-a{background:linear-gradient(135deg,#060b12,#091210)}.rt-b{background:linear-gradient(135deg,#0a0b06,#0d100a)}.rt-c{background:linear-gradient(135deg,#06100a,#051208)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--wf-mono)}.rel-series-tag{font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}.rel-title{font:500 13px/1.45 var(--wf-sans);color:var(--wf-fg-muted);margin-bottom:4px;transition:color .15s}.rel-card:hover .rel-title{color:var(--wf-fg)}.rel-meta{font:300 11px/1 var(--wf-sans);color:var(--wf-fg-faint)}
+.footer-menu{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:52px 32px 36px}.fm-w{max-width:1280px;margin:0 auto}.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--wf-border)}@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--wf-sans);font-size:20px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}.fm-logo span{font-style:italic;color:var(--wf-brand)}.fm-tagline{font-size:13px;color:var(--wf-fg-subtle);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);color:rgba(29,185,84,.6)}
+.fm-col-title{font:700 9px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}.fm-col a{font-size:13px;color:var(--wf-fg-subtle);text-decoration:none;transition:color .15s}.fm-col a:hover{color:var(--wf-fg)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}.fm-series-item:hover{opacity:.75}.fm-s-num{font:700 9px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}.fm-s-title{font:300 11px/1.3 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}
+.final-footer{background:var(--wf-bg);border-top:1px solid var(--wf-border);padding:14px 32px}.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}.ff-legal{font:300 11px/1 var(--wf-mono);color:var(--wf-fg-faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ff-sep{width:1px;height:10px;background:var(--wf-fg-faint)}.ff-series{color:rgba(29,185,84,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);padding:5px 14px;border:1px solid rgba(29,185,84,.2);border-radius:20px;background:rgba(29,185,84,.06)}
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--wf-ease),transform .65s var(--wf-ease)}.r.in{opacity:1;transform:none}
+@media(max-width:768px){.hero-w{gap:40px;padding:0 20px}.article-grid{padding:40px 20px 60px;gap:40px}.nav-w{padding:0 16px}.ps-inner{padding:0 16px}.pm-inner{padding:16px}.fm-grid{grid-template-columns:1fr}.ff-w{flex-direction:column;gap:8px}.author-inner{flex-direction:column;align-items:center;text-align:center}.author-links{justify-content:center}.hero-text{padding-bottom:48px}h1{font-size:clamp(28px,7vw,48px)}.pull-quote{padding:28px 24px}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<nav><div class="nav-w">
+  <a href="#" class="nav-logo"><span>IO</span> Platform</a><div class="nav-rule"></div>
+  <span class="nav-section">Commercial Real Estate</span>
+  <div class="nav-btns">
+    <button class="nbtn nbtn-ghost" id="attr-btn" onclick="toggleAttr()">Show Agent Sources</button>
+    <button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button>
+    <button class="nbtn nbtn-live"><span class="live-dot"></span>18 Agents Live</button>
+  </div>
+</div></nav>
+
+<div id="pstrip"><div class="ps-inner">
+  <div class="ps-label">Pipeline &middot; WF-07</div>
+  <div class="ps-feeds" id="ps-feeds"></div>
+  <div class="ps-arrow">&rarr;</div>
+  <div class="ps-result"><span class="live-dot"></span>Qualification Suite &middot; 14 Signals &middot; 5 Tiers &middot; 2m 10s</div>
+</div></div>
+
+<div id="pipemap"><div class="pm-inner">
+  <div class="pm-title">ORCHESTRATION MAP <span>&mdash; WF-07 &middot; Prospect Qualification: Scoring, Segmenting, and Relationship Mapping</span></div>
+  <div class="pm-scan"></div>
+  <div class="pm-flow">
+    <div class="pm-node" style="border-color:var(--wf-brand-border)"><div class="pm-node-label">Input</div><div class="pm-node-name" style="color:var(--wf-brand)">Raw Leads</div><div class="pm-node-sub">Enriched prospect data</div></div>
+    <div class="pm-arr">&rarr;</div>
+    <div class="pm-libs">
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-tgt)"></div><div class="pm-lib-name" style="color:var(--c-tgt)">TGT</div><div class="pm-lib-count">4</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-enr)"></div><div class="pm-lib-name" style="color:var(--c-enr)">ENR</div><div class="pm-lib-count">12</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-mkt)"></div><div class="pm-lib-name" style="color:var(--c-mkt)">MKT</div><div class="pm-lib-count">4</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-out)"></div><div class="pm-lib-name" style="color:var(--c-out)">OUT</div><div class="pm-lib-count">6</div></div>
+    </div>
+    <div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Phase 3</div><div class="pm-node-name" style="color:#4ade80">Qualifier</div><div class="pm-node-sub">14-signal scoring</div></div>
+    <div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Output</div><div class="pm-node-name" style="color:#4ade80">Tiered Pipeline</div><div class="pm-node-sub">5 tiers scored</div></div>
+  </div>
+  <div class="pm-meta-row">
+    <div class="pm-meta-item"><span class="pm-meta-n">4</span> Agents</div>
+    <div class="pm-meta-item"><span class="pm-meta-n">14</span> Signals</div>
+    <div class="pm-meta-item"><span class="pm-meta-n">~18k</span> Tokens</div>
+    <div class="pm-meta-item"><span class="pm-meta-n">2m 10s</span> Runtime</div>
+    <div class="pm-meta-item" style="margin-left:auto"><span style="color:var(--wf-green);font:700 9px/1 var(--wf-mono)">&bull; ACTIVE</span></div>
+  </div>
+</div></div>
+
+<header class="hero src art" id="hero">
+  <div class="src-tag">Targeting Agent &mdash; Hero<span class="conf-badge">CONF 0.96</span></div>
+  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow"><span class="eye-tag">Agent Deep Dive</span><span class="eye-divider"></span><span class="eye-series">Windfield CRE Series &middot; Article 07</span></div>
+      <h1>Prospect <em>Qualification:</em> Scoring, Segmenting, and Relationship Mapping</h1>
+      <p class="hero-deck">A lead list without qualification is noise. The IO Qualification Agent evaluates every prospect against 14 signals, assigns one of five tiers, builds dynamic segments, and maps relationship networks &mdash; so brokers spend time on the prospects most likely to close.</p>
+      <div class="hero-meta">
+        <div class="h-author"><div class="h-av">T</div><div><div class="h-name">Tommy Saunders</div><div class="h-role">Founder, IntelligentOperations.ai</div></div></div>
+        <div class="h-sep"></div><span class="h-date">Apr 12, 2026</span><span class="h-read">&middot; 9 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border)">
+        <span style="font:700 8px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-brand)">WF-CRE-2026-007</span>
+        <span style="width:1px;height:10px;background:var(--wf-brand-border)"></span>
+        <span style="font:300 8px/1 var(--wf-mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; WF-07 &middot; APR 2026</span>
+      </div>
+    </div>
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz7">
+        <div class="hv-grid"></div><div class="hv-glow"></div><div class="hv-scan"></div>
+        <div class="hv-tier-group">
+          <div class="hv-tier"><div class="hv-tier-label" style="color:var(--tier-fire)">On Fire</div><div class="hv-tier-bar" style="width:92%;background:linear-gradient(90deg,var(--tier-fire),#f87171)"></div><div class="hv-tier-score" style="color:var(--tier-fire)">85&ndash;100</div><div class="hv-tier-count">12 prospects</div></div>
+          <div class="hv-tier"><div class="hv-tier-label" style="color:var(--tier-hot)">Hot</div><div class="hv-tier-bar" style="width:78%;background:linear-gradient(90deg,var(--tier-hot),#fb923c)"></div><div class="hv-tier-score" style="color:var(--tier-hot)">70&ndash;84</div><div class="hv-tier-count">28 prospects</div></div>
+          <div class="hv-tier"><div class="hv-tier-label" style="color:var(--tier-warm)">Warm</div><div class="hv-tier-bar" style="width:65%;background:linear-gradient(90deg,var(--tier-warm),#facc15)"></div><div class="hv-tier-score" style="color:var(--tier-warm)">50&ndash;69</div><div class="hv-tier-count">47 prospects</div></div>
+          <div class="hv-tier"><div class="hv-tier-label" style="color:var(--tier-neutral)">Neutral</div><div class="hv-tier-bar" style="width:45%;background:linear-gradient(90deg,var(--tier-neutral),#9ca3af)"></div><div class="hv-tier-score" style="color:var(--tier-neutral)">25&ndash;49</div><div class="hv-tier-count">83 prospects</div></div>
+          <div class="hv-tier"><div class="hv-tier-label" style="color:var(--tier-cold)">Cold</div><div class="hv-tier-bar" style="width:30%;background:linear-gradient(90deg,var(--tier-cold),#60a5fa)"></div><div class="hv-tier-score" style="color:var(--tier-cold)">0&ndash;24</div><div class="hv-tier-count">156 prospects</div></div>
+        </div>
+        <div class="hv-bottom-stats">
+          <div class="hv-bs"><div class="hv-bs-n" style="color:var(--tier-fire)">326</div><div class="hv-bs-l">Total Scored</div></div>
+          <div class="hv-bs"><div class="hv-bs-n" style="color:var(--wf-brand)">14</div><div class="hv-bs-l">Signals Active</div></div>
+          <div class="hv-bs"><div class="hv-bs-n" style="color:var(--wf-green)">5</div><div class="hv-bs-l">Tiers</div></div>
+          <div class="hv-bs"><div class="hv-bs-n" style="color:var(--tier-hot)">40</div><div class="hv-bs-l">Priority Queue</div></div>
+        </div>
+        <div class="hv-status7">QUALIFICATION AGENT &middot; SCORING</div>
+        <div class="hv-badge7">IO-VIZ-07</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="article-grid">
+  <article class="article-body"><div class="body">
+
+    <div class="direct-answer-box src enr r" id="s-intro"><div class="src-tag">Enrichment Agent &mdash; Answer Box<span class="conf-badge">CONF 0.95</span></div>
+      <div class="dab-label">Direct Answer</div>
+      <div class="dab-q">How does the IO Qualification Agent score CRE prospects?</div>
+      <div class="dab-a">The Qualification Agent evaluates each prospect against <strong>14 signals across four categories</strong>: firmographic data, behavioral signals, transactional history, and relationship proximity. Each signal is weighted and combined into a <strong>composite score from 0&ndash;100</strong>, mapping to five tiers: On Fire (85&ndash;100), Hot (70&ndash;84), Warm (50&ndash;69), Neutral (25&ndash;49), and Cold (0&ndash;24). The tier determines outreach priority, channel strategy, and broker assignment.</div>
+      <div class="dab-footer"><span class="dab-source">Source: IO Qualification Agent &middot; Windfield Pipeline</span><span class="dab-schema-badge">FAQ Schema</span></div>
+    </div>
+
+    <div class="toc-inline r"><div class="toc-inline-title">In This Article</div>
+      <ul class="toc-inline-list">
+        <a class="toc-inline-item" onclick="scrollToSection('s-problem')"><span class="toc-n">01</span>The Problem With Unqualified Pipeline</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-signals')"><span class="toc-n">02</span>14-Signal Scoring Model</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-tiers')"><span class="toc-n">03</span>Five Tiers and Outreach Rules</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-segments')"><span class="toc-n">04</span>Dynamic Segment Builder</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-relationships')"><span class="toc-n">05</span>Relationship Mapper</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-disqualification')"><span class="toc-n">06</span>Disqualification Flags</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-faq')"><span class="toc-n">07</span>FAQs</a>
+      </ul>
+    </div>
+
+    <div class="r" id="s-problem">
+      <h2 class="sh">The Problem With Unqualified Pipeline</h2>
+      <p class="lede">Every commercial real estate brokerage has the same problem: too many leads, not enough qualified ones. A broker with 200 contacts in a CRM and no scoring system spends the same amount of energy on a cold lead as a prospect who visited three property pages last week, attended a market event, and has a $50M transaction history. That is not a strategy. It is a lottery ticket approach to deal flow.</p>
+      <p>The traditional approach to qualification in CRE is intuition-based. Senior brokers develop a feel for which prospects are real and which are tire-kickers. This works &mdash; until the brokerage scales. When you have 78 properties across three markets, intuition cannot process the signal volume. You need a system that reads data the way a senior broker reads a room, except it does it across <strong>every prospect simultaneously</strong> and never forgets a signal.</p>
+      <p>The IO Qualification Agent was built for this problem. It takes the enriched prospect data from the Enrichment Agent &mdash; firmographic profiles, behavioral signals, transaction history, and relationship data &mdash; and runs each prospect through a <strong>14-signal scoring model</strong> that produces a composite score from 0 to 100. That score maps to one of five tiers. Each tier has defined outreach rules, channel strategies, and response time expectations. No guessing. No gut feel. Data-driven prioritization that ensures <strong>broker time goes where deals close</strong>.</p>
+    </div>
+
+    <div class="pull-quote r"><div class="pq-text">In CRE, <em>the deals you don&rsquo;t pursue</em> matter as much as the ones you do. Qualification is not about finding winners &mdash; it is about <em>eliminating losers</em> before they consume your most expensive resource: broker attention.</div><div class="pq-attr">IO Pipeline Intelligence</div></div>
+
+    <div class="r" id="s-signals">
+      <h2 class="sh">The 14-Signal Scoring Model</h2>
+      <p>The Qualification Agent evaluates four categories of signals, each weighted differently based on their predictive power for CRE deal conversion. The model was calibrated against 18 months of closed transaction data across three Windfield properties.</p>
+      <h3 class="sh3">Category 1: Firmographic Data (30% weight)</h3>
+      <p><strong>Company size</strong> is measured by employee count and annual revenue, mapped against the property type&rsquo;s ideal tenant profile. An industrial warehouse property weights companies with 50&ndash;500 employees and $10M&ndash;$200M revenue most highly. <strong>Industry vertical</strong> is scored by alignment with the property&rsquo;s target sectors &mdash; logistics and distribution companies score highest for industrial assets, tech companies for Class A office. <strong>Geographic footprint</strong> measures whether the prospect has existing operations in the target market or adjacent markets. <strong>Growth trajectory</strong> uses public data signals (job postings, funding rounds, SEC filings) to estimate expansion likelihood.</p>
+      <h3 class="sh3">Category 2: Behavioral Signals (25% weight)</h3>
+      <p><strong>Website engagement</strong> tracks property page visits, time on page, and repeat visits within 30 days. A prospect who visited the same property page three times in a week scores 9/10. <strong>Content downloads</strong> &mdash; market reports, property brochures, investment summaries &mdash; indicate active research behavior. <strong>Email engagement</strong> measures open rates and click-through rates on outreach sequences. <strong>Event attendance</strong> at market tours, broker events, and industry conferences signals active deal intent.</p>
+      <h3 class="sh3">Category 3: Transactional History (30% weight)</h3>
+      <p><strong>Past deal volume</strong> counts the number of CRE transactions in the last 36 months. High-volume transactors are scored higher because they have proven deal execution capability. <strong>Average transaction size</strong> is compared against the subject property&rsquo;s price range &mdash; a prospect whose average deal is $5M looking at a $50M asset gets a lower score. <strong>Time since last transaction</strong> measures recency: a deal closed 3 months ago scores higher than one closed 18 months ago.</p>
+      <h3 class="sh3">Category 4: Relationship Proximity (15% weight)</h3>
+      <p><strong>Shared connections</strong> counts mutual contacts between the prospect and the brokerage team. <strong>Referral source strength</strong> evaluates whether the prospect was referred by a high-value relationship. <strong>Portfolio overlap</strong> identifies prospects who already own or lease properties similar to or adjacent to Windfield assets.</p>
+    </div>
+
+    <div class="signal-block src enr r"><div class="src-tag">Enrichment Agent &mdash; Signal Matrix<span class="conf-badge">CONF 0.94</span></div>
+      <div class="sig-header"><div class="sig-title">14-Signal Scoring Matrix</div></div>
+      <div class="sig-scroll"><table class="sig-table">
+        <thead><tr><th>Signal</th><th>Category</th><th>Weight</th><th>Max Points</th><th>Data Source</th></tr></thead>
+        <tbody>
+          <tr><td>Company Size</td><td>Firmographic</td><td>8%</td><td>10</td><td>Enrichment Agent + LinkedIn</td></tr>
+          <tr><td>Revenue Range</td><td>Firmographic</td><td>8%</td><td>10</td><td>D&amp;B / Public filings</td></tr>
+          <tr><td>Industry Vertical</td><td>Firmographic</td><td>7%</td><td>10</td><td>SIC/NAICS classification</td></tr>
+          <tr><td>Geographic Footprint</td><td>Firmographic</td><td>7%</td><td>10</td><td>Company locations API</td></tr>
+          <tr><td>Website Engagement</td><td>Behavioral</td><td>8%</td><td>10</td><td>Analytics tracking</td></tr>
+          <tr><td>Content Downloads</td><td>Behavioral</td><td>6%</td><td>10</td><td>CRM event tracking</td></tr>
+          <tr><td>Email Engagement</td><td>Behavioral</td><td>6%</td><td>10</td><td>Outreach platform</td></tr>
+          <tr><td>Event Attendance</td><td>Behavioral</td><td>5%</td><td>10</td><td>Event registration data</td></tr>
+          <tr><td>Past Deal Volume</td><td>Transactional</td><td>10%</td><td>10</td><td>CoStar / Public records</td></tr>
+          <tr><td>Avg Transaction Size</td><td>Transactional</td><td>10%</td><td>10</td><td>CoStar / REIS</td></tr>
+          <tr><td>Transaction Recency</td><td>Transactional</td><td>10%</td><td>10</td><td>Public records</td></tr>
+          <tr><td>Shared Connections</td><td>Relationship</td><td>5%</td><td>10</td><td>LinkedIn + CRM graph</td></tr>
+          <tr><td>Referral Source</td><td>Relationship</td><td>5%</td><td>10</td><td>CRM referral tracking</td></tr>
+          <tr><td>Portfolio Overlap</td><td>Relationship</td><td>5%</td><td>10</td><td>Ownership records</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="r" id="s-tiers">
+      <h2 class="sh">Five Tiers and Outreach Rules</h2>
+      <p>The composite score maps to five tiers. Each tier has defined response-time SLAs, channel strategies, and escalation rules. This is not a suggestion system &mdash; it is an operational framework that dictates broker behavior.</p>
+    </div>
+
+    <div class="score-card src mkt r"><div class="src-tag">Market Agent &mdash; Tier System<span class="conf-badge">CONF 0.95</span></div>
+      <div class="sc-header"><div class="sc-title">Prospect Tier System</div><div class="sc-badge">5 Tiers &middot; 326 Scored</div></div>
+      <div class="sc-body">
+        <div class="tier-row"><div class="tier-indicator" style="background:var(--tier-fire)"></div><div class="tier-name" style="color:var(--tier-fire)">On Fire</div><div class="tier-range">85&ndash;100</div><div class="tier-bar-wrap"><div class="tier-bar" style="width:92%;background:var(--tier-fire)"></div></div><div class="tier-action">Personal call within 4 hours</div></div>
+        <div class="tier-row"><div class="tier-indicator" style="background:var(--tier-hot)"></div><div class="tier-name" style="color:var(--tier-hot)">Hot</div><div class="tier-range">70&ndash;84</div><div class="tier-bar-wrap"><div class="tier-bar" style="width:78%;background:var(--tier-hot)"></div></div><div class="tier-action">3-touch sequence in 48 hours</div></div>
+        <div class="tier-row"><div class="tier-indicator" style="background:var(--tier-warm)"></div><div class="tier-name" style="color:var(--tier-warm)">Warm</div><div class="tier-range">50&ndash;69</div><div class="tier-bar-wrap"><div class="tier-bar" style="width:65%;background:var(--tier-warm)"></div></div><div class="tier-action">Automated nurture cadence</div></div>
+        <div class="tier-row"><div class="tier-indicator" style="background:var(--tier-neutral)"></div><div class="tier-name" style="color:var(--tier-neutral)">Neutral</div><div class="tier-range">25&ndash;49</div><div class="tier-bar-wrap"><div class="tier-bar" style="width:45%;background:var(--tier-neutral)"></div></div><div class="tier-action">Monitor for signal changes</div></div>
+        <div class="tier-row"><div class="tier-indicator" style="background:var(--tier-cold)"></div><div class="tier-name" style="color:var(--tier-cold)">Cold</div><div class="tier-range">0&ndash;24</div><div class="tier-bar-wrap"><div class="tier-bar" style="width:30%;background:var(--tier-cold)"></div></div><div class="tier-action">Archive, re-score monthly</div></div>
+      </div>
+    </div>
+
+    <p class="r">The tier system creates a <strong>meritocracy of attention</strong>. An On Fire prospect &mdash; scoring 85 or above &mdash; triggers an immediate alert to the assigned senior broker with a pre-built context brief: who the prospect is, which signals are strongest, what property they are interested in, and a recommended conversation opener. The broker does not have to research the prospect. The system has already done it.</p>
+    <p class="r">Hot prospects (70&ndash;84) enter a structured 3-touch sequence: a personalized email within 24 hours, a LinkedIn connection request with a custom note within 36 hours, and a phone call at 48 hours. Each touchpoint is pre-drafted by the Content Agent and reviewed by the broker before sending. The content references the prospect&rsquo;s specific behavioral signals &mdash; &ldquo;I noticed you downloaded our DFW industrial market report last week.&rdquo;</p>
+
+    <div class="r" id="s-segments">
+      <h2 class="sh">Dynamic Segment Builder</h2>
+      <p>Static lists decay. A prospect list exported from a CRM on Monday is already stale by Thursday because new engagement data has arrived, a company announced an acquisition, or a competitor signed a lease. The IO Segment Builder solves this with <strong>dynamic segments</strong> that update in real time as signals change.</p>
+      <p>A segment is defined by a composite filter across any combination of the 14 scoring signals plus additional metadata: property type preference, geographic focus, deal timeline, budget range, and tenant vs. buyer classification. The system supports up to <strong>50 active segments per portfolio</strong>, each feeding its own outreach cadence.</p>
+    </div>
+
+    <div class="callout r"><div class="callout-label">Example Segment</div>
+      <div class="callout-text"><strong>&ldquo;DFW Industrial Active Buyers&rdquo;</strong> &mdash; Industrial vertical + DFW geography + transaction size &gt;$10M + content engagement in last 30 days + score &ge;50. This segment currently contains 23 prospects and feeds a weekly market intelligence email. When a prospect&rsquo;s score crosses 70, they automatically promote to the Hot tier and exit the automated cadence into a broker-managed sequence.</div>
+    </div>
+
+    <p class="r">The segment builder is not just a filter &mdash; it is a <strong>pipeline management tool</strong>. Brokers can see which segments are growing (indicating market demand for that property type), which are shrinking (indicating cooling interest), and which have the highest concentration of On Fire and Hot prospects. This segment-level view is how the brokerage decides where to allocate marketing spend.</p>
+
+    <div class="r" id="s-relationships">
+      <h2 class="sh">Relationship Mapper</h2>
+      <p>Commercial real estate is a relationship business. A prospect with a score of 60 who is connected to your top three clients through shared portfolio companies is fundamentally different from a 60-score prospect with zero connections. The Relationship Mapper identifies these connections and adjusts qualification accordingly.</p>
+      <p>The mapper cross-references four data sources: <strong>LinkedIn network overlaps</strong> between the prospect and brokerage team members, <strong>transaction co-participants</strong> who appeared in the same deal as existing clients, <strong>shared property interests</strong> from viewing the same properties, and <strong>event co-attendance</strong> at market events.</p>
+      <p>Each connection type carries a different weight. A direct LinkedIn connection to a senior broker adds 5 points. A transaction co-participant with an existing client adds 8 points. Shared property interest adds 3 points. Event co-attendance adds 2 points. The maximum relationship modifier is <strong>15 points</strong> &mdash; enough to push a Warm prospect into the Hot tier or a Hot prospect into On Fire.</p>
+    </div>
+
+    <div class="rel-map src enr r"><div class="src-tag">Enrichment Agent &mdash; Relationship Map<span class="conf-badge">CONF 0.93</span></div>
+      <div class="rm-header"><div class="rm-title">Relationship Network &mdash; Sample Prospect</div></div>
+      <div class="rm-body" style="height:220px">
+        <div class="rm-node" style="top:40%;left:42%;border-color:var(--wf-brand-border);background:var(--wf-brand-muted)"><span style="color:var(--wf-brand)">Prospect: J. Chen</span><div class="rm-node-label">Score: 67 &rarr; 79 (+12)</div></div>
+        <div class="rm-node" style="top:10%;left:15%">Broker: M. Torres<div class="rm-node-label">LinkedIn connection (+5)</div></div>
+        <div class="rm-node" style="top:10%;left:65%">Client: Apex Logistics<div class="rm-node-label">Transaction co-party (+8)</div></div>
+        <div class="rm-node" style="top:75%;left:20%">Client: BrightPath Capital<div class="rm-node-label">Shared property views (+3)</div></div>
+        <div class="rm-node" style="top:75%;left:60%">Event: DFW Industrial Summit<div class="rm-node-label">Co-attendee (+2)</div></div>
+        <svg style="position:absolute;inset:0;pointer-events:none" width="100%" height="100%"><line x1="48%" y1="42%" x2="25%" y2="18%" stroke="rgba(29,185,84,.3)" stroke-width="1" stroke-dasharray="4 3"/><line x1="52%" y1="42%" x2="72%" y2="18%" stroke="rgba(29,185,84,.3)" stroke-width="1" stroke-dasharray="4 3"/><line x1="45%" y1="52%" x2="28%" y2="78%" stroke="rgba(29,185,84,.3)" stroke-width="1" stroke-dasharray="4 3"/><line x1="50%" y1="52%" x2="68%" y2="78%" stroke="rgba(29,185,84,.3)" stroke-width="1" stroke-dasharray="4 3"/></svg>
+      </div>
+    </div>
+
+    <div class="r" id="s-disqualification">
+      <h2 class="sh">Disqualification Flags</h2>
+      <p>Qualification is not only about scoring prospects in &mdash; it is about flagging them out. The disqualification system applies <strong>seven negative flags</strong> that can override even a high composite score. A prospect scoring 88 with a confirmed competitor relationship flag gets moved to the hold queue regardless of their tier.</p>
+      <p>The seven flags are: <strong>confirmed competitor relationship</strong> (active listing with a competing brokerage), <strong>regulatory issues</strong> (pending litigation or compliance violations), <strong>financial distress</strong> (credit downgrades, missed payments), <strong>geographic mismatch</strong> (no operations or expansion signals in target market), <strong>size mismatch</strong> (requirements below minimum threshold), <strong>explicit opt-out</strong> (prospect requested no contact), and <strong>stale engagement</strong> (no activity in 180+ days despite outreach).</p>
+      <p>Disqualification flags are not permanent. The system re-evaluates flagged prospects monthly. A competitor relationship flag is automatically cleared if public records show the engagement has ended. The goal is not to permanently reject prospects but to <strong>prevent wasted outreach on prospects who cannot convert today</strong>.</p>
+    </div>
+
+    <div class="pull-quote r"><div class="pq-text">The best qualification system does not just tell you who to call. It tells you <em>who not to call</em> &mdash; and gives you a reason the broker can articulate if someone asks.</div><div class="pq-attr">IO Qualification Agent Architecture</div></div>
+
+    <div class="src mkt r" id="s-crm"><div class="src-tag">Market Agent &mdash; Lead Capture<span class="conf-badge">CONF 0.94</span></div>
+      <div class="crm-block"><div class="crm-main">
+        <div><div class="crm-eyebrow">IO Platform &middot; CRE Qualification</div><div class="crm-headline">Get the 14-signal scoring model + tier configuration template.</div><div class="crm-sub">The complete qualification framework, signal weighting methodology, five-tier SLA definitions, segment builder templates, and relationship scoring matrix.</div></div>
+        <div class="crm-form"><input type="email" class="crm-inp" placeholder="your@email.com"><button class="crm-btn">Get the Qualification Spec &rarr;</button><div class="crm-note">Free. No spam. Unsubscribe anytime.</div></div>
+      </div></div>
+    </div>
+
+    <div class="src enr r" id="s-faq"><div class="src-tag">Enrichment Agent &mdash; FAQs<span class="conf-badge">CONF 0.96</span></div>
+      <div class="faq-section">
+        <div class="faq-head"><h2 class="faq-head-title">Frequently Asked Questions</h2><span class="faq-head-count">5 Questions</span></div>
+        <div class="faq-item open"><div class="faq-q" onclick="toggleFaq(this)">How does the Qualification Agent score prospects?<span class="faq-toggle">&times;</span></div><div class="faq-a"><div class="faq-a-inner">The Qualification Agent evaluates each prospect against <strong>14 signals across four categories</strong>: firmographic data (company size, revenue, industry, geography), behavioral signals (site visits, downloads, email engagement, events), transactional history (deal volume, transaction size, recency), and relationship proximity (shared connections, referrals, portfolio overlap). Each signal is weighted and combined into a composite score from 0&ndash;100, mapping to five tiers.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What are the five prospect tiers?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">On Fire (85&ndash;100): immediate personal outreach within 4 hours. Hot (70&ndash;84): structured 3-touch sequence within 48 hours. Warm (50&ndash;69): automated nurture cadence. Neutral (25&ndash;49): monitoring for signal changes. Cold (0&ndash;24): archived with monthly re-scoring. <strong>The tier system ensures broker time goes to the highest-probability opportunities.</strong></div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the segment builder work?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">The segment builder creates dynamic groups based on composite filters across any combination of the 14 scoring signals plus property preferences, geographic focus, and deal timeline. Segments update in real time as signals change. The system supports <strong>up to 50 active segments per portfolio</strong>, each feeding its own outreach cadence.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the relationship mapper?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">The relationship mapper identifies connections between prospects, existing clients, and the brokerage team by cross-referencing LinkedIn networks, transaction co-participants, shared property interests, and event co-attendance. It generates a <strong>relationship score that modifies the base qualification score by up to 15 points</strong>.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does disqualification work?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">Seven disqualification flags can override a high score: confirmed competitor relationship, regulatory issues, financial distress, geographic mismatch, size mismatch, explicit opt-out, and stale engagement. Flags are <strong>not permanent</strong> &mdash; the system re-evaluates monthly and clears flags when conditions change.</div></div></div>
+      </div>
+    </div>
+
+  </div></article>
+
+  <aside class="sidebar">
+    <div class="sb-sec r"><div class="sb-sec-title">In This Article</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-item active" onclick="scrollToSection('s-problem')"><span class="toc-dot"></span>Unqualified Pipeline</li>
+        <li class="toc-item" onclick="scrollToSection('s-signals')"><span class="toc-dot"></span>14-Signal Model</li>
+        <li class="toc-item" onclick="scrollToSection('s-tiers')"><span class="toc-dot"></span>Five Tiers</li>
+        <li class="toc-item" onclick="scrollToSection('s-segments')"><span class="toc-dot"></span>Segment Builder</li>
+        <li class="toc-item" onclick="scrollToSection('s-relationships')"><span class="toc-dot"></span>Relationship Mapper</li>
+        <li class="toc-item" onclick="scrollToSection('s-disqualification')"><span class="toc-dot"></span>Disqualification</li>
+        <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+      </ul>
+    </div>
+    <div class="sb-sec r"><div class="sb-sec-title">Active Agents</div><div class="lib-list">
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-tgt)"></div><div class="lib-name">Targeting</div><div class="lib-count">4</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-enr)"></div><div class="lib-name">Enrichment</div><div class="lib-count">12</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-mkt)"></div><div class="lib-name">Market</div><div class="lib-count">4</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-out)"></div><div class="lib-name">Outreach</div><div class="lib-count">6</div></div>
+    </div></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Pipeline Stats</div><div class="stats-grid">
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">14</div><div class="stat-l">Scoring signals</div></div>
+      <div class="stat-card"><div class="stat-n">5</div><div class="stat-l">Tiers defined</div></div>
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-green)">326</div><div class="stat-l">Prospects scored</div></div>
+      <div class="stat-card"><div class="stat-n" style="color:var(--tier-fire)">40</div><div class="stat-l">Priority queue</div></div>
+    </div></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Article Series</div><div class="series-nav">
+      <a class="sn-item" href="wf-article-01.html"><span class="sn-num">01</span><span class="sn-title">Complete CRE Intelligence</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)">Overview</span></a>
+      <a class="sn-item" href="wf-article-06.html"><span class="sn-num">06</span><span class="sn-title">Market Intelligence</span><span class="sn-pill" style="background:rgba(232,160,0,.1);color:#fbbf24;border:1px solid rgba(232,160,0,.2)">Market</span></a>
+      <a class="sn-item current"><span class="sn-num">07</span><span class="sn-title">Prospect Qualification</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)">Scoring</span></a>
+      <a class="sn-item" href="wf-article-08.html"><span class="sn-num">08</span><span class="sn-title">Content &amp; Collateral</span><span class="sn-pill" style="background:rgba(29,185,84,.1);color:#34d399;border:1px solid rgba(29,185,84,.2)">Content</span></a>
+      <a class="sn-item" href="wf-article-09.html"><span class="sn-num">09</span><span class="sn-title">Pipeline Orchestration</span><span class="sn-pill" style="background:rgba(225,29,72,.1);color:#fb7185;border:1px solid rgba(225,29,72,.2)">Pipeline</span></a>
+      <a class="sn-item" href="wf-article-10.html"><span class="sn-num">10</span><span class="sn-title">The Complete System</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)">Capstone</span></a>
+    </div></div>
+  </aside>
+</div>
+
+<div class="author-section r"><div class="author-inner">
+  <div>
+    <div class="author-av">T</div><div class="author-name">Tommy Saunders</div>
+    <div class="author-role">Founder, IntelligentOperations.ai</div>
+    <div class="author-bio">Building the AI-native commercial real estate intelligence system. 18 agents. 78 properties. The pipeline from lead to close is never unattended.</div>
+    <div class="author-links"><a href="#" class="author-link">Twitter</a><a href="#" class="author-link">LinkedIn</a><a href="#" class="author-link">IO Platform</a></div>
+  </div>
+  <div class="author-divider"></div>
+  <div><div class="related-label">Continue Reading &mdash; Windfield CRE Series</div><div class="related-grid">
+    <a class="rel-card" href="wf-article-06.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-b"><div class="rel-thumb-dot" style="background:rgba(232,160,0,.2);border:1px solid rgba(232,160,0,.5);color:#fbbf24">06</div></div></div><div class="rel-series-tag" style="color:rgba(232,160,0,.5)">Agent Deep Dive</div><div class="rel-title">Market Intelligence: Vacancy, Comps, and Demand Signals</div><div class="rel-meta">10 min &middot; Published</div></a>
+    <a class="rel-card" href="wf-article-08.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-c"><div class="rel-thumb-dot" style="background:rgba(29,185,84,.2);border:1px solid rgba(29,185,84,.5);color:#34d399">08</div></div></div><div class="rel-series-tag" style="color:rgba(29,185,84,.5)">Agent Deep Dive</div><div class="rel-title">Content &amp; Collateral at Scale</div><div class="rel-meta">8 min &middot; Published</div></a>
+    <a class="rel-card" href="wf-article-10.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-a"><div class="rel-thumb-dot" style="background:rgba(29,185,84,.2);border:1px solid rgba(29,185,84,.5);color:var(--wf-brand)">10</div></div></div><div class="rel-series-tag" style="color:rgba(29,185,84,.5)">Capstone</div><div class="rel-title">The Complete System: 78 Properties Under IO</div><div class="rel-meta">10 min &middot; Published</div></a>
+  </div></div>
+</div></div>
+
+<footer class="footer-menu"><div class="fm-w"><div class="fm-grid">
+  <div><div class="fm-logo"><span>IO</span> Platform</div><div class="fm-tagline">AI-Native Commercial Real Estate Intelligence. 18 agents. 78 properties. Pipeline that never sleeps.</div><div class="fm-series-badge"><span class="live-dot"></span>Windfield CRE Series &middot; 10 Articles</div></div>
+  <div class="fm-col"><div class="fm-col-title">Platform</div><ul><li><a href="#">Property Hub</a></li><li><a href="#">Agent Registry</a></li><li><a href="#">Pipeline Runner</a></li><li><a href="#">MCP Server</a></li><li><a href="#">Supabase</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">Intelligence</div><ul><li><a href="#">Targeting</a></li><li><a href="#">Enrichment</a></li><li><a href="#">Market Intel</a></li><li><a href="#">Outreach</a></li><li><a href="#">LinkedIn</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">Article Series</div><div class="fm-series-list">
+    <a class="fm-series-item" href="wf-article-06.html"><span class="fm-s-num">06</span><span class="fm-s-title">Market Intelligence</span></a>
+    <a class="fm-series-item"><span class="fm-s-num" style="color:var(--wf-brand)">07</span><span class="fm-s-title" style="color:var(--wf-fg-muted)">Prospect Qualification &larr;</span></a>
+    <a class="fm-series-item" href="wf-article-08.html"><span class="fm-s-num">08</span><span class="fm-s-title">Content &amp; Collateral</span></a>
+    <a class="fm-series-item" href="wf-article-09.html"><span class="fm-s-num">09</span><span class="fm-s-title">Pipeline Orchestration</span></a>
+    <a class="fm-series-item" href="wf-article-10.html"><span class="fm-s-num">10</span><span class="fm-s-title">The Complete System</span></a>
+  </div></div>
+  <div class="fm-col"><div class="fm-col-title">Resources</div><ul><li><a href="#">llm.txt</a></li><li><a href="#">API Docs</a></li><li><a href="#">GitHub</a></li><li><a href="#">Status</a></li><li><a href="#">Templates</a></li></ul></div>
+</div></div></footer>
+
+<div class="final-footer"><div class="ff-w">
+  <div class="ff-legal"><span>&copy; 2026 IntelligentOperations.ai</span><span class="ff-sep"></span><span>All rights reserved</span><span class="ff-sep"></span><span class="ff-series">Windfield CRE Article Series</span><span class="ff-sep"></span><span>WF-CRE-2026-007 &middot; WF-07</span></div>
+  <div class="ff-mcp"><span class="live-dot"></span>18 Agents Active</div>
+</div></div>
+
+<script>
+var FEEDS=[{n:'Targeting',c:'#1db954',ct:4},{n:'Enrichment',c:'#1db954',ct:12},{n:'Market',c:'#e8a000',ct:4},{n:'Outreach',c:'#e11d48',ct:6},{n:'LinkedIn',c:'#0891b2',ct:5},{n:'Content',c:'#8b5cf6',ct:3}];
+var pf=document.getElementById('ps-feeds');
+FEEDS.forEach(function(f,i){var chip=document.createElement('div');chip.className='ps-chip';chip.style.background=f.c+'14';chip.style.border='1px solid '+f.c+'28';chip.style.color=f.c;var dot=document.createElement('div');dot.className='ps-dot';dot.style.background=f.c;chip.appendChild(dot);chip.appendChild(document.createTextNode(f.n+' \u00b7 '+f.ct));pf.appendChild(chip);if(i<FEEDS.length-1){var a=document.createElement('div');a.className='ps-arrow';a.textContent='\u00b7';pf.appendChild(a)}});
+var attrOn=false;function toggleAttr(){attrOn=!attrOn;document.body.classList.toggle('attr',attrOn);var b=document.getElementById('attr-btn');b.classList.toggle('on',attrOn);b.textContent=attrOn?'Hide Sources':'Show Agent Sources';if(attrOn){document.querySelectorAll('.src').forEach(function(el){if(!el.querySelector('.ann-corners')){var c=document.createElement('div');c.className='ann-corners';c.innerHTML='<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';el.appendChild(c)}})}}
+function togglePipe(){var s=document.getElementById('pstrip'),m=document.getElementById('pipemap'),b=document.getElementById('pipe-btn');if(m.classList.contains('open')){m.classList.remove('open');s.classList.remove('open');b.classList.remove('on')}else if(s.classList.contains('open')){s.classList.remove('open');m.classList.add('open');b.classList.add('on')}else{s.classList.add('open');b.classList.add('on')}}
+function toggleFaq(q){var item=q.parentElement,was=item.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(function(i){i.classList.remove('open');i.querySelector('.faq-toggle').textContent='+'});if(!was){item.classList.add('open');q.querySelector('.faq-toggle').textContent='\u00d7'}}
+window.addEventListener('scroll',function(){var d=document.documentElement;document.getElementById('prog').style.width=((window.scrollY/(d.scrollHeight-d.clientHeight))*100)+'%'},{passive:true});
+var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('in')})},{threshold:.05,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.r').forEach(function(el){ro.observe(el)});
+var sections=['s-problem','s-signals','s-tiers','s-segments','s-relationships','s-disqualification','s-faq'];var tocItems=document.querySelectorAll('.toc-item');
+var tocObs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var idx=sections.indexOf(en.target.id);if(idx>-1){tocItems.forEach(function(t){t.classList.remove('active')});if(tocItems[idx])tocItems[idx].classList.add('active')}}})},{threshold:.3});
+sections.forEach(function(s){var el=document.getElementById(s);if(el)tocObs.observe(el)});
+function scrollToSection(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+</script>
+</body>
+</html>

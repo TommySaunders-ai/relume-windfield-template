@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pipeline Orchestration: The 7-Stage Loop That Runs Continuously — Windfield Real Estate IO</title>
+<meta name="description" content="How the IO Pipeline Orchestrator runs a continuous 7-stage loop — Seed, Score, Audiences, Creatives, Launch, Monitor, Rescore — across 78 properties with Vercel cron jobs, signal monitoring, and automatic optimization.">
+<meta name="keywords" content="CRE pipeline orchestration, continuous pipeline automation, 7 stage pipeline loop, vercel cron commercial real estate, ai pipeline optimization, windfield pipeline architecture">
+<meta property="og:title" content="Pipeline Orchestration: The 7-Stage Loop That Runs Continuously">
+<meta property="og:description" content="How the IO Pipeline Orchestrator runs a 7-stage continuous loop across 78 properties — from seed to rescore — with automated scheduling, signal monitoring, and optimization.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-04-15">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Pipeline Orchestration: The 7-Stage Loop That Runs Continuously","description":"How the IO Pipeline Orchestrator runs a continuous 7-stage loop — Seed, Score, Audiences, Creatives, Launch, Monitor, Rescore — across 78 properties with Vercel cron, signal monitoring, and optimization.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"IntelligentOperations.ai"}},"publisher":{"@type":"Organization","name":"IntelligentOperations.ai"},"datePublished":"2026-04-15","articleSection":"Agent Deep Dive","keywords":["pipeline orchestration","continuous loop","7-stage pipeline","vercel cron","signal monitoring","pipeline optimization"],"wordCount":3000,"timeRequired":"PT10M","isPartOf":{"@type":"CreativeWorkSeries","name":"Windfield CRE Article Series","position":9}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What are the 7 stages of the IO pipeline loop?","acceptedAnswer":{"@type":"Answer","text":"The 7 stages are: (1) Seed — identify new prospects from data sources, (2) Score — run the 14-signal qualification model, (3) Audiences — build dynamic segments from scored prospects, (4) Creatives — generate content packages for each segment, (5) Launch — deploy outreach sequences across channels, (6) Monitor — track engagement signals and response data, (7) Rescore — update prospect scores based on new signals and restart the loop. Each full cycle takes approximately 4 hours for the complete 78-property portfolio."}},
+{"@type":"Question","name":"How does the pipeline run continuously without manual intervention?","acceptedAnswer":{"@type":"Answer","text":"The pipeline uses Vercel cron jobs to schedule each stage. The Seed stage runs every 6 hours to pull new prospect data. Score runs immediately after Seed completes. Audiences and Creatives run in parallel once scoring is done. Launch is gated by a broker approval queue for On Fire and Hot prospects, while Warm and Neutral tier outreach launches automatically. Monitor runs continuously, and Rescore triggers when engagement signals exceed defined thresholds or on a 24-hour cycle."}},
+{"@type":"Question","name":"How does signal monitoring work between pipeline cycles?","acceptedAnswer":{"@type":"Answer","text":"The Monitor stage runs continuously between full pipeline cycles, watching for engagement signals that should trigger immediate action. A prospect who opens three emails in one hour triggers an immediate rescore and potential tier promotion. A prospect who visits a property page after receiving outreach triggers a real-time alert to the assigned broker. The monitoring system tracks 8 signal types: email opens, email clicks, website visits, content downloads, LinkedIn profile views, LinkedIn message responses, phone call completions, and event registrations."}},
+{"@type":"Question","name":"What happens during the Rescore stage?","acceptedAnswer":{"@type":"Answer","text":"Rescore re-evaluates every prospect's 14-signal composite score using data collected during the Monitor stage. Prospects whose scores cross tier boundaries are automatically promoted or demoted. A Warm prospect whose email engagement spiked gets rescored to Hot and enters the broker-managed sequence. A Hot prospect who went silent for 30 days gets demoted to Warm and returns to automated nurture. Rescore also feeds the Seed stage by identifying gaps in coverage — segments with declining prospects trigger new seed queries."}},
+{"@type":"Question","name":"How does the orchestrator handle 78 properties simultaneously?","acceptedAnswer":{"@type":"Answer","text":"The orchestrator uses a priority queue based on property activity level. High-activity properties (those with recent listing changes, upcoming lease expirations, or high prospect engagement) run full pipeline cycles every 4 hours. Medium-activity properties run every 8 hours. Low-activity properties run every 24 hours. This tiered scheduling ensures that the properties most likely to generate deals get the most frequent pipeline attention while keeping total compute costs manageable across the full portfolio."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"IntelligentOperations.ai","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Commercial Real Estate","item":"https://intelligentoperations.ai/cre"},
+{"@type":"ListItem","position":3,"name":"Windfield Series","item":"https://intelligentoperations.ai/cre/windfield-series"},
+{"@type":"ListItem","position":4,"name":"Pipeline Orchestration","item":"https://intelligentoperations.ai/cre/pipeline-orchestration-7-stage-loop"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-surface:#141417;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;
+  --wf-brand:#1db954;--wf-brand-muted:rgba(29,185,84,.12);--wf-brand-border:rgba(29,185,84,.22);
+  --wf-border:#27272a;--wf-border2:rgba(250,250,250,.1);--wf-border3:rgba(250,250,250,.16);
+  --wf-amber:#e8a000;--wf-rose:#e11d48;--wf-purple:#8b5cf6;--wf-cyan:#0891b2;--wf-green:#1db954;
+  --c-tgt:#1db954;--c-enr:#1db954;--c-mkt:#e8a000;--c-out:#e11d48;--c-lin:#0891b2;--c-cnt:#8b5cf6;
+  --wf-sans:'Inter',system-ui,-apple-system,sans-serif;--wf-mono:'JetBrains Mono','Fira Code',monospace;
+  --wf-r-sm:6px;--wf-r-md:10px;--wf-r-lg:16px;
+  --wf-ease:cubic-bezier(.25,.46,.45,.94);--wf-spring:cubic-bezier(.34,1.56,.64,1);
+  --s1:#34d399;--s2:#60a5fa;--s3:#fbbf24;--s4:#a78bfa;--s5:#fb923c;--s6:#38bdf8;--s7:#f87171;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--wf-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+.src{position:relative}.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-tgt);outline-offset:3px}body.attr .enr{outline:1.5px solid var(--c-enr);outline-offset:3px}body.attr .mkt{outline:1.5px solid var(--c-mkt);outline-offset:3px}body.attr .out{outline:1.5px solid var(--c-out);outline-offset:3px}body.attr .con{outline:1.5px solid var(--c-cnt);outline-offset:3px}
+.art .src-tag{background:var(--c-tgt);color:#fff}.enr .src-tag{background:var(--c-enr);color:#fff}.mkt .src-tag{background:var(--c-mkt);color:#fff}.out .src-tag{background:var(--c-out);color:#fff}.con .src-tag{background:var(--c-cnt);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-tgt)}body.attr .enr .ann-c{border-color:var(--c-enr)}body.attr .out .ann-c{border-color:var(--c-out)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:9999;width:0;transition:width .1s linear}
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border);height:52px;display:flex;align-items:center}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center}
+.nav-logo{font-family:var(--wf-sans);font-size:18px;font-weight:700;color:var(--wf-fg);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-rule{width:1px;height:16px;background:var(--wf-border2);margin-right:18px}.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--wf-sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--wf-ease)}
+.nbtn-ghost{background:none;border:1px solid var(--wf-border2);color:var(--wf-fg-subtle)}.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--wf-green);display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+#pstrip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}.ps-chip{padding:4px 10px;border-radius:var(--wf-r-sm);font:600 10px/1 var(--wf-sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}.ps-arrow{font-size:10px;color:var(--wf-fg-faint);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--wf-sans);color:var(--wf-green);letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+#pipemap{background:var(--wf-surface);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .5s var(--wf-ease)}#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:10px}.pm-title span{font-weight:300;color:var(--wf-fg-subtle)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.5),transparent);animation:pms9 2s ease-in-out infinite;margin:10px 0}
+@keyframes pms9{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--wf-sans);color:var(--wf-fg)}.pm-node-sub{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:var(--wf-r-sm);text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--wf-border)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}.pm-lib-name{font:700 7px/1 var(--wf-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.pm-lib-count{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--wf-border)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--wf-mono);color:var(--wf-fg-subtle)}.pm-meta-n{font:700 11px/1 var(--wf-mono);color:var(--wf-fg)}
+.hero{background:var(--wf-bg);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--wf-border) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-divider{width:20px;height:1px;background:var(--wf-fg-faint)}.eye-series{font:600 10px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+h1{font-family:var(--wf-sans);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--wf-border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}.h-role{font-size:11px;color:var(--wf-fg-subtle)}.h-sep{width:1px;height:28px;background:var(--wf-border2);margin:0 18px}.h-date{font-size:13px;color:var(--wf-fg-subtle)}.h-read{font-size:13px;color:var(--wf-fg-subtle);margin-left:14px}
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);background-size:32px 32px}
+.hv-glow{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(29,185,84,.12) 0%,transparent 65%);animation:gp9 4s ease-in-out infinite}
+@keyframes gp9{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);animation:hvs9 5.5s ease-in-out infinite;opacity:.4}
+@keyframes hvs9{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+.hv-loop-center{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:rgba(29,185,84,.08);border:1.5px solid rgba(29,185,84,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:700 9px/1 var(--wf-mono);color:var(--wf-brand);z-index:10;box-shadow:0 0 32px rgba(29,185,84,.2)}
+.hv-stage{position:absolute;transform:translate(-50%,-50%);z-index:8;width:64px;text-align:center;cursor:pointer;transition:opacity .2s}
+.hv-stage-dot{width:10px;height:10px;border-radius:50%;margin:0 auto 4px;border:2px solid;background:rgba(9,9,11,.8)}
+.hv-stage-label{font:700 7px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase}
+.hv-stage-sub{font:300 6px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-top:2px}
+.hv-progress-ring{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;z-index:5}
+.hv-badge9{position:absolute;top:14px;right:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.22)}
+.hv-status9{position:absolute;top:14px;left:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.25)}
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}.article-body{min-width:0}.sidebar{position:sticky;top:72px}
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;background:linear-gradient(135deg,var(--wf-brand-muted),rgba(29,185,84,.02));border:1px solid var(--wf-brand-border);border-left:3px solid var(--wf-brand);border-radius:var(--wf-r-md)}
+.dab-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}.dab-label::before{content:'\25B8'}
+.dab-q{font:600 15px/1.4 var(--wf-sans);color:var(--wf-fg);margin-bottom:10px}.dab-a{font:300 14px/1.72 var(--wf-sans);color:var(--wf-fg-muted)}.dab-a strong{font-weight:600;color:var(--wf-fg)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}.dab-source{font:300 10px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:var(--wf-r-md)}
+.toc-inline-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;text-decoration:none;transition:color .15s}.toc-inline-item:last-child{border-bottom:none}.toc-inline-item:hover{color:var(--wf-fg)}
+.toc-n{font:700 9px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0;padding-top:2px}
+.body p{font-size:17.5px;line-height:1.82;color:var(--wf-fg-muted);font-weight:300;margin-bottom:28px}.body p strong{font-weight:600;color:var(--wf-fg)}
+h2.sh{font-family:var(--wf-sans);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--wf-fg);margin:60px 0 20px}
+h3.sh3{font:700 11px/1 var(--wf-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin:40px 0 14px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--wf-fg)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--wf-sans);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--wf-brand)}
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--wf-surface);border-radius:var(--wf-r-md);border:1px solid var(--wf-border);border-left:3px solid var(--wf-brand);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--wf-sans);font-size:150px;font-weight:700;color:var(--wf-brand-muted);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--wf-sans);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--wf-fg);position:relative;z-index:1;margin-bottom:14px}.pq-text em{font-style:italic;color:var(--wf-brand)}
+.pq-attr{font:600 11px/1 var(--wf-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);position:relative;z-index:1}
+.stage-block{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border2);background:var(--wf-surface)}
+.stg-header{padding:14px 22px;border-bottom:1px solid var(--wf-border);display:flex;align-items:center;gap:12px}
+.stg-title{font:700 10px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.stg-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.stg-grid{padding:20px 24px;display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+@media(max-width:800px){.stg-grid{grid-template-columns:repeat(4,1fr)}}@media(max-width:500px){.stg-grid{grid-template-columns:1fr 1fr}}
+.stg-card{background:rgba(255,255,255,.025);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:12px;text-align:center;cursor:pointer;transition:all .2s}
+.stg-card:hover{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.stg-num{font:700 16px/1 var(--wf-mono);margin-bottom:4px}.stg-name{font:700 9px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.stg-desc{font:300 9px/1.4 var(--wf-sans);color:var(--wf-fg-faint)}.stg-time{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-top:4px}
+.callout{margin:48px 0;padding:24px 28px;background:linear-gradient(135deg,var(--wf-brand-muted),rgba(29,185,84,.02));border:1px solid var(--wf-brand-border);border-left:3px solid var(--wf-brand);border-radius:var(--wf-r-md)}
+.callout-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}.callout-label::before{content:'\25B8'}
+.callout-text{font:300 14px/1.72 var(--wf-sans);color:var(--wf-fg-muted)}.callout-text strong{font-weight:600;color:var(--wf-fg)}
+.faq-section{margin:52px 0}.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--wf-border2)}
+.faq-head-title{font-family:var(--wf-sans);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--wf-fg)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);overflow:hidden;margin-bottom:8px;transition:border-color .15s}.faq-item.open{border-color:var(--wf-border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--wf-sans);color:var(--wf-fg-muted);gap:12px;transition:color .15s}.faq-q:hover,.faq-item.open .faq-q{color:var(--wf-fg)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--wf-border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wf-fg-subtle);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--wf-brand-muted);border-color:var(--wf-brand-border);color:var(--wf-brand)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease),padding .2s}.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--wf-sans);color:var(--wf-fg-muted)}.faq-a-inner strong{font-weight:600;color:var(--wf-fg)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--wf-mono);color:var(--wf-fg-faint)}.faq-schema-note::before{content:'\25C8';color:rgba(29,185,84,.4);font-size:8px}
+.crm-block{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-brand-border);background:linear-gradient(135deg,var(--wf-surface) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-block::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(29,185,84,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);opacity:.6;margin-bottom:10px}
+.crm-headline{font-family:var(--wf-sans);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--wf-fg);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--wf-fg-subtle);line-height:1.65}.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--wf-border2);border-radius:var(--wf-r-sm);font:300 14px var(--wf-sans);color:var(--wf-fg);outline:none;transition:border-color .15s}.crm-inp:focus{border-color:var(--wf-brand-border)}.crm-inp::placeholder{color:var(--wf-fg-faint)}
+.crm-btn{padding:12px;background:var(--wf-brand);border:none;border-radius:var(--wf-r-sm);font:700 13px var(--wf-sans);color:#fff;cursor:pointer;transition:opacity .15s}.crm-btn:hover{opacity:.88}.crm-note{font-size:10px;color:var(--wf-fg-faint);text-align:center}
+.sb-sec{margin-bottom:36px}.sb-sec-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}.toc-item{padding:9px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}.toc-item:hover,.toc-item.active{color:var(--wf-fg)}.toc-item.active{color:var(--wf-brand)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:12px}.stat-n{font:700 22px/1 var(--wf-mono);color:var(--wf-fg);margin-bottom:3px}.stat-l{font-size:10px;color:var(--wf-fg-subtle);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm)}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}.lib-name{font:500 12px/1 var(--wf-sans);color:var(--wf-fg);flex:1}.lib-count{font:normal 10px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.series-nav{display:flex;flex-direction:column;gap:6px}.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);text-decoration:none;transition:all .15s;cursor:pointer}.sn-item:hover{border-color:var(--wf-border2)}.sn-item.current{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.sn-num{font:700 10px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}.sn-item.current .sn-num{color:var(--wf-brand)}.sn-title{font:400 11px/1.35 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}.sn-item.current .sn-title{color:var(--wf-fg)}
+.sn-pill{padding:2px 6px;border-radius:3px;font:700 7px/1 var(--wf-mono);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--wf-border)}.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--wf-sans);font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-.02em}.author-role{font:500 12px/1 var(--wf-sans);color:var(--wf-brand);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--wf-fg-subtle);line-height:1.7;margin-bottom:14px}.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--wf-border2);color:var(--wf-fg-subtle);text-decoration:none;transition:all .15s}.author-link:hover{color:var(--wf-fg);border-color:var(--wf-border3)}
+.author-divider{background:var(--wf-border)}.related-label{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}.rel-thumb{height:100px;border-radius:var(--wf-r-sm);margin-bottom:10px;overflow:hidden;position:relative}.rel-thumb-bg{width:100%;height:100%;position:relative}
+.rt-a{background:linear-gradient(135deg,#07071a,#0d1030)}.rt-b{background:linear-gradient(135deg,#0c0900,#140e00)}.rt-c{background:linear-gradient(135deg,#06100a,#051208)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--wf-mono)}
+.rel-series-tag{font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}.rel-title{font:500 13px/1.45 var(--wf-sans);color:var(--wf-fg-muted);margin-bottom:4px;transition:color .15s}.rel-card:hover .rel-title{color:var(--wf-fg)}.rel-meta{font:300 11px/1 var(--wf-sans);color:var(--wf-fg-faint)}
+.footer-menu{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:52px 32px 36px}.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--wf-border)}@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--wf-sans);font-size:20px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}.fm-logo span{font-style:italic;color:var(--wf-brand)}
+.fm-tagline{font-size:13px;color:var(--wf-fg-subtle);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);color:rgba(29,185,84,.6)}
+.fm-col-title{font:700 9px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}.fm-col a{font-size:13px;color:var(--wf-fg-subtle);text-decoration:none;transition:color .15s}.fm-col a:hover{color:var(--wf-fg)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}.fm-series-item:hover{opacity:.75}.fm-s-num{font:700 9px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}.fm-s-title{font:300 11px/1.3 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}
+.final-footer{background:var(--wf-bg);border-top:1px solid var(--wf-border);padding:14px 32px}.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--wf-mono);color:var(--wf-fg-faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ff-sep{width:1px;height:10px;background:var(--wf-fg-faint)}.ff-series{color:rgba(29,185,84,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);padding:5px 14px;border:1px solid rgba(29,185,84,.2);border-radius:20px;background:rgba(29,185,84,.06)}
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--wf-ease),transform .65s var(--wf-ease)}.r.in{opacity:1;transform:none}
+@media(max-width:768px){.hero-w{gap:40px;padding:0 20px}.article-grid{padding:40px 20px 60px;gap:40px}.nav-w{padding:0 16px}.nav-section{display:none}.ps-inner{padding:0 16px}.pm-inner{padding:16px}.stg-grid{grid-template-columns:1fr 1fr}.fm-grid{grid-template-columns:1fr}.ff-w{flex-direction:column;gap:8px}.author-inner{flex-direction:column;align-items:center;text-align:center}.author-links{justify-content:center}.hero-text{padding-bottom:48px}h1{font-size:clamp(28px,7vw,48px)}.pull-quote{padding:28px 24px}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-w"><a href="#" class="nav-logo"><span>IO</span> Platform</a><div class="nav-rule"></div><span class="nav-section">Commercial Real Estate</span><div class="nav-btns"><button class="nbtn nbtn-ghost" id="attr-btn" onclick="toggleAttr()">Show Agent Sources</button><button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button><button class="nbtn nbtn-live"><span class="live-dot"></span>18 Agents Live</button></div></div></nav>
+
+<div id="pstrip"><div class="ps-inner"><div class="ps-label">Pipeline &middot; WF-09</div><div class="ps-feeds" id="ps-feeds"></div><div class="ps-arrow">&rarr;</div><div class="ps-result"><span class="live-dot"></span>7-Stage Loop &middot; 78 Properties &middot; Continuous &middot; ~4h/cycle</div></div></div>
+
+<div id="pipemap"><div class="pm-inner">
+  <div class="pm-title">ORCHESTRATION MAP <span>&mdash; WF-09 &middot; Pipeline Orchestration: The 7-Stage Loop</span></div><div class="pm-scan"></div>
+  <div class="pm-flow">
+    <div class="pm-node" style="border-color:var(--wf-brand-border)"><div class="pm-node-label">Input</div><div class="pm-node-name" style="color:var(--wf-brand)">Data Sources</div><div class="pm-node-sub">All agents feed</div></div>
+    <div class="pm-arr">&rarr;</div>
+    <div class="pm-libs">
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-tgt)"></div><div class="pm-lib-name" style="color:var(--c-tgt)">TGT</div><div class="pm-lib-count">4</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-enr)"></div><div class="pm-lib-name" style="color:var(--c-enr)">ENR</div><div class="pm-lib-count">12</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-mkt)"></div><div class="pm-lib-name" style="color:var(--c-mkt)">MKT</div><div class="pm-lib-count">4</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-out)"></div><div class="pm-lib-name" style="color:var(--c-out)">OUT</div><div class="pm-lib-count">6</div></div>
+    </div>
+    <div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Orchestrator</div><div class="pm-node-name" style="color:#4ade80">7-Stage Loop</div><div class="pm-node-sub">Continuous cycle</div></div>
+    <div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Output</div><div class="pm-node-name" style="color:#4ade80">Live Pipeline</div><div class="pm-node-sub">78 properties</div></div>
+  </div>
+  <div class="pm-meta-row">
+    <div class="pm-meta-item"><span class="pm-meta-n">7</span> Stages</div><div class="pm-meta-item"><span class="pm-meta-n">18</span> Agents</div>
+    <div class="pm-meta-item"><span class="pm-meta-n">78</span> Properties</div><div class="pm-meta-item"><span class="pm-meta-n">~4h</span> Full cycle</div>
+    <div class="pm-meta-item" style="margin-left:auto"><span style="color:var(--wf-green);font:700 9px/1 var(--wf-mono)">&bull; ACTIVE</span></div>
+  </div>
+</div></div>
+
+<header class="hero src art" id="hero"><div class="src-tag">Targeting Agent &mdash; Hero<span class="conf-badge">CONF 0.97</span></div>
+  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow"><span class="eye-tag">Agent Deep Dive</span><span class="eye-divider"></span><span class="eye-series">Windfield CRE Series &middot; Article 09</span></div>
+      <h1>Pipeline <em>Orchestration:</em> The 7-Stage Loop That Runs Continuously</h1>
+      <p class="hero-deck">A pipeline that runs once is a report. A pipeline that runs continuously is an operating system. The IO Orchestrator executes a 7-stage loop &mdash; Seed, Score, Audiences, Creatives, Launch, Monitor, Rescore &mdash; across 78 properties on automated Vercel cron schedules. The loop never stops. The pipeline never sleeps.</p>
+      <div class="hero-meta">
+        <div class="h-author"><div class="h-av">T</div><div><div class="h-name">Tommy Saunders</div><div class="h-role">Founder, IntelligentOperations.ai</div></div></div>
+        <div class="h-sep"></div><span class="h-date">Apr 15, 2026</span><span class="h-read">&middot; 10 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border)">
+        <span style="font:700 8px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-brand)">WF-CRE-2026-009</span><span style="width:1px;height:10px;background:var(--wf-brand-border)"></span>
+        <span style="font:300 8px/1 var(--wf-mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; WF-09 &middot; APR 2026</span>
+      </div>
+    </div>
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz9"><div class="hv-grid"></div><div class="hv-glow"></div><div class="hv-scan"></div>
+        <div class="hv-loop-center"><span style="font-size:14px">&#8635;</span><span>LOOP</span><span style="font:300 6px/1 var(--wf-mono);color:rgba(29,185,84,.5)">CONTINUOUS</span></div>
+        <div class="hv-stage" style="top:16%;left:50%"><div class="hv-stage-dot" style="color:var(--s1);border-color:var(--s1)"></div><div class="hv-stage-label" style="color:var(--s1)">1. Seed</div><div class="hv-stage-sub">New prospects</div></div>
+        <div class="hv-stage" style="top:24%;left:78%"><div class="hv-stage-dot" style="color:var(--s2);border-color:var(--s2)"></div><div class="hv-stage-label" style="color:var(--s2)">2. Score</div><div class="hv-stage-sub">14 signals</div></div>
+        <div class="hv-stage" style="top:46%;left:88%"><div class="hv-stage-dot" style="color:var(--s3);border-color:var(--s3)"></div><div class="hv-stage-label" style="color:var(--s3)">3. Audience</div><div class="hv-stage-sub">Dynamic segments</div></div>
+        <div class="hv-stage" style="top:68%;left:78%"><div class="hv-stage-dot" style="color:var(--s4);border-color:var(--s4)"></div><div class="hv-stage-label" style="color:var(--s4)">4. Creative</div><div class="hv-stage-sub">Content package</div></div>
+        <div class="hv-stage" style="top:78%;left:50%"><div class="hv-stage-dot" style="color:var(--s5);border-color:var(--s5)"></div><div class="hv-stage-label" style="color:var(--s5)">5. Launch</div><div class="hv-stage-sub">Deploy outreach</div></div>
+        <div class="hv-stage" style="top:68%;left:22%"><div class="hv-stage-dot" style="color:var(--s6);border-color:var(--s6)"></div><div class="hv-stage-label" style="color:var(--s6)">6. Monitor</div><div class="hv-stage-sub">Track signals</div></div>
+        <div class="hv-stage" style="top:24%;left:22%"><div class="hv-stage-dot" style="color:var(--s7);border-color:var(--s7)"></div><div class="hv-stage-label" style="color:var(--s7)">7. Rescore</div><div class="hv-stage-sub">Update &amp; restart</div></div>
+        <svg class="hv-progress-ring" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="none" stroke="rgba(29,185,84,.15)" stroke-width="1.5"/><circle cx="100" cy="100" r="90" fill="none" stroke="rgba(29,185,84,.5)" stroke-width="1.5" stroke-dasharray="565" stroke-dashoffset="565" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="565" to="0" dur="8s" repeatCount="indefinite"/></circle></svg>
+        <div class="hv-status9">PIPELINE ORCHESTRATOR &middot; 7-STAGE LOOP</div><div class="hv-badge9">IO-VIZ-09</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="article-grid">
+  <article class="article-body"><div class="body">
+    <div class="direct-answer-box src art r" id="s-intro"><div class="src-tag">Targeting Agent &mdash; Answer Box<span class="conf-badge">CONF 0.95</span></div>
+      <div class="dab-label">Direct Answer</div><div class="dab-q">What are the 7 stages of the IO pipeline loop?</div>
+      <div class="dab-a">The 7 stages are: <strong>(1) Seed</strong> &mdash; identify new prospects, <strong>(2) Score</strong> &mdash; run 14-signal qualification, <strong>(3) Audiences</strong> &mdash; build dynamic segments, <strong>(4) Creatives</strong> &mdash; generate content packages, <strong>(5) Launch</strong> &mdash; deploy outreach, <strong>(6) Monitor</strong> &mdash; track engagement signals, <strong>(7) Rescore</strong> &mdash; update scores and restart. Each full cycle takes approximately <strong>4 hours</strong> for the complete 78-property portfolio.</div>
+      <div class="dab-footer"><span class="dab-source">Source: IO Pipeline Orchestrator &middot; Windfield</span><span class="dab-schema-badge">FAQ Schema</span></div>
+    </div>
+
+    <div class="toc-inline r"><div class="toc-inline-title">In This Article</div><ul class="toc-inline-list">
+      <a class="toc-inline-item" onclick="scrollToSection('s-why')"><span class="toc-n">01</span>Why Continuous Beats Batch</a>
+      <a class="toc-inline-item" onclick="scrollToSection('s-stages')"><span class="toc-n">02</span>The 7 Stages Detailed</a>
+      <a class="toc-inline-item" onclick="scrollToSection('s-cron')"><span class="toc-n">03</span>Vercel Cron Scheduling</a>
+      <a class="toc-inline-item" onclick="scrollToSection('s-monitor')"><span class="toc-n">04</span>Signal Monitoring</a>
+      <a class="toc-inline-item" onclick="scrollToSection('s-optimize')"><span class="toc-n">05</span>Continuous Optimization</a>
+      <a class="toc-inline-item" onclick="scrollToSection('s-faq')"><span class="toc-n">06</span>FAQs</a>
+    </ul></div>
+
+    <div class="r" id="s-why">
+      <h2 class="sh">Why Continuous Beats Batch</h2>
+      <p class="lede">Most CRE technology runs in batch mode. You pull a list of prospects on Monday, run outreach on Tuesday, check results on Friday. This cadence was designed for a world where data arrived slowly and analysis took time. That world no longer exists. Engagement data arrives in real time. Market signals change hourly. A prospect who was Warm at 9 AM may be On Fire by noon because they just visited three property pages and downloaded a market report.</p>
+      <p>The IO Pipeline Orchestrator replaces batch processing with a <strong>continuous loop</strong>. Instead of running once and waiting for human review, the pipeline cycles through seven stages and then starts again. Each cycle incorporates new data from the Monitor stage, so the pipeline gets smarter with every rotation. The question is not &ldquo;did we run the pipeline this week&rdquo; but &ldquo;how many cycles has the pipeline completed since the last deal closed.&rdquo;</p>
+      <p>For a portfolio of 78 properties, continuous orchestration means every property has an active pipeline running. No property sits idle waiting for a broker to initiate outreach. No prospect goes unscored because the weekly batch hasn&rsquo;t run yet. <strong>The pipeline runs whether anyone is watching or not.</strong></p>
+    </div>
+
+    <div class="pull-quote r"><div class="pq-text">A pipeline that runs once is a report. A pipeline that <em>runs continuously</em> is an operating system. The difference is the difference between knowing what happened and <em>controlling what happens next</em>.</div><div class="pq-attr">IO Pipeline Architecture</div></div>
+
+    <div class="r" id="s-stages">
+      <h2 class="sh">The 7 Stages Detailed</h2>
+      <p>Each stage has a defined input, processing agent, output, and handoff protocol. The stages are sequential within a cycle but the pipeline can run multiple property cycles in parallel.</p>
+    </div>
+
+    <div class="stage-block src out r"><div class="src-tag">Outreach Agent &mdash; Stage Map<span class="conf-badge">CONF 0.95</span></div>
+      <div class="stg-header"><div class="stg-title">7-Stage Pipeline Loop</div><div class="stg-badge">Continuous &middot; ~4h/cycle</div></div>
+      <div class="stg-grid">
+        <div class="stg-card"><div class="stg-num" style="color:var(--s1)">1</div><div class="stg-name" style="color:var(--s1)">Seed</div><div class="stg-desc">New prospects from data sources</div><div class="stg-time">Every 6h</div></div>
+        <div class="stg-card"><div class="stg-num" style="color:var(--s2)">2</div><div class="stg-name" style="color:var(--s2)">Score</div><div class="stg-desc">14-signal qualification</div><div class="stg-time">After Seed</div></div>
+        <div class="stg-card"><div class="stg-num" style="color:var(--s3)">3</div><div class="stg-name" style="color:var(--s3)">Audiences</div><div class="stg-desc">Dynamic segment build</div><div class="stg-time">Parallel</div></div>
+        <div class="stg-card"><div class="stg-num" style="color:var(--s4)">4</div><div class="stg-name" style="color:var(--s4)">Creatives</div><div class="stg-desc">Content package gen</div><div class="stg-time">Parallel</div></div>
+        <div class="stg-card"><div class="stg-num" style="color:var(--s5)">5</div><div class="stg-name" style="color:var(--s5)">Launch</div><div class="stg-desc">Deploy outreach</div><div class="stg-time">Gated</div></div>
+        <div class="stg-card"><div class="stg-num" style="color:var(--s6)">6</div><div class="stg-name" style="color:var(--s6)">Monitor</div><div class="stg-desc">Track engagement</div><div class="stg-time">Continuous</div></div>
+        <div class="stg-card"><div class="stg-num" style="color:var(--s7)">7</div><div class="stg-name" style="color:var(--s7)">Rescore</div><div class="stg-desc">Update &amp; restart</div><div class="stg-time">24h / threshold</div></div>
+      </div>
+    </div>
+
+    <h3 class="sh3 r">Stage 1: Seed</h3>
+    <p class="r">The Seed stage identifies new prospects by querying data sources: CoStar lease expirations, company expansion announcements, funding rounds, job postings in target markets, and inbound website traffic. It runs every 6 hours via Vercel cron, pulling fresh data and deduplicating against the existing prospect database in Supabase. New prospects enter the pipeline unscored and are immediately queued for Stage 2.</p>
+
+    <h3 class="sh3 r">Stage 2: Score</h3>
+    <p class="r">Score runs the 14-signal qualification model against every new and updated prospect. This is the Qualification Agent from Article 07 &mdash; firmographic, behavioral, transactional, and relationship signals combined into a composite 0&ndash;100 score. Score runs immediately after Seed completes, processing the full queue in parallel batches of 50 prospects.</p>
+
+    <h3 class="sh3 r">Stage 3: Audiences</h3>
+    <p class="r">The Audience stage rebuilds all dynamic segments based on updated scores. Prospects are assigned to segments, promoted between tiers, or flagged for disqualification. This stage also identifies <strong>segment gaps</strong> &mdash; if a high-value segment has fewer than 10 prospects, it triggers a targeted Seed query in the next cycle.</p>
+
+    <h3 class="sh3 r">Stage 4: Creatives</h3>
+    <p class="r">Creatives generates fresh content packages for any segment that has new prospects or updated positioning. This is the Content Agent from Article 08 &mdash; brochures, articles, target profiles, and ad copy. Creatives runs in parallel with Audiences because each segment&rsquo;s content is independent.</p>
+
+    <h3 class="sh3 r">Stage 5: Launch</h3>
+    <p class="r">Launch deploys outreach sequences across email, LinkedIn, and phone. <strong>On Fire and Hot prospects require broker approval</strong> before sequences launch &mdash; this is the human-in-the-loop gate. Warm and Neutral tier outreach launches automatically. Launch also schedules follow-up touchpoints based on the prospect&rsquo;s tier-specific cadence.</p>
+
+    <h3 class="sh3 r">Stage 6: Monitor</h3>
+    <p class="r">Monitor runs continuously between full pipeline cycles, tracking 8 signal types: email opens, email clicks, website visits, content downloads, LinkedIn profile views, LinkedIn message responses, phone call completions, and event registrations. <strong>Real-time triggers</strong> fire when engagement exceeds defined thresholds &mdash; three email opens in one hour triggers an immediate broker alert.</p>
+
+    <div class="r" id="s-cron">
+      <h2 class="sh">Vercel Cron Scheduling</h2>
+      <p>The orchestrator uses <strong>tiered scheduling</strong> based on property activity level. High-activity properties (recent listing changes, upcoming lease expirations, or high prospect engagement) run full pipeline cycles every 4 hours. Medium-activity properties run every 8 hours. Low-activity properties run every 24 hours. This ensures the most active properties get the most frequent attention while keeping compute costs manageable across 78 properties.</p>
+    </div>
+
+    <div class="callout r"><div class="callout-label">Scheduling Tiers</div><div class="callout-text"><strong>High-activity:</strong> Every 4 hours &mdash; new listings, expiring leases within 6 months, &gt;5 prospect signals/day. <strong>Medium-activity:</strong> Every 8 hours &mdash; stable listings, moderate engagement. <strong>Low-activity:</strong> Every 24 hours &mdash; long-term holds, minimal prospect activity. The orchestrator automatically promotes/demotes properties between tiers based on activity signals.</div></div>
+
+    <div class="r" id="s-monitor">
+      <h2 class="sh">Signal Monitoring</h2>
+      <p>The Monitor stage is unique because it runs <strong>continuously</strong> rather than on a cycle. It watches for engagement signals that should trigger immediate action, regardless of where the pipeline is in its current cycle. A prospect who opens three emails in one hour does not wait for the next Rescore cycle &mdash; they get an immediate tier promotion and broker alert.</p>
+      <p>The monitoring system tracks 8 signal types with defined thresholds for immediate action. These thresholds are calibrated per property type because engagement patterns differ &mdash; industrial prospects tend to be more decisive (fewer touches to conversion) while office prospects tend to be more deliberate (more research before engagement).</p>
+    </div>
+
+    <div class="r" id="s-optimize">
+      <h2 class="sh">Continuous Optimization</h2>
+      <h3 class="sh3">Stage 7: Rescore</h3>
+      <p>Rescore re-evaluates every prospect&rsquo;s composite score using data collected during Monitor. Prospects whose scores cross tier boundaries are automatically promoted or demoted. A Warm prospect whose email engagement spiked gets rescored to Hot and enters the broker-managed sequence. A Hot prospect who went silent for 30 days gets demoted to Warm.</p>
+      <p>Rescore also feeds the next Seed cycle by identifying <strong>coverage gaps</strong>. If a high-value segment is declining in size, Rescore triggers a targeted seed query to replenish it. This creates a self-healing pipeline &mdash; segments that lose prospects automatically trigger efforts to find new ones. The loop restarts. The pipeline never stops.</p>
+    </div>
+
+    <div class="pull-quote r"><div class="pq-text">The pipeline does not wait for instructions. It <em>generates its own instructions</em> based on what the data says happened since the last cycle. That is the difference between automation and <em>intelligence</em>.</div><div class="pq-attr">IO Pipeline Orchestrator</div></div>
+
+    <div class="src out r" id="s-crm"><div class="src-tag">Outreach Agent &mdash; Lead Capture<span class="conf-badge">CONF 0.94</span></div>
+      <div class="crm-block"><div class="crm-main">
+        <div><div class="crm-eyebrow">IO Platform &middot; Pipeline Orchestration</div><div class="crm-headline">Get the 7-stage pipeline architecture + cron configuration.</div><div class="crm-sub">The complete orchestration framework, stage handoff protocols, Vercel cron schedules, monitoring thresholds, and rescore logic.</div></div>
+        <div class="crm-form"><input type="email" class="crm-inp" placeholder="your@email.com"><button class="crm-btn">Get the Pipeline Spec &rarr;</button><div class="crm-note">Free. No spam. Unsubscribe anytime.</div></div>
+      </div></div>
+    </div>
+
+    <div class="src enr r" id="s-faq"><div class="src-tag">Enrichment Agent &mdash; FAQs<span class="conf-badge">CONF 0.96</span></div>
+      <div class="faq-section">
+        <div class="faq-head"><h2 class="faq-head-title">Frequently Asked Questions</h2><span class="faq-head-count">5 Questions</span></div>
+        <div class="faq-item open"><div class="faq-q" onclick="toggleFaq(this)">What are the 7 stages of the IO pipeline loop?<span class="faq-toggle">&times;</span></div><div class="faq-a"><div class="faq-a-inner"><strong>(1) Seed</strong> &mdash; identify new prospects. <strong>(2) Score</strong> &mdash; 14-signal qualification. <strong>(3) Audiences</strong> &mdash; dynamic segments. <strong>(4) Creatives</strong> &mdash; content packages. <strong>(5) Launch</strong> &mdash; deploy outreach. <strong>(6) Monitor</strong> &mdash; track signals. <strong>(7) Rescore</strong> &mdash; update and restart. Full cycle: ~4 hours for 78 properties.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the pipeline run continuously?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">Vercel cron jobs schedule each stage. Seed runs every 6 hours. Score runs immediately after. Audiences and Creatives run in parallel. Launch is gated by broker approval for high-tier prospects. <strong>Monitor runs continuously</strong>, and Rescore triggers on 24-hour cycles or engagement thresholds.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does signal monitoring work between cycles?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">Monitor watches 8 signal types continuously: email opens, clicks, website visits, downloads, LinkedIn views, message responses, phone completions, and event registrations. <strong>Real-time triggers fire when thresholds are exceeded</strong> &mdash; three opens in one hour triggers an immediate rescore and broker alert.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What happens during Rescore?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">Rescore re-evaluates every prospect&rsquo;s score using new Monitor data. Tier promotions and demotions happen automatically. It also identifies <strong>segment gaps</strong> &mdash; declining segments trigger targeted Seed queries in the next cycle, creating a self-healing pipeline.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the orchestrator handle 78 properties?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner"><strong>Tiered scheduling</strong> based on property activity. High-activity: every 4 hours. Medium: every 8 hours. Low: every 24 hours. Properties automatically promote/demote between tiers based on activity signals, ensuring active properties get the most pipeline attention.</div></div></div>
+      </div>
+    </div>
+  </div></article>
+
+  <aside class="sidebar">
+    <div class="sb-sec r"><div class="sb-sec-title">In This Article</div><ul class="toc-list" id="toc-list">
+      <li class="toc-item active" onclick="scrollToSection('s-why')"><span class="toc-dot"></span>Continuous vs Batch</li>
+      <li class="toc-item" onclick="scrollToSection('s-stages')"><span class="toc-dot"></span>7 Stages</li>
+      <li class="toc-item" onclick="scrollToSection('s-cron')"><span class="toc-dot"></span>Cron Scheduling</li>
+      <li class="toc-item" onclick="scrollToSection('s-monitor')"><span class="toc-dot"></span>Signal Monitoring</li>
+      <li class="toc-item" onclick="scrollToSection('s-optimize')"><span class="toc-dot"></span>Optimization</li>
+      <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+    </ul></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Active Agents</div><div class="lib-list">
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-tgt)"></div><div class="lib-name">Targeting</div><div class="lib-count">4</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-enr)"></div><div class="lib-name">Enrichment</div><div class="lib-count">12</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-mkt)"></div><div class="lib-name">Market</div><div class="lib-count">4</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-out)"></div><div class="lib-name">Outreach</div><div class="lib-count">6</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-lin)"></div><div class="lib-name">LinkedIn</div><div class="lib-count">5</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-cnt)"></div><div class="lib-name">Content</div><div class="lib-count">3</div></div>
+    </div></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Pipeline Stats</div><div class="stats-grid">
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">7</div><div class="stat-l">Pipeline stages</div></div>
+      <div class="stat-card"><div class="stat-n">78</div><div class="stat-l">Properties</div></div>
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-green)">~4h</div><div class="stat-l">Full cycle</div></div>
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">18</div><div class="stat-l">Agents live</div></div>
+    </div></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Article Series</div><div class="series-nav">
+      <a class="sn-item" href="wf-article-07.html"><span class="sn-num">07</span><span class="sn-title">Prospect Qualification</span><span class="sn-pill" style="background:rgba(232,160,0,.1);color:#fbbf24;border:1px solid rgba(232,160,0,.2)">Scoring</span></a>
+      <a class="sn-item" href="wf-article-08.html"><span class="sn-num">08</span><span class="sn-title">Content &amp; Collateral</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)">Content</span></a>
+      <a class="sn-item current"><span class="sn-num">09</span><span class="sn-title">Pipeline Orchestration</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)">Pipeline</span></a>
+      <a class="sn-item" href="wf-article-10.html"><span class="sn-num">10</span><span class="sn-title">The Complete System</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)">Capstone</span></a>
+    </div></div>
+  </aside>
+</div>
+
+<div class="author-section r"><div class="author-inner">
+  <div><div class="author-av">T</div><div class="author-name">Tommy Saunders</div><div class="author-role">Founder, IntelligentOperations.ai</div><div class="author-bio">Building the AI-native commercial real estate intelligence system. 18 agents. 78 properties. The loop never stops.</div><div class="author-links"><a href="#" class="author-link">Twitter</a><a href="#" class="author-link">LinkedIn</a><a href="#" class="author-link">IO Platform</a></div></div>
+  <div class="author-divider"></div>
+  <div><div class="related-label">Continue Reading &mdash; Windfield CRE Series</div><div class="related-grid">
+    <a class="rel-card" href="wf-article-08.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-c"><div class="rel-thumb-dot" style="background:rgba(29,185,84,.2);border:1px solid rgba(29,185,84,.5);color:#4ade80">08</div></div></div><div class="rel-series-tag" style="color:rgba(29,185,84,.5)">Agent Deep Dive</div><div class="rel-title">Content &amp; Collateral at Scale</div><div class="rel-meta">8 min &middot; Published</div></a>
+    <a class="rel-card" href="wf-article-10.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-a"><div class="rel-thumb-dot" style="background:rgba(29,185,84,.2);border:1px solid rgba(29,185,84,.5);color:#4ade80">10</div></div></div><div class="rel-series-tag" style="color:rgba(29,185,84,.5)">Capstone</div><div class="rel-title">The Complete System: 78 Properties Under IO</div><div class="rel-meta">10 min &middot; Published</div></a>
+    <a class="rel-card" href="wf-article-07.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-b"><div class="rel-thumb-dot" style="background:rgba(232,160,0,.2);border:1px solid rgba(232,160,0,.5);color:#fbbf24">07</div></div></div><div class="rel-series-tag" style="color:rgba(232,160,0,.5)">Agent Deep Dive</div><div class="rel-title">Prospect Qualification: Scoring and Segmenting</div><div class="rel-meta">9 min &middot; Published</div></a>
+  </div></div>
+</div></div>
+
+<footer class="footer-menu"><div class="fm-w"><div class="fm-grid">
+  <div><div class="fm-logo"><span>IO</span> Platform</div><div class="fm-tagline">AI-Native Commercial Real Estate Intelligence. 18 agents. 78 properties. The loop never stops.</div><div class="fm-series-badge"><span class="live-dot"></span>Windfield CRE Series &middot; 10 Articles</div></div>
+  <div class="fm-col"><div class="fm-col-title">Platform</div><ul><li><a href="#">Property Hub</a></li><li><a href="#">Agent Registry</a></li><li><a href="#">Pipeline Runner</a></li><li><a href="#">MCP Server</a></li><li><a href="#">Supabase</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">Intelligence</div><ul><li><a href="#">Targeting</a></li><li><a href="#">Enrichment</a></li><li><a href="#">Market Intel</a></li><li><a href="#">Outreach</a></li><li><a href="#">LinkedIn</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">Article Series</div><div class="fm-series-list">
+    <a class="fm-series-item" href="wf-article-07.html"><span class="fm-s-num">07</span><span class="fm-s-title">Prospect Qualification</span></a>
+    <a class="fm-series-item" href="wf-article-08.html"><span class="fm-s-num">08</span><span class="fm-s-title">Content &amp; Collateral</span></a>
+    <a class="fm-series-item"><span class="fm-s-num" style="color:var(--wf-brand)">09</span><span class="fm-s-title" style="color:var(--wf-fg-muted)">Pipeline Orchestration &larr;</span></a>
+    <a class="fm-series-item" href="wf-article-10.html"><span class="fm-s-num">10</span><span class="fm-s-title">The Complete System</span></a>
+  </div></div>
+  <div class="fm-col"><div class="fm-col-title">Resources</div><ul><li><a href="#">llm.txt</a></li><li><a href="#">API Docs</a></li><li><a href="#">GitHub</a></li><li><a href="#">Status</a></li><li><a href="#">Templates</a></li></ul></div>
+</div></div></footer>
+
+<div class="final-footer"><div class="ff-w">
+  <div class="ff-legal"><span>&copy; 2026 IntelligentOperations.ai</span><span class="ff-sep"></span><span>All rights reserved</span><span class="ff-sep"></span><span class="ff-series">Windfield CRE Article Series</span><span class="ff-sep"></span><span>WF-CRE-2026-009 &middot; WF-09</span></div>
+  <div class="ff-mcp"><span class="live-dot"></span>18 Agents Active</div>
+</div></div>
+
+<script>
+var FEEDS=[{n:'Targeting',c:'#1db954',ct:4},{n:'Enrichment',c:'#1db954',ct:12},{n:'Market',c:'#e8a000',ct:4},{n:'Outreach',c:'#e11d48',ct:6},{n:'LinkedIn',c:'#0891b2',ct:5},{n:'Content',c:'#8b5cf6',ct:3}];
+var pf=document.getElementById('ps-feeds');FEEDS.forEach(function(f,i){var chip=document.createElement('div');chip.className='ps-chip';chip.style.background=f.c+'14';chip.style.border='1px solid '+f.c+'28';chip.style.color=f.c;var dot=document.createElement('div');dot.className='ps-dot';dot.style.background=f.c;chip.appendChild(dot);chip.appendChild(document.createTextNode(f.n+' \u00b7 '+f.ct));pf.appendChild(chip);if(i<FEEDS.length-1){var a=document.createElement('div');a.className='ps-arrow';a.textContent='\u00b7';pf.appendChild(a)}});
+var attrOn=false;function toggleAttr(){attrOn=!attrOn;document.body.classList.toggle('attr',attrOn);var b=document.getElementById('attr-btn');b.classList.toggle('on',attrOn);b.textContent=attrOn?'Hide Sources':'Show Agent Sources';if(attrOn){document.querySelectorAll('.src').forEach(function(el){if(!el.querySelector('.ann-corners')){var c=document.createElement('div');c.className='ann-corners';c.innerHTML='<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';el.appendChild(c)}})}}
+function togglePipe(){var s=document.getElementById('pstrip'),m=document.getElementById('pipemap'),b=document.getElementById('pipe-btn');if(m.classList.contains('open')){m.classList.remove('open');s.classList.remove('open');b.classList.remove('on')}else if(s.classList.contains('open')){s.classList.remove('open');m.classList.add('open');b.classList.add('on')}else{s.classList.add('open');b.classList.add('on')}}
+function toggleFaq(q){var item=q.parentElement,was=item.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(function(i){i.classList.remove('open');i.querySelector('.faq-toggle').textContent='+'});if(!was){item.classList.add('open');q.querySelector('.faq-toggle').textContent='\u00d7'}}
+window.addEventListener('scroll',function(){var d=document.documentElement;document.getElementById('prog').style.width=((window.scrollY/(d.scrollHeight-d.clientHeight))*100)+'%'},{passive:true});
+var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('in')})},{threshold:.05,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.r').forEach(function(el){ro.observe(el)});
+var sections=['s-why','s-stages','s-cron','s-monitor','s-optimize','s-faq'];var tocItems=document.querySelectorAll('.toc-item');
+var tocObs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var idx=sections.indexOf(en.target.id);if(idx>-1){tocItems.forEach(function(t){t.classList.remove('active')});if(tocItems[idx])tocItems[idx].classList.add('active')}}})},{threshold:.3});
+sections.forEach(function(s){var el=document.getElementById(s);if(el)tocObs.observe(el)});
+function scrollToSection(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+</script>
+</body>
+</html>

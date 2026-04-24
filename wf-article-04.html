@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Intelligence: Comps, Trends, and Risk Scoring in 30 Seconds — IntelligentOperations.ai</title>
+<meta name="description" content="How the Market Analyst Agent produces submarket overviews, comparable property analysis, market trends, risk/opportunity scoring, and pricing recommendations for every Windfield CRE listing in under 30 seconds.">
+<meta name="keywords" content="cre market intelligence, comparable property analysis, risk scoring commercial real estate, submarket analysis ai, market analyst agent, cre pricing recommendations">
+<meta property="og:title" content="Market Intelligence: Comps, Trends, and Risk Scoring in 30 Seconds">
+<meta property="og:description" content="How the Market Analyst Agent produces submarket overviews, comparable property analysis, risk scoring, and pricing recommendations for every Windfield CRE listing in under 30 seconds.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-04-15">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Market Intelligence: Comps, Trends, and Risk Scoring in 30 Seconds","description":"How the Market Analyst Agent produces submarket overviews, comparable property analysis, market trends, risk/opportunity scoring, and pricing recommendations for every Windfield CRE listing in under 30 seconds.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"IntelligentOperations.ai"}},"publisher":{"@type":"Organization","name":"IntelligentOperations.ai"},"datePublished":"2026-04-15","articleSection":"Agent Deep Dive","keywords":["cre market intelligence","comparable property analysis","risk scoring","submarket analysis","market analyst agent","cre pricing"],"wordCount":2800,"timeRequired":"PT10M","isPartOf":{"@type":"CreativeWorkSeries","name":"Windfield IO System Series","position":4}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What data sources does the Market Analyst Agent use for comparable property analysis?","acceptedAnswer":{"@type":"Answer","text":"The Market Analyst Agent ingests data from CoStar, county assessor records, recent transaction databases, and proprietary Windfield enrichment feeds. It cross-references sale prices, cap rates, price per square foot, lease rates, and tenant profiles across a 3-mile radius by default (adjustable to 1- or 5-mile). The agent weights recency, property class similarity, and use-type match to produce a relevance-ranked comp set of 8-12 properties, each with a similarity score from 0-100."}},
+{"@type":"Question","name":"How does the risk scoring algorithm work for commercial real estate?","acceptedAnswer":{"@type":"Answer","text":"The Market Analyst Agent calculates a composite risk score from 0-100 across five dimensions: market velocity (absorption rate and days-on-market trends), tenant concentration risk (single-tenant vs. multi-tenant exposure), capital expenditure exposure (roof age, HVAC vintage, deferred maintenance indicators), regulatory risk (zoning overlay changes, environmental flags), and submarket trajectory (population growth, employment diversification, infrastructure investment). Each dimension is weighted by property type — industrial properties weight tenant concentration lower than office, for example — and the composite score maps to a four-tier risk rating: Low (0-25), Moderate (26-50), Elevated (51-75), or High (76-100)."}},
+{"@type":"Question","name":"How quickly does the Market Analyst Agent produce a complete market intelligence package?","acceptedAnswer":{"@type":"Answer","text":"The complete market intelligence package — submarket overview, 8-12 comparable properties, trend analysis, risk/opportunity scoring, and pricing recommendation — generates in 22-28 seconds. The agent runs 4 parallel data retrieval tasks (comps, trends, risk factors, submarket metrics) and then synthesizes them into the final package in a single orchestration pass. The parallel architecture means adding more data sources does not linearly increase runtime."}},
+{"@type":"Question","name":"What is a submarket overview and what does it include?","acceptedAnswer":{"@type":"Answer","text":"A submarket overview is a 400-600 word narrative analysis of the specific geographic and economic micro-market surrounding a target property. It includes: current vacancy rates by property type, average asking rents and recent trajectory, absorption trends (positive or negative net absorption over trailing 4 quarters), major tenant moves (arrivals, departures, expansions), planned development pipeline within the submarket, and a comparative positioning statement that ranks the submarket against adjacent submarkets on a standardized vitality index. The overview is generated from the same data feed that produces the comp set, ensuring analytical consistency."}},
+{"@type":"Question","name":"How does the pricing recommendation engine differ from a traditional BPO?","acceptedAnswer":{"@type":"Answer","text":"A traditional Broker Price Opinion relies on 3-5 manually selected comps and the broker's subjective market judgment. The Market Analyst Agent pricing recommendation uses 8-12 algorithmically ranked comps weighted by similarity score, applies regression analysis across cap rate, price/SF, and NOI multiples, then adjusts for property-specific factors (deferred maintenance, lease rollover schedule, tenant credit quality). The output is a recommended price range (not a single number) with confidence intervals and a sensitivity table showing how the recommendation shifts if cap rate assumptions change by 25-50 basis points in either direction. The recommendation updates automatically when new transaction data enters the system."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"IntelligentOperations.ai","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Commercial Real Estate","item":"https://intelligentoperations.ai/cre"},
+{"@type":"ListItem","position":3,"name":"Windfield IO Series","item":"https://intelligentoperations.ai/cre/series"},
+{"@type":"ListItem","position":4,"name":"Market Intelligence","item":"https://intelligentoperations.ai/cre/market-intelligence-comps-risk-scoring"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-surface:#141417;
+  --wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;
+  --wf-brand:#1db954;--wf-brand-muted:rgba(29,185,84,.12);--wf-brand-border:rgba(29,185,84,.22);
+  --wf-border:#27272a;--wf-border2:rgba(250,250,250,.1);--wf-border3:rgba(250,250,250,.16);
+  --wf-amber:#e8a000;--wf-rose:#e11d48;--wf-purple:#8b5cf6;--wf-cyan:#0891b2;--wf-green:#1db954;
+  --c-tgt:#1db954;--c-enr:#1db954;--c-mkt:#e8a000;--c-out:#e11d48;--c-lin:#0891b2;--c-cnt:#8b5cf6;
+  --wf-sans:'Inter',system-ui,-apple-system,sans-serif;--wf-mono:'JetBrains Mono','Fira Code',monospace;
+  --wf-r-sm:6px;--wf-r-md:10px;--wf-r-lg:16px;
+  --wf-ease:cubic-bezier(.25,.46,.45,.94);--wf-spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--wf-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+.src{position:relative}.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .tgt{outline:1.5px solid var(--c-tgt);outline-offset:3px}body.attr .enr{outline:1.5px solid var(--c-enr);outline-offset:3px}body.attr .mkt{outline:1.5px solid var(--c-mkt);outline-offset:3px}body.attr .out{outline:1.5px solid var(--c-out);outline-offset:3px}body.attr .lin{outline:1.5px solid var(--c-lin);outline-offset:3px}body.attr .con{outline:1.5px solid var(--c-cnt);outline-offset:3px}
+.tgt .src-tag{background:var(--c-tgt);color:#fff}.enr .src-tag{background:var(--c-enr);color:#fff}.mkt .src-tag{background:var(--c-mkt);color:#fff}.out .src-tag{background:var(--c-out);color:#fff}.lin .src-tag{background:var(--c-lin);color:#fff}.con .src-tag{background:var(--c-cnt);color:#fff}
+body.attr .tgt .ann-c{border-color:var(--c-tgt)}body.attr .enr .ann-c{border-color:var(--c-enr)}body.attr .mkt .ann-c{border-color:var(--c-mkt)}body.attr .out .ann-c{border-color:var(--c-out)}body.attr .lin .ann-c{border-color:var(--c-lin)}body.attr .con .ann-c{border-color:var(--c-cnt)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:9999;width:0;transition:width .1s linear}
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border);height:52px;display:flex;align-items:center}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center}
+.nav-logo{font-family:var(--wf-sans);font-size:18px;font-weight:700;color:var(--wf-fg);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-rule{width:1px;height:16px;background:var(--wf-border2);margin-right:18px}.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:auto;display:none}
+.nav-btns{display:flex;gap:8px;flex-shrink:0;margin-left:auto}.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--wf-sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--wf-ease)}
+.nbtn-ghost{background:none;border:1px solid var(--wf-border2);color:var(--wf-fg-subtle)}.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--wf-green);display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+#pstrip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}.ps-chip{padding:4px 10px;border-radius:var(--wf-r-sm);font:600 10px/1 var(--wf-sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}.ps-arrow{font-size:10px;color:var(--wf-fg-faint);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--wf-sans);color:var(--wf-green);letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+#pipemap{background:var(--wf-surface);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .5s var(--wf-ease)}#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}.pm-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:10px}.pm-title span{font-weight:300;color:var(--wf-fg-subtle)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.5),transparent);animation:pms1 2s ease-in-out infinite;margin:10px 0}@keyframes pms1{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}.pm-node-name{font:600 11px/1.2 var(--wf-sans);color:var(--wf-fg)}.pm-node-sub{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:var(--wf-r-sm);text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--wf-border)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}.pm-lib-name{font:700 7px/1 var(--wf-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle)}.pm-lib-count{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--wf-border)}.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--wf-mono);color:var(--wf-fg-subtle)}.pm-meta-n{font:700 11px/1 var(--wf-mono);color:var(--wf-fg)}
+.hero{background:var(--wf-bg);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--wf-border) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}.eye-divider{width:20px;height:1px;background:var(--wf-fg-faint)}.eye-series{font:600 10px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+h1{font-family:var(--wf-sans);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--wf-border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}.h-role{font-size:11px;color:var(--wf-fg-subtle)}.h-sep{width:1px;height:28px;background:var(--wf-border2);margin:0 18px}.h-date{font-size:13px;color:var(--wf-fg-subtle)}.h-read{font-size:13px;color:var(--wf-fg-subtle);margin-left:14px}
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);background-size:32px 32px}
+.hv-glow{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(29,185,84,.1) 0%,transparent 65%);animation:gp1 4s ease-in-out infinite}
+@keyframes gp1{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);animation:hvs1 5s ease-in-out infinite;opacity:.4}
+@keyframes hvs1{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+.hv-card{position:absolute;border-radius:var(--wf-r-sm);background:rgba(255,255,255,.04);border:1px solid rgba(29,185,84,.15);padding:12px 14px;z-index:5}
+.hv-card-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:6px}
+.hv-card-val{font:700 22px/1 var(--wf-mono);margin-bottom:4px}.hv-card-sub{font:300 9px/1 var(--wf-mono);color:var(--wf-fg-subtle)}
+.hv-gauge{position:absolute;z-index:6;width:120px;height:60px}.hv-gauge-arc{stroke-dasharray:160;stroke-dashoffset:48;stroke-linecap:round;fill:none;stroke-width:6}
+.hv-gauge-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;text-anchor:middle;fill:var(--wf-fg-faint)}.hv-gauge-val{font:700 18px/1 var(--wf-mono);text-anchor:middle}
+.hv-bars{position:absolute;z-index:5;display:flex;align-items:flex-end;gap:4px}
+.hv-bar{width:14px;border-radius:2px 2px 0 0;transition:height .5s var(--wf-ease)}
+.hv-bar-label{font:700 6px/1 var(--wf-mono);color:var(--wf-fg-faint);text-align:center;margin-top:3px}
+.hv-badge{position:absolute;top:14px;right:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.22)}
+.hv-status{position:absolute;top:14px;left:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.25)}
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}@media(max-width:1024px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}.sidebar{position:sticky;top:72px}
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;background:linear-gradient(135deg,var(--wf-brand-muted),rgba(29,185,84,.02));border:1px solid var(--wf-brand-border);border-left:3px solid var(--wf-brand);border-radius:var(--wf-r-md)}
+.dab-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}.dab-label::before{content:'\25B8'}
+.dab-q{font:600 15px/1.4 var(--wf-sans);color:var(--wf-fg);margin-bottom:10px}
+.dab-a{font:300 14px/1.72 var(--wf-sans);color:var(--wf-fg-muted)}.dab-a strong{font-weight:600;color:var(--wf-fg)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}
+.dab-source{font:300 10px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:var(--wf-brand-muted);color:rgba(29,185,84,.6);border:1px solid var(--wf-brand-border)}
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:var(--wf-r-md)}
+.toc-inline-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;text-decoration:none;transition:color .15s}.toc-inline-item:last-child{border-bottom:none}.toc-inline-item:hover{color:var(--wf-fg)}
+.toc-n{font:700 9px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0;padding-top:2px}
+.body p{font-size:17.5px;line-height:1.82;color:var(--wf-fg-muted);font-weight:300;margin-bottom:28px;max-width:720px}.body p strong{font-weight:600;color:var(--wf-fg)}
+.body p a{color:var(--wf-brand);text-decoration:none;border-bottom:1px solid rgba(29,185,84,.3);transition:border-color .15s}.body p a:hover{border-bottom-color:var(--wf-brand)}
+h2.sh{font-family:var(--wf-sans);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--wf-fg);margin:60px 0 20px;max-width:720px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--wf-fg)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--wf-sans);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--wf-brand)}
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--wf-surface);border-radius:var(--wf-r-md);border:1px solid var(--wf-border);border-left:3px solid var(--wf-brand);position:relative;overflow:hidden;max-width:720px}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--wf-sans);font-size:150px;font-weight:700;color:var(--wf-brand-muted);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--wf-sans);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--wf-fg);position:relative;z-index:1;margin-bottom:14px}.pq-text em{font-style:italic;color:var(--wf-brand)}
+.pq-attr{font:600 11px/1 var(--wf-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);position:relative;z-index:1}
+.callout{margin:48px 0;padding:24px 28px;border-radius:var(--wf-r-md);border:1px solid var(--wf-brand-border);background:var(--wf-brand-muted);max-width:720px}
+.callout-label{font:700 8px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:10px}
+.callout-body{font:300 14px/1.75 var(--wf-sans);color:var(--wf-fg-muted)}.callout-body strong{font-weight:600;color:var(--wf-fg)}
+.mock-card{margin:48px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border2);background:var(--wf-surface);max-width:720px}
+.mc-header{padding:14px 22px;border-bottom:1px solid var(--wf-border);display:flex;align-items:center;gap:12px}
+.mc-title{font:700 10px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.mc-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.mc-body{padding:24px}
+.mc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}@media(max-width:640px){.mc-grid{grid-template-columns:1fr}}
+.mc-cell{background:rgba(255,255,255,.025);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:14px}
+.mc-cell-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:6px}
+.mc-cell-val{font:700 20px/1 var(--wf-mono);margin-bottom:4px}.mc-cell-sub{font:300 10px/1.4 var(--wf-sans);color:var(--wf-fg-subtle)}
+.mc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.mc-item{background:rgba(255,255,255,.02);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:10px 12px}
+.mc-item-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.mc-item-val{font:300 12px/1.5 var(--wf-sans);color:var(--wf-fg-muted)}
+.faq-section{margin:52px 0}.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--wf-border2)}
+.faq-head-title{font-family:var(--wf-sans);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--wf-fg)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);overflow:hidden;margin-bottom:8px;transition:border-color .15s}.faq-item.open{border-color:var(--wf-border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--wf-sans);color:var(--wf-fg-muted);gap:12px;transition:color .15s}.faq-q:hover,.faq-item.open .faq-q{color:var(--wf-fg)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--wf-border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wf-fg-subtle);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--wf-brand-muted);border-color:var(--wf-brand-border);color:var(--wf-brand)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease),padding .2s}.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--wf-sans);color:var(--wf-fg-muted)}.faq-a-inner strong{font-weight:600;color:var(--wf-fg)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--wf-mono);color:var(--wf-fg-faint)}.faq-schema-note::before{content:'\25C8';color:rgba(29,185,84,.4);font-size:8px}
+.sb-sec{margin-bottom:36px}.sb-sec-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}.toc-item:hover,.toc-item.active{color:var(--wf-fg)}.toc-item.active{color:var(--wf-brand)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:12px}
+.stat-n{font:700 22px/1 var(--wf-mono);color:var(--wf-fg);margin-bottom:3px}.stat-l{font-size:10px;color:var(--wf-fg-subtle);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}
+.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm)}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}.lib-name{font:500 12px/1 var(--wf-sans);color:var(--wf-fg);flex:1}.lib-count{font:normal 10px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);text-decoration:none;transition:all .15s;cursor:pointer}.sn-item:hover{border-color:var(--wf-border2)}
+.sn-item.current{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}.sn-num{font:700 10px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}.sn-item.current .sn-num{color:var(--wf-brand)}
+.sn-title{font:400 11px/1.35 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}.sn-item.current .sn-title{color:var(--wf-fg)}
+.sn-pill{padding:2px 7px;border-radius:3px;font:700 7px/1 var(--wf-mono);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--wf-border)}
+.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--wf-sans);font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--wf-sans);color:var(--wf-brand);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--wf-fg-subtle);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--wf-border2);color:var(--wf-fg-subtle);text-decoration:none;transition:all .15s}.author-link:hover{color:var(--wf-fg);border-color:var(--wf-border3)}
+.author-divider{background:var(--wf-border)}
+.related-label{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}
+.rel-thumb{height:100px;border-radius:var(--wf-r-sm);margin-bottom:10px;overflow:hidden;position:relative}
+.rel-thumb-bg{width:100%;height:100%;position:relative}.rt-a{background:linear-gradient(135deg,#07071a,#0d1030)}.rt-b{background:linear-gradient(135deg,#0c0900,#140e00)}.rt-c{background:linear-gradient(135deg,#06100a,#051208)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--wf-mono)}
+.rel-series-tag{font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rel-title{font:500 13px/1.45 var(--wf-sans);color:var(--wf-fg-muted);margin-bottom:4px;transition:color .15s}.rel-card:hover .rel-title{color:var(--wf-fg)}
+.rel-meta{font:300 11px/1 var(--wf-sans);color:var(--wf-fg-faint)}
+.footer-menu{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:52px 32px 36px}.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--wf-border)}@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr}}
+.fm-logo{font-family:var(--wf-sans);font-size:20px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}.fm-logo span{font-style:italic;color:var(--wf-brand)}
+.fm-tagline{font-size:13px;color:var(--wf-fg-subtle);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);color:rgba(29,185,84,.6)}
+.fm-col-title{font:700 9px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}.fm-col a{font-size:13px;color:var(--wf-fg-subtle);text-decoration:none;transition:color .15s}.fm-col a:hover{color:var(--wf-fg)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}
+.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}.fm-series-item:hover{opacity:.75}
+.fm-s-num{font:700 9px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}.fm-s-title{font:300 11px/1.3 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}
+.final-footer{background:var(--wf-bg);border-top:1px solid var(--wf-border);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--wf-mono);color:var(--wf-fg-faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ff-sep{width:1px;height:10px;background:var(--wf-fg-faint)}.ff-series{color:rgba(29,185,84,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-green);padding:5px 14px;border:1px solid rgba(29,185,84,.2);border-radius:20px;background:rgba(29,185,84,.06)}
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--wf-ease),transform .65s var(--wf-ease)}.r.in{opacity:1;transform:none}
+@media(max-width:768px){.hero-w{gap:40px;padding:0 20px}.article-grid{padding:40px 20px 60px;gap:40px}.nav-w{padding:0 16px}.ps-inner{padding:0 16px}.pm-inner{padding:16px}.mc-grid{grid-template-columns:1fr}.fm-grid{grid-template-columns:1fr}.ff-w{flex-direction:column;gap:8px}.hero-text{padding-bottom:48px}h1{font-size:clamp(28px,7vw,48px)}.pull-quote{padding:28px 24px}.author-inner{grid-template-columns:1fr}.related-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<nav><div class="nav-w"><a href="#" class="nav-logo"><span>IO</span> Platform</a><div class="nav-rule"></div><span class="nav-section">Commercial Real Estate</span><div class="nav-btns"><button class="nbtn nbtn-ghost" id="attr-btn" onclick="toggleAttr()">Show Agent Sources</button><button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button><button class="nbtn nbtn-live"><span class="live-dot"></span>18 Agents Live</button></div></div></nav>
+
+<div id="pstrip"><div class="ps-inner"><div class="ps-label">Pipeline &middot; WF-04</div><div class="ps-feeds" id="ps-feeds"></div><div class="ps-arrow">&rarr;</div><div class="ps-result"><span class="live-dot"></span>Market Package &middot; 12 Comps &middot; Risk Score &middot; 28s</div></div></div>
+
+<div id="pipemap"><div class="pm-inner">
+  <div class="pm-title">ORCHESTRATION MAP <span>&mdash; Article 04 &middot; Market Intelligence: Comps, Trends, and Risk Scoring</span></div><div class="pm-scan"></div>
+  <div class="pm-flow">
+    <div class="pm-node" style="border-color:var(--wf-brand-border)"><div class="pm-node-label">Input</div><div class="pm-node-name" style="color:var(--wf-brand)">Property Brief</div><div class="pm-node-sub">Address + Type + SF</div></div><div class="pm-arr">&rarr;</div>
+    <div class="pm-libs">
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-mkt)"></div><div class="pm-lib-name" style="color:var(--c-mkt)">MKT</div><div class="pm-lib-count">4</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-enr)"></div><div class="pm-lib-name" style="color:var(--c-enr)">ENR</div><div class="pm-lib-count">12</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-tgt)"></div><div class="pm-lib-name" style="color:var(--c-tgt)">TGT</div><div class="pm-lib-count">4</div></div>
+    </div><div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Analysis</div><div class="pm-node-name" style="color:var(--wf-brand)">Market Analyst</div><div class="pm-node-sub">4 parallel tasks</div></div><div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Output</div><div class="pm-node-name" style="color:#4ade80">Intel Package</div><div class="pm-node-sub">Comps + Risk + Price</div></div>
+  </div>
+  <div class="pm-meta-row"><div class="pm-meta-item"><span class="pm-meta-n">3</span> Agent Groups</div><div class="pm-meta-item"><span class="pm-meta-n">20</span> Tasks total</div><div class="pm-meta-item"><span class="pm-meta-n">~28s</span> Runtime</div><div class="pm-meta-item"><span class="pm-meta-n">12</span> Comps ranked</div><div class="pm-meta-item" style="margin-left:auto"><span style="color:var(--wf-green);font:700 9px/1 var(--wf-mono)">&bull; ACTIVE</span></div></div>
+</div></div>
+
+<header class="hero src mkt" id="hero">
+  <div class="src-tag">Market Agent &mdash; Hero<span class="conf-badge">CONF 0.97</span></div>
+  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow"><span class="eye-tag">Agent Deep Dive</span><span class="eye-divider"></span><span class="eye-series">Windfield IO Series &middot; Article 04</span></div>
+      <h1>Market <em>Intelligence:</em> Comps, Trends, and Risk Scoring in 30 Seconds</h1>
+      <p class="hero-deck">Most CRE brokers spend 4&ndash;6 hours assembling market intelligence for a single listing. The Market Analyst Agent produces a complete comp set, submarket overview, trend analysis, risk score, and pricing recommendation in under 30 seconds &mdash; from the same property brief that powers every other Windfield agent.</p>
+      <div class="hero-meta"><div class="h-author"><div class="h-av">T</div><div><div class="h-name">Tommy Saunders</div><div class="h-role">Founder, IntelligentOperations.ai</div></div></div><div class="h-sep"></div><span class="h-date">Apr 15, 2026</span><span class="h-read">&middot; 10 min read</span></div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border)"><span style="font:700 8px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-brand)">WF-IO-2026-004</span><span style="width:1px;height:10px;background:var(--wf-brand-border)"></span><span style="font:300 8px/1 var(--wf-mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; A04 &middot; APR 2026</span></div>
+    </div>
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz4"><div class="hv-grid"></div><div class="hv-glow"></div><div class="hv-scan"></div>
+        <div class="hv-card" style="top:12%;left:8%;width:160px"><div class="hv-card-label">Top Comp Match</div><div class="hv-card-val" style="color:var(--wf-brand)">94/100</div><div class="hv-card-sub">1200 Market St &middot; 42,000 SF &middot; Class A</div></div>
+        <div class="hv-card" style="top:12%;right:12%;width:130px"><div class="hv-card-label">Avg Cap Rate</div><div class="hv-card-val" style="color:#4ade80">6.8%</div><div class="hv-card-sub">vs. 7.2% submarket avg</div></div>
+        <div class="hv-card" style="top:42%;left:6%;width:140px"><div class="hv-card-label">Vacancy Rate</div><div class="hv-card-val" style="color:#60a5fa">8.4%</div><div class="hv-card-sub">&darr; 1.2% trailing 4Q</div></div>
+        <div class="hv-card" style="top:44%;right:10%;width:130px"><div class="hv-card-label">Price / SF</div><div class="hv-card-val" style="color:#f59e0b">$285</div><div class="hv-card-sub">+6.3% YoY</div></div>
+        <svg class="hv-gauge" style="bottom:22%;left:50%;transform:translateX(-50%)" viewBox="0 0 120 70">
+          <path d="M 10 60 A 50 50 0 0 1 110 60" stroke="rgba(255,255,255,.08)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 10 60 A 50 50 0 0 1 110 60" class="hv-gauge-arc" stroke="url(#riskGrad)" />
+          <defs><linearGradient id="riskGrad"><stop offset="0%" stop-color="#4ade80"/><stop offset="50%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#e11d48"/></linearGradient></defs>
+          <text class="hv-gauge-label" x="60" y="48">RISK SCORE</text>
+          <text class="hv-gauge-val" x="60" y="64" fill="#f59e0b">34</text>
+        </svg>
+        <div class="hv-bars" style="bottom:10%;left:8%;height:50px">
+          <div style="display:flex;flex-direction:column;align-items:center"><div class="hv-bar" style="height:20px;background:rgba(29,185,84,.4);width:12px"></div><div class="hv-bar-label">Q1</div></div>
+          <div style="display:flex;flex-direction:column;align-items:center"><div class="hv-bar" style="height:28px;background:rgba(29,185,84,.5);width:12px"></div><div class="hv-bar-label">Q2</div></div>
+          <div style="display:flex;flex-direction:column;align-items:center"><div class="hv-bar" style="height:36px;background:rgba(29,185,84,.6);width:12px"></div><div class="hv-bar-label">Q3</div></div>
+          <div style="display:flex;flex-direction:column;align-items:center"><div class="hv-bar" style="height:44px;background:rgba(29,185,84,.8);width:12px"></div><div class="hv-bar-label">Q4</div></div>
+        </div>
+        <div class="hv-status">MARKET ANALYST AGENT &middot; LIVE</div><div class="hv-badge">IO-VIZ-04</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="article-grid">
+  <article class="article-body"><div class="body">
+    <div class="src enr r" id="s-dab"><div class="src-tag">Enrichment Agent &mdash; Direct Answer<span class="conf-badge">CONF 0.97</span></div>
+      <div class="direct-answer-box">
+        <div class="dab-label">Direct Answer</div>
+        <div class="dab-q">What does the Market Analyst Agent produce for a commercial real estate listing?</div>
+        <div class="dab-a">The Market Analyst Agent produces five outputs from a single property brief: a <strong>submarket overview</strong> (400&ndash;600 word narrative with vacancy rates, absorption trends, and vitality index), a <strong>comparable property set</strong> (8&ndash;12 properties ranked by similarity score 0&ndash;100), a <strong>trend analysis</strong> (trailing 4-quarter price, vacancy, and absorption trajectories), a <strong>composite risk score</strong> (0&ndash;100 across five dimensions: market velocity, tenant concentration, capex exposure, regulatory risk, submarket trajectory), and a <strong>pricing recommendation</strong> (range with confidence intervals and cap rate sensitivity table). Total runtime: 22&ndash;28 seconds.</div>
+        <div class="dab-footer"><span class="dab-source">Source: IntelligentOperations.ai &middot; Windfield IO &middot; Apr 2026</span><span class="dab-schema-badge">JSON-LD Schema</span></div>
+      </div>
+    </div>
+
+    <div class="src mkt r"><div class="src-tag">Market Agent &mdash; ToC<span class="conf-badge">CONF 0.95</span></div>
+      <div class="toc-inline"><div class="toc-inline-title">Table of Contents</div>
+        <ol class="toc-inline-list">
+          <li><a class="toc-inline-item" href="#s-problem"><span class="toc-n">1.</span>The Market Intelligence Bottleneck</a></li>
+          <li><a class="toc-inline-item" href="#s-agent"><span class="toc-n">2.</span>The Market Analyst Agent &mdash; Architecture</a></li>
+          <li><a class="toc-inline-item" href="#s-comps"><span class="toc-n">3.</span>Comparable Property Analysis</a></li>
+          <li><a class="toc-inline-item" href="#s-submarket"><span class="toc-n">4.</span>Submarket Overview Generation</a></li>
+          <li><a class="toc-inline-item" href="#s-risk"><span class="toc-n">5.</span>Risk and Opportunity Scoring</a></li>
+          <li><a class="toc-inline-item" href="#s-pricing"><span class="toc-n">6.</span>Pricing Recommendations</a></li>
+          <li><a class="toc-inline-item" href="#s-faq"><span class="toc-n">7.</span>Frequently Asked Questions</a></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="src mkt r" id="s-lede"><div class="src-tag">Market Agent &mdash; Lede<span class="conf-badge">CONF 0.98</span></div>
+      <p class="lede">Every commercial real estate broker has the same ritual. A new listing comes in, and the next four to six hours disappear into CoStar searches, county records, spreadsheet formatting, and the slow assembly of a market intelligence package that will be partially outdated by the time the broker presents it. The comparable properties were selected manually, the risk assessment lives in the broker&rsquo;s head, and the pricing recommendation is an educated guess dressed up in a slide deck.</p>
+    </div>
+
+    <div class="src mkt r"><div class="src-tag">Market Agent<span class="conf-badge">CONF 0.97</span></div>
+      <p>This workflow made sense when data access was the scarce resource. Brokers had proprietary knowledge because they had relationships with assessors, they remembered what traded at what price, and they had physical familiarity with every building in a submarket. But the data access advantage has evaporated. CoStar, Reonomy, and county assessor portals have made the same transaction data available to every broker in the market. <strong>The competitive advantage has shifted from data access to data synthesis speed.</strong></p>
+      <p>The broker who can produce a defensible market intelligence package in 30 seconds while a competitor spends 4 hours assembling the same package has a structural advantage that compounds with every listing. Not because the AI-generated package is necessarily better &mdash; but because it frees 4 hours per listing for the work that actually requires human judgment: relationship building, deal negotiation, and creative positioning.</p>
+    </div>
+
+    <div class="src mkt r" id="s-problem"><div class="src-tag">Market Agent<span class="conf-badge">CONF 0.96</span></div>
+      <h2 class="sh">The Market Intelligence Bottleneck</h2>
+      <p>The traditional market intelligence workflow breaks down into five sequential steps, each dependent on the previous one. First, the broker identifies the subject property&rsquo;s characteristics: square footage, building class, year built, zoning, current occupancy. Second, they search for comparable sales and leases within a defined radius. Third, they analyze submarket conditions &mdash; vacancy rates, absorption trends, major tenant moves. Fourth, they assess risk factors: deferred maintenance, lease rollover exposure, environmental concerns, regulatory changes. Fifth, they synthesize everything into a pricing recommendation.</p>
+      <p>Each step takes 30&ndash;90 minutes. The entire workflow is serial because each step informs the next. You can&rsquo;t select comps without knowing the subject property&rsquo;s characteristics. You can&rsquo;t assess risk without understanding the submarket context. You can&rsquo;t price without comps and risk data. <strong>The Market Analyst Agent breaks this serial dependency by running four parallel data retrieval tasks and synthesizing them in a single orchestration pass.</strong></p>
+    </div>
+
+    <div class="src con r"><div class="src-tag">Content Agent &mdash; Pull Quote<span class="conf-badge">CONF 0.91</span></div>
+      <div class="pull-quote"><p class="pq-text">&ldquo;The competitive advantage has shifted from <em>data access</em> to data synthesis speed &mdash; the broker who produces a defensible market package in 30 seconds has a structural advantage that compounds with every listing.&rdquo;</p><div class="pq-attr">Tommy Saunders &middot; Founder, IntelligentOperations.ai</div></div>
+    </div>
+
+    <div class="src mkt r" id="s-agent"><div class="src-tag">Market Agent<span class="conf-badge">CONF 0.95</span></div>
+      <h2 class="sh">The Market Analyst Agent &mdash; Architecture</h2>
+      <p>The Market Analyst Agent is one of 18 agents in the Windfield IO system. It receives a property brief &mdash; the same structured document that every other agent reads &mdash; and produces five outputs: submarket overview, comp set, trend analysis, risk score, and pricing recommendation. The agent runs four parallel data retrieval tasks (comps, trends, risk factors, and submarket metrics) and then synthesizes them in a single pass.</p>
+      <p>The parallel architecture is deliberate. In the traditional workflow, these four tasks run serially because a human can only focus on one research task at a time. The agent has no such limitation. It queries CoStar, county assessor APIs, transaction databases, and proprietary Windfield enrichment feeds simultaneously. The synthesis step &mdash; the only serial operation &mdash; takes approximately 6 seconds. Total runtime: 22&ndash;28 seconds.</p>
+    </div>
+
+    <div class="src enr r"><div class="src-tag">Enrichment Agent &mdash; Architecture Card<span class="conf-badge">CONF 0.92</span></div>
+      <div class="mock-card"><div class="mc-header"><span class="mc-title">Market Analyst Agent &mdash; Pipeline Architecture</span><span class="mc-badge">4 Parallel Tasks</span></div>
+        <div class="mc-body"><div class="mc-grid">
+          <div class="mc-cell"><div class="mc-cell-label">Task 1</div><div class="mc-cell-val" style="color:var(--wf-brand);font-size:16px">Comps</div><div class="mc-cell-sub">8&ndash;12 properties ranked by similarity score. CoStar + county records + transaction DB</div></div>
+          <div class="mc-cell"><div class="mc-cell-label">Task 2</div><div class="mc-cell-val" style="color:#60a5fa;font-size:16px">Trends</div><div class="mc-cell-sub">4-quarter trailing price, vacancy, absorption. Submarket + metro level</div></div>
+          <div class="mc-cell"><div class="mc-cell-label">Task 3</div><div class="mc-cell-val" style="color:#f59e0b;font-size:16px">Risk</div><div class="mc-cell-sub">5-dimension composite score. CapEx, tenant, regulatory, velocity, trajectory</div></div>
+        </div><div class="mc-row">
+          <div class="mc-item"><div class="mc-item-label">Task 4</div><div class="mc-item-val"><strong>Submarket Metrics:</strong> Vacancy rates, asking rents, absorption, development pipeline, tenant moves</div></div>
+          <div class="mc-item"><div class="mc-item-label">Synthesis</div><div class="mc-item-val"><strong>Single Pass:</strong> All 4 task outputs merged into pricing recommendation with confidence intervals</div></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="src mkt r" id="s-comps"><div class="src-tag">Market Agent<span class="conf-badge">CONF 0.96</span></div>
+      <h2 class="sh">Comparable Property Analysis</h2>
+      <p>The comp selection algorithm is the core of the Market Analyst Agent. Traditional comp selection is subjective: a broker picks 3&ndash;5 properties they consider similar based on experience and proximity. The agent evaluates every transaction within the defined radius (default 3 miles, adjustable to 1 or 5) and scores each property on a 0&ndash;100 similarity scale across seven dimensions: square footage (within 20% band), building class match, year built proximity, zoning classification, occupancy status, transaction recency, and use-type match.</p>
+      <p>The algorithm returns the top 8&ndash;12 properties, ranked by composite similarity score. Each comp includes: sale price or lease rate, cap rate, price per square foot, transaction date, buyer/seller or tenant identity, and a one-sentence narrative explaining why the agent selected this specific comp. <strong>The narrative is critical.</strong> A broker reviewing the comp set can immediately see the agent&rsquo;s reasoning and override it if local knowledge suggests a different interpretation.</p>
+      <p>The comp set also includes an outlier flag. If a property scores above 85 on similarity but has a cap rate more than 150 basis points from the submarket average, the agent flags it as a potential distressed sale or premium trade and excludes it from the pricing regression by default. The broker can re-include it with one click.</p>
+    </div>
+
+    <div class="src enr r"><div class="src-tag">Enrichment Agent &mdash; Comp Table<span class="conf-badge">CONF 0.90</span></div>
+      <div class="mock-card"><div class="mc-header"><span class="mc-title">Sample Comp Set &mdash; 1200 Market St, Office, 42,000 SF</span><span class="mc-badge">Top 4 of 12</span></div>
+        <div class="mc-body"><div class="mc-grid" style="grid-template-columns:1fr 1fr">
+          <div class="mc-cell"><div class="mc-cell-label">Comp #1 &middot; Score 94</div><div class="mc-cell-val" style="color:var(--wf-brand);font-size:14px">1350 Commerce Ave</div><div class="mc-cell-sub">38,500 SF &middot; Class A &middot; Cap 6.4% &middot; $298/SF &middot; Q3 2025</div></div>
+          <div class="mc-cell"><div class="mc-cell-label">Comp #2 &middot; Score 89</div><div class="mc-cell-val" style="color:#60a5fa;font-size:14px">900 Financial Blvd</div><div class="mc-cell-sub">45,200 SF &middot; Class A &middot; Cap 6.9% &middot; $271/SF &middot; Q4 2025</div></div>
+          <div class="mc-cell"><div class="mc-cell-label">Comp #3 &middot; Score 82</div><div class="mc-cell-val" style="color:#4ade80;font-size:14px">2100 Gateway Dr</div><div class="mc-cell-sub">36,800 SF &middot; Class B+ &middot; Cap 7.1% &middot; $252/SF &middot; Q2 2025</div></div>
+          <div class="mc-cell"><div class="mc-cell-label">Comp #4 &middot; Score 78 &#9888;</div><div class="mc-cell-val" style="color:#f59e0b;font-size:14px">500 Civic Center Pkwy</div><div class="mc-cell-sub">41,000 SF &middot; Class A &middot; Cap 8.9% &middot; $218/SF &middot; Q1 2025 &middot; OUTLIER FLAG</div></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="src mkt r" id="s-submarket"><div class="src-tag">Market Agent<span class="conf-badge">CONF 0.95</span></div>
+      <h2 class="sh">Submarket Overview Generation</h2>
+      <p>The submarket overview is a 400&ndash;600 word narrative analysis of the geographic and economic micro-market surrounding the target property. It is not a data dump. The agent synthesizes vacancy rates, average asking rents, net absorption over trailing four quarters, major tenant moves (arrivals, departures, expansions), the planned development pipeline, and a comparative vitality index that ranks the submarket against adjacent submarkets.</p>
+      <p>The narrative structure follows a consistent format: current state (one paragraph), recent trajectory (one paragraph), forward-looking factors (one paragraph), and competitive positioning (one sentence comparing to adjacent submarkets). This consistency matters because brokers need to read these quickly. A submarket overview that buries the key insight in paragraph four is operationally useless even if the analysis is excellent.</p>
+      <p>The vitality index is a proprietary Windfield metric that combines population growth, employment diversification, infrastructure investment, and institutional capital flow into a single 0&ndash;100 score. A submarket scoring 72 on vitality with a declining vacancy rate tells a fundamentally different story than a submarket scoring 72 with a rising vacancy rate. <strong>The narrative captures this nuance because it&rsquo;s generated from the same data feed that produces the comp set &mdash; analytical consistency is architectural, not editorial.</strong></p>
+    </div>
+
+    <div class="src con r"><div class="src-tag">Content Agent &mdash; Callout<span class="conf-badge">CONF 0.93</span></div>
+      <div class="callout"><div class="callout-label">Architecture Note</div><div class="callout-body">The submarket overview and the comp set are generated from the same data retrieval task. This is not a convenience &mdash; it&rsquo;s a consistency guarantee. When the overview says &ldquo;vacancy dropped 1.2% over trailing 4 quarters,&rdquo; the comp set reflects that same vacancy figure. <strong>No manual reconciliation required.</strong></div></div>
+    </div>
+
+    <div class="src mkt r" id="s-risk"><div class="src-tag">Market Agent<span class="conf-badge">CONF 0.96</span></div>
+      <h2 class="sh">Risk and Opportunity Scoring</h2>
+      <p>The risk scoring system produces a composite score from 0&ndash;100 across five dimensions. Each dimension is independently scored, then weighted by property type to produce the composite. The five dimensions are: <strong>market velocity</strong> (absorption rate and days-on-market trends), <strong>tenant concentration</strong> (single-tenant vs. multi-tenant exposure), <strong>capital expenditure exposure</strong> (roof age, HVAC vintage, deferred maintenance indicators), <strong>regulatory risk</strong> (zoning overlay changes, environmental flags, pending legislation), and <strong>submarket trajectory</strong> (population growth, employment diversification, infrastructure investment).</p>
+      <p>The weighting is property-type specific. An industrial warehouse weights tenant concentration lower than an office building because single-tenant industrial is a common and accepted risk profile. A multi-tenant retail property weights regulatory risk higher because zoning changes affect retail more directly than industrial. The agent applies the appropriate weighting matrix automatically based on the property type field in the brief.</p>
+      <p>The output is a four-tier rating: Low (0&ndash;25), Moderate (26&ndash;50), Elevated (51&ndash;75), or High (76&ndash;100). Each dimension also shows its individual score and a one-sentence explanation. A property scoring Moderate overall with an Elevated capex dimension and Low everything else tells the broker exactly where to focus due diligence. <strong>The risk score is a prioritization tool, not a go/no-go signal.</strong></p>
+    </div>
+
+    <div class="src enr r"><div class="src-tag">Enrichment Agent &mdash; Risk Dashboard<span class="conf-badge">CONF 0.91</span></div>
+      <div class="mock-card"><div class="mc-header"><span class="mc-title">Risk Score Breakdown &mdash; 1200 Market St</span><span class="mc-badge" style="background:rgba(245,158,11,.12);color:#f59e0b;border-color:rgba(245,158,11,.3)">Moderate &middot; 34</span></div>
+        <div class="mc-body"><div class="mc-grid" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr">
+          <div class="mc-cell" style="text-align:center"><div class="mc-cell-label">Mkt Velocity</div><div class="mc-cell-val" style="color:#4ade80;font-size:18px">18</div><div class="mc-cell-sub">Low</div></div>
+          <div class="mc-cell" style="text-align:center"><div class="mc-cell-label">Tenant Conc.</div><div class="mc-cell-val" style="color:#60a5fa;font-size:18px">22</div><div class="mc-cell-sub">Low</div></div>
+          <div class="mc-cell" style="text-align:center"><div class="mc-cell-label">CapEx</div><div class="mc-cell-val" style="color:#f59e0b;font-size:18px">58</div><div class="mc-cell-sub">Elevated</div></div>
+          <div class="mc-cell" style="text-align:center"><div class="mc-cell-label">Regulatory</div><div class="mc-cell-val" style="color:#4ade80;font-size:18px">14</div><div class="mc-cell-sub">Low</div></div>
+          <div class="mc-cell" style="text-align:center"><div class="mc-cell-label">Trajectory</div><div class="mc-cell-val" style="color:#60a5fa;font-size:18px">28</div><div class="mc-cell-sub">Moderate</div></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="src mkt r" id="s-pricing"><div class="src-tag">Market Agent<span class="conf-badge">CONF 0.95</span></div>
+      <h2 class="sh">Pricing Recommendations</h2>
+      <p>The pricing recommendation engine differs from a traditional Broker Price Opinion in three structural ways. First, it uses 8&ndash;12 algorithmically ranked comps instead of 3&ndash;5 manually selected ones. Second, it applies regression analysis across cap rate, price per square foot, and NOI multiples rather than relying on subjective weighting. Third, it adjusts for property-specific factors that a standard BPO treats as qualitative: deferred maintenance quantified as estimated capex, lease rollover schedule modeled as cash flow risk, and tenant credit quality scored against industry benchmarks.</p>
+      <p>The output is a recommended price range, not a single number. The range includes confidence intervals: the agent reports a 70% confidence range and a 90% confidence range. A tight 70% range (say $11.2M&ndash;$11.8M) indicates strong comp alignment. A wide 70% range ($10.5M&ndash;$12.8M) indicates divergent comps or unusual property characteristics that make precise pricing difficult. <strong>The width of the range is information, not imprecision.</strong></p>
+      <p>The recommendation also includes a sensitivity table showing how the price range shifts if cap rate assumptions change by 25 or 50 basis points in either direction. This is the single most requested feature from brokers in Windfield&rsquo;s beta program, because cap rate assumptions are the most common point of disagreement between buyers and sellers. Having the sensitivity table pre-calculated saves 20&ndash;30 minutes of spreadsheet work per deal negotiation.</p>
+      <p>Finally, the pricing recommendation updates automatically when new transaction data enters the system. A comp that closed yesterday appears in tomorrow&rsquo;s pricing run. The broker does not need to remember to re-pull comps &mdash; the system does it as part of its daily enrichment cycle.</p>
+    </div>
+
+    <div class="src con r"><div class="src-tag">Content Agent &mdash; Pull Quote<span class="conf-badge">CONF 0.92</span></div>
+      <div class="pull-quote"><p class="pq-text">&ldquo;The width of the pricing range is <em>information, not imprecision</em> &mdash; a tight range means strong comp alignment, a wide range tells you exactly where to focus due diligence.&rdquo;</p><div class="pq-attr">Tommy Saunders &middot; Founder, IntelligentOperations.ai</div></div>
+    </div>
+
+    <div class="src enr r" id="s-faq"><div class="src-tag">Enrichment Agent &mdash; FAQs<span class="conf-badge">CONF 0.96</span></div>
+      <div class="faq-section"><div class="faq-head"><h2 class="faq-head-title">Frequently Asked Questions</h2><span class="faq-head-count">5 Questions</span></div>
+        <div class="faq-item open"><div class="faq-q" onclick="toggleFaq(this)">What data sources does the Market Analyst Agent use for comparable property analysis?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">The Market Analyst Agent ingests data from CoStar, county assessor records, recent transaction databases, and proprietary Windfield enrichment feeds. It cross-references sale prices, cap rates, price per square foot, lease rates, and tenant profiles across a 3-mile radius by default (adjustable to 1- or 5-mile). The agent weights recency, property class similarity, and use-type match to produce a <strong>relevance-ranked comp set of 8&ndash;12 properties</strong>, each with a similarity score from 0&ndash;100.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the risk scoring algorithm work for commercial real estate?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">The agent calculates a composite risk score from 0&ndash;100 across five dimensions: market velocity, tenant concentration, capital expenditure exposure, regulatory risk, and submarket trajectory. Each dimension is weighted by property type &mdash; industrial properties weight tenant concentration lower than office, for example. The composite score maps to a <strong>four-tier rating: Low (0&ndash;25), Moderate (26&ndash;50), Elevated (51&ndash;75), or High (76&ndash;100)</strong>. Each dimension shows its individual score and a one-sentence explanation so brokers know exactly where to focus due diligence.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How quickly does the Market Analyst Agent produce a complete market intelligence package?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">The complete package &mdash; submarket overview, 8&ndash;12 comps, trend analysis, risk scoring, and pricing recommendation &mdash; generates in <strong>22&ndash;28 seconds</strong>. The agent runs 4 parallel data retrieval tasks and synthesizes them in a single orchestration pass. The parallel architecture means adding more data sources does not linearly increase runtime. Compare this to the 4&ndash;6 hours a broker typically spends assembling the same intelligence manually.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is included in the submarket overview?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">The submarket overview is a 400&ndash;600 word narrative including: current vacancy rates by property type, average asking rents and trajectory, <strong>net absorption over trailing 4 quarters</strong>, major tenant moves (arrivals, departures, expansions), planned development pipeline, and a comparative vitality index ranking the submarket against adjacent submarkets. The narrative follows a consistent four-part structure: current state, recent trajectory, forward-looking factors, and competitive positioning.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the pricing recommendation differ from a traditional BPO?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">A traditional BPO uses 3&ndash;5 manually selected comps and subjective judgment. The Market Analyst Agent uses <strong>8&ndash;12 algorithmically ranked comps</strong>, applies regression analysis across cap rate, price/SF, and NOI multiples, then adjusts for deferred maintenance, lease rollover, and tenant credit quality. The output is a price range with 70% and 90% confidence intervals plus a cap rate sensitivity table showing how the recommendation shifts by 25&ndash;50 basis points. The recommendation updates automatically when new transaction data enters the system.</div></div></div>
+      </div>
+    </div>
+  </div></article>
+
+  <aside class="sidebar">
+    <div class="sb-sec r"><div class="sb-sec-title">In This Article</div><ul class="toc-list" id="toc-list">
+      <li class="toc-item active" onclick="scrollToSection('s-problem')"><span class="toc-dot"></span>The Intelligence Bottleneck</li>
+      <li class="toc-item" onclick="scrollToSection('s-agent')"><span class="toc-dot"></span>Agent Architecture</li>
+      <li class="toc-item" onclick="scrollToSection('s-comps')"><span class="toc-dot"></span>Comparable Properties</li>
+      <li class="toc-item" onclick="scrollToSection('s-submarket')"><span class="toc-dot"></span>Submarket Overview</li>
+      <li class="toc-item" onclick="scrollToSection('s-risk')"><span class="toc-dot"></span>Risk Scoring</li>
+      <li class="toc-item" onclick="scrollToSection('s-pricing')"><span class="toc-dot"></span>Pricing Recommendations</li>
+      <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+    </ul></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Agents in This Article</div><div class="lib-list">
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-mkt)"></div><div class="lib-name">Market Analyst</div><div class="lib-count">4</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-enr)"></div><div class="lib-name">Enrichment</div><div class="lib-count">12</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-tgt)"></div><div class="lib-name">Targeting</div><div class="lib-count">4</div></div>
+    </div></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Pipeline Stats</div><div class="stats-grid">
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">12</div><div class="stat-l">Comps ranked</div></div>
+      <div class="stat-card"><div class="stat-n">5</div><div class="stat-l">Risk dimensions</div></div>
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-green)">~28s</div><div class="stat-l">Total runtime</div></div>
+      <div class="stat-card"><div class="stat-n" style="color:#f59e0b">34</div><div class="stat-l">Risk score</div></div>
+    </div></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Article Series</div><div class="series-nav">
+      <a class="sn-item" href="wf-article.html"><span class="sn-num">01</span><span class="sn-title">The Windfield IO System</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand)">Overview</span></a>
+      <a class="sn-item" href="wf-article-02.html"><span class="sn-num">02</span><span class="sn-title">Property Enrichment</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand)">Enrichment</span></a>
+      <a class="sn-item" href="wf-article-03.html"><span class="sn-num">03</span><span class="sn-title">Targeting Engine</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand)">Targeting</span></a>
+      <a class="sn-item current"><span class="sn-num">04</span><span class="sn-title">Market Intelligence</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand)">Market</span></a>
+      <a class="sn-item" href="wf-article-05.html"><span class="sn-num">05</span><span class="sn-title">Outreach Engine</span><span class="sn-pill" style="background:rgba(225,29,72,.12);color:var(--wf-rose)">Outreach</span></a>
+      <a class="sn-item" href="wf-article-06.html"><span class="sn-num">06</span><span class="sn-title">LinkedIn Campaigns</span><span class="sn-pill" style="background:rgba(8,145,178,.12);color:var(--wf-cyan)">LinkedIn</span></a>
+    </div></div>
+  </aside>
+</div>
+
+<div class="author-section r">
+  <div class="author-inner">
+    <div>
+      <div class="author-av">T</div>
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Founder, IntelligentOperations.ai</div>
+      <div class="author-bio">Building AI-native commercial real estate operations for brokers who need defensible market intelligence at listing speed. 18 agents. One property brief. From targeting to close.</div>
+      <div class="author-links"><a href="#" class="author-link">Twitter</a><a href="#" class="author-link">LinkedIn</a><a href="#" class="author-link">IO Platform</a></div>
+    </div>
+    <div class="author-divider"></div>
+    <div>
+      <div class="related-label">Continue Reading &mdash; Windfield IO Series</div>
+      <div class="related-grid">
+        <a class="rel-card" href="wf-article-03.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-c"><div class="rel-thumb-dot" style="background:rgba(29,185,84,.2);border:1px solid rgba(29,185,84,.5);color:#4ade80">03</div></div></div><div class="rel-series-tag" style="color:rgba(29,185,84,.5)">Agent Deep Dive</div><div class="rel-title">The Enrichment Engine: 84 Data Points Per Property</div><div class="rel-meta">10 min &middot; Published</div></a>
+        <a class="rel-card" href="wf-article-05.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-a"><div class="rel-thumb-dot" style="background:rgba(225,29,72,.2);border:1px solid rgba(225,29,72,.5);color:#fb7185">05</div></div></div><div class="rel-series-tag" style="color:rgba(225,29,72,.5)">Agent Deep Dive</div><div class="rel-title">The Outreach Engine: Multi-Touch Sequences That Actually Convert</div><div class="rel-meta">10 min &middot; Published</div></a>
+        <a class="rel-card" href="wf-article-06.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-b"><div class="rel-thumb-dot" style="background:rgba(8,145,178,.2);border:1px solid rgba(8,145,178,.5);color:#38bdf8">06</div></div></div><div class="rel-series-tag" style="color:rgba(8,145,178,.5)">Agent Deep Dive</div><div class="rel-title">LinkedIn Campaign Builder: From Prospect List to Matched Audience</div><div class="rel-meta">10 min &middot; Published</div></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer-menu"><div class="fm-w"><div class="fm-grid">
+  <div><div class="fm-logo"><span>IO</span> Platform</div><div class="fm-tagline">AI-native commercial real estate operations. 18 agents. One property brief. From targeting to close.</div><div class="fm-series-badge"><span class="live-dot"></span>Windfield IO Series &middot; 10 Articles</div></div>
+  <div class="fm-col"><div class="fm-col-title">Platform</div><ul><li><a href="#">Property Profiles</a></li><li><a href="#">Agent Pipeline</a></li><li><a href="#">Market Intel</a></li><li><a href="#">Outreach Engine</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">CRE Ops</div><ul><li><a href="#">Targeting Feed</a></li><li><a href="#">Enrichment Feed</a></li><li><a href="#">Market Feed</a></li><li><a href="#">LinkedIn Feed</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">Article Series</div><div class="fm-series-list">
+    <a class="fm-series-item" href="wf-article-03.html"><span class="fm-s-num">03</span><span class="fm-s-title">Enrichment Engine</span></a>
+    <a class="fm-series-item"><span class="fm-s-num" style="color:var(--wf-brand)">04</span><span class="fm-s-title" style="color:var(--wf-fg-muted)">Market Intelligence &larr;</span></a>
+    <a class="fm-series-item" href="wf-article-05.html"><span class="fm-s-num">05</span><span class="fm-s-title">Outreach Engine</span></a>
+    <a class="fm-series-item" href="wf-article-06.html"><span class="fm-s-num">06</span><span class="fm-s-title">LinkedIn Campaigns</span></a>
+  </div></div>
+</div></div></footer>
+
+<div class="final-footer"><div class="ff-w"><div class="ff-legal"><span>&copy; 2026 IntelligentOperations.ai</span><span class="ff-sep"></span><span>All rights reserved</span><span class="ff-sep"></span><span class="ff-series">Windfield IO System Series</span><span class="ff-sep"></span><span>WF-IO-2026-004 &middot; A04</span></div><div class="ff-mcp"><span class="live-dot"></span>18 Agents Live</div></div></div>
+
+<script>
+var FEEDS=[{n:'Targeting',c:'#1db954',ct:4},{n:'Enrichment',c:'#1db954',ct:12},{n:'Market',c:'#e8a000',ct:4},{n:'Outreach',c:'#e11d48',ct:6},{n:'LinkedIn',c:'#0891b2',ct:5},{n:'Content',c:'#8b5cf6',ct:3}];
+var pf=document.getElementById('ps-feeds');FEEDS.forEach(function(f,i){var c=document.createElement('div');c.className='ps-chip';c.style.background=f.c+'14';c.style.border='1px solid '+f.c+'28';c.style.color=f.c;var d=document.createElement('div');d.className='ps-dot';d.style.background=f.c;c.appendChild(d);c.appendChild(document.createTextNode(f.n+' \u00b7 '+f.ct));pf.appendChild(c);if(i<FEEDS.length-1){var a=document.createElement('div');a.className='ps-arrow';a.textContent='\u00b7';pf.appendChild(a)}});
+var attrOn=false;function toggleAttr(){attrOn=!attrOn;document.body.classList.toggle('attr',attrOn);var b=document.getElementById('attr-btn');b.classList.toggle('on',attrOn);b.textContent=attrOn?'Hide Sources':'Show Agent Sources';if(attrOn)document.querySelectorAll('.src').forEach(function(el){if(!el.querySelector('.ann-corners')){var c=document.createElement('div');c.className='ann-corners';c.innerHTML='<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';el.appendChild(c)}})}
+function togglePipe(){var s=document.getElementById('pstrip'),m=document.getElementById('pipemap'),b=document.getElementById('pipe-btn');if(m.classList.contains('open')){m.classList.remove('open');s.classList.remove('open');b.classList.remove('on')}else if(s.classList.contains('open')){s.classList.remove('open');m.classList.add('open');b.classList.add('on')}else{s.classList.add('open');b.classList.add('on')}}
+function toggleFaq(q){var it=q.parentElement,w=it.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(function(i){i.classList.remove('open');i.querySelector('.faq-toggle').textContent='+'});if(!w){it.classList.add('open');q.querySelector('.faq-toggle').textContent='\u00d7'}}
+window.addEventListener('scroll',function(){var d=document.documentElement;document.getElementById('prog').style.width=((window.scrollY/(d.scrollHeight-d.clientHeight))*100)+'%'},{passive:true});
+var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('in')})},{threshold:.05,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.r').forEach(function(el){ro.observe(el)});
+var sections=['s-problem','s-agent','s-comps','s-submarket','s-risk','s-pricing','s-faq'];var tocItems=document.querySelectorAll('.toc-item');
+var tocObs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var idx=sections.indexOf(en.target.id);if(idx>-1){tocItems.forEach(function(t){t.classList.remove('active')});if(tocItems[idx])tocItems[idx].classList.add('active')}}})},{threshold:.3});
+sections.forEach(function(s){var el=document.getElementById(s);if(el)tocObs.observe(el)});
+function scrollToSection(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+</script>
+</body>
+</html>

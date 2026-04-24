@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Enrichment: From Raw Listing to Investment-Grade Profile — Windfield Real Estate</title>
+<meta name="description" content="How Windfield Real Estate's Enrichment Agent transforms raw Buildout listings into investment-grade profiles with marketing copy, investment theses, tenant narratives, and financial projections using 12 specialist AI agents.">
+<meta name="keywords" content="property enrichment ai, cre listing enhancement, ai investment thesis, commercial real estate automation, buildout listing enrichment, tenant narrative ai, windfield real estate">
+<meta property="og:title" content="Property Enrichment: From Raw Listing to Investment-Grade Profile">
+<meta property="og:description" content="How 12 specialist AI agents transform a raw commercial real estate listing into a 340-data-point investment-grade profile — with marketing copy, tenant narratives, financial models, and competitive positioning.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-04-22">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Property Enrichment: From Raw Listing to Investment-Grade Profile","description":"How Windfield Real Estate's Enrichment Agent and its 12 specialist AI agents transform raw Buildout listings into investment-grade property profiles containing marketing copy, investment theses, tenant narratives, financial projections, and competitive positioning — processing each property in under 4 minutes.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"IntelligentOperations.ai"}},"publisher":{"@type":"Organization","name":"Windfield Real Estate, LLC"},"datePublished":"2026-04-22","articleSection":"Agent Deep Dive","keywords":["property enrichment","ai listing enhancement","investment thesis generation","tenant narrative ai","cre profile automation","buildout integration"],"wordCount":2900,"timeRequired":"PT10M","isPartOf":{"@type":"CreativeWorkSeries","name":"Windfield CRE Intelligence Series","position":2}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What does the Enrichment Agent generate from a raw Buildout listing?","acceptedAnswer":{"@type":"Answer","text":"The Enrichment Agent's 12 specialists generate a complete investment-grade profile from a raw Buildout listing. Outputs include: marketing copy (headline, listing description, feature highlights), investment thesis (cap rate analysis, value-add potential, market positioning), tenant narratives (3-5 ideal tenant use cases with buildout scenarios), financial projections (NOI modeling, expense ratios, rent roll analysis), comparable analysis (recent sales and leases within defined radius), competitive positioning, demographic analysis, infrastructure assessment, environmental review, zoning analysis, accessibility scoring, and neighborhood narrative. Total: approximately 340 data points per property."}},
+{"@type":"Question","name":"How long does the Enrichment Agent take versus manual enrichment?","acceptedAnswer":{"@type":"Answer","text":"The Enrichment Agent processes a raw Buildout listing into a complete 340-data-point profile in under 4 minutes. Manual enrichment of the same property — researching comps, writing marketing copy, building financial models, analyzing demographics, and drafting tenant narratives — typically requires 2-3 hours. The 12 specialists run in parallel where possible, with the core Enrichment Agent managing dependency chains."}},
+{"@type":"Question","name":"What is the difference between a raw listing and an enriched profile?","acceptedAnswer":{"@type":"Answer","text":"A raw Buildout listing contains 40-60 data points: address, square footage, lot size, asking price, year built, zoning, and basic description. An enriched profile contains approximately 340 data points across 12 specialist domains. The investment thesis adds cap rate comparisons, IRR projections, and value-add scenarios. Tenant narratives add 3-5 specific use cases with buildout costs. Marketing copy provides buyer-type-specific descriptions. The raw listing tells a buyer what the building is. The enriched profile tells them why they should buy it."}},
+{"@type":"Question","name":"How does the Enrichment Agent keep profiles current?","acceptedAnswer":{"@type":"Answer","text":"The enrichment loop runs continuously. Every new data point triggers re-enrichment of relevant profile sections. A new comp sale triggers the comparable analysis and investment thesis specialists. A new tenant lease triggers the tenant narrative and demographic specialists. On average, the system processes 15-20 re-enrichment triggers per day across 78 properties, maintaining 26,520 continuously-updated data points."}},
+{"@type":"Question","name":"How does the enriched profile feed into downstream agents?","acceptedAnswer":{"@type":"Answer","text":"The enriched profile is the source of truth for every downstream agent. The Targeting Agent reads property type and investment thesis to calibrate prospect lists. The Outreach Agent reads marketing copy and tenant narratives to personalize emails. The LinkedIn Agent reads market positioning for thought-leadership content. The Market Analysis Agent reads comparable analysis to identify when new comps change the thesis. Enrichment quality determines the quality of every other agent's output."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Windfield Real Estate","item":"https://windfield.io"},
+{"@type":"ListItem","position":2,"name":"CRE Intelligence","item":"https://windfield.io/intelligence"},
+{"@type":"ListItem","position":3,"name":"Article Series","item":"https://windfield.io/intelligence/series"},
+{"@type":"ListItem","position":4,"name":"Property Enrichment","item":"https://windfield.io/intelligence/property-enrichment-investment-grade-profile"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Windfield IO Design Tokens */
+  --wf-bg:#09090b;
+  --wf-bg-elevated:#111113;
+  --wf-surface:#141417;
+  --wf-fg:#fafafa;
+  --wf-fg-muted:#a1a1aa;
+  --wf-fg-subtle:#71717a;
+  --wf-fg-faint:#52525b;
+  --wf-brand:#1db954;
+  --wf-brand-muted:rgba(29,185,84,.12);
+  --wf-brand-border:rgba(29,185,84,.22);
+  --wf-border:#27272a;
+  --wf-border2:rgba(250,250,250,.1);
+  --wf-border3:rgba(250,250,250,.16);
+
+  /* Semantic aliases */
+  --wf-amber:#e8a000;
+  --wf-rose:#e11d48;
+  --wf-purple:#8b5cf6;
+  --wf-cyan:#0891b2;
+  --wf-green:#1db954;
+
+  /* Agent domain colors */
+  --c-tgt:#1db954;
+  --c-enr:#1db954;
+  --c-mkt:#e8a000;
+  --c-out:#e11d48;
+  --c-lin:#0891b2;
+  --c-cnt:#8b5cf6;
+
+  /* Typography */
+  --wf-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --wf-mono:'JetBrains Mono','Fira Code',monospace;
+
+  /* Radii */
+  --wf-r-sm:6px;
+  --wf-r-md:10px;
+  --wf-r-lg:16px;
+
+  /* Transitions */
+  --wf-ease:cubic-bezier(.25,.46,.45,.94);
+  --wf-spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--wf-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+/* ── Attribution ── */
+.src{position:relative}
+.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .enr{outline:1.5px solid var(--c-enr);outline-offset:3px}body.attr .tgt{outline:1.5px solid var(--c-tgt);outline-offset:3px}body.attr .cnt{outline:1.5px solid var(--c-cnt);outline-offset:3px}
+.enr .src-tag{background:var(--c-enr);color:#fff}.tgt .src-tag{background:var(--c-tgt);color:#fff}.cnt .src-tag{background:var(--c-cnt);color:#fff}
+body.attr .enr .ann-c{border-color:var(--c-enr)}body.attr .tgt .ann-c{border-color:var(--c-tgt)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+
+/* ── Progress Bar ── */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:9999;width:0;transition:width .1s linear}
+
+/* ── Navbar ── */
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border);height:52px;display:flex;align-items:center}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center}
+.nav-logo{font-family:var(--wf-sans);font-size:18px;font-weight:700;color:var(--wf-fg);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}
+.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-rule{width:1px;height:16px;background:var(--wf-border2);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:auto;display:none}
+.nav-btns{display:flex;gap:8px;flex-shrink:0;margin-left:auto}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--wf-sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--wf-ease)}
+.nbtn-ghost{background:none;border:1px solid var(--wf-border2);color:var(--wf-fg-subtle)}
+.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--wf-green);display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── Pipeline Strip ── */
+#pstrip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}
+#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}
+.ps-chip{padding:4px 10px;border-radius:var(--wf-r-sm);font:600 10px/1 var(--wf-sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}
+.ps-arrow{font-size:10px;color:var(--wf-fg-faint);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--wf-sans);color:var(--wf-green);letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+
+/* ── Pipeline Map ── */
+#pipemap{background:var(--wf-surface);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .5s var(--wf-ease)}
+#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.pm-title span{font-weight:300;color:var(--wf-fg-subtle)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.5),transparent);animation:pms1 2s ease-in-out infinite;margin:10px 0}
+@keyframes pms1{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--wf-sans);color:var(--wf-fg)}
+.pm-node-sub{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);font-size:12px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--wf-border)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--wf-mono);color:var(--wf-fg-subtle)}
+.pm-meta-n{font:700 11px/1 var(--wf-mono);color:var(--wf-fg)}
+
+/* ── Hero ── */
+.hero{background:var(--wf-bg);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--wf-border) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-divider{width:20px;height:1px;background:var(--wf-fg-faint)}
+.eye-series{font:600 10px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+h1{font-family:var(--wf-sans);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--wf-border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:var(--wf-border2);margin:0 18px}
+.h-date{font-size:13px;color:var(--wf-fg-subtle)}
+.h-read{font-size:13px;color:var(--wf-fg-subtle);margin-left:14px}
+
+/* ── Hero Viz ── */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);
+  border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.12) 0%,transparent 65%);animation:gp1 4s ease-in-out infinite}
+@keyframes gp1{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);
+  animation:hvs1 5s ease-in-out infinite;opacity:.4}
+@keyframes hvs1{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+.hv-before{position:absolute;top:12%;left:6%;width:36%;z-index:10}
+.hv-after{position:absolute;top:8%;right:4%;width:40%;z-index:10}
+.hv-card{border-radius:var(--wf-r-sm);padding:12px;border:1px solid}
+.hv-card-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.hv-card-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);font:300 8px/1.4 var(--wf-mono)}.hv-card-row:last-child{border-bottom:none}
+.hv-card-k{color:var(--wf-fg-faint)}.hv-card-v{color:var(--wf-fg-muted)}
+.hv-transform{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);z-index:12;display:flex;flex-direction:column;align-items:center;gap:4px}
+.hv-arrow-circle{width:40px;height:40px;border-radius:50%;background:rgba(29,185,84,.15);border:1.5px solid rgba(29,185,84,.5);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--wf-brand);animation:pulse2 2s ease-in-out infinite}
+@keyframes pulse2{0%,100%{box-shadow:0 0 0 0 rgba(29,185,84,.3)}50%{box-shadow:0 0 0 12px rgba(29,185,84,0)}}
+.hv-arrow-label{font:700 6px/1 var(--wf-mono);letter-spacing:.1em;color:rgba(29,185,84,.4)}
+.hv-enr-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid rgba(29,185,84,.06)}
+.hv-enr-dot{width:5px;height:5px;border-radius:50%;background:var(--wf-brand);flex-shrink:0;opacity:.6}
+.hv-enr-name{font:500 7px/1 var(--wf-sans);color:var(--wf-fg-muted);flex:1}
+.hv-enr-status{font:700 6px/1 var(--wf-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-brand)}
+.hv-stats-bar{position:absolute;bottom:10%;left:8%;right:8%;display:flex;gap:8px}
+.hv-stat{flex:1;text-align:center;padding:6px 4px;border-radius:4px;background:rgba(29,185,84,.06);border:1px solid rgba(29,185,84,.12)}
+.hv-stat-n{font:700 14px/1 var(--wf-mono);color:var(--wf-brand)}.hv-stat-l{font:300 6px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-top:3px;letter-spacing:.05em}
+.hv-badge2{position:absolute;top:14px;right:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.22)}
+.hv-status2{position:absolute;top:14px;left:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.25)}
+
+/* ── Article Grid ── */
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:1024px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}
+.sidebar{position:sticky;top:72px}
+
+/* ── Body Text ── */
+.body p{font-size:17.5px;line-height:1.82;color:var(--wf-fg-muted);font-weight:300;margin-bottom:28px}
+.body p strong{font-weight:600;color:var(--wf-fg)}
+.body p a{color:var(--wf-brand);text-decoration:none;border-bottom:1px solid rgba(29,185,84,.3);transition:border-color .15s}
+.body p a:hover{border-bottom-color:var(--wf-brand)}
+h2.sh{font-family:var(--wf-sans);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--wf-fg);margin:60px 0 20px}
+h2.sh .sn{font:700 12px/1 var(--wf-mono);color:var(--wf-brand);letter-spacing:.1em;display:block;margin-bottom:8px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--wf-fg)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--wf-sans);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--wf-brand)}
+
+/* ── Pull Quotes ── */
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--wf-surface);border-radius:var(--wf-r-md);border:1px solid var(--wf-border);border-left:3px solid var(--wf-brand);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--wf-sans);font-size:150px;font-weight:700;color:var(--wf-brand-muted);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--wf-sans);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--wf-fg);position:relative;z-index:1;margin-bottom:14px}
+.pq-text em{font-style:italic;color:var(--wf-brand)}
+.pq-attr{font:600 11px/1 var(--wf-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);position:relative;z-index:1}
+
+/* ── Specialist Grid ── */
+.spec-grid{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border2);background:var(--wf-surface)}
+.sg-header{padding:14px 22px;border-bottom:1px solid var(--wf-border);display:flex;align-items:center;gap:12px}
+.sg-title{font:700 10px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.sg-body{padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:640px){.sg-body{grid-template-columns:1fr 1fr}}
+.sg-card{background:rgba(255,255,255,.025);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:12px;transition:all .2s}
+.sg-card:hover{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.sg-num{font:700 8px/1 var(--wf-mono);color:var(--wf-brand);margin-bottom:4px}
+.sg-name{font:600 11px/1.2 var(--wf-sans);color:var(--wf-fg);margin-bottom:3px}
+.sg-desc{font:300 10px/1.5 var(--wf-sans);color:var(--wf-fg-subtle)}
+
+/* ── Before/After Block ── */
+.ba-block{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border2)}
+.ba-header{padding:14px 22px;background:var(--wf-surface);border-bottom:1px solid var(--wf-border);display:flex;align-items:center;gap:12px}
+.ba-title{font:700 10px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:640px){.ba-grid{grid-template-columns:1fr}}
+.ba-col{padding:20px 24px}
+.ba-col:first-child{background:var(--wf-bg-elevated);border-right:1px solid var(--wf-border)}
+.ba-col:last-child{background:var(--wf-surface)}
+.ba-col-title{font:700 8px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+.ba-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--wf-border);font:300 12px/1.5 var(--wf-sans)}
+.ba-row:last-child{border-bottom:none}
+.ba-k{color:var(--wf-fg-subtle)}.ba-v{color:var(--wf-fg-muted);text-align:right}
+
+/* ── Callout Boxes ── */
+.callout{margin:48px 0;padding:24px 28px;background:linear-gradient(135deg,var(--wf-brand-muted),rgba(29,185,84,.02));border:1px solid var(--wf-brand-border);border-left:3px solid var(--wf-brand);border-radius:var(--wf-r-md)}
+.callout-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.callout-label::before{content:'\25B8'}
+.callout-body{font:300 14px/1.72 var(--wf-sans);color:var(--wf-fg-muted)}
+.callout-body strong{font-weight:600;color:var(--wf-fg)}
+
+/* ── FAQ Section ── */
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--wf-border2)}
+.faq-head-title{font-family:var(--wf-sans);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--wf-fg)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);overflow:hidden;margin-bottom:8px;transition:border-color .15s}
+.faq-item.open{border-color:var(--wf-border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--wf-sans);color:var(--wf-fg-muted);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--wf-fg)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--wf-border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wf-fg-subtle);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--wf-brand-muted);border-color:var(--wf-brand-border);color:var(--wf-brand)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease),padding .2s}
+.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--wf-sans);color:var(--wf-fg-muted)}
+.faq-a-inner strong{font-weight:600;color:var(--wf-fg)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.faq-schema-note::before{content:'\25C8';color:rgba(29,185,84,.4);font-size:8px}
+
+/* ── Sidebar ── */
+.sb-sec{margin-bottom:36px}
+.sb-sec-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}
+.toc-item:hover,.toc-item.active{color:var(--wf-fg)}.toc-item.active{color:var(--wf-brand)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:12px}
+.stat-n{font:700 22px/1 var(--wf-mono);color:var(--wf-fg);margin-bottom:3px}
+.stat-l{font-size:10px;color:var(--wf-fg-subtle);letter-spacing:.04em}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);text-decoration:none;transition:all .15s;cursor:pointer}
+.sn-item:hover{border-color:var(--wf-border2)}
+.sn-item.current{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.sn-num{font:700 10px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.sn-item.current .sn-num{color:var(--wf-brand)}
+.sn-title{font:400 11px/1.35 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}
+.sn-item.current .sn-title{color:var(--wf-fg)}
+
+/* ── Author Section ── */
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--wf-border)}
+.author-inner{display:flex;align-items:start;gap:24px;padding-bottom:60px}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:26px;color:#fff;font-weight:700;flex-shrink:0}
+.author-info{flex:1}
+.author-name{font-family:var(--wf-sans);font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--wf-sans);color:var(--wf-brand);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--wf-fg-subtle);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--wf-border2);color:var(--wf-fg-subtle);text-decoration:none;transition:all .15s}
+.author-link:hover{color:var(--wf-fg);border-color:var(--wf-border3)}
+
+/* ── Series Footer Nav ── */
+.series-footer{margin:40px 0;display:flex;gap:16px;flex-wrap:wrap}
+.sf-link{padding:10px 18px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);background:var(--wf-surface);text-decoration:none;transition:all .15s;display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+.sf-link:hover{border-color:var(--wf-border2)}
+.sf-dir{font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint)}
+.sf-title{font:500 13px/1.3 var(--wf-sans);color:var(--wf-fg-muted)}
+.sf-link:hover .sf-title{color:var(--wf-fg)}
+
+/* ── Footer ── */
+.footer-menu{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:52px 32px 36px}
+.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--wf-border)}
+@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr}}
+.fm-logo{font-family:var(--wf-sans);font-size:20px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}
+.fm-logo span{font-style:italic;color:var(--wf-brand)}
+.fm-tagline{font-size:13px;color:var(--wf-fg-subtle);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);color:rgba(29,185,84,.6)}
+.fm-col-title{font:700 9px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-col a{font-size:13px;color:var(--wf-fg-subtle);text-decoration:none;transition:color .15s}
+.fm-col a:hover{color:var(--wf-fg)}
+
+/* ── Final Footer Bar ── */
+.final-footer{background:var(--wf-bg);border-top:1px solid var(--wf-border);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--wf-mono);color:var(--wf-fg-faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ff-sep{width:1px;height:10px;background:var(--wf-fg-faint)}
+.ff-series{color:rgba(29,185,84,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);padding:5px 14px;border:1px solid rgba(29,185,84,.2);border-radius:20px;background:rgba(29,185,84,.06)}
+
+/* ── Reveal Animation ── */
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--wf-ease),transform .65s var(--wf-ease)}
+.r.in{opacity:1;transform:none}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .hero-w{gap:40px;padding:0 20px}
+  .article-grid{padding:40px 20px 60px;gap:40px}
+  .nav-w{padding:0 16px}
+  .nav-section{display:none}
+  .ps-inner{padding:0 16px}
+  .pm-inner{padding:16px}
+  .sg-body{grid-template-columns:1fr}
+  .ba-grid{grid-template-columns:1fr}
+  .fm-grid{grid-template-columns:1fr}
+  .ff-w{flex-direction:column;gap:8px}
+  .series-footer{flex-direction:column}
+  .author-inner{flex-direction:column;align-items:center;text-align:center}
+  .author-links{justify-content:center}
+  .hero-text{padding-bottom:48px}
+  h1{font-size:clamp(28px,7vw,48px)}
+  .pull-quote{padding:28px 24px}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<nav>
+  <div class="nav-w">
+    <a href="#" class="nav-logo"><span>IO</span> Platform</a>
+    <div class="nav-rule"></div>
+    <span class="nav-section">Commercial Real Estate</span>
+    <div class="nav-btns">
+      <button class="nbtn nbtn-ghost" id="attr-btn" onclick="toggleAttr()">Show Agent Sources</button>
+      <button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button>
+      <button class="nbtn nbtn-live"><span class="live-dot"></span>18 Agents Live</button>
+    </div>
+  </div>
+</nav>
+
+<div id="pstrip"><div class="ps-inner"><div class="ps-label">Pipeline &middot; WF-02</div><div class="ps-feeds" id="ps-feeds"></div><div class="ps-arrow">&rarr;</div><div class="ps-result"><span class="live-dot"></span>12 Specialists &middot; 340 Data Points &middot; ~4min</div></div></div>
+
+<div id="pipemap"><div class="pm-inner">
+  <div class="pm-title">ORCHESTRATION MAP <span>&mdash; Article 02 &middot; Property Enrichment</span></div><div class="pm-scan"></div>
+  <div class="pm-flow">
+    <div class="pm-node" style="border-color:rgba(255,255,255,.15)"><div class="pm-node-label">Input</div><div class="pm-node-name">Raw Listing</div><div class="pm-node-sub">40&ndash;60 pts</div></div><div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:var(--wf-brand-border)"><div class="pm-node-label">Processing</div><div class="pm-node-name" style="color:var(--wf-brand)">Enrichment</div><div class="pm-node-sub">12 specialists</div></div><div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Output</div><div class="pm-node-name" style="color:#4ade80">Profile</div><div class="pm-node-sub">340 pts</div></div><div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Downstream</div><div class="pm-node-name" style="color:var(--wf-brand)">TGT + OUT</div><div class="pm-node-sub">Profile-driven</div></div>
+  </div>
+  <div class="pm-meta-row"><div class="pm-meta-item"><span class="pm-meta-n">12</span> Specialists</div><div class="pm-meta-item"><span class="pm-meta-n">340</span> Data points</div><div class="pm-meta-item"><span class="pm-meta-n">~4min</span> Processing</div><div class="pm-meta-item"><span class="pm-meta-n">78</span> Profiles</div><div class="pm-meta-item" style="margin-left:auto"><span style="color:var(--wf-green);font:700 9px/1 var(--wf-mono)">&bull; ACTIVE</span></div></div>
+</div></div>
+
+<header class="hero src enr" id="hero">
+  <div class="src-tag">Enrichment Agent &mdash; Hero<span class="conf-badge">CONF 0.97</span></div>
+  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow"><span class="eye-tag">Agent Deep Dive</span><span class="eye-divider"></span><span class="eye-series">Windfield Intelligence Series &middot; Article 02</span></div>
+      <h1>Property <em>Enrichment:</em> From Raw Listing to Investment-Grade Profile</h1>
+      <p class="hero-deck">A raw Buildout listing contains 40&ndash;60 data points. An enriched Windfield profile contains 340. The difference is 12 specialist AI agents transforming square footage into investment theses, tenant narratives, and marketing copy &mdash; in under 4 minutes.</p>
+      <div class="hero-meta"><div class="h-author"><div class="h-av">T</div><div><div class="h-name">Tommy Saunders</div><div class="h-role">Founder, IntelligentOperations.ai</div></div></div><div class="h-sep"></div><span class="h-date">Apr 22, 2026</span><span class="h-read">&middot; 10 min read</span></div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border)"><span style="font:700 8px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-brand)">IO-WF-2026-002</span><span style="width:1px;height:10px;background:var(--wf-brand-border)"></span><span style="font:300 8px/1 var(--wf-mono);letter-spacing:.1em;color:#ffffff">CRE SYSTEM &middot; A02 &middot; APR 2026</span></div>
+    </div>
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz2"><div class="hv-grid"></div><div class="hv-glow"></div><div class="hv-scan"></div>
+        <div class="hv-before"><div class="hv-card" style="background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1)"><div class="hv-card-label" style="color:var(--wf-fg-faint)">RAW LISTING</div><div class="hv-card-row"><span class="hv-card-k">Address</span><span class="hv-card-v">4200 Main St</span></div><div class="hv-card-row"><span class="hv-card-k">Type</span><span class="hv-card-v">Industrial</span></div><div class="hv-card-row"><span class="hv-card-k">SqFt</span><span class="hv-card-v">48,000</span></div><div class="hv-card-row"><span class="hv-card-k">Price</span><span class="hv-card-v">$3.2M</span></div><div class="hv-card-row"><span class="hv-card-k">Year</span><span class="hv-card-v">2004</span></div><div class="hv-card-row"><span class="hv-card-k">Zoning</span><span class="hv-card-v">M1</span></div><div class="hv-card-row" style="border:none;padding-top:6px"><span class="hv-card-k" style="font-size:7px">~48 DATA POINTS</span></div></div></div>
+        <div class="hv-transform"><div class="hv-arrow-circle">&rarr;</div><div class="hv-arrow-label">12 AGENTS</div></div>
+        <div class="hv-after"><div class="hv-card" style="background:rgba(29,185,84,.04);border-color:rgba(29,185,84,.2)"><div class="hv-card-label" style="color:var(--wf-brand)">ENRICHED PROFILE</div><div class="hv-enr-row"><div class="hv-enr-dot"></div><div class="hv-enr-name">Marketing Copy</div><div class="hv-enr-status">DONE</div></div><div class="hv-enr-row"><div class="hv-enr-dot"></div><div class="hv-enr-name">Investment Thesis</div><div class="hv-enr-status">DONE</div></div><div class="hv-enr-row"><div class="hv-enr-dot"></div><div class="hv-enr-name">Tenant Narratives</div><div class="hv-enr-status">DONE</div></div><div class="hv-enr-row"><div class="hv-enr-dot"></div><div class="hv-enr-name">Financial Model</div><div class="hv-enr-status">DONE</div></div><div class="hv-enr-row"><div class="hv-enr-dot"></div><div class="hv-enr-name">Comp Analysis</div><div class="hv-enr-status">DONE</div></div><div class="hv-enr-row"><div class="hv-enr-dot"></div><div class="hv-enr-name">Demographics</div><div class="hv-enr-status">DONE</div></div><div class="hv-enr-row"><div class="hv-enr-dot"></div><div class="hv-enr-name">+6 more</div><div class="hv-enr-status" style="color:var(--wf-fg-faint)">340 pts</div></div></div></div>
+        <div class="hv-stats-bar"><div class="hv-stat"><div class="hv-stat-n">340</div><div class="hv-stat-l">DATA POINTS</div></div><div class="hv-stat"><div class="hv-stat-n">12</div><div class="hv-stat-l">SPECIALISTS</div></div><div class="hv-stat"><div class="hv-stat-n">&lt;4m</div><div class="hv-stat-l">RUNTIME</div></div><div class="hv-stat"><div class="hv-stat-n">78</div><div class="hv-stat-l">PROPERTIES</div></div></div>
+        <div class="hv-status2">ENRICHMENT AGENT &middot; 12 SPECIALISTS</div><div class="hv-badge2">IO-VIZ-02</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="article-grid">
+  <article class="article-body"><div class="body">
+    <div class="src enr r" id="s-lede"><div class="src-tag">Enrichment Agent<span class="conf-badge">CONF 0.98</span></div>
+      <p class="lede">There is a moment in every commercial real estate transaction where the listing sheet stops being sufficient. A buyer asks about tenant buildout costs. An investor wants cap rate comparisons against recent submarket sales. A developer needs to know the zoning allows their intended use. The listing sheet says the building is 48,000 square feet of industrial space priced at $3.2 million. That is the beginning of a conversation, not the end of one. The Enrichment Agent exists to complete that conversation before it starts.</p>
+    </div>
+    <div class="src enr r"><div class="src-tag">Enrichment Agent<span class="conf-badge">CONF 0.97</span></div>
+      <p>At Windfield Real Estate, every property that enters the pipeline goes through the same transformation. A raw Buildout listing containing 40&ndash;60 data points is processed by 12 specialist agents that produce a complete investment-grade profile containing approximately 340 data points. <strong>The raw listing tells a buyer what the building is. The enriched profile tells them why they should buy it.</strong></p>
+    </div>
+
+    <div class="src enr r" id="s-specialists"><div class="src-tag">Enrichment Agent<span class="conf-badge">CONF 0.96</span></div>
+      <h2 class="sh"><span class="sn">01</span>The 12 Enrichment Specialists</h2>
+      <p>Each specialist handles one domain. They run in parallel where possible. Some have dependencies: the investment thesis specialist waits for the comparable analysis specialist because the thesis references specific comp data.</p>
+    </div>
+
+    <div class="src enr r"><div class="src-tag">Enrichment Agent &mdash; Roster<span class="conf-badge">CONF 0.94</span></div>
+      <div class="spec-grid"><div class="sg-header"><span class="sg-title">Enrichment Specialist Roster &mdash; 12 Agents</span></div>
+        <div class="sg-body">
+          <div class="sg-card"><div class="sg-num">S01</div><div class="sg-name">Marketing Copy</div><div class="sg-desc">Headline, description, features calibrated to buyer type</div></div>
+          <div class="sg-card"><div class="sg-num">S02</div><div class="sg-name">Investment Thesis</div><div class="sg-desc">Cap rate, value-add potential, IRR projections, timing</div></div>
+          <div class="sg-card"><div class="sg-num">S03</div><div class="sg-name">Tenant Narratives</div><div class="sg-desc">3&ndash;5 ideal tenant use cases with buildout costs</div></div>
+          <div class="sg-card"><div class="sg-num">S04</div><div class="sg-name">Financial Projections</div><div class="sg-desc">NOI modeling, expense ratios, cash flow</div></div>
+          <div class="sg-card"><div class="sg-num">S05</div><div class="sg-name">Comparable Analysis</div><div class="sg-desc">8&ndash;12 recent sales/leases with PSF trending</div></div>
+          <div class="sg-card"><div class="sg-num">S06</div><div class="sg-name">Competitive Position</div><div class="sg-desc">Active competing listings comparison</div></div>
+          <div class="sg-card"><div class="sg-num">S07</div><div class="sg-name">Demographics</div><div class="sg-desc">Population, income, traffic, employment</div></div>
+          <div class="sg-card"><div class="sg-num">S08</div><div class="sg-name">Infrastructure</div><div class="sg-desc">Utilities, road/rail access, fiber</div></div>
+          <div class="sg-card"><div class="sg-num">S09</div><div class="sg-name">Environmental</div><div class="sg-desc">Flood zones, brownfield, Phase I indicators</div></div>
+          <div class="sg-card"><div class="sg-num">S10</div><div class="sg-name">Zoning Analysis</div><div class="sg-desc">Permitted uses, density, variance history</div></div>
+          <div class="sg-card"><div class="sg-num">S11</div><div class="sg-name">Accessibility</div><div class="sg-desc">ADA, parking ratios, loading, clear height</div></div>
+          <div class="sg-card"><div class="sg-num">S12</div><div class="sg-name">Neighborhood</div><div class="sg-desc">Amenities, growth trajectory, anchors</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="src enr r" id="s-before-after"><div class="src-tag">Enrichment Agent<span class="conf-badge">CONF 0.95</span></div>
+      <h2 class="sh"><span class="sn">02</span>Before vs. After: What Enrichment Produces</h2>
+      <p>Consider a 48,000 SF industrial property in Kansas City&rsquo;s Northland submarket. The raw listing tells you it exists. The enriched profile tells you its 7.2% cap rate is 80 basis points above the submarket average, that the clear height accommodates automated racking for 3PL tenants, that three similar properties leased within 90 days, and that it is 8 minutes from the Cerner/Oracle campus.</p>
+    </div>
+
+    <div class="src enr r"><div class="src-tag">Enrichment Agent &mdash; Comparison<span class="conf-badge">CONF 0.93</span></div>
+      <div class="ba-block"><div class="ba-header"><span class="ba-title">Before &rarr; After &mdash; Industrial Property WF-KC-2026-042</span></div>
+        <div class="ba-grid">
+          <div class="ba-col"><div class="ba-col-title" style="color:var(--wf-fg-faint)">Raw Listing</div><div class="ba-row"><span class="ba-k">Description</span><span class="ba-v">48,000 SF industrial</span></div><div class="ba-row"><span class="ba-k">Price</span><span class="ba-v">$3,200,000</span></div><div class="ba-row"><span class="ba-k">Cap Rate</span><span class="ba-v">Not calculated</span></div><div class="ba-row"><span class="ba-k">Tenants</span><span class="ba-v">Not addressed</span></div><div class="ba-row"><span class="ba-k">Comps</span><span class="ba-v">None</span></div><div class="ba-row"><span class="ba-k">Investment Case</span><span class="ba-v">None</span></div><div class="ba-row"><span class="ba-k">Data Points</span><span class="ba-v" style="color:var(--wf-fg-faint)">~48</span></div></div>
+          <div class="ba-col"><div class="ba-col-title" style="color:var(--wf-brand)">Enriched Profile</div><div class="ba-row"><span class="ba-k">Description</span><span class="ba-v" style="color:var(--wf-brand)">5 buyer-type headlines</span></div><div class="ba-row"><span class="ba-k">Price</span><span class="ba-v" style="color:var(--wf-brand)">$66.67/SF + trend</span></div><div class="ba-row"><span class="ba-k">Cap Rate</span><span class="ba-v" style="color:var(--wf-brand)">7.2% (+80bp)</span></div><div class="ba-row"><span class="ba-k">Tenants</span><span class="ba-v" style="color:var(--wf-brand)">5 narratives + $</span></div><div class="ba-row"><span class="ba-k">Comps</span><span class="ba-v" style="color:var(--wf-brand)">12 transactions</span></div><div class="ba-row"><span class="ba-k">Investment Case</span><span class="ba-v" style="color:var(--wf-brand)">Full thesis + IRR</span></div><div class="ba-row"><span class="ba-k">Data Points</span><span class="ba-v" style="color:var(--wf-brand)">~340</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="src cnt r" id="s-copy"><div class="src-tag">Content Agent<span class="conf-badge">CONF 0.95</span></div>
+      <h2 class="sh"><span class="sn">03</span>Marketing Copy: From Generic to Buyer-Specific</h2>
+      <p>The Marketing Copy Specialist writes five descriptions &mdash; each calibrated to a different buyer persona. An owner-occupier receives copy about operational efficiency and buildout flexibility. An investor receives cap rate and value-add positioning. A developer receives zoning and density analysis. <strong>The marketing copy is the last enrichment step, not the first</strong> &mdash; because it synthesizes what the other 11 specialists discovered.</p>
+    </div>
+
+    <div class="r"><div class="pull-quote"><p class="pq-text">&ldquo;A raw listing says the building is 48,000 square feet. An enriched profile says it has a 7.2% cap rate that is <em>80 basis points above the submarket average</em> and accommodates automated racking for 3PL tenants.&rdquo;</p><div class="pq-attr">Tommy Saunders &middot; Windfield Real Estate &middot; CORFAC International</div></div></div>
+
+    <div class="src enr r" id="s-thesis"><div class="src-tag">Enrichment Agent<span class="conf-badge">CONF 0.96</span></div>
+      <h2 class="sh"><span class="sn">04</span>Investment Thesis Generation</h2>
+      <p>The Investment Thesis Specialist produces the single most valuable enrichment output. It takes raw financial data and produces a complete investment case: current cap rate versus submarket average, projected IRR under three scenarios, value-add opportunities with estimated ROI, and market timing analysis. The thesis references specific comparable transactions from S05 and specific market conditions from the Market Analysis Agent. <strong>This specificity is what converts investor inquiries into tours.</strong></p>
+    </div>
+
+    <div class="src enr r" id="s-tenants"><div class="src-tag">Enrichment Agent<span class="conf-badge">CONF 0.95</span></div>
+      <h2 class="sh"><span class="sn">05</span>Tenant Narratives: Who Belongs in This Building</h2>
+      <p>The Tenant Narrative Specialist generates 3&ndash;5 detailed use cases. For a 48,000 SF industrial building with 24-foot clear height: a 3PL operator needing automated racking, a regional food distributor requiring temperature-controlled zones, a contract manufacturer needing heavy power and crane-ready bays, an e-commerce fulfillment center needing high-cube storage, and a building materials distributor needing yard storage. <strong>Each narrative is specific enough to guide tenant-rep conversations across the CORFAC network.</strong></p>
+    </div>
+
+    <div class="src enr r" id="s-continuous"><div class="src-tag">Enrichment Agent<span class="conf-badge">CONF 0.96</span></div>
+      <h2 class="sh"><span class="sn">06</span>Continuous Re-Enrichment</h2>
+      <p>The enrichment loop runs continuously across 78 properties. A new comp sale triggers S05 and S02. A new tenant lease triggers S03 and S07. A zoning change triggers S10. On average, 15&ndash;20 re-enrichment triggers per day across the portfolio. Re-enrichment is surgical &mdash; only affected specialists run.</p>
+      <p><strong>The operational impact is compound.</strong> When the Outreach Agent emails a prospect who expressed interest 3 weeks ago, it references a comp sale that closed yesterday. Every downstream output is as current as the most recent enrichment trigger.</p>
+    </div>
+
+    <div class="src enr r"><div class="src-tag">Enrichment Agent<span class="conf-badge">CONF 0.94</span></div>
+      <div class="callout"><div class="callout-label">Downstream Impact</div><div class="callout-body">The enriched profile is the source of truth for every downstream agent. Targeting reads property type and thesis for prospect calibration. Outreach reads marketing copy and narratives for personalized emails. LinkedIn reads positioning for thought-leadership content. <strong>Enrichment quality determines the quality of every other agent&rsquo;s output.</strong> This is why 12 of 18 agents are enrichment specialists.</div></div>
+    </div>
+
+    <div class="src enr r" id="s-faq"><div class="src-tag">SEO &mdash; FAQs<span class="conf-badge">CONF 0.96</span></div>
+      <div class="faq-section"><div class="faq-head"><h2 class="faq-head-title">Frequently Asked Questions</h2><span class="faq-head-count">5 Questions</span></div>
+        <div class="faq-item open"><div class="faq-q" onclick="toggleFaq(this)">What does the Enrichment Agent produce from a raw listing?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">The 12 specialists generate a <strong>340-data-point profile</strong> including marketing copy, investment thesis, tenant narratives, financial projections, comparable analysis, competitive positioning, demographics, infrastructure, environmental, zoning, accessibility, and neighborhood narrative. Processing time: under 4 minutes.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does it compare to manual enrichment?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">Manual enrichment requires <strong>2&ndash;3 hours</strong> of broker time per property. The Enrichment Agent processes the same scope in under 4 minutes with 12 parallel specialists.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the difference between a raw listing and an enriched profile?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">A raw listing has ~48 data points: address, sqft, price, zoning. An enriched profile has ~340: <strong>investment thesis, 5 tenant narratives, 12 comps, financial models, and buyer-calibrated marketing copy</strong>. The listing describes a building. The profile makes a case for it.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do profiles stay current across 78 properties?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">The enrichment loop runs continuously. New data triggers surgical re-enrichment of affected sections only. <strong>15&ndash;20 triggers per day</strong> across 78 properties maintain 26,520 continuously-updated data points.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Why does Windfield use 12 of 18 agents for enrichment?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner"><strong>The property profile is the source of truth for every downstream agent.</strong> Thin profiles produce generic outreach. Rich profiles produce specific, compelling outputs across Targeting, Outreach, LinkedIn, and Content agents. Enrichment is overweighted because getting the profile right makes everything else work.</div></div></div>
+      </div>
+    </div>
+  </div></article>
+
+  <aside class="sidebar">
+    <div class="sb-sec r"><div class="sb-sec-title">In This Article</div><ul class="toc-list" id="toc-list"><li class="toc-item active" onclick="scrollToSection('s-specialists')"><span class="toc-dot"></span>12 Specialists</li><li class="toc-item" onclick="scrollToSection('s-before-after')"><span class="toc-dot"></span>Before vs. After</li><li class="toc-item" onclick="scrollToSection('s-copy')"><span class="toc-dot"></span>Marketing Copy</li><li class="toc-item" onclick="scrollToSection('s-thesis')"><span class="toc-dot"></span>Investment Thesis</li><li class="toc-item" onclick="scrollToSection('s-tenants')"><span class="toc-dot"></span>Tenant Narratives</li><li class="toc-item" onclick="scrollToSection('s-continuous')"><span class="toc-dot"></span>Continuous Enrichment</li><li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li></ul></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Enrichment Stats</div><div class="stats-grid"><div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">12</div><div class="stat-l">Specialists</div></div><div class="stat-card"><div class="stat-n">340</div><div class="stat-l">Data points</div></div><div class="stat-card"><div class="stat-n" style="color:var(--wf-green)">&lt;4m</div><div class="stat-l">Per property</div></div><div class="stat-card"><div class="stat-n" style="color:var(--wf-amber)">78</div><div class="stat-l">Active profiles</div></div></div></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Article Series</div><div class="series-nav"><a class="sn-item" href="wf-article.html"><span class="sn-num">01</span><span class="sn-title">18 AI Agents</span></a><a class="sn-item current"><span class="sn-num">02</span><span class="sn-title">Property Enrichment</span></a><a class="sn-item" href="wf-article-03.html"><span class="sn-num">03</span><span class="sn-title">The Targeting Engine</span></a></div></div>
+  </aside>
+</div>
+
+<div class="author-section r"><div class="author-inner"><div class="author-av">T</div><div class="author-info"><div class="author-name">Tommy Saunders</div><div class="author-role">Founder, IntelligentOperations.ai</div><div class="author-bio">Building AI-native operations for commercial real estate. 12 enrichment specialists transform raw listings into investment-grade profiles that drive every downstream output in the pipeline.</div><div class="author-links"><a href="#" class="author-link">LinkedIn</a><a href="#" class="author-link">IO Platform</a><a href="#" class="author-link">Windfield</a></div></div></div></div>
+
+<div style="max-width:1280px;margin:0 auto;padding:0 32px 40px"><div class="series-footer">
+  <a class="sf-link" href="wf-article.html" style="border-color:rgba(29,185,84,.2)"><div><div class="sf-dir" style="color:var(--wf-green)">&larr; Previous</div><div class="sf-title">How 18 AI Agents Power a Full-Service CRE Operation</div></div></a>
+  <a class="sf-link" href="wf-article-03.html" style="border-color:rgba(232,160,0,.2)"><div><div class="sf-dir" style="color:var(--wf-amber)">Next &rarr;</div><div class="sf-title">The Targeting Engine: 7 Prospect Lists from One Set of Coordinates</div></div></a>
+</div></div>
+
+<footer class="footer-menu"><div class="fm-w"><div class="fm-grid">
+  <div><div class="fm-logo"><span>IO</span> Platform</div><div class="fm-tagline">AI-native operations for commercial real estate. 12 enrichment specialists. 340 data points. Under 4 minutes.</div><div class="fm-series-badge"><span class="live-dot"></span>CRE Intelligence Series</div></div>
+  <div class="fm-col"><div class="fm-col-title">Platform</div><ul><li><a href="#">Property Hub</a></li><li><a href="#">Agent Dashboard</a></li><li><a href="#">Pipeline Runner</a></li><li><a href="#">Config Manager</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">Operations</div><ul><li><a href="#">Targeting</a></li><li><a href="#">Enrichment</a></li><li><a href="#">Market Analysis</a></li><li><a href="#">Outreach</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">Resources</div><ul><li><a href="#">CORFAC Network</a></li><li><a href="#">Market Reports</a></li><li><a href="#">API Docs</a></li><li><a href="#">Status</a></li></ul></div>
+</div></div></footer>
+
+<div class="final-footer"><div class="ff-w"><div class="ff-legal"><span>&copy; 2026 Windfield Real Estate, LLC</span><span class="ff-sep"></span><span>CORFAC International</span><span class="ff-sep"></span><span class="ff-series">CRE Intelligence Series</span><span class="ff-sep"></span><span>IO-WF-2026-002 &middot; A02</span></div><div class="ff-mcp"><span class="live-dot"></span>18 Agents Active</div></div></div>
+
+<script>
+var FEEDS=[{n:'Targeting',c:'#1db954',ct:4},{n:'Enrichment',c:'#1db954',ct:12},{n:'Market',c:'#e8a000',ct:4},{n:'Outreach',c:'#e11d48',ct:6},{n:'LinkedIn',c:'#0891b2',ct:5},{n:'Content',c:'#8b5cf6',ct:3}];
+var pf=document.getElementById('ps-feeds');FEEDS.forEach(function(f,i){var c=document.createElement('div');c.className='ps-chip';c.style.background=f.c+'14';c.style.border='1px solid '+f.c+'28';c.style.color=f.c;var d=document.createElement('div');d.className='ps-dot';d.style.background=f.c;c.appendChild(d);c.appendChild(document.createTextNode(f.n+' \u00b7 '+f.ct));pf.appendChild(c);if(i<FEEDS.length-1){var a=document.createElement('div');a.className='ps-arrow';a.textContent='\u00b7';pf.appendChild(a)}});
+var attrOn=false;function toggleAttr(){attrOn=!attrOn;document.body.classList.toggle('attr',attrOn);var b=document.getElementById('attr-btn');b.classList.toggle('on',attrOn);b.textContent=attrOn?'Hide Sources':'Show Agent Sources';if(attrOn)document.querySelectorAll('.src').forEach(function(el){if(!el.querySelector('.ann-corners')){var c=document.createElement('div');c.className='ann-corners';c.innerHTML='<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';el.appendChild(c)}})}
+function togglePipe(){var s=document.getElementById('pstrip'),m=document.getElementById('pipemap'),b=document.getElementById('pipe-btn');if(m.classList.contains('open')){m.classList.remove('open');s.classList.remove('open');b.classList.remove('on')}else if(s.classList.contains('open')){s.classList.remove('open');m.classList.add('open');b.classList.add('on')}else{s.classList.add('open');b.classList.add('on')}}
+function toggleFaq(q){var it=q.parentElement,w=it.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(function(i){i.classList.remove('open');i.querySelector('.faq-toggle').textContent='+'});if(!w){it.classList.add('open');q.querySelector('.faq-toggle').textContent='\u00d7'}}
+window.addEventListener('scroll',function(){var d=document.documentElement;document.getElementById('prog').style.width=((window.scrollY/(d.scrollHeight-d.clientHeight))*100)+'%'},{passive:true});
+var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('in')})},{threshold:.05,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.r').forEach(function(el){ro.observe(el)});
+var sections=['s-specialists','s-before-after','s-copy','s-thesis','s-tenants','s-continuous','s-faq'];var tocItems=document.querySelectorAll('.toc-item');
+var tocObs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var idx=sections.indexOf(en.target.id);if(idx>-1){tocItems.forEach(function(t){t.classList.remove('active')});if(tocItems[idx])tocItems[idx].classList.add('active')}}})},{threshold:.3});
+sections.forEach(function(s){var el=document.getElementById(s);if(el)tocObs.observe(el)});
+function scrollToSection(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+</script>
+</body>
+</html>

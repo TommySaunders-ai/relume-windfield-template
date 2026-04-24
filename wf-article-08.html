@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content &amp; Collateral: Brochures, Articles, and Campaign Copy at Scale — Windfield Real Estate IO</title>
+<meta name="description" content="How the IO Content Agent generates property brochures, market articles, target profiles, and ad copy from a single property brief — producing an entire marketing package in under 3 minutes.">
+<meta name="keywords" content="CRE content generation, property brochure ai, commercial real estate marketing automation, ai campaign copy, content agent, windfield real estate collateral">
+<meta property="og:title" content="Content &amp; Collateral: Brochures, Articles, and Campaign Copy at Scale">
+<meta property="og:description" content="How the IO Content Agent generates property brochures, market articles, target profiles, and ad copy from a single property brief — the entire marketing package in under 3 minutes.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-04-14">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Content & Collateral: Brochures, Articles, and Campaign Copy at Scale","description":"How the IO Content Agent generates property brochures, market articles, target profiles, and ad copy from a single property brief — the entire CRE marketing package in under 3 minutes.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Founder","worksFor":{"@type":"Organization","name":"IntelligentOperations.ai"}},"publisher":{"@type":"Organization","name":"IntelligentOperations.ai"},"datePublished":"2026-04-14","articleSection":"Agent Deep Dive","keywords":["CRE content generation","property brochure ai","marketing automation","campaign copy","content agent"],"wordCount":2500,"timeRequired":"PT8M","isPartOf":{"@type":"CreativeWorkSeries","name":"Windfield CRE Article Series","position":8}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What does the IO Content Agent produce from a single property brief?","acceptedAnswer":{"@type":"Answer","text":"The Content Agent produces four output types from one property brief: a property brochure (executive summary, key metrics, location advantages, tenant fit analysis), a market article (800-1200 words analyzing the submarket with comps, vacancy data, and trend analysis), a target profile document (ideal tenant/buyer persona with firmographic criteria), and ad copy sets (LinkedIn ads, email subject lines, and Google Ads headlines). All four outputs share the same data foundation and brand voice."}},
+{"@type":"Question","name":"How does the Brochure Generator create property marketing materials?","acceptedAnswer":{"@type":"Answer","text":"The Brochure Generator takes the property brief — which includes square footage, location, asking rate, building class, amenities, and market positioning — and produces a structured brochure with six sections: executive headline, property overview, key metrics grid, location and access analysis, tenant fit profile, and call-to-action. Each section is calibrated to the property type: industrial brochures emphasize clear height, dock doors, and logistics access; office brochures emphasize floor plates, parking ratios, and walkability scores."}},
+{"@type":"Question","name":"How does the Article Campaign Writer work?","acceptedAnswer":{"@type":"Answer","text":"The Article Campaign Writer generates market-positioning articles that establish the property within its submarket context. It pulls vacancy rates, recent comps, absorption data, and demand signals from the Market Agent, then structures an 800-1200 word article that positions the subject property as a solution to a market-level trend. For example, an industrial property in a market with declining vacancy gets an article framed around 'why the last available Class A industrial in [submarket] matters now.'"}},
+{"@type":"Question","name":"What is the Target Profile Generator?","acceptedAnswer":{"@type":"Answer","text":"The Target Profile Generator creates detailed ideal tenant/buyer personas based on the property's characteristics and the Enrichment Agent's firmographic data. It produces a document specifying: industry verticals most likely to need this space type, company size ranges, geographic expansion patterns, technology and infrastructure requirements, and competitive positioning. This profile feeds directly into the Targeting Agent's prospect identification pipeline."}},
+{"@type":"Question","name":"How long does it take to generate a complete content package?","acceptedAnswer":{"@type":"Answer","text":"A complete content package — brochure, market article, target profile, and ad copy set — generates in approximately 2 minutes 40 seconds. The brochure runs first (Sonnet, ~18 seconds), the article and target profile run in parallel (Sonnet, ~45 seconds each), and the ad copy set runs last using outputs from the other three (Haiku, ~12 seconds). Total token consumption is approximately 22,000 tokens per package."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"IntelligentOperations.ai","item":"https://intelligentoperations.ai"},
+{"@type":"ListItem","position":2,"name":"Commercial Real Estate","item":"https://intelligentoperations.ai/cre"},
+{"@type":"ListItem","position":3,"name":"Windfield Series","item":"https://intelligentoperations.ai/cre/windfield-series"},
+{"@type":"ListItem","position":4,"name":"Content & Collateral","item":"https://intelligentoperations.ai/cre/content-collateral-at-scale"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Windfield IO Design Tokens */
+  --wf-bg:#09090b;
+  --wf-bg-elevated:#111113;
+  --wf-surface:#141417;
+  --wf-fg:#fafafa;
+  --wf-fg-muted:#a1a1aa;
+  --wf-fg-subtle:#71717a;
+  --wf-fg-faint:#52525b;
+  --wf-brand:#1db954;
+  --wf-brand-muted:rgba(29,185,84,.12);
+  --wf-brand-border:rgba(29,185,84,.22);
+  --wf-border:#27272a;
+  --wf-border2:rgba(250,250,250,.1);
+  --wf-border3:rgba(250,250,250,.16);
+
+  /* Semantic aliases */
+  --wf-amber:#e8a000;
+  --wf-rose:#e11d48;
+  --wf-purple:#8b5cf6;
+  --wf-cyan:#0891b2;
+  --wf-green:#1db954;
+
+  /* Agent domain colors */
+  --c-tgt:#1db954;
+  --c-enr:#1db954;
+  --c-mkt:#e8a000;
+  --c-out:#e11d48;
+  --c-lin:#0891b2;
+  --c-cnt:#8b5cf6;
+
+  /* Typography */
+  --wf-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --wf-mono:'JetBrains Mono','Fira Code',monospace;
+
+  /* Radii */
+  --wf-r-sm:6px;
+  --wf-r-md:10px;
+  --wf-r-lg:16px;
+
+  /* Transitions */
+  --wf-ease:cubic-bezier(.25,.46,.45,.94);
+  --wf-spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--wf-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+.src{position:relative}.src-tag{display:none;position:absolute;top:-1px;left:-1px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px 3px 6px;border-radius:0 0 4px 0;z-index:30;pointer-events:none;white-space:nowrap}
+.ann-corners{position:absolute;inset:0;pointer-events:none;z-index:25}.ann-c{position:absolute;width:10px;height:10px;border-style:solid;display:none}
+.ann-c.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}.ann-c.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}.ann-c.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}.ann-c.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+body.attr .src-tag{display:block}body.attr .ann-c{display:block}
+body.attr .art{outline:1.5px solid var(--c-tgt);outline-offset:3px}body.attr .enr{outline:1.5px solid var(--c-enr);outline-offset:3px}body.attr .mkt{outline:1.5px solid var(--c-mkt);outline-offset:3px}body.attr .out{outline:1.5px solid var(--c-out);outline-offset:3px}body.attr .con{outline:1.5px solid var(--c-cnt);outline-offset:3px}
+.art .src-tag{background:var(--c-tgt);color:#fff}.enr .src-tag{background:var(--c-enr);color:#fff}.mkt .src-tag{background:var(--c-mkt);color:#fff}.out .src-tag{background:var(--c-out);color:#fff}.con .src-tag{background:var(--c-cnt);color:#fff}
+body.attr .art .ann-c{border-color:var(--c-tgt)}body.attr .enr .ann-c{border-color:var(--c-enr)}body.attr .con .ann-c{border-color:var(--c-cnt)}
+.conf-badge{opacity:.65;margin-left:4px;font-weight:300}
+
+/* ── Progress Bar ── */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:9999;width:0;transition:width .1s linear}
+
+/* ── Navbar ── */
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border);height:52px;display:flex;align-items:center}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center}
+.nav-logo{font-family:var(--wf-sans);font-size:18px;font-weight:700;color:var(--wf-fg);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-rule{width:1px;height:16px;background:var(--wf-border2);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:auto}
+.nav-btns{display:flex;gap:8px;flex-shrink:0}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--wf-sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--wf-ease)}
+.nbtn-ghost{background:none;border:1px solid var(--wf-border2);color:var(--wf-fg-subtle)}.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--wf-green);display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── Pipeline Strip ── */
+#pstrip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}.ps-chip{padding:4px 10px;border-radius:var(--wf-r-sm);font:600 10px/1 var(--wf-sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}.ps-arrow{font-size:10px;color:var(--wf-fg-faint);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--wf-sans);color:var(--wf-green);letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+
+/* ── Pipeline Map ── */
+#pipemap{background:var(--wf-surface);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .5s var(--wf-ease)}#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:10px}.pm-title span{font-weight:300;color:var(--wf-fg-subtle)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.5),transparent);animation:pms8 2s ease-in-out infinite;margin:10px 0}
+@keyframes pms8{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--wf-sans);color:var(--wf-fg)}.pm-node-sub{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);font-size:12px}
+.pm-libs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.pm-lib{padding:8px 6px;border-radius:var(--wf-r-sm);text-align:center;background:rgba(255,255,255,.025);border:1px solid var(--wf-border)}
+.pm-lib-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 4px}.pm-lib-name{font:700 7px/1 var(--wf-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.pm-lib-count{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-top:2px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--wf-border)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--wf-mono);color:var(--wf-fg-subtle)}.pm-meta-n{font:700 11px/1 var(--wf-mono);color:var(--wf-fg)}
+
+/* ── Hero ── */
+.hero{background:var(--wf-bg);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--wf-border) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-divider{width:20px;height:1px;background:var(--wf-fg-faint)}.eye-series{font:600 10px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+h1{font-family:var(--wf-sans);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--wf-border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:var(--wf-border2);margin:0 18px}.h-date{font-size:13px;color:var(--wf-fg-subtle)}.h-read{font-size:13px;color:var(--wf-fg-subtle);margin-left:14px}
+
+/* HERO VIZ — Content output gallery */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);background-size:32px 32px}
+.hv-glow{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(29,185,84,.12) 0%,transparent 65%);animation:gp8 4s ease-in-out infinite}
+@keyframes gp8{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);animation:hvs8 5s ease-in-out infinite;opacity:.4}
+@keyframes hvs8{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+.hv-output-grid{position:absolute;top:10%;left:6%;right:6%;bottom:14%;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hv-output-card{border-radius:var(--wf-r-md);background:rgba(255,255,255,.04);border:1px solid rgba(29,185,84,.15);padding:14px;display:flex;flex-direction:column;cursor:pointer;transition:all .2s}
+.hv-output-card:hover{border-color:rgba(29,185,84,.4);background:rgba(29,185,84,.06)}
+.hv-oc-icon{font-size:20px;margin-bottom:8px}.hv-oc-type{font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:4px}
+.hv-oc-title{font:600 11px/1.3 var(--wf-sans);color:var(--wf-fg-muted);margin-bottom:6px}
+.hv-oc-meta{margin-top:auto;display:flex;align-items:center;gap:6px;font:300 8px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.hv-oc-runtime{padding:2px 5px;border-radius:3px;background:rgba(29,185,84,.1);color:#4ade80;font:700 7px/1 var(--wf-mono)}
+.hv-badge8{position:absolute;top:14px;right:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.22)}
+.hv-status8{position:absolute;top:14px;left:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.25)}
+
+/* ── Article Grid ── */
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:960px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}.sidebar{position:sticky;top:72px}
+
+/* ── Direct Answer Box ── */
+.direct-answer-box{margin:0 0 40px;padding:24px 28px;background:linear-gradient(135deg,var(--wf-brand-muted),rgba(29,185,84,.02));border:1px solid var(--wf-brand-border);border-left:3px solid var(--wf-brand);border-radius:var(--wf-r-md)}
+.dab-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}.dab-label::before{content:'\25B8'}
+.dab-q{font:600 15px/1.4 var(--wf-sans);color:var(--wf-fg);margin-bottom:10px}
+.dab-a{font:300 14px/1.72 var(--wf-sans);color:var(--wf-fg-muted)}.dab-a strong{font-weight:600;color:var(--wf-fg)}
+.dab-footer{margin-top:12px;display:flex;align-items:center;gap:10px}.dab-source{font:300 10px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.dab-schema-badge{padding:2px 7px;border-radius:3px;font:700 8px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+
+/* ── Inline TOC ── */
+.toc-inline{margin:0 0 36px;padding:20px 24px;background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:var(--wf-r-md)}
+.toc-inline-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.toc-inline-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-inline-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;text-decoration:none;transition:color .15s}
+.toc-inline-item:last-child{border-bottom:none}.toc-inline-item:hover{color:var(--wf-fg)}
+.toc-n{font:700 9px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0;padding-top:2px}
+
+/* ── Body Text ── */
+.body p{font-size:17.5px;line-height:1.82;color:var(--wf-fg-muted);font-weight:300;margin-bottom:28px}.body p strong{font-weight:600;color:var(--wf-fg)}
+h2.sh{font-family:var(--wf-sans);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--wf-fg);margin:60px 0 20px}
+h3.sh3{font:700 11px/1 var(--wf-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle);margin:40px 0 14px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--wf-fg)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--wf-sans);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--wf-brand)}
+
+/* ── Pull Quotes ── */
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--wf-surface);border-radius:var(--wf-r-md);border:1px solid var(--wf-border);border-left:3px solid var(--wf-brand);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--wf-sans);font-size:150px;font-weight:700;color:var(--wf-brand-muted);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--wf-sans);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--wf-fg);position:relative;z-index:1;margin-bottom:14px}.pq-text em{font-style:italic;color:var(--wf-brand)}
+.pq-attr{font:600 11px/1 var(--wf-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);position:relative;z-index:1}
+
+/* Output gallery */
+.output-gallery{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-brand-border);background:var(--wf-surface)}
+.og-header{padding:14px 22px;border-bottom:1px solid var(--wf-brand-border);display:flex;align-items:center;gap:12px;background:var(--wf-brand-muted)}
+.og-title{font:700 10px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.og-badge{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.og-grid{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.og-grid{grid-template-columns:1fr}}
+.og-card{background:rgba(255,255,255,.025);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:16px;cursor:pointer;transition:all .2s}
+.og-card:hover{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.og-card-icon{font-size:24px;margin-bottom:10px}.og-card-type{font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:6px}
+.og-card-title{font:600 14px/1.3 var(--wf-sans);color:var(--wf-fg);margin-bottom:6px}
+.og-card-desc{font:300 12px/1.55 var(--wf-sans);color:var(--wf-fg-subtle);margin-bottom:8px}
+.og-card-meta{display:flex;align-items:center;gap:8px;font:300 9px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.og-card-rt{padding:2px 6px;border-radius:3px;background:rgba(29,185,84,.1);color:#4ade80;font:700 8px/1 var(--wf-mono)}
+
+/* ── Callout ── */
+.callout{margin:48px 0;padding:24px 28px;background:linear-gradient(135deg,var(--wf-brand-muted),rgba(29,185,84,.02));border:1px solid var(--wf-brand-border);border-left:3px solid var(--wf-brand);border-radius:var(--wf-r-md)}
+.callout-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}.callout-label::before{content:'\25B8'}
+.callout-text{font:300 14px/1.72 var(--wf-sans);color:var(--wf-fg-muted)}.callout-text strong{font-weight:600;color:var(--wf-fg)}
+
+/* ── FAQ ── */
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--wf-border2)}
+.faq-head-title{font-family:var(--wf-sans);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--wf-fg)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);overflow:hidden;margin-bottom:8px;transition:border-color .15s}.faq-item.open{border-color:var(--wf-border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--wf-sans);color:var(--wf-fg-muted);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--wf-fg)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--wf-border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wf-fg-subtle);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--wf-brand-muted);border-color:var(--wf-brand-border);color:var(--wf-brand)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease),padding .2s}
+.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--wf-sans);color:var(--wf-fg-muted)}.faq-a-inner strong{font-weight:600;color:var(--wf-fg)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--wf-mono);color:var(--wf-fg-faint)}.faq-schema-note::before{content:'\25C8';color:rgba(29,185,84,.4);font-size:8px}
+
+/* ── CRM Block ── */
+.crm-block{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-brand-border);background:linear-gradient(135deg,var(--wf-surface) 0%,rgba(10,10,18,1) 100%);position:relative}
+.crm-block::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(29,185,84,.08),transparent 65%);pointer-events:none}
+.crm-main{padding:40px 44px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start}
+@media(max-width:700px){.crm-main{grid-template-columns:1fr}}
+.crm-eyebrow{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);opacity:.6;margin-bottom:10px}
+.crm-headline{font-family:var(--wf-sans);font-size:26px;font-weight:600;line-height:1.2;letter-spacing:-.025em;color:var(--wf-fg);margin-bottom:10px}
+.crm-sub{font-size:14px;color:var(--wf-fg-subtle);line-height:1.65}
+.crm-form{display:flex;flex-direction:column;gap:8px}
+.crm-inp{padding:11px 16px;background:rgba(255,255,255,.06);border:1px solid var(--wf-border2);border-radius:var(--wf-r-sm);font:300 14px var(--wf-sans);color:var(--wf-fg);outline:none;transition:border-color .15s}.crm-inp:focus{border-color:var(--wf-brand-border)}.crm-inp::placeholder{color:var(--wf-fg-faint)}
+.crm-btn{padding:12px;background:var(--wf-brand);border:none;border-radius:var(--wf-r-sm);font:700 13px var(--wf-sans);color:#fff;cursor:pointer;transition:opacity .15s}.crm-btn:hover{opacity:.88}
+.crm-note{font-size:10px;color:var(--wf-fg-faint);text-align:center}
+
+/* ── Sidebar ── */
+.sb-sec{margin-bottom:36px}.sb-sec-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}.toc-item:hover,.toc-item.active{color:var(--wf-fg)}.toc-item.active{color:var(--wf-brand)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:12px}.stat-n{font:700 22px/1 var(--wf-mono);color:var(--wf-fg);margin-bottom:3px}.stat-l{font-size:10px;color:var(--wf-fg-subtle);letter-spacing:.04em}
+.lib-list{display:flex;flex-direction:column;gap:7px}.lib-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm)}
+.lib-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}.lib-name{font:500 12px/1 var(--wf-sans);color:var(--wf-fg);flex:1}.lib-count{font:normal 10px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);text-decoration:none;transition:all .15s;cursor:pointer}.sn-item:hover{border-color:var(--wf-border2)}.sn-item.current{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.sn-num{font:700 10px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}.sn-item.current .sn-num{color:var(--wf-brand)}
+.sn-title{font:400 11px/1.35 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}.sn-item.current .sn-title{color:var(--wf-fg)}
+.sn-pill{padding:2px 6px;border-radius:3px;font:700 7px/1 var(--wf-mono);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+
+/* ── Author Section ── */
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--wf-border)}
+.author-inner{display:grid;grid-template-columns:300px 1px 1fr;gap:52px;align-items:start;padding-bottom:60px}
+@media(max-width:760px){.author-inner{grid-template-columns:1fr}.author-divider{display:none}}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:26px;color:#fff;font-weight:700;margin-bottom:16px}
+.author-name{font-family:var(--wf-sans);font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--wf-sans);color:var(--wf-brand);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--wf-fg-subtle);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--wf-border2);color:var(--wf-fg-subtle);text-decoration:none;transition:all .15s}.author-link:hover{color:var(--wf-fg);border-color:var(--wf-border3)}
+.author-divider{background:var(--wf-border)}
+.related-label{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}@media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}}@media(max-width:600px){.related-grid{grid-template-columns:1fr}}
+.rel-card{text-decoration:none;cursor:pointer;display:block}.rel-thumb{height:100px;border-radius:var(--wf-r-sm);margin-bottom:10px;overflow:hidden;position:relative}
+.rel-thumb-bg{width:100%;height:100%;position:relative}.rt-a{background:linear-gradient(135deg,#07071a,#0d1030)}.rt-b{background:linear-gradient(135deg,#0c0900,#140e00)}.rt-c{background:linear-gradient(135deg,#06100a,#051208)}
+.rel-thumb-bg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:16px 16px}
+.rel-thumb-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;z-index:2;display:flex;align-items:center;justify-content:center;font:700 7px/1 var(--wf-mono)}
+.rel-series-tag{font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.rel-title{font:500 13px/1.45 var(--wf-sans);color:var(--wf-fg-muted);margin-bottom:4px;transition:color .15s}.rel-card:hover .rel-title{color:var(--wf-fg)}.rel-meta{font:300 11px/1 var(--wf-sans);color:var(--wf-fg-faint)}
+
+/* ── Footer ── */
+.footer-menu{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:52px 32px 36px}.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--wf-border)}@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr 1fr}}
+.fm-logo{font-family:var(--wf-sans);font-size:20px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}.fm-logo span{font-style:italic;color:var(--wf-brand)}
+.fm-tagline{font-size:13px;color:var(--wf-fg-subtle);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);color:rgba(29,185,84,.6)}
+.fm-col-title{font:700 9px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}.fm-col a{font-size:13px;color:var(--wf-fg-subtle);text-decoration:none;transition:color .15s}.fm-col a:hover{color:var(--wf-fg)}
+.fm-series-list{display:flex;flex-direction:column;gap:8px}.fm-series-item{display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s}.fm-series-item:hover{opacity:.75}
+.fm-s-num{font:700 9px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}.fm-s-title{font:300 11px/1.3 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}
+
+/* ── Final Footer Bar ── */
+.final-footer{background:var(--wf-bg);border-top:1px solid var(--wf-border);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--wf-mono);color:var(--wf-fg-faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ff-sep{width:1px;height:10px;background:var(--wf-fg-faint)}.ff-series{color:rgba(29,185,84,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);padding:5px 14px;border:1px solid rgba(29,185,84,.2);border-radius:20px;background:rgba(29,185,84,.06)}
+
+/* ── Reveal Animation ── */
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--wf-ease),transform .65s var(--wf-ease)}.r.in{opacity:1;transform:none}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .hero-w{gap:40px;padding:0 20px}
+  .article-grid{padding:40px 20px 60px;gap:40px}
+  .nav-w{padding:0 16px}
+  .nav-section{display:none}
+  .ps-inner{padding:0 16px}
+  .pm-inner{padding:16px}
+  .og-grid{grid-template-columns:1fr}
+  .fm-grid{grid-template-columns:1fr}
+  .ff-w{flex-direction:column;gap:8px}
+  .author-inner{flex-direction:column;align-items:center;text-align:center}
+  .author-links{justify-content:center}
+  .hero-text{padding-bottom:48px}
+  h1{font-size:clamp(28px,7vw,48px)}
+  .pull-quote{padding:28px 24px}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-w"><a href="#" class="nav-logo"><span>IO</span> Platform</a><div class="nav-rule"></div><span class="nav-section">Commercial Real Estate</span><div class="nav-btns"><button class="nbtn nbtn-ghost" id="attr-btn" onclick="toggleAttr()">Show Agent Sources</button><button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button><button class="nbtn nbtn-live"><span class="live-dot"></span>18 Agents Live</button></div></div></nav>
+
+<div id="pstrip"><div class="ps-inner"><div class="ps-label">Pipeline &middot; WF-08</div><div class="ps-feeds" id="ps-feeds"></div><div class="ps-arrow">&rarr;</div><div class="ps-result"><span class="live-dot"></span>Content Package &middot; 4 Outputs &middot; ~22k Tokens &middot; 2m 40s</div></div></div>
+
+<div id="pipemap"><div class="pm-inner">
+  <div class="pm-title">ORCHESTRATION MAP <span>&mdash; WF-08 &middot; Content &amp; Collateral at Scale</span></div><div class="pm-scan"></div>
+  <div class="pm-flow">
+    <div class="pm-node" style="border-color:var(--wf-brand-border)"><div class="pm-node-label">Input</div><div class="pm-node-name" style="color:var(--wf-brand)">Property Brief</div><div class="pm-node-sub">Metrics + positioning</div></div>
+    <div class="pm-arr">&rarr;</div>
+    <div class="pm-libs">
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-cnt)"></div><div class="pm-lib-name" style="color:var(--c-cnt)">CON</div><div class="pm-lib-count">3</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-mkt)"></div><div class="pm-lib-name" style="color:var(--c-mkt)">MKT</div><div class="pm-lib-count">4</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-enr)"></div><div class="pm-lib-name" style="color:var(--c-enr)">ENR</div><div class="pm-lib-count">12</div></div>
+      <div class="pm-lib"><div class="pm-lib-dot" style="background:var(--c-lin)"></div><div class="pm-lib-name" style="color:var(--c-lin)">LIN</div><div class="pm-lib-count">5</div></div>
+    </div>
+    <div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Phase 4</div><div class="pm-node-name" style="color:#4ade80">Content Agent</div><div class="pm-node-sub">4 outputs parallel</div></div>
+    <div class="pm-arr">&rarr;</div>
+    <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Output</div><div class="pm-node-name" style="color:#4ade80">Full Package</div><div class="pm-node-sub">Ready to deploy</div></div>
+  </div>
+  <div class="pm-meta-row">
+    <div class="pm-meta-item"><span class="pm-meta-n">4</span> Output Types</div>
+    <div class="pm-meta-item"><span class="pm-meta-n">~22k</span> Tokens</div>
+    <div class="pm-meta-item"><span class="pm-meta-n">2m 40s</span> Runtime</div>
+    <div class="pm-meta-item" style="margin-left:auto"><span style="color:var(--wf-green);font:700 9px/1 var(--wf-mono)">&bull; ACTIVE</span></div>
+  </div>
+</div></div>
+
+<header class="hero src con" id="hero"><div class="src-tag">Content Agent &mdash; Hero<span class="conf-badge">CONF 0.96</span></div>
+  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow"><span class="eye-tag">Agent Deep Dive</span><span class="eye-divider"></span><span class="eye-series">Windfield CRE Series &middot; Article 08</span></div>
+      <h1>Content &amp; <em>Collateral:</em> Brochures, Articles, and Campaign Copy at Scale</h1>
+      <p class="hero-deck">One property brief. Four production-ready outputs. The IO Content Agent generates brochures, market articles, target profiles, and ad copy &mdash; each calibrated to property type and audience &mdash; in under three minutes. No templates. No copy-paste. Fresh content for every property, every cycle.</p>
+      <div class="hero-meta">
+        <div class="h-author"><div class="h-av">T</div><div><div class="h-name">Tommy Saunders</div><div class="h-role">Founder, IntelligentOperations.ai</div></div></div>
+        <div class="h-sep"></div><span class="h-date">Apr 14, 2026</span><span class="h-read">&middot; 8 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border)">
+        <span style="font:700 8px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-brand)">WF-CRE-2026-008</span>
+        <span style="width:1px;height:10px;background:var(--wf-brand-border)"></span>
+        <span style="font:300 8px/1 var(--wf-mono);letter-spacing:.1em;color:#ffffff">SERIES PLAN &middot; WF-08 &middot; APR 2026</span>
+      </div>
+    </div>
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz8"><div class="hv-grid"></div><div class="hv-glow"></div><div class="hv-scan"></div>
+        <div class="hv-output-grid">
+          <div class="hv-output-card"><div class="hv-oc-icon">&#128196;</div><div class="hv-oc-type">Brochure</div><div class="hv-oc-title">Property Marketing Brochure</div><div class="hv-oc-meta">6 sections &middot; Sonnet<div class="hv-oc-runtime">~18s</div></div></div>
+          <div class="hv-output-card"><div class="hv-oc-icon">&#128240;</div><div class="hv-oc-type">Article</div><div class="hv-oc-title">Market Positioning Article</div><div class="hv-oc-meta">800&ndash;1200 words &middot; Sonnet<div class="hv-oc-runtime">~45s</div></div></div>
+          <div class="hv-output-card"><div class="hv-oc-icon">&#128100;</div><div class="hv-oc-type">Profile</div><div class="hv-oc-title">Target Tenant/Buyer Profile</div><div class="hv-oc-meta">Firmographic spec &middot; Sonnet<div class="hv-oc-runtime">~45s</div></div></div>
+          <div class="hv-output-card"><div class="hv-oc-icon">&#128227;</div><div class="hv-oc-type">Ad Copy</div><div class="hv-oc-title">LinkedIn + Google + Email</div><div class="hv-oc-meta">Multi-platform &middot; Haiku<div class="hv-oc-runtime">~12s</div></div></div>
+        </div>
+        <div class="hv-status8">CONTENT AGENT &middot; OUTPUT GALLERY</div><div class="hv-badge8">IO-VIZ-08</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="article-grid">
+  <article class="article-body"><div class="body">
+    <div class="direct-answer-box src con r" id="s-intro"><div class="src-tag">Content Agent &mdash; Answer Box<span class="conf-badge">CONF 0.95</span></div>
+      <div class="dab-label">Direct Answer</div>
+      <div class="dab-q">What does the IO Content Agent produce for CRE properties?</div>
+      <div class="dab-a">The Content Agent produces <strong>four output types from one property brief</strong>: a property brochure (executive summary, key metrics, location analysis, tenant fit), a market article (800&ndash;1200 words with comps and trends), a target profile (ideal tenant/buyer persona with firmographic criteria), and ad copy sets (LinkedIn, Google Ads, email subject lines). Total runtime: approximately <strong>2 minutes 40 seconds</strong>. All outputs share the same data foundation and brand voice.</div>
+      <div class="dab-footer"><span class="dab-source">Source: IO Content Agent &middot; Windfield Pipeline</span><span class="dab-schema-badge">FAQ Schema</span></div>
+    </div>
+
+    <div class="toc-inline r"><div class="toc-inline-title">In This Article</div>
+      <ul class="toc-inline-list">
+        <a class="toc-inline-item" onclick="scrollToSection('s-problem')"><span class="toc-n">01</span>Why CRE Content Bottlenecks Kill Deals</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-brochure')"><span class="toc-n">02</span>The Brochure Generator</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-article')"><span class="toc-n">03</span>Article Campaign Writer</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-profile')"><span class="toc-n">04</span>Target Profile Generator</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-adcopy')"><span class="toc-n">05</span>Ad Copy &amp; Campaign Output</a>
+        <a class="toc-inline-item" onclick="scrollToSection('s-faq')"><span class="toc-n">06</span>FAQs</a>
+      </ul>
+    </div>
+
+    <div class="r" id="s-problem">
+      <h2 class="sh">Why CRE Content Bottlenecks Kill Deals</h2>
+      <p class="lede">Commercial real estate marketing has a production problem. A brokerage with 78 properties needs brochures, market articles, target profiles, and ad copy for each one. At traditional production speeds &mdash; 2&ndash;3 days per brochure, a week per market article &mdash; content becomes the bottleneck between listing and first outreach. By the time the collateral is ready, the market has moved.</p>
+      <p>The IO Content Agent eliminates this bottleneck by generating a <strong>complete content package in under 3 minutes</strong>. It reads the property brief &mdash; square footage, location, asking rate, building class, amenities, market positioning &mdash; and produces four output types that share the same data foundation. The brochure, article, profile, and ad copy are architecturally consistent because they all derive from the same source document, not from four separate creative processes.</p>
+      <p>This is not about replacing human creativity. It is about eliminating the <strong>zero-to-first-draft gap</strong> &mdash; the hours or days when a broker has a new listing but no collateral to support outreach. The Content Agent produces the first draft. The broker refines. Time to market drops from days to minutes.</p>
+    </div>
+
+    <div class="pull-quote r"><div class="pq-text">The content bottleneck in CRE is not quality &mdash; it is <em>production velocity</em>. A perfect brochure delivered three days late loses to a good brochure delivered in three minutes.</div><div class="pq-attr">IO Content Agent Architecture</div></div>
+
+    <div class="r" id="s-brochure">
+      <h2 class="sh">The Brochure Generator</h2>
+      <p>The Brochure Generator takes the property brief and produces a structured marketing document with <strong>six sections</strong>: executive headline, property overview, key metrics grid, location and access analysis, tenant fit profile, and call-to-action. Each section is calibrated to the property type.</p>
+      <p><strong>Industrial brochures</strong> emphasize clear height, dock doors, column spacing, trailer parking, and logistics access (proximity to interstate, rail, airport). <strong>Office brochures</strong> emphasize floor plate efficiency, parking ratios, walkability scores, and amenity packages. <strong>Retail brochures</strong> emphasize traffic counts, co-tenancy, demographic radius data, and signage visibility. The Content Agent knows which metrics matter for each asset class because the property brief includes a type field that triggers the correct template logic.</p>
+      <p>The key metrics grid is the most data-dense section. It pulls from the Market Agent&rsquo;s submarket data to include not just the subject property&rsquo;s metrics but <strong>comparative context</strong>: how the asking rate compares to submarket average, how the vacancy rate compares to the market, how the building class compares to recent deliveries. This context transforms a brochure from a fact sheet into a <strong>market positioning document</strong>.</p>
+    </div>
+
+    <div class="r" id="s-article">
+      <h2 class="sh">Article Campaign Writer</h2>
+      <p>The Article Campaign Writer generates market-positioning articles of 800&ndash;1200 words that establish the property within its submarket context. Unlike brochures, which are property-centric, articles are <strong>market-centric with the property as the solution</strong>.</p>
+      <p>The writer pulls vacancy rates, recent comps, absorption data, and demand signals from the Market Agent, then structures an article around a market-level trend. For example, an industrial property in a market with declining vacancy gets an article framed around &ldquo;why the last available Class A industrial in [submarket] matters now.&rdquo; An office building in a market with rising sublease inventory gets &ldquo;direct lease advantage: why subleases are losing to well-positioned Class A.&rdquo;</p>
+      <p>Each article includes <strong>three SEO-optimized sections</strong>: a trend analysis (what is happening in the submarket), an impact analysis (why it matters for tenants/buyers), and a property positioning section (how the subject property fits the trend). The article is designed to rank for submarket search queries while functioning as outreach content &mdash; it gets sent to qualified prospects as a market intelligence piece, not a sales pitch.</p>
+    </div>
+
+    <div class="r" id="s-profile">
+      <h2 class="sh">Target Profile Generator</h2>
+      <p>The Target Profile Generator creates a detailed ideal tenant or buyer persona based on the property&rsquo;s characteristics and the Enrichment Agent&rsquo;s firmographic data. This profile specifies <strong>who should be in this building</strong> and why.</p>
+      <p>The profile includes: industry verticals most likely to need this space type, company size ranges (by employee count and revenue), geographic expansion patterns that align with this market, technology and infrastructure requirements the building supports, and competitive positioning (what distinguishes this property from alternatives for this persona). The profile feeds directly into the Targeting Agent&rsquo;s prospect identification pipeline &mdash; it is not just a marketing document but an <strong>operational input</strong> that determines who gets targeted.</p>
+    </div>
+
+    <div class="output-gallery src con r"><div class="src-tag">Content Agent &mdash; Output Gallery<span class="conf-badge">CONF 0.95</span></div>
+      <div class="og-header"><div class="og-title">Content Package Outputs</div><div class="og-badge">4 Types &middot; Per Property</div></div>
+      <div class="og-grid">
+        <div class="og-card"><div class="og-card-icon">&#128196;</div><div class="og-card-type">Brochure</div><div class="og-card-title">Property Marketing Brochure</div><div class="og-card-desc">6-section structured document with executive headline, metrics grid, location analysis, and tenant fit profile.</div><div class="og-card-meta">Sonnet &middot; ~18s<div class="og-card-rt">~4k tokens</div></div></div>
+        <div class="og-card"><div class="og-card-icon">&#128240;</div><div class="og-card-type">Article</div><div class="og-card-title">Market Positioning Article</div><div class="og-card-desc">800&ndash;1200 word market analysis with trend data, comps, and property positioning. SEO-optimized.</div><div class="og-card-meta">Sonnet &middot; ~45s<div class="og-card-rt">~8k tokens</div></div></div>
+        <div class="og-card"><div class="og-card-icon">&#128100;</div><div class="og-card-type">Target Profile</div><div class="og-card-title">Ideal Tenant/Buyer Persona</div><div class="og-card-desc">Firmographic specification with industry verticals, size ranges, expansion patterns, and competitive positioning.</div><div class="og-card-meta">Sonnet &middot; ~45s<div class="og-card-rt">~6k tokens</div></div></div>
+        <div class="og-card"><div class="og-card-icon">&#128227;</div><div class="og-card-type">Ad Copy</div><div class="og-card-title">Multi-Platform Campaign Copy</div><div class="og-card-desc">LinkedIn ads, Google Ads headlines, email subject lines, and CTA variants. A/B test ready.</div><div class="og-card-meta">Haiku &middot; ~12s<div class="og-card-rt">~4k tokens</div></div></div>
+      </div>
+    </div>
+
+    <div class="r" id="s-adcopy">
+      <h2 class="sh">Ad Copy &amp; Campaign Output</h2>
+      <p>The ad copy generator runs last in the content pipeline because it uses outputs from the other three generators as input. It produces copy sets for <strong>three platforms</strong>: LinkedIn (sponsored content headlines, body text, CTA buttons), Google Ads (responsive search ad headlines and descriptions), and email (subject lines, preview text, and body openers).</p>
+      <p>Each platform gets copy calibrated to its format constraints and audience behavior. LinkedIn copy uses professional language and market-level framing. Google Ads copy uses high-intent keywords from the Market Agent&rsquo;s search data. Email copy references the prospect&rsquo;s specific engagement signals from the Enrichment Agent. Every copy set includes <strong>A/B variants</strong> &mdash; two headlines, two CTAs &mdash; so the Outreach Agent can test which performs better and feed results back into the next cycle.</p>
+    </div>
+
+    <div class="callout r"><div class="callout-label">Production Speed</div><div class="callout-text">A complete content package &mdash; brochure, market article, target profile, and ad copy set &mdash; generates in approximately <strong>2 minutes 40 seconds</strong>. The brochure runs first (Sonnet, ~18s), article and target profile run in parallel (Sonnet, ~45s each), and ad copy runs last using outputs from the other three (Haiku, ~12s). Total: ~22,000 tokens per package.</div></div>
+
+    <div class="src con r" id="s-crm"><div class="src-tag">Content Agent &mdash; Lead Capture<span class="conf-badge">CONF 0.94</span></div>
+      <div class="crm-block"><div class="crm-main">
+        <div><div class="crm-eyebrow">IO Platform &middot; CRE Content</div><div class="crm-headline">Get the Content Agent architecture + output templates.</div><div class="crm-sub">The complete content generation framework, brochure templates, article structures, target profile format, and ad copy specifications.</div></div>
+        <div class="crm-form"><input type="email" class="crm-inp" placeholder="your@email.com"><button class="crm-btn">Get the Content Spec &rarr;</button><div class="crm-note">Free. No spam. Unsubscribe anytime.</div></div>
+      </div></div>
+    </div>
+
+    <div class="src enr r" id="s-faq"><div class="src-tag">Enrichment Agent &mdash; FAQs<span class="conf-badge">CONF 0.96</span></div>
+      <div class="faq-section">
+        <div class="faq-head"><h2 class="faq-head-title">Frequently Asked Questions</h2><span class="faq-head-count">5 Questions</span></div>
+        <div class="faq-item open"><div class="faq-q" onclick="toggleFaq(this)">What does the Content Agent produce from a single property brief?<span class="faq-toggle">&times;</span></div><div class="faq-a"><div class="faq-a-inner">Four output types: a <strong>property brochure</strong> (6-section structured document), a <strong>market article</strong> (800&ndash;1200 words with comps and trends), a <strong>target profile</strong> (ideal tenant/buyer persona), and <strong>ad copy sets</strong> (LinkedIn, Google Ads, email). All four share the same data foundation. Total runtime: ~2 minutes 40 seconds.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the Brochure Generator calibrate to property type?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">The property brief includes a type field (industrial, office, retail) that triggers the correct template logic. <strong>Industrial brochures</strong> emphasize clear height, dock doors, and logistics access. <strong>Office brochures</strong> emphasize floor plates, parking ratios, and walkability. <strong>Retail brochures</strong> emphasize traffic counts and demographics.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the Article Campaign Writer position properties?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">Articles are <strong>market-centric with the property as the solution</strong>. The writer pulls vacancy, comps, absorption, and demand data from the Market Agent, then frames the property within a market-level trend. The article functions as market intelligence that prospects value, not as a sales pitch they ignore.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the Target Profile Generator?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">It creates an ideal tenant/buyer persona specifying industry verticals, company size ranges, expansion patterns, and infrastructure requirements. This profile feeds directly into the <strong>Targeting Agent&rsquo;s prospect identification pipeline</strong> &mdash; it is both a marketing document and an operational input.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How long does a complete content package take to generate?<span class="faq-toggle">+</span></div><div class="faq-a"><div class="faq-a-inner">Approximately <strong>2 minutes 40 seconds</strong>. Brochure first (Sonnet, ~18s), article and target profile in parallel (Sonnet, ~45s each), ad copy last (Haiku, ~12s). Total token consumption: ~22,000 tokens per package across all four outputs.</div></div></div>
+      </div>
+    </div>
+  </div></article>
+
+  <aside class="sidebar">
+    <div class="sb-sec r"><div class="sb-sec-title">In This Article</div><ul class="toc-list" id="toc-list">
+      <li class="toc-item active" onclick="scrollToSection('s-problem')"><span class="toc-dot"></span>Content Bottlenecks</li>
+      <li class="toc-item" onclick="scrollToSection('s-brochure')"><span class="toc-dot"></span>Brochure Generator</li>
+      <li class="toc-item" onclick="scrollToSection('s-article')"><span class="toc-dot"></span>Article Writer</li>
+      <li class="toc-item" onclick="scrollToSection('s-profile')"><span class="toc-dot"></span>Target Profile</li>
+      <li class="toc-item" onclick="scrollToSection('s-adcopy')"><span class="toc-dot"></span>Ad Copy</li>
+      <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+    </ul></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Active Agents</div><div class="lib-list">
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-cnt)"></div><div class="lib-name">Content</div><div class="lib-count">3</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-mkt)"></div><div class="lib-name">Market</div><div class="lib-count">4</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-enr)"></div><div class="lib-name">Enrichment</div><div class="lib-count">12</div></div>
+      <div class="lib-item"><div class="lib-swatch" style="background:var(--c-lin)"></div><div class="lib-name">LinkedIn</div><div class="lib-count">5</div></div>
+    </div></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Pipeline Stats</div><div class="stats-grid">
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">4</div><div class="stat-l">Output types</div></div>
+      <div class="stat-card"><div class="stat-n">~22k</div><div class="stat-l">Tokens/package</div></div>
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-green)">2:40</div><div class="stat-l">Runtime</div></div>
+      <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">78</div><div class="stat-l">Properties served</div></div>
+    </div></div>
+    <div class="sb-sec r"><div class="sb-sec-title">Article Series</div><div class="series-nav">
+      <a class="sn-item" href="wf-article-01.html"><span class="sn-num">01</span><span class="sn-title">Complete CRE Intelligence</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)">Overview</span></a>
+      <a class="sn-item" href="wf-article-07.html"><span class="sn-num">07</span><span class="sn-title">Prospect Qualification</span><span class="sn-pill" style="background:rgba(232,160,0,.1);color:#fbbf24;border:1px solid rgba(232,160,0,.2)">Scoring</span></a>
+      <a class="sn-item current"><span class="sn-num">08</span><span class="sn-title">Content &amp; Collateral</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)">Content</span></a>
+      <a class="sn-item" href="wf-article-09.html"><span class="sn-num">09</span><span class="sn-title">Pipeline Orchestration</span><span class="sn-pill" style="background:rgba(225,29,72,.1);color:#fb7185;border:1px solid rgba(225,29,72,.2)">Pipeline</span></a>
+      <a class="sn-item" href="wf-article-10.html"><span class="sn-num">10</span><span class="sn-title">The Complete System</span><span class="sn-pill" style="background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)">Capstone</span></a>
+    </div></div>
+  </aside>
+</div>
+
+<div class="author-section r"><div class="author-inner">
+  <div><div class="author-av">T</div><div class="author-name">Tommy Saunders</div><div class="author-role">Founder, IntelligentOperations.ai</div><div class="author-bio">Building the AI-native commercial real estate intelligence system. 18 agents. 78 properties. Content at the speed of pipeline.</div><div class="author-links"><a href="#" class="author-link">Twitter</a><a href="#" class="author-link">LinkedIn</a><a href="#" class="author-link">IO Platform</a></div></div>
+  <div class="author-divider"></div>
+  <div><div class="related-label">Continue Reading &mdash; Windfield CRE Series</div><div class="related-grid">
+    <a class="rel-card" href="wf-article-07.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-b"><div class="rel-thumb-dot" style="background:rgba(232,160,0,.2);border:1px solid rgba(232,160,0,.5);color:#fbbf24">07</div></div></div><div class="rel-series-tag" style="color:rgba(232,160,0,.5)">Agent Deep Dive</div><div class="rel-title">Prospect Qualification: Scoring and Segmenting</div><div class="rel-meta">9 min &middot; Published</div></a>
+    <a class="rel-card" href="wf-article-09.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-a"><div class="rel-thumb-dot" style="background:rgba(225,29,72,.2);border:1px solid rgba(225,29,72,.5);color:#fb7185">09</div></div></div><div class="rel-series-tag" style="color:rgba(225,29,72,.5)">Agent Deep Dive</div><div class="rel-title">Pipeline Orchestration: The 7-Stage Loop</div><div class="rel-meta">10 min &middot; Published</div></a>
+    <a class="rel-card" href="wf-article-10.html"><div class="rel-thumb"><div class="rel-thumb-bg rt-c"><div class="rel-thumb-dot" style="background:rgba(29,185,84,.2);border:1px solid rgba(29,185,84,.5);color:#4ade80">10</div></div></div><div class="rel-series-tag" style="color:rgba(29,185,84,.5)">Capstone</div><div class="rel-title">The Complete System: 78 Properties Under IO</div><div class="rel-meta">10 min &middot; Published</div></a>
+  </div></div>
+</div></div>
+
+<footer class="footer-menu"><div class="fm-w"><div class="fm-grid">
+  <div><div class="fm-logo"><span>IO</span> Platform</div><div class="fm-tagline">AI-Native Commercial Real Estate Intelligence. 18 agents. 78 properties. Pipeline that never sleeps.</div><div class="fm-series-badge"><span class="live-dot"></span>Windfield CRE Series &middot; 10 Articles</div></div>
+  <div class="fm-col"><div class="fm-col-title">Platform</div><ul><li><a href="#">Property Hub</a></li><li><a href="#">Agent Registry</a></li><li><a href="#">Pipeline Runner</a></li><li><a href="#">MCP Server</a></li><li><a href="#">Supabase</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">Intelligence</div><ul><li><a href="#">Targeting</a></li><li><a href="#">Enrichment</a></li><li><a href="#">Market Intel</a></li><li><a href="#">Outreach</a></li><li><a href="#">LinkedIn</a></li></ul></div>
+  <div class="fm-col"><div class="fm-col-title">Article Series</div><div class="fm-series-list">
+    <a class="fm-series-item" href="wf-article-07.html"><span class="fm-s-num">07</span><span class="fm-s-title">Prospect Qualification</span></a>
+    <a class="fm-series-item"><span class="fm-s-num" style="color:var(--wf-brand)">08</span><span class="fm-s-title" style="color:var(--wf-fg-muted)">Content &amp; Collateral &larr;</span></a>
+    <a class="fm-series-item" href="wf-article-09.html"><span class="fm-s-num">09</span><span class="fm-s-title">Pipeline Orchestration</span></a>
+    <a class="fm-series-item" href="wf-article-10.html"><span class="fm-s-num">10</span><span class="fm-s-title">The Complete System</span></a>
+  </div></div>
+  <div class="fm-col"><div class="fm-col-title">Resources</div><ul><li><a href="#">llm.txt</a></li><li><a href="#">API Docs</a></li><li><a href="#">GitHub</a></li><li><a href="#">Status</a></li><li><a href="#">Templates</a></li></ul></div>
+</div></div></footer>
+
+<div class="final-footer"><div class="ff-w">
+  <div class="ff-legal"><span>&copy; 2026 IntelligentOperations.ai</span><span class="ff-sep"></span><span>All rights reserved</span><span class="ff-sep"></span><span class="ff-series">Windfield CRE Article Series</span><span class="ff-sep"></span><span>WF-CRE-2026-008 &middot; WF-08</span></div>
+  <div class="ff-mcp"><span class="live-dot"></span>18 Agents Active</div>
+</div></div>
+
+<script>
+var FEEDS=[{n:'Targeting',c:'#1db954',ct:4},{n:'Enrichment',c:'#1db954',ct:12},{n:'Market',c:'#e8a000',ct:4},{n:'Outreach',c:'#e11d48',ct:6},{n:'LinkedIn',c:'#0891b2',ct:5},{n:'Content',c:'#8b5cf6',ct:3}];
+var pf=document.getElementById('ps-feeds');FEEDS.forEach(function(f,i){var chip=document.createElement('div');chip.className='ps-chip';chip.style.background=f.c+'14';chip.style.border='1px solid '+f.c+'28';chip.style.color=f.c;var dot=document.createElement('div');dot.className='ps-dot';dot.style.background=f.c;chip.appendChild(dot);chip.appendChild(document.createTextNode(f.n+' \u00b7 '+f.ct));pf.appendChild(chip);if(i<FEEDS.length-1){var a=document.createElement('div');a.className='ps-arrow';a.textContent='\u00b7';pf.appendChild(a)}});
+var attrOn=false;function toggleAttr(){attrOn=!attrOn;document.body.classList.toggle('attr',attrOn);var b=document.getElementById('attr-btn');b.classList.toggle('on',attrOn);b.textContent=attrOn?'Hide Sources':'Show Agent Sources';if(attrOn){document.querySelectorAll('.src').forEach(function(el){if(!el.querySelector('.ann-corners')){var c=document.createElement('div');c.className='ann-corners';c.innerHTML='<span class="ann-c tl"></span><span class="ann-c tr"></span><span class="ann-c bl"></span><span class="ann-c br"></span>';el.appendChild(c)}})}}
+function togglePipe(){var s=document.getElementById('pstrip'),m=document.getElementById('pipemap'),b=document.getElementById('pipe-btn');if(m.classList.contains('open')){m.classList.remove('open');s.classList.remove('open');b.classList.remove('on')}else if(s.classList.contains('open')){s.classList.remove('open');m.classList.add('open');b.classList.add('on')}else{s.classList.add('open');b.classList.add('on')}}
+function toggleFaq(q){var item=q.parentElement,was=item.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(function(i){i.classList.remove('open');i.querySelector('.faq-toggle').textContent='+'});if(!was){item.classList.add('open');q.querySelector('.faq-toggle').textContent='\u00d7'}}
+window.addEventListener('scroll',function(){var d=document.documentElement;document.getElementById('prog').style.width=((window.scrollY/(d.scrollHeight-d.clientHeight))*100)+'%'},{passive:true});
+var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('in')})},{threshold:.05,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.r').forEach(function(el){ro.observe(el)});
+var sections=['s-problem','s-brochure','s-article','s-profile','s-adcopy','s-faq'];var tocItems=document.querySelectorAll('.toc-item');
+var tocObs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var idx=sections.indexOf(en.target.id);if(idx>-1){tocItems.forEach(function(t){t.classList.remove('active')});if(tocItems[idx])tocItems[idx].classList.add('active')}}})},{threshold:.3});
+sections.forEach(function(s){var el=document.getElementById(s);if(el)tocObs.observe(el)});
+function scrollToSection(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+</script>
+</body>
+</html>
