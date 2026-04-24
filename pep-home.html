@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PEP Home — Windfield Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-success: #22c55e;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+input, textarea { font-family: var(--font-sans); }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 80px 0; }
+.text-center { text-align: center; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 600; border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap; border: 1px solid transparent;
+}
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-sm { height: 36px; padding: 0 16px; font-size: 13px; }
+.btn-lg { height: 52px; padding: 0 32px; font-size: 15px; }
+.btn-primary { background: var(--wf-brand); color: var(--wf-brand-fg); }
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-outline { background: transparent; color: var(--wf-fg); border-color: var(--wf-border-strong); }
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+
+.link-arrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 500; color: var(--wf-brand);
+  transition: gap var(--wf-dur);
+}
+.link-arrow:hover { gap: 10px; }
+.link-arrow svg { width: 16px; height: 16px; }
+
+/* ── NAVBAR ── */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--wf-bg); border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex; align-items: center; height: 64px; gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  letter-spacing: -0.02em;
+}
+.navbar-links {
+  display: flex; align-items: center; gap: 24px; margin-left: auto;
+}
+.navbar-link {
+  font-size: 14px; color: var(--wf-fg-muted); transition: color var(--wf-dur);
+  display: flex; align-items: center; gap: 4px;
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link.active { color: var(--wf-fg); }
+.navbar-actions {
+  display: flex; align-items: center; gap: 12px; margin-left: 16px;
+}
+.mobile-toggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; color: var(--wf-fg); }
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ── HERO ── */
+.hero {
+  position: relative; padding: 100px 0 80px; overflow: hidden;
+  background: var(--wf-bg);
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(29,185,84,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero .container { position: relative; z-index: 1; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border-radius: 9999px;
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  font-size: 13px; font-weight: 500; color: var(--wf-fg-muted);
+  margin-bottom: 32px;
+}
+.hero-badge-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--wf-brand);
+  box-shadow: 0 0 8px var(--wf-brand), 0 0 16px rgba(29,185,84,0.3);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+.hero-title {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 800; letter-spacing: -0.035em;
+  line-height: 1.05; color: var(--wf-fg);
+  margin-bottom: 24px; max-width: 900px;
+}
+.hero-title .accent { color: var(--wf-brand); }
+
+.hero-subtitle {
+  font-size: 18px; color: var(--wf-fg-muted); line-height: 1.6;
+  margin-bottom: 40px; max-width: 640px;
+}
+
+.hero-stats {
+  display: flex; gap: 0; margin-bottom: 40px;
+}
+.hero-stat {
+  padding: 16px 28px; border-left: 3px solid var(--wf-brand);
+  position: relative;
+}
+.hero-stat + .hero-stat::before {
+  content: ''; position: absolute; left: -1px; top: 8px; bottom: 8px;
+  width: 1px; background: var(--wf-border);
+}
+.hero-stat-value {
+  font-size: 24px; font-weight: 700; color: var(--wf-fg);
+  letter-spacing: -0.02em;
+}
+.hero-stat-label {
+  font-size: 12px; font-weight: 500; color: var(--wf-fg-subtle);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px;
+}
+
+.hero-btns { display: flex; gap: 12px; }
+
+/* ── ABOUT (light section) ── */
+.about-section {
+  background: #ffffff; color: #1e293b; padding: 80px 0;
+}
+.about-section .container { max-width: 800px; text-align: center; }
+.about-heading {
+  font-size: 36px; font-weight: 800; color: #0f172a;
+  letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 20px;
+}
+.about-text {
+  font-size: 16px; color: #64748b; line-height: 1.7; margin-bottom: 36px;
+}
+.about-checks {
+  display: flex; flex-direction: column; gap: 14px;
+  max-width: 480px; margin: 0 auto; text-align: left;
+}
+.about-check {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 15px; color: #334155;
+}
+.about-check-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(29,185,84,0.12); color: var(--wf-brand);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.about-check-icon svg { width: 13px; height: 13px; }
+
+/* ── FEATURED LISTINGS ── */
+.listings-section {
+  background: #f8fafc; padding: 80px 0;
+}
+.listings-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 40px;
+}
+.listings-kicker {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--wf-brand); margin-bottom: 8px;
+}
+.listings-heading {
+  font-size: 32px; font-weight: 800; color: #0f172a;
+  letter-spacing: -0.02em; line-height: 1.2;
+}
+.listings-link {
+  font-size: 14px; font-weight: 600; color: var(--wf-brand);
+  display: flex; align-items: center; gap: 6px;
+  transition: gap var(--wf-dur);
+}
+.listings-link:hover { gap: 10px; }
+.listings-link svg { width: 16px; height: 16px; }
+
+.listings-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.listing-card {
+  background: #ffffff; border-radius: var(--wf-r-lg);
+  border: 1px solid #e2e8f0; overflow: hidden;
+  transition: transform var(--wf-dur), box-shadow var(--wf-dur);
+}
+.listing-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+.listing-img {
+  height: 180px; position: relative;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #94a3b8 100%);
+}
+.listing-badge {
+  position: absolute; top: 12px; left: 12px;
+  padding: 4px 10px; border-radius: var(--wf-r-sm);
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.listing-badge.sale { background: #3b82f6; color: #ffffff; }
+.listing-badge.lease { background: var(--wf-brand); color: var(--wf-brand-fg); }
+.listing-body { padding: 16px 20px 20px; }
+.listing-type {
+  font-size: 11px; font-weight: 600; color: #94a3b8;
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+}
+.listing-name {
+  font-size: 16px; font-weight: 700; color: #0f172a;
+  letter-spacing: -0.01em; margin-bottom: 4px;
+}
+.listing-address {
+  font-size: 13px; color: #64748b;
+}
+
+/* ── SERVICES ── */
+.services-section {
+  background: var(--wf-bg); padding: 80px 0;
+}
+.services-kicker {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--wf-brand); margin-bottom: 8px;
+}
+.services-heading {
+  font-size: 36px; font-weight: 800; color: var(--wf-fg);
+  letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 48px;
+}
+.services-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;
+}
+.service-card {
+  padding: 28px 24px;
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  transition: border-color var(--wf-dur), transform var(--wf-dur);
+}
+.service-card:hover {
+  border-color: var(--wf-border-strong);
+  transform: translateY(-2px);
+}
+.service-icon {
+  width: 44px; height: 44px; border-radius: var(--wf-r-md);
+  background: var(--wf-brand-muted);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.service-icon svg { width: 22px; height: 22px; color: var(--wf-brand); }
+.service-title {
+  font-size: 15px; font-weight: 700; color: var(--wf-fg);
+  margin-bottom: 8px;
+}
+.service-desc {
+  font-size: 13px; color: var(--wf-fg-muted); line-height: 1.5;
+}
+
+/* ── TEAM ── */
+.team-section {
+  background: var(--wf-bg); padding: 80px 0;
+  border-top: 1px solid var(--wf-border);
+}
+.team-heading {
+  font-size: 36px; font-weight: 800; color: var(--wf-fg);
+  letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 48px;
+  text-align: center;
+}
+.team-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+}
+.team-card { text-align: center; }
+.team-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--wf-surface); border: 2px solid var(--wf-border);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.team-avatar svg { width: 32px; height: 32px; color: var(--wf-fg-faint); }
+.team-name {
+  font-size: 16px; font-weight: 700; color: var(--wf-fg);
+  margin-bottom: 4px;
+}
+.team-title {
+  font-size: 13px; font-weight: 500; color: var(--wf-brand);
+  margin-bottom: 4px;
+}
+.team-phone {
+  font-size: 13px; color: var(--wf-fg-muted);
+}
+
+/* ── CTA ── */
+.cta-section {
+  padding: 100px 0;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ecfdf5 50%, #f8fafc 100%);
+  text-align: center;
+}
+.cta-heading {
+  font-size: 44px; font-weight: 800; color: #0f172a;
+  letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 16px;
+}
+.cta-subtitle {
+  font-size: 16px; color: #64748b; line-height: 1.6;
+  margin-bottom: 32px; max-width: 540px; margin-left: auto; margin-right: auto;
+}
+.cta-btns {
+  display: flex; gap: 12px; justify-content: center; margin-bottom: 40px;
+}
+.cta-form {
+  display: flex; gap: 8px; max-width: 440px; margin: 0 auto;
+}
+.cta-input {
+  flex: 1; height: 48px; padding: 0 16px;
+  background: #ffffff; border: 1px solid #e2e8f0;
+  border-radius: var(--wf-r-md); font-size: 14px; color: #0f172a;
+}
+.cta-input::placeholder { color: #94a3b8; }
+.cta-input:focus { outline: none; border-color: var(--wf-brand); }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--wf-border); padding: 56px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+  gap: 32px; padding-bottom: 40px;
+}
+.footer-newsletter-label {
+  font-size: 13px; font-weight: 600; color: var(--wf-fg); margin-bottom: 4px;
+}
+.footer-subscribe-text {
+  font-size: 13px; color: var(--wf-fg-muted); margin-bottom: 12px;
+}
+.footer-form { display: flex; gap: 8px; margin-bottom: 12px; }
+.footer-input {
+  flex: 1; height: 40px; padding: 0 12px;
+  background: var(--wf-bg); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-sm); font-size: 13px; color: var(--wf-fg);
+}
+.footer-input::placeholder { color: var(--wf-fg-faint); }
+.footer-input:hover { border-color: var(--wf-border-strong); }
+.footer-input:focus { outline: none; border-color: var(--wf-brand); }
+.footer-disclaimer {
+  font-size: 11px; color: var(--wf-fg-faint); line-height: 1.5;
+}
+.footer-disclaimer a { text-decoration: underline; text-underline-offset: 2px; }
+.footer-logo-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 24px;
+}
+.footer-logo {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg); letter-spacing: -0.02em;
+}
+.footer-col-title {
+  font-size: 13px; font-weight: 600; color: var(--wf-fg); margin-bottom: 16px;
+}
+.footer-links { display: flex; flex-direction: column; gap: 10px; }
+.footer-link {
+  font-size: 13px; color: var(--wf-fg-muted); transition: color var(--wf-dur);
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-social {
+  display: flex; gap: 16px; align-items: center; margin-top: auto;
+}
+.footer-social-icon {
+  width: 24px; height: 24px; color: var(--wf-fg-subtle);
+  transition: color var(--wf-dur);
+}
+.footer-social-icon:hover { color: var(--wf-fg); }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; border-top: 1px solid var(--wf-border);
+  font-size: 12px; color: var(--wf-fg-subtle);
+}
+.footer-legal { display: flex; gap: 24px; }
+.footer-legal a {
+  color: var(--wf-fg-subtle); text-decoration: underline;
+  text-underline-offset: 2px; transition: color var(--wf-dur);
+}
+.footer-legal a:hover { color: var(--wf-fg); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .services-grid { grid-template-columns: repeat(3, 1fr); }
+  .listings-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { grid-template-columns: 1fr 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .section { padding: 56px 0; }
+  .hero { padding: 64px 0 56px; }
+  .hero-stats { flex-direction: column; gap: 0; }
+  .hero-btns { flex-direction: column; align-items: flex-start; }
+  .navbar-links { display: none; }
+  .mobile-toggle { display: flex; }
+  .services-grid { grid-template-columns: 1fr; }
+  .listings-grid { grid-template-columns: 1fr; }
+  .listings-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .team-grid { grid-template-columns: 1fr 1fr; }
+  .cta-heading { font-size: 32px; }
+  .cta-btns { flex-direction: column; align-items: center; }
+  .cta-form { flex-direction: column; }
+  .footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="pep-home.html" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="pep-home.html" class="navbar-link active">PEP Home</a>
+      <a href="windfield-home.html" class="navbar-link">Windfield Home</a>
+      <a href="home-v1.html" class="navbar-link">Home v1</a>
+      <a href="home-v2.html" class="navbar-link">Home v2</a>
+      <a href="property.html" class="navbar-link">Property</a>
+      <a href="services.html" class="navbar-link">Services</a>
+      <a href="team.html" class="navbar-link">Team</a>
+      <a href="about.html" class="navbar-link">About</a>
+      <a href="contact.html" class="navbar-link">Contact</a>
+      <a href="blog-home.html" class="navbar-link">Blog</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-primary">Get Started</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      CORFAC International Member
+    </div>
+    <h1 class="hero-title">Premier Commercial<br><span class="accent">Real Estate</span> Brokerage</h1>
+    <p class="hero-subtitle">Full-service commercial real estate brokerage providing Development, Sales, Leasing, and Advisory services across the Kansas City metropolitan area.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">70+</div>
+        <div class="hero-stat-label">Markets Served</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">83</div>
+        <div class="hero-stat-label">Active Listings</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">$2.4B</div>
+        <div class="hero-stat-label">Transaction Volume</div>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#" class="btn btn-lg btn-primary">View Properties</a>
+      <a href="#" class="btn btn-lg btn-outline">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ABOUT (LIGHT) ═══════════════ -->
+<section class="about-section">
+  <div class="container">
+    <h2 class="about-heading">Trusted Advisors in Commercial Real Estate</h2>
+    <p class="about-text">With decades of experience in the Kansas City market, our team delivers exceptional results through deep market knowledge, innovative strategies, and unwavering commitment to our clients' success.</p>
+    <div class="about-checks">
+      <div class="about-check">
+        <span class="about-check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>
+        Brokerage &amp; Sales
+      </div>
+      <div class="about-check">
+        <span class="about-check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>
+        Tenant Representation
+      </div>
+      <div class="about-check">
+        <span class="about-check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>
+        Landlord Representation
+      </div>
+      <div class="about-check">
+        <span class="about-check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>
+        Development Consulting
+      </div>
+      <div class="about-check">
+        <span class="about-check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>
+        Investment Services
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURED LISTINGS ═══════════════ -->
+<section class="listings-section">
+  <div class="container">
+    <div class="listings-header">
+      <div>
+        <div class="listings-kicker">Featured Properties</div>
+        <h2 class="listings-heading">Current Listings</h2>
+      </div>
+      <a href="#" class="listings-link">
+        View All
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="listings-grid">
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);">
+          <span class="listing-badge sale">For Sale</span>
+        </div>
+        <div class="listing-body">
+          <div class="listing-type">Office</div>
+          <div class="listing-name">Lenexa Corporate Centre</div>
+          <div class="listing-address">8700 Renner Blvd, Lenexa, KS 66219</div>
+        </div>
+      </div>
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);">
+          <span class="listing-badge lease">For Lease</span>
+        </div>
+        <div class="listing-body">
+          <div class="listing-type">Industrial</div>
+          <div class="listing-name">Riverside Distribution Center</div>
+          <div class="listing-address">2100 Front Street, Kansas City, MO 64120</div>
+        </div>
+      </div>
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #e2e8f0 0%, #a8b4c4 100%);">
+          <span class="listing-badge sale">For Sale</span>
+        </div>
+        <div class="listing-body">
+          <div class="listing-type">Retail</div>
+          <div class="listing-name">Plaza West Shopping Center</div>
+          <div class="listing-address">4800 W 135th St, Overland Park, KS 66224</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SERVICES ═══════════════ -->
+<section class="services-section section">
+  <div class="container">
+    <div class="services-kicker">Our Services</div>
+    <h2 class="services-heading">Full-Service Capabilities</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="service-title">Brokerage</div>
+        <div class="service-desc">Comprehensive sales and leasing services for commercial properties across all asset classes.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="service-title">Tenant Rep</div>
+        <div class="service-desc">Strategic advisory and negotiation services to secure the best terms for tenants.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><path d="M12 12v4"/></svg>
+        </div>
+        <div class="service-title">Landlord Rep</div>
+        <div class="service-desc">Maximizing property value through strategic leasing and asset management.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20h20"/><path d="M5 20V8l7-5 7 5v12"/><path d="M9 20v-6h6v6"/></svg>
+        </div>
+        <div class="service-title">Development</div>
+        <div class="service-desc">Ground-up development consulting from site selection through project delivery.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        </div>
+        <div class="service-title">Investment</div>
+        <div class="service-desc">Investment sales and acquisition advisory for institutional and private investors.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TEAM ═══════════════ -->
+<section class="team-section">
+  <div class="container">
+    <h2 class="team-heading">Our Team</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="team-name">Andrew Danner</div>
+        <div class="team-title">Principal Broker</div>
+        <div class="team-phone">(816) 555-0101</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="team-name">Matthew Danner</div>
+        <div class="team-title">Development</div>
+        <div class="team-phone">(816) 555-0102</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="team-name">Benjamin Nelson</div>
+        <div class="team-title">Senior Associate, CCIM</div>
+        <div class="team-phone">(816) 555-0103</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="team-name">Aaron Truax</div>
+        <div class="team-title">Office Manager</div>
+        <div class="team-phone">(816) 555-0104</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="cta-heading">Ready to Get Started?</h2>
+    <p class="cta-subtitle">Let our experienced team help you navigate the commercial real estate market with confidence and clarity.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn btn-lg btn-primary">Contact Us</a>
+      <a href="#" class="btn btn-lg btn-outline" style="border-color: #cbd5e1; color: #334155;">View Properties</a>
+    </div>
+    <form class="cta-form" onsubmit="return false;">
+      <input type="email" class="cta-input" placeholder="Enter your email address">
+      <button type="submit" class="btn btn-md btn-primary">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-newsletter-label">Join our newsletter</div>
+        <form class="footer-form" onsubmit="return false;">
+          <input type="email" class="footer-input" placeholder="Enter your email">
+          <button type="submit" class="btn btn-sm btn-outline">Subscribe</button>
+        </form>
+        <p class="footer-disclaimer">By subscribing you agree to our <a href="#">Privacy Policy</a> and provide consent to receive updates.</p>
+        <div class="footer-logo-row">
+          <span class="footer-logo">Logo</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Properties</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">For Sale</a>
+          <a href="#" class="footer-link">For Lease</a>
+          <a href="#" class="footer-link">Featured</a>
+          <a href="#" class="footer-link">Recently Sold</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Brokerage</a>
+          <a href="#" class="footer-link">Tenant Rep</a>
+          <a href="#" class="footer-link">Landlord Rep</a>
+          <a href="#" class="footer-link">Development</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">About</a>
+          <a href="#" class="footer-link">Team</a>
+          <a href="#" class="footer-link">Articles</a>
+          <a href="#" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Connect</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">LinkedIn</a>
+          <a href="#" class="footer-link">Facebook</a>
+          <a href="#" class="footer-link">Instagram</a>
+        </div>
+        <div class="footer-social" style="margin-top: 16px;">
+          <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <span>&copy; 2026 Windfield. All rights reserved.</span>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Settings</a>
+        </div>
+      </div>
+      <div class="footer-social">
+        <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#" class="footer-social-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
