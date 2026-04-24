@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windfield Real Estate Intelligent Operations Is Live</title>
+<meta name="description" content="The announcement. Ten years at Windfield Real Estate. The pivot from selling AI to using AI to sell commercial real estate. What was built, who built it, and what comes next.">
+<meta name="keywords" content="windfield real estate, intelligent operations, ai commercial real estate, cre ai agents, tommy saunders, kansas city commercial real estate, agent pipeline, io platform">
+<meta property="og:title" content="Windfield Real Estate Intelligent Operations Is Live">
+<meta property="og:description" content="Ten years at Windfield Real Estate. The pivot from selling AI to using AI to sell commercial real estate. 18 agents, 78 properties, and the system that builds the system.">
+<meta property="og:type" content="article">
+<meta name="article:author" content="Tommy Saunders">
+<meta name="article:published_time" content="2026-04-16">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Windfield Real Estate Intelligent Operations Is Live","description":"The announcement. Ten years at Windfield Real Estate. The pivot from selling AI to using AI to sell commercial real estate. What was built, who built it, and what comes next.","author":{"@type":"Person","name":"Tommy Saunders","jobTitle":"Senior Sales & Marketing Technology Strategist","worksFor":{"@type":"Organization","name":"Windfield Real Estate"}},"publisher":{"@type":"Organization","name":"Windfield Real Estate, LLC"},"datePublished":"2026-04-16","articleSection":"IO Launch","keywords":["windfield real estate","intelligent operations","ai commercial real estate","agent pipeline","io platform","tommy saunders"],"wordCount":2800,"timeRequired":"PT10M","isPartOf":{"@type":"CreativeWorkSeries","name":"Windfield IO Launch Series","position":1}}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is Windfield Real Estate Intelligent Operations?","acceptedAnswer":{"@type":"Answer","text":"Windfield Real Estate Intelligent Operations is an 18-agent AI pipeline purpose-built for commercial real estate intelligence. From a single property ID, the system produces CCIM-standard market analysis, ideal prospect profiles with Clay search keywords, LinkedIn advertising briefs, 4-touch email outreach sequences, LinkedIn connection requests and follow-up messages, property brochures, 5-post 14-day LinkedIn content campaigns, and 700-900 word thought leadership articles."}},
+{"@type":"Question","name":"How many AI agents does Windfield use?","acceptedAnswer":{"@type":"Answer","text":"Windfield operates 18 operational AI agents organized across six domains: Targeting (4), Enrichment (12), Market Analysis (4), Outreach (6), LinkedIn (5), and Content (3). Additionally, 59 APB (Agent Profile Builder) agents construct, validate, safety-gate, and deploy new agents through an 8-phase structured pipeline."}},
+{"@type":"Question","name":"What does the system produce from one property?","acceptedAnswer":{"@type":"Answer","text":"From a single property ID, the Windfield IO system produces: CCIM-standard market analysis, ideal prospect profile with Clay search keywords, LinkedIn advertising campaign brief, 4-touch email outreach sequence, LinkedIn connection requests and follow-up messages, property brochure, 5-post 14-day LinkedIn content campaign, and a 700-900 word thought leadership article."}},
+{"@type":"Question","name":"What is the compound reliability problem?","acceptedAnswer":{"@type":"Answer","text":"The compound reliability problem is the mathematical reality of multi-step AI pipelines. At 85% reliability per step, a 10-step pipeline has only 20% end-to-end reliability (0.85^10 = 0.197). An 18-step pipeline drops to 5.4% (0.85^18 = 0.054). To achieve 95% end-to-end reliability across 18 steps, each step must operate at 99.7% reliability. This is why careful instrumentation and outside-in architecture are essential."}},
+{"@type":"Question","name":"Is the system fully autonomous?","acceptedAnswer":{"@type":"Answer","text":"No, and that is by design. Windfield IO uses an outside-in architecture: demonstrate first, observe second, hand over control where evidence supports it. The way to build a 100% reliable autonomous system is to start by not automating anything. Each agent earns autonomy through measured performance, not assumptions."}}
+]}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Windfield Real Estate","item":"https://windfield.io"},
+{"@type":"ListItem","position":2,"name":"IO Launch","item":"https://windfield.io/intelligence"},
+{"@type":"ListItem","position":3,"name":"Article Series","item":"https://windfield.io/intelligence/series"},
+{"@type":"ListItem","position":4,"name":"IO Is Live","item":"https://windfield.io/intelligence/io-launch-announcement"}
+]}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Windfield IO Design Tokens */
+  --wf-bg:#09090b;
+  --wf-bg-elevated:#111113;
+  --wf-surface:#141417;
+  --wf-fg:#fafafa;
+  --wf-fg-muted:#a1a1aa;
+  --wf-fg-subtle:#71717a;
+  --wf-fg-faint:#52525b;
+  --wf-brand:#1db954;
+  --wf-brand-muted:rgba(29,185,84,.12);
+  --wf-brand-border:rgba(29,185,84,.22);
+  --wf-border:#27272a;
+  --wf-border2:rgba(250,250,250,.1);
+  --wf-border3:rgba(250,250,250,.16);
+
+  /* Semantic aliases */
+  --wf-amber:#e8a000;
+  --wf-rose:#e11d48;
+  --wf-purple:#8b5cf6;
+  --wf-cyan:#0891b2;
+  --wf-green:#1db954;
+
+  /* Agent domain colors */
+  --c-tgt:#1db954;
+  --c-enr:#1db954;
+  --c-mkt:#e8a000;
+  --c-out:#e11d48;
+  --c-lin:#0891b2;
+  --c-cnt:#8b5cf6;
+
+  /* Typography */
+  --wf-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --wf-mono:'JetBrains Mono','Fira Code',monospace;
+
+  /* Radii */
+  --wf-r-sm:6px;
+  --wf-r-md:10px;
+  --wf-r-lg:16px;
+
+  /* Transitions */
+  --wf-ease:cubic-bezier(.25,.46,.45,.94);
+  --wf-spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--wf-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+
+/* ── Progress Bar ── */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--wf-brand);z-index:9999;width:0;transition:width .1s linear}
+
+/* ── Navbar ── */
+nav{position:sticky;top:0;z-index:500;background:rgba(9,9,11,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--wf-border);height:52px;display:flex;align-items:center}
+.nav-w{max-width:1280px;margin:0 auto;padding:0 32px;width:100%;display:flex;align-items:center}
+.nav-logo{font-family:var(--wf-sans);font-size:18px;font-weight:700;color:var(--wf-fg);text-decoration:none;letter-spacing:-.02em;margin-right:24px;flex-shrink:0}
+.nav-logo span{font-style:italic;color:var(--wf-brand)}
+.nav-rule{width:1px;height:16px;background:var(--wf-border2);margin-right:18px}
+.nav-section{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:auto;display:none}
+.nav-btns{display:flex;gap:8px;flex-shrink:0;margin-left:auto}
+.nbtn{padding:5px 14px;border-radius:20px;font:600 11px/1 var(--wf-sans);letter-spacing:.04em;cursor:pointer;border:none;transition:all .18s var(--wf-ease)}
+.nbtn-ghost{background:none;border:1px solid var(--wf-border2);color:var(--wf-fg-subtle)}
+.nbtn-ghost:hover,.nbtn-ghost.on{background:var(--wf-fg);color:var(--wf-bg);border-color:var(--wf-fg)}
+.nbtn-live{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.2);color:var(--wf-green);display:flex;align-items:center;gap:5px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── Pipeline Strip ── */
+#pstrip{background:var(--wf-bg-elevated);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .35s var(--wf-ease)}
+#pstrip.open{max-height:52px}
+.ps-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;overflow-x:auto}
+.ps-inner::-webkit-scrollbar{display:none}
+.ps-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-right:20px;flex-shrink:0}
+.ps-feeds{display:flex;gap:6px}
+.ps-chip{padding:4px 10px;border-radius:var(--wf-r-sm);font:600 10px/1 var(--wf-sans);display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:.04em}
+.ps-dot{width:5px;height:5px;border-radius:50%}
+.ps-arrow{font-size:10px;color:var(--wf-fg-faint);margin:0 6px;flex-shrink:0}
+.ps-result{font:700 10px/1 var(--wf-sans);color:var(--wf-green);letter-spacing:.06em;flex-shrink:0;display:flex;align-items:center;gap:6px}
+
+/* ── Pipeline Map ── */
+#pipemap{background:var(--wf-surface);border-bottom:1px solid var(--wf-border);overflow:hidden;max-height:0;transition:max-height .5s var(--wf-ease)}
+#pipemap.open{max-height:280px}
+.pm-inner{max-width:1280px;margin:0 auto;padding:20px 32px}
+.pm-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.pm-title span{font-weight:300;color:var(--wf-fg-subtle)}
+.pm-scan{height:2px;background:linear-gradient(90deg,transparent,rgba(29,185,84,.5),transparent);animation:pms1 2s ease-in-out infinite;margin:10px 0}
+@keyframes pms1{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:1;transform:scaleX(1)}}
+.pm-flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:4px}
+.pm-node{flex-shrink:0;padding:8px 12px;border-radius:var(--wf-r-md);background:rgba(255,255,255,.03);border:1px solid var(--wf-border2);text-align:center;min-width:80px}
+.pm-node-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:4px}
+.pm-node-name{font:600 11px/1.2 var(--wf-sans);color:var(--wf-fg)}
+.pm-node-sub{font:300 8px/1 var(--wf-mono);color:var(--wf-fg-subtle);margin-top:2px}
+.pm-arr{flex-shrink:0;width:32px;display:flex;align-items:center;justify-content:center;color:var(--wf-fg-faint);font-size:12px}
+.pm-meta-row{display:flex;align-items:center;gap:24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--wf-border)}
+.pm-meta-item{display:flex;align-items:center;gap:6px;font:300 11px/1 var(--wf-mono);color:var(--wf-fg-subtle)}
+.pm-meta-n{font:700 11px/1 var(--wf-mono);color:var(--wf-fg)}
+
+/* ── Hero ── */
+.hero{background:var(--wf-bg);position:relative;overflow:hidden;padding:80px 0 0;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 58% 52% at 72% 32%,rgba(29,185,84,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 40% at 16% 80%,rgba(29,185,84,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--wf-border) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 100% at 50% 0%,black 30%,transparent 100%)}
+.hero-w{max-width:1280px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:end;position:relative}
+@media(max-width:900px){.hero-w{grid-template-columns:1fr}.hero-viz{display:none}}
+.hero-text{padding-bottom:72px}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.eye-tag{font:700 10px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.eye-divider{width:20px;height:1px;background:var(--wf-fg-faint)}
+.eye-series{font:600 10px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);opacity:.8}
+h1{font-family:var(--wf-sans);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.05;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:24px}
+h1 em{font-style:italic;color:var(--wf-brand)}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:560px;margin-bottom:40px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:0;border-top:1px solid var(--wf-border2);padding-top:20px}
+.h-author{display:flex;align-items:center;gap:10px;margin-right:20px}
+.h-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:14px;color:#fff;font-weight:700}
+.h-name{font-size:14px;font-weight:500;color:var(--wf-fg)}
+.h-role{font-size:11px;color:var(--wf-fg-subtle)}
+.h-sep{width:1px;height:28px;background:var(--wf-border2);margin:0 18px}
+.h-date{font-size:13px;color:var(--wf-fg-subtle)}
+.h-read{font-size:13px;color:var(--wf-fg-subtle);margin-left:14px}
+
+/* ── Hero Viz ── */
+.hero-viz{position:relative;height:500px;align-self:end;overflow:visible}
+.hviz-inner{position:absolute;bottom:0;left:0;right:-40px;height:520px;
+  background:linear-gradient(160deg,#060b12 0%,#091210 55%,#060b0e 100%);
+  border-radius:var(--wf-r-lg) var(--wf-r-lg) 0 0;border:1px solid rgba(29,185,84,.1);border-bottom:none;overflow:hidden}
+.hv-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);
+  background-size:32px 32px}
+.hv-glow{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(29,185,84,.12) 0%,transparent 65%);animation:gp1 4s ease-in-out infinite}
+@keyframes gp1{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}}
+.hv-scan{position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(29,185,84,.35) 30%,rgba(29,185,84,.6) 50%,rgba(29,185,84,.35) 70%,transparent);
+  animation:hvs1 5s ease-in-out infinite;opacity:.4}
+@keyframes hvs1{0%{top:8%;opacity:0}8%{opacity:.4}92%{opacity:.2}100%{top:92%;opacity:0}}
+.hv-orch{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(29,185,84,.1);border:2px solid rgba(29,185,84,.5);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;z-index:10;
+  box-shadow:0 0 40px rgba(29,185,84,.2)}
+.hv-orch-label{font:700 7px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand)}
+.hv-orch-count{font:700 18px/1 var(--wf-mono);color:#fff}
+.hv-orch-sub{font:300 6px/1 var(--wf-mono);color:rgba(29,185,84,.6);letter-spacing:.08em}
+.hv-core{position:absolute;z-index:9;display:flex;flex-direction:column;align-items:center;gap:3px}
+.hv-core-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  border:1.5px solid;background:rgba(9,9,11,.7);font:700 8px/1 var(--wf-mono);letter-spacing:.05em;
+  transition:transform .2s var(--wf-spring);cursor:pointer}
+.hv-core-circle:hover{transform:scale(1.15)}
+.hv-core-name{font:700 7px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase}
+.hv-core-ct{font:300 7px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.hv-spec{position:absolute;width:10px;height:10px;border-radius:50%;z-index:8;cursor:pointer;
+  transition:transform .15s var(--wf-spring);opacity:.6}
+.hv-spec:hover{transform:translate(-50%,-50%) scale(1.6);opacity:1}
+.hv-badge1{position:absolute;top:14px;right:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.22)}
+.hv-status1{position:absolute;top:14px;left:14px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(29,185,84,.25)}
+
+/* ── Article Grid ── */
+.article-grid{max-width:1280px;margin:0 auto;padding:64px 32px 80px;display:grid;grid-template-columns:1fr 290px;gap:72px;align-items:start}
+@media(max-width:1024px){.article-grid{grid-template-columns:1fr}.sidebar{display:none}}
+.article-body{min-width:0}
+.sidebar{position:sticky;top:72px}
+
+/* ── Body Text ── */
+.body p{font-size:17.5px;line-height:1.82;color:var(--wf-fg-muted);font-weight:300;margin-bottom:28px}
+.body p strong{font-weight:600;color:var(--wf-fg)}
+.body p a{color:var(--wf-brand);text-decoration:none;border-bottom:1px solid rgba(29,185,84,.3);transition:border-color .15s}
+.body p a:hover{border-bottom-color:var(--wf-brand)}
+h2.sh{font-family:var(--wf-sans);font-size:30px;font-weight:600;line-height:1.15;letter-spacing:-.03em;color:var(--wf-fg);margin:60px 0 20px}
+h2.sh .sn{font:700 12px/1 var(--wf-mono);color:var(--wf-brand);letter-spacing:.1em;display:block;margin-bottom:8px}
+.lede{font-size:19.5px!important;line-height:1.72!important;color:var(--wf-fg)!important;font-weight:400!important;margin-bottom:32px!important}
+.lede::first-letter{font-family:var(--wf-sans);font-size:82px;font-weight:700;line-height:.78;float:left;margin:8px 12px 0 0;color:var(--wf-brand)}
+
+/* ── Pull Quotes ── */
+.pull-quote{margin:52px 0;padding:36px 44px;background:var(--wf-surface);border-radius:var(--wf-r-md);border:1px solid var(--wf-border);border-left:3px solid var(--wf-brand);position:relative;overflow:hidden}
+.pull-quote::before{content:'\201C';position:absolute;top:-16px;left:28px;font-family:var(--wf-sans);font-size:150px;font-weight:700;color:var(--wf-brand-muted);line-height:1;pointer-events:none}
+.pq-text{font-family:var(--wf-sans);font-size:clamp(19px,2.4vw,26px);font-weight:400;line-height:1.42;letter-spacing:-.02em;color:var(--wf-fg);position:relative;z-index:1;margin-bottom:14px}
+.pq-text em{font-style:italic;color:var(--wf-brand)}
+.pq-attr{font:600 11px/1 var(--wf-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-subtle);position:relative;z-index:1}
+
+/* ── Agent Architecture Grid ── */
+.agent-arch{margin:52px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border2);background:var(--wf-surface)}
+.aa-header{padding:14px 22px;border-bottom:1px solid var(--wf-border);display:flex;align-items:center;gap:12px}
+.aa-title{font:700 10px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.aa-body{padding:24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:640px){.aa-body{grid-template-columns:1fr}}
+.aa-card{background:rgba(255,255,255,.025);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:14px;transition:all .2s}
+.aa-card:hover{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.aa-card-icon{width:10px;height:10px;border-radius:50%;margin-bottom:8px}
+.aa-card-title{font:700 12px/1 var(--wf-sans);color:var(--wf-fg);margin-bottom:5px}
+.aa-card-desc{font:300 11px/1.55 var(--wf-sans);color:var(--wf-fg-subtle)}
+.aa-card-meta{font:700 8px/1 var(--wf-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--wf-brand);margin-top:7px}
+
+/* ── Callout Boxes ── */
+.callout{margin:48px 0;padding:24px 28px;background:linear-gradient(135deg,var(--wf-brand-muted),rgba(29,185,84,.02));border:1px solid var(--wf-brand-border);border-left:3px solid var(--wf-brand);border-radius:var(--wf-r-md)}
+.callout-label{font:700 8px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-brand);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.callout-label::before{content:'\25B8'}
+.callout-body{font:300 14px/1.72 var(--wf-sans);color:var(--wf-fg-muted)}
+.callout-body strong{font-weight:600;color:var(--wf-fg)}
+
+/* ── Config Blocks ── */
+.config-block{margin:48px 0;border-radius:var(--wf-r-md);overflow:hidden;border:1px solid var(--wf-border2);background:var(--wf-surface)}
+.cb-header{padding:11px 18px;background:rgba(255,255,255,.02);border-bottom:1px solid var(--wf-border);display:flex;align-items:center;gap:10px}
+.cb-label{font:700 9px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint)}
+.cb-dot{width:7px;height:7px;border-radius:50%;background:var(--wf-green)}
+.cb-body{padding:20px 22px;font:300 13px/1.7 var(--wf-mono);color:var(--wf-fg-muted);white-space:pre-wrap;overflow-x:auto}
+.cb-body .ck{color:var(--wf-brand)}.cb-body .cv{color:var(--wf-green)}.cb-body .cc{color:var(--wf-fg-faint)}
+
+/* ── FAQ Section ── */
+.faq-section{margin:52px 0}
+.faq-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--wf-border2)}
+.faq-head-title{font-family:var(--wf-sans);font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--wf-fg)}
+.faq-head-count{padding:3px 9px;border-radius:20px;font:700 9px/1 var(--wf-mono);background:var(--wf-brand-muted);color:var(--wf-brand);border:1px solid var(--wf-brand-border)}
+.faq-item{border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);overflow:hidden;margin-bottom:8px;transition:border-color .15s}
+.faq-item.open{border-color:var(--wf-border2)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font:500 15px/1.4 var(--wf-sans);color:var(--wf-fg-muted);gap:12px;transition:color .15s}
+.faq-q:hover,.faq-item.open .faq-q{color:var(--wf-fg)}
+.faq-toggle{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid var(--wf-border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--wf-fg-subtle);transition:transform .2s,background .15s}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--wf-brand-muted);border-color:var(--wf-brand-border);color:var(--wf-brand)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s var(--wf-ease),padding .2s}
+.faq-item.open .faq-a{max-height:500px;padding:0 20px 16px}
+.faq-a-inner{font:300 14px/1.75 var(--wf-sans);color:var(--wf-fg-muted)}
+.faq-a-inner strong{font-weight:600;color:var(--wf-fg)}
+.faq-schema-note{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font:300 9px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.faq-schema-note::before{content:'\25C8';color:rgba(29,185,84,.4);font-size:8px}
+
+/* ── Sidebar ── */
+.sb-sec{margin-bottom:36px}
+.sb-sec-title{font:700 9px/1 var(--wf-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 0;border-bottom:1px solid var(--wf-border);font-size:13px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .15s;text-decoration:none}
+.toc-item:hover,.toc-item.active{color:var(--wf-fg)}.toc-item.active{color:var(--wf-brand)}
+.toc-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}.toc-item.active .toc-dot{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);padding:12px}
+.stat-n{font:700 22px/1 var(--wf-mono);color:var(--wf-fg);margin-bottom:3px}
+.stat-l{font-size:10px;color:var(--wf-fg-subtle);letter-spacing:.04em}
+.agent-list{display:flex;flex-direction:column;gap:7px}
+.agent-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm)}
+.agent-swatch{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.agent-name{font:500 12px/1 var(--wf-sans);color:var(--wf-fg);flex:1}
+.agent-count{font:normal 10px/1 var(--wf-mono);color:var(--wf-fg-faint)}
+.series-nav{display:flex;flex-direction:column;gap:6px}
+.sn-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);text-decoration:none;transition:all .15s;cursor:pointer}
+.sn-item:hover{border-color:var(--wf-border2)}
+.sn-item.current{border-color:var(--wf-brand-border);background:var(--wf-brand-muted)}
+.sn-num{font:700 10px/1 var(--wf-mono);color:var(--wf-fg-faint);width:18px;flex-shrink:0}
+.sn-item.current .sn-num{color:var(--wf-brand)}
+.sn-title{font:400 11px/1.35 var(--wf-sans);color:var(--wf-fg-subtle);flex:1}
+.sn-item.current .sn-title{color:var(--wf-fg)}
+
+/* ── Author Section ── */
+.author-section{max-width:1280px;margin:0 auto;padding:52px 32px 0;border-top:1px solid var(--wf-border)}
+.author-inner{display:flex;align-items:start;gap:24px;padding-bottom:60px}
+.author-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--wf-brand),var(--wf-green));display:flex;align-items:center;justify-content:center;font-family:var(--wf-sans);font-size:26px;color:#fff;font-weight:700;flex-shrink:0}
+.author-info{flex:1}
+.author-name{font-family:var(--wf-sans);font-size:24px;font-weight:700;color:var(--wf-fg);margin-bottom:6px;letter-spacing:-.02em}
+.author-role{font:500 12px/1 var(--wf-sans);color:var(--wf-brand);letter-spacing:.04em;margin-bottom:10px}
+.author-bio{font-size:13px;color:var(--wf-fg-subtle);line-height:1.7;margin-bottom:14px}
+.author-links{display:flex;gap:8px}
+.author-link{padding:5px 12px;border-radius:20px;font:700 9px/1 var(--wf-mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--wf-border2);color:var(--wf-fg-subtle);text-decoration:none;transition:all .15s}
+.author-link:hover{color:var(--wf-fg);border-color:var(--wf-border3)}
+
+/* ── Series Footer Nav ── */
+.series-footer{margin:40px 0;display:flex;gap:16px;flex-wrap:wrap}
+.sf-link{padding:10px 18px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);background:var(--wf-surface);text-decoration:none;transition:all .15s;display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+.sf-link:hover{border-color:var(--wf-border2)}
+.sf-dir{font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-fg-faint)}
+.sf-title{font:500 13px/1.3 var(--wf-sans);color:var(--wf-fg-muted)}
+.sf-link:hover .sf-title{color:var(--wf-fg)}
+
+/* ── Footer ── */
+.footer-menu{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:52px 32px 36px}
+.fm-w{max-width:1280px;margin:0 auto}
+.fm-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--wf-border)}
+@media(max-width:900px){.fm-grid{grid-template-columns:1fr 1fr}}
+.fm-logo{font-family:var(--wf-sans);font-size:20px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}
+.fm-logo span{font-style:italic;color:var(--wf-brand)}
+.fm-tagline{font-size:13px;color:var(--wf-fg-subtle);line-height:1.65;max-width:220px}
+.fm-series-badge{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font:700 8px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.15);color:rgba(29,185,84,.6)}
+.fm-col-title{font:700 9px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-faint);margin-bottom:14px}
+.fm-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-col a{font-size:13px;color:var(--wf-fg-subtle);text-decoration:none;transition:color .15s}
+.fm-col a:hover{color:var(--wf-fg)}
+
+/* ── Final Footer Bar ── */
+.final-footer{background:var(--wf-bg);border-top:1px solid var(--wf-border);padding:14px 32px}
+.ff-w{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ff-legal{font:300 11px/1 var(--wf-mono);color:var(--wf-fg-faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ff-sep{width:1px;height:10px;background:var(--wf-fg-faint)}
+.ff-series{color:rgba(29,185,84,.4)}
+.ff-mcp{display:flex;align-items:center;gap:6px;flex-shrink:0;font:700 9px/1 var(--wf-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--wf-brand);padding:5px 14px;border:1px solid rgba(29,185,84,.2);border-radius:20px;background:rgba(29,185,84,.06)}
+
+/* ── Reveal Animation ── */
+.r{opacity:0;transform:translateY(22px);transition:opacity .65s var(--wf-ease),transform .65s var(--wf-ease)}
+.r.in{opacity:1;transform:none}
+
+/* ── Responsive: 768px single column ── */
+@media(max-width:768px){
+  .hero-w{gap:40px;padding:0 20px}
+  .article-grid{padding:40px 20px 60px;gap:40px}
+  .nav-w{padding:0 16px}
+  .nav-section{display:none}
+  .ps-inner{padding:0 16px}
+  .pm-inner{padding:16px}
+  .aa-body{grid-template-columns:1fr}
+  .fm-grid{grid-template-columns:1fr}
+  .ff-w{flex-direction:column;gap:8px}
+  .series-footer{flex-direction:column}
+  .author-inner{flex-direction:column;align-items:center;text-align:center}
+  .author-links{justify-content:center}
+  .hero-text{padding-bottom:48px}
+  h1{font-size:clamp(28px,7vw,48px)}
+  .pull-quote{padding:28px 24px}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<nav>
+  <div class="nav-w">
+    <a href="#" class="nav-logo"><span>IO</span> Platform</a>
+    <div class="nav-rule"></div>
+    <span class="nav-section">Commercial Real Estate</span>
+    <div class="nav-btns">
+      <button class="nbtn nbtn-ghost" id="pipe-btn" onclick="togglePipe()">Pipeline Map</button>
+      <button class="nbtn nbtn-live"><span class="live-dot"></span>18 Agents Live</button>
+    </div>
+  </div>
+</nav>
+
+<div id="pstrip">
+  <div class="ps-inner">
+    <div class="ps-label">Pipeline &middot; WF-01</div>
+    <div class="ps-feeds" id="ps-feeds"></div>
+    <div class="ps-arrow">&rarr;</div>
+    <div class="ps-result"><span class="live-dot"></span>78 Properties &middot; 1,816 Contacts &middot; 18 Agents</div>
+  </div>
+</div>
+
+<div id="pipemap">
+  <div class="pm-inner">
+    <div class="pm-title">ORCHESTRATION MAP <span>&mdash; Article 01 &middot; Windfield Real Estate Intelligent Operations Is Live</span></div>
+    <div class="pm-scan"></div>
+    <div class="pm-flow">
+      <div class="pm-node" style="border-color:var(--wf-brand-border)"><div class="pm-node-label">Source</div><div class="pm-node-name" style="color:var(--wf-brand)">Property ID</div><div class="pm-node-sub">Single input</div></div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Phase 1</div><div class="pm-node-name" style="color:var(--wf-green)">Enrichment</div><div class="pm-node-sub">12 specialists</div></div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.3)"><div class="pm-node-label">Phase 2</div><div class="pm-node-name" style="color:var(--wf-brand)">Targeting</div><div class="pm-node-sub">4 specialists</div></div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(232,160,0,.3)"><div class="pm-node-label">Phase 3</div><div class="pm-node-name" style="color:var(--wf-amber)">Market</div><div class="pm-node-sub">4 specialists</div></div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(225,29,72,.3)"><div class="pm-node-label">Phase 4</div><div class="pm-node-name" style="color:var(--wf-rose)">Outreach</div><div class="pm-node-sub">6 specialists</div></div>
+      <div class="pm-arr">&rarr;</div>
+      <div class="pm-node" style="border-color:rgba(29,185,84,.4)"><div class="pm-node-label">Output</div><div class="pm-node-name" style="color:#4ade80">Intelligence</div><div class="pm-node-sub">Full property loop</div></div>
+    </div>
+    <div class="pm-meta-row">
+      <div class="pm-meta-item"><span class="pm-meta-n">18</span> Agents</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">78</span> Properties</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">1,816</span> Contacts</div>
+      <div class="pm-meta-item"><span class="pm-meta-n">59</span> APB Agents</div>
+      <div class="pm-meta-item" style="margin-left:auto"><span style="color:var(--wf-green);font:700 9px/1 var(--wf-mono)">&bull; ACTIVE</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-w">
+    <div class="hero-text r">
+      <div class="hero-eyebrow">
+        <span class="eye-tag">IO Launch</span>
+        <span class="eye-divider"></span>
+        <span class="eye-series">Windfield Intelligence Series &middot; Article 01</span>
+      </div>
+      <h1>Windfield Real Estate <em>Intelligent Operations</em> Is Live</h1>
+      <p class="hero-deck">Ten years at Windfield Real Estate. The pivot from selling AI to using AI to sell commercial real estate. 18 agents, 78 properties, and the system that builds the system.</p>
+      <div class="hero-meta">
+        <div class="h-author"><div class="h-av">T</div><div><div class="h-name">Tommy Saunders</div><div class="h-role">Senior Sales &amp; Marketing Technology Strategist</div></div></div>
+        <div class="h-sep"></div>
+        <span class="h-date">Apr 16, 2026</span>
+        <span class="h-read">&middot; 10 min read</span>
+      </div>
+      <div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:4px;background:var(--wf-brand-muted);border:1px solid var(--wf-brand-border)">
+        <span style="font:700 8px/1 var(--wf-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-brand)">IO-WF-2026-001</span>
+        <span style="width:1px;height:10px;background:var(--wf-brand-border)"></span>
+        <span style="font:300 8px/1 var(--wf-mono);letter-spacing:.1em;color:#ffffff">IO LAUNCH &middot; A01 &middot; APR 2026</span>
+      </div>
+    </div>
+
+    <div class="hero-viz r" style="transition-delay:.15s">
+      <div class="hviz-inner" id="hviz1">
+        <div class="hv-grid"></div>
+        <div class="hv-glow"></div>
+        <div class="hv-scan"></div>
+        <div class="hv-orch"><div class="hv-orch-label">PIPELINE</div><div class="hv-orch-count">18</div><div class="hv-orch-sub">AGENTS</div></div>
+        <div class="hv-core" style="top:18%;left:22%"><div class="hv-core-circle" style="border-color:var(--c-tgt);color:var(--c-tgt)">TGT</div><div class="hv-core-name" style="color:var(--c-tgt)">Targeting</div><div class="hv-core-ct">4 agents</div></div>
+        <div class="hv-core" style="top:18%;left:72%"><div class="hv-core-circle" style="border-color:var(--c-enr);color:var(--c-enr)">ENR</div><div class="hv-core-name" style="color:var(--c-enr)">Enrichment</div><div class="hv-core-ct">12 agents</div></div>
+        <div class="hv-core" style="top:68%;left:18%"><div class="hv-core-circle" style="border-color:var(--c-mkt);color:var(--c-mkt)">MKT</div><div class="hv-core-name" style="color:var(--c-mkt)">Market</div><div class="hv-core-ct">4 agents</div></div>
+        <div class="hv-core" style="top:68%;left:76%"><div class="hv-core-circle" style="border-color:var(--c-out);color:var(--c-out)">OUT</div><div class="hv-core-name" style="color:var(--c-out)">Outreach</div><div class="hv-core-ct">6 agents</div></div>
+        <div class="hv-spec" style="top:10%;left:12%;background:var(--c-tgt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:8%;left:28%;background:var(--c-tgt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:14%;left:34%;background:var(--c-tgt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:22%;left:10%;background:var(--c-tgt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:8%;left:62%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:6%;left:74%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:10%;left:84%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:14%;left:90%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:22%;left:88%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:28%;left:84%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:20%;left:60%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:12%;left:68%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:26%;left:62%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:6%;left:80%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:16%;left:66%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:24%;left:92%;background:var(--c-enr);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:76%;left:10%;background:var(--c-mkt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:80%;left:22%;background:var(--c-mkt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:74%;left:30%;background:var(--c-mkt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:82%;left:14%;background:var(--c-mkt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:76%;left:66%;background:var(--c-out);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:78%;left:80%;background:var(--c-out);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:82%;left:72%;background:var(--c-out);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:74%;left:88%;background:var(--c-lin);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:80%;left:92%;background:var(--c-lin);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:86%;left:84%;background:var(--c-lin);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:84%;left:90%;background:var(--c-lin);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:78%;left:86%;background:var(--c-lin);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:88%;left:44%;background:var(--c-cnt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:90%;left:52%;background:var(--c-cnt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-spec" style="top:86%;left:58%;background:var(--c-cnt);transform:translate(-50%,-50%)"></div>
+        <div class="hv-status1">WINDFIELD IO &middot; 18-AGENT SYSTEM</div>
+        <div class="hv-badge1">IO-VIZ-01</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ARTICLE GRID -->
+<div class="article-grid">
+  <article class="article-body">
+    <div class="body">
+
+      <div class="r" id="s-lede">
+        <p class="lede">I have had my real estate license under Windfield Real Estate for almost ten years. That is a long time. Long enough to watch how a commercial real estate brokerage actually operates &mdash; the manual comp pulls, the one-at-a-time outreach sequences, the market analysis that takes a day to produce and still misses things, the prospect research that is always incomplete because there are only so many hours in a day and the good brokers spend them on relationships, not data entry.</p>
+      </div>
+
+      <div class="r" id="s-idea">
+        <h2 class="sh"><span class="sn">01</span>The Original Idea</h2>
+        <p>I started building what would become Intelligent Operations with a much bigger idea. I wanted to build an AI operating system for commercial real estate &mdash; one with symmetric incentives, where the system earned value only when it created value. An agentic platform that could serve any brokerage, any market, any deal type. A product company.</p>
+        <p>I soon realized how impossible that would be to build and sell at scale. The integration requirements alone were staggering &mdash; every brokerage runs different tools, different CRMs, different workflows. The sales cycle for enterprise CRE technology is measured in years, not months. And the trust gap between &ldquo;AI can help your brokerage&rdquo; and &ldquo;here is a system I will bet my career on&rdquo; is enormous.</p>
+        <p>So I pivoted. I decided to build the same system &mdash; but just do it for me. For my daily operations. For my work at Windfield Real Estate. <strong>Not to sell AI. To use AI to sell commercial real estate better than anybody else in Kansas City.</strong></p>
+      </div>
+
+      <div class="r">
+        <div class="pull-quote">
+          <p class="pq-text">&ldquo;I am not trying to sell AI. I am trying to use AI to <em>sell real estate</em>.&rdquo;</p>
+          <div class="pq-attr">Tommy Saunders &middot; Windfield Real Estate</div>
+        </div>
+      </div>
+
+      <div class="r" id="s-built">
+        <h2 class="sh"><span class="sn">02</span>What We Built</h2>
+        <p>The Windfield Real Estate Intelligent Operations platform is an 18-agent AI pipeline purpose-built for commercial real estate intelligence. From a single property ID, the system produces everything a broker needs to take a listing to market with full intelligence coverage:</p>
+        <p><strong>CCIM-standard market analysis.</strong> Ideal prospect profile with Clay search keywords. LinkedIn advertising campaign brief. 4-touch email outreach sequence. LinkedIn connection requests and follow-up messages. Property brochure. 5-post 14-day LinkedIn content campaign. A 700&ndash;900 word thought leadership article anchored to the property&rsquo;s market position.</p>
+        <p>One property ID in. Full intelligence package out. That is what 18 agents coordinated through a shared configuration produce.</p>
+      </div>
+
+      <div class="r">
+        <div class="agent-arch">
+          <div class="aa-header"><span class="aa-title">Agent Architecture &mdash; Six Operational Domains</span><span style="font:300 10px/1 var(--wf-mono);color:var(--wf-fg-faint);margin-left:auto">18 agents total</span></div>
+          <div class="aa-body">
+            <div class="aa-card"><div class="aa-card-icon" style="background:var(--c-tgt)"></div><div class="aa-card-title">Targeting Agent</div><div class="aa-card-desc">Identifies ideal prospects from coordinates, zoning data, ownership records, and Clay enrichment keywords.</div><div class="aa-card-meta">4 Specialists</div></div>
+            <div class="aa-card"><div class="aa-card-icon" style="background:var(--c-enr)"></div><div class="aa-card-title">Enrichment Agent</div><div class="aa-card-desc">Transforms raw property data into investment-grade profiles with marketing copy, tenant narratives, financial projections.</div><div class="aa-card-meta">12 Specialists</div></div>
+            <div class="aa-card"><div class="aa-card-icon" style="background:var(--c-mkt)"></div><div class="aa-card-title">Market Analysis Agent</div><div class="aa-card-desc">CCIM-standard comp analysis, absorption tracking, vacancy monitoring, and submarket trend detection.</div><div class="aa-card-meta">4 Specialists</div></div>
+            <div class="aa-card"><div class="aa-card-icon" style="background:var(--c-out)"></div><div class="aa-card-title">Outreach Agent</div><div class="aa-card-desc">Generates personalized 4-touch email sequences calibrated to prospect type, deal stage, and property characteristics.</div><div class="aa-card-meta">6 Specialists</div></div>
+            <div class="aa-card"><div class="aa-card-icon" style="background:var(--c-lin)"></div><div class="aa-card-title">LinkedIn Agent</div><div class="aa-card-desc">Connection requests, advertising briefs, content campaigns, InMail sequences, and engagement tracking.</div><div class="aa-card-meta">5 Specialists</div></div>
+            <div class="aa-card"><div class="aa-card-icon" style="background:var(--c-cnt)"></div><div class="aa-card-title">Content Agent</div><div class="aa-card-desc">Property brochures, thought leadership articles, and 14-day LinkedIn content campaigns anchored to market position.</div><div class="aa-card-meta">3 Specialists</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="r">
+        <p>And then there is the system behind the system. The IO Agent Profile Builder &mdash; <strong>59 builder agents</strong> that construct, validate, safety-gate, and deploy new operational agents through an 8-phase structured pipeline. Every one of the 18 operational agents was built by the APB. Every agent has a profile, a test suite, a safety gate, and a deployment record.</p>
+      </div>
+
+      <div class="r">
+        <div class="callout">
+          <div class="callout-label">The System That Builds the System</div>
+          <div class="callout-body"><strong>59 APB agents</strong> organized across 8 phases: Discovery, Architecture, Implementation, Validation, Safety, Documentation, Deployment, and Monitoring. The first operating system that documents and governs its own construction. Every operational agent has a build record, a test suite, and a safety gate &mdash; all produced by the APB pipeline.</div>
+        </div>
+      </div>
+
+      <div class="r" id="s-hard">
+        <h2 class="sh"><span class="sn">03</span>The Hard Part Nobody Talks About</h2>
+        <p>Here is something I will tell you that most people building AI products will not: this system has not run a full production property loop yet. The agents are deployed and the architecture is correct, but we have not loaded the API credits to run the pipeline against real KC properties at scale.</p>
+        <p>I am telling you this because honesty about where a system actually is matters more than marketing claims about where it could be. The architecture is sound. The agents are built. The configs are written. But the compound reliability problem is real, and I want to show you the math.</p>
+        <p><strong>The compound reliability problem:</strong> if each step in an 18-step pipeline operates at 85% reliability, the end-to-end reliability is not 85%. It is 0.85 raised to the 18th power. That is 5.4%. A system that works 85% of the time at each step fails 95% of the time across the full pipeline.</p>
+      </div>
+
+      <div class="r">
+        <div class="callout">
+          <div class="callout-label">Compound Reliability Math</div>
+          <div class="callout-body"><strong>85% per-step &times; 10 steps = 20% end-to-end</strong> (0.85<sup>10</sup> = 0.197)<br><strong>85% per-step &times; 18 steps = 5.4% end-to-end</strong> (0.85<sup>18</sup> = 0.054)<br><strong>Need 99.7% per-step for 95% end-to-end across 18 steps</strong><br><br>This is why most multi-agent AI systems fail in production. The math is not forgiving. Every step that is not near-perfect compounds into system-level failure.</div>
+        </div>
+      </div>
+
+      <div class="r" id="s-outside">
+        <h2 class="sh"><span class="sn">04</span>Building from the Outside In</h2>
+        <p>The solution to the compound reliability problem is not to build faster. It is to build from the outside in. Three layers:</p>
+        <p><strong>Demonstrate first.</strong> Run each agent with a human reviewing every output. Measure accuracy. Identify failure modes. Build the evidence base for what works and what does not.</p>
+        <p><strong>Observe second.</strong> Once an agent demonstrates consistent accuracy, move it to monitored autonomy. It runs independently but every output is logged, scored, and reviewed. Regressions trigger immediate reversion to human review.</p>
+        <p><strong>Hand over control where evidence supports it.</strong> Only agents with demonstrated, measured, sustained reliability earn full autonomy. Not assumed reliability. Measured reliability.</p>
+      </div>
+
+      <div class="r">
+        <div class="pull-quote">
+          <p class="pq-text">&ldquo;The way to build a 100% reliable autonomous system is to start by <em>not automating anything</em>.&rdquo;</p>
+          <div class="pq-attr">Tommy Saunders &middot; Intelligent Operations AI</div>
+        </div>
+      </div>
+
+      <div class="r" id="s-means">
+        <h2 class="sh"><span class="sn">05</span>What This Means for Windfield Real Estate</h2>
+        <p>Andrew Danner and Ben Nelson CCIM are going to be the best-served brokers in Kansas City. That is not hyperbole &mdash; it is the direct consequence of deploying 18 agents against every property in their portfolio.</p>
+        <p>Every listing gets intelligence. Not a static flyer and a hope that the right buyer sees it. A CCIM-standard market analysis, a targeted prospect profile, a multi-channel outreach campaign, and a content strategy &mdash; all generated from the same property data, all coordinated, all current.</p>
+        <p>Every prospect gets research. Not a name and a phone number. A profile with company size, recent transactions, portfolio composition, investment thesis, and the specific messaging angle most likely to generate a conversation.</p>
+        <p><strong>Every article reflects real Kansas City market intelligence.</strong> Not generic CRE content. Market-specific, property-specific, data-anchored thought leadership that positions Windfield as the brokerage that knows its market better than anyone.</p>
+      </div>
+
+      <div class="r" id="s-gratitude">
+        <h2 class="sh"><span class="sn">06</span>Gratitude</h2>
+        <p><strong>Andrew Danner.</strong> You believed in this before it was finished. You gave direction and trust in equal measure. The commissions have not been earned yet, but the architecture to earn them is built. That belief &mdash; investing in someone before the returns are visible &mdash; is rare. I do not take it for granted.</p>
+        <p><strong>Alex Danner.</strong> The resources, the grace, and the trust to let someone build something that did not exist yet inside your company. That takes a kind of vision most people do not have.</p>
+        <p><strong>My wife.</strong> The time and space to create. The nights and weekends. The patience when I was building something I could not fully explain yet. None of this exists without that foundation.</p>
+        <p><strong>Matthew Danner.</strong> I have said it before and I will say it again: Matthew Danner could make a billion dollars if he wanted to. The talent is there. The instincts are there. The drive is there. I am grateful to work alongside someone with that kind of potential.</p>
+      </div>
+
+      <div class="r" id="s-next">
+        <h2 class="sh"><span class="sn">07</span>What Comes Next</h2>
+        <p>The platform is live. The architecture is public. The first property loops are next.</p>
+        <p>We will load the API credits, run the first full pipeline against a real Kansas City property, and publish every output &mdash; the market analysis, the prospect profile, the outreach sequence, the content campaign. All of it. Transparent. Documented. Measurable.</p>
+        <p>We are also open-sourcing aspects of the codebase. The agent profile builder architecture. The config-loader pattern. The compound reliability framework. If this approach works, it should not be locked inside one brokerage.</p>
+        <p>The math is brutal. The solution is patience, instrumentation, and the discipline to build from evidence.</p>
+        <p><strong>We built it. Now we run it.</strong></p>
+      </div>
+
+      <!-- FAQ -->
+      <div class="r" id="s-faq">
+        <div class="faq-section">
+          <div class="faq-head"><h2 class="faq-head-title">Frequently Asked Questions</h2><span class="faq-head-count">5 Questions</span></div>
+
+          <div class="faq-item open">
+            <div class="faq-q" onclick="toggleFaq(this)">What is Windfield Real Estate Intelligent Operations?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">Windfield Real Estate Intelligent Operations is an <strong>18-agent AI pipeline</strong> purpose-built for commercial real estate intelligence. From a single property ID, the system produces CCIM-standard market analysis, ideal prospect profiles, LinkedIn advertising briefs, email outreach sequences, property brochures, content campaigns, and thought leadership articles &mdash; all coordinated through a shared configuration.<div class="faq-schema-note">Structured as FAQ schema (JSON-LD) for AEO indexing</div></div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How many AI agents does Windfield use?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner"><strong>18 operational agents</strong> organized across six domains: Targeting (4), Enrichment (12), Market Analysis (4), Outreach (6), LinkedIn (5), and Content (3). Additionally, <strong>59 APB (Agent Profile Builder) agents</strong> construct, validate, safety-gate, and deploy new agents through an 8-phase structured pipeline.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What does the system produce from one property?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">From a single property ID: <strong>CCIM-standard market analysis</strong>, ideal prospect profile with Clay search keywords, LinkedIn advertising campaign brief, 4-touch email outreach sequence, LinkedIn connection requests and follow-up messages, property brochure, 5-post 14-day LinkedIn content campaign, and a 700&ndash;900 word thought leadership article.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">What is the compound reliability problem?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner">The compound reliability problem is the mathematical reality of multi-step AI pipelines. At 85% reliability per step, an 18-step pipeline has only <strong>5.4% end-to-end reliability</strong> (0.85<sup>18</sup> = 0.054). To achieve 95% end-to-end reliability across 18 steps, each step must operate at 99.7% reliability. This is why careful instrumentation and outside-in architecture are essential.</div></div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Is the system fully autonomous?<span class="faq-toggle">+</span></div>
+            <div class="faq-a"><div class="faq-a-inner"><strong>No, and that is by design.</strong> Windfield IO uses an outside-in architecture: demonstrate first, observe second, hand over control where evidence supports it. The way to build a 100% reliable autonomous system is to start by not automating anything. Each agent earns autonomy through measured performance, not assumptions.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <aside class="sidebar">
+    <div class="sb-sec r">
+      <div class="sb-sec-title">In This Article</div>
+      <ul class="toc-list" id="toc-list">
+        <li class="toc-item active" onclick="scrollToSection('s-idea')"><span class="toc-dot"></span>The Original Idea</li>
+        <li class="toc-item" onclick="scrollToSection('s-built')"><span class="toc-dot"></span>What We Built</li>
+        <li class="toc-item" onclick="scrollToSection('s-hard')"><span class="toc-dot"></span>The Hard Part</li>
+        <li class="toc-item" onclick="scrollToSection('s-outside')"><span class="toc-dot"></span>Outside In</li>
+        <li class="toc-item" onclick="scrollToSection('s-means')"><span class="toc-dot"></span>What This Means</li>
+        <li class="toc-item" onclick="scrollToSection('s-gratitude')"><span class="toc-dot"></span>Gratitude</li>
+        <li class="toc-item" onclick="scrollToSection('s-next')"><span class="toc-dot"></span>What Comes Next</li>
+        <li class="toc-item" onclick="scrollToSection('s-faq')"><span class="toc-dot"></span>FAQs</li>
+      </ul>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Agent Domains</div>
+      <div class="agent-list">
+        <div class="agent-item"><div class="agent-swatch" style="background:var(--c-tgt)"></div><div class="agent-name">Targeting</div><div class="agent-count">4</div></div>
+        <div class="agent-item"><div class="agent-swatch" style="background:var(--c-enr)"></div><div class="agent-name">Enrichment</div><div class="agent-count">12</div></div>
+        <div class="agent-item"><div class="agent-swatch" style="background:var(--c-mkt)"></div><div class="agent-name">Market Analysis</div><div class="agent-count">4</div></div>
+        <div class="agent-item"><div class="agent-swatch" style="background:var(--c-out)"></div><div class="agent-name">Outreach</div><div class="agent-count">6</div></div>
+        <div class="agent-item"><div class="agent-swatch" style="background:var(--c-lin)"></div><div class="agent-name">LinkedIn</div><div class="agent-count">5</div></div>
+        <div class="agent-item"><div class="agent-swatch" style="background:var(--c-cnt)"></div><div class="agent-name">Content</div><div class="agent-count">3</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Pipeline Stats</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" style="color:var(--wf-brand)">18</div><div class="stat-l">Active agents</div></div>
+        <div class="stat-card"><div class="stat-n">78</div><div class="stat-l">Properties</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:var(--wf-green)">1,816</div><div class="stat-l">Contacts</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:var(--wf-amber)">59</div><div class="stat-l">APB Agents</div></div>
+      </div>
+    </div>
+    <div class="sb-sec r">
+      <div class="sb-sec-title">Article Series</div>
+      <div class="series-nav">
+        <a class="sn-item current"><span class="sn-num">01</span><span class="sn-title">IO Is Live</span></a>
+        <a class="sn-item" href="wf-article-02.html"><span class="sn-num">02</span><span class="sn-title">The Math</span></a>
+        <a class="sn-item" href="wf-article-03.html"><span class="sn-num">03</span><span class="sn-title">18 Agents One Property</span></a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="author-section r">
+  <div class="author-inner">
+    <div class="author-av">T</div>
+    <div class="author-info">
+      <div class="author-name">Tommy Saunders</div>
+      <div class="author-role">Senior Sales &amp; Marketing Technology Strategist, Windfield Real Estate</div>
+      <div class="author-bio">Senior Sales &amp; Marketing Technology Strategist at Windfield Real Estate and founder of Intelligent Operations AI. Building the IO Agentic Operating System &mdash; production-grade agent infrastructure for commercial real estate. 18 agents. 78 properties. One system.</div>
+      <div class="author-links"><a href="#" class="author-link">LinkedIn</a><a href="#" class="author-link">IO Platform</a><a href="#" class="author-link">Windfield</a></div>
+    </div>
+  </div>
+</div>
+
+<div style="max-width:1280px;margin:0 auto;padding:0 32px 40px">
+  <div class="series-footer">
+    <a class="sf-link" href="wf-article-02.html" style="border-color:rgba(29,185,84,.2)"><div><div class="sf-dir" style="color:var(--wf-green)">Next Article &rarr;</div><div class="sf-title">The Math That Will Kill Your AI Agent Project</div></div></a>
+    <a class="sf-link" href="wf-article-03.html" style="border-color:rgba(232,160,0,.2)"><div><div class="sf-dir" style="color:var(--wf-amber)">Article 03 &rarr;</div><div class="sf-title">18 Agents, One Property: What the Full Intelligence Loop Produces</div></div></a>
+  </div>
+</div>
+
+<footer class="footer-menu">
+  <div class="fm-w">
+    <div class="fm-grid">
+      <div><div class="fm-logo"><span>IO</span> Platform</div><div class="fm-tagline">AI-native operations for commercial real estate. Built for brokers who need speed without sacrificing judgment.</div><div class="fm-series-badge"><span class="live-dot"></span>Windfield IO Launch Series</div></div>
+      <div class="fm-col"><div class="fm-col-title">Platform</div><ul><li><a href="#">Property Hub</a></li><li><a href="#">Agent Dashboard</a></li><li><a href="#">Pipeline Runner</a></li><li><a href="#">Config Manager</a></li></ul></div>
+      <div class="fm-col"><div class="fm-col-title">Operations</div><ul><li><a href="#">Targeting</a></li><li><a href="#">Enrichment</a></li><li><a href="#">Market Analysis</a></li><li><a href="#">Outreach</a></li></ul></div>
+      <div class="fm-col"><div class="fm-col-title">Resources</div><ul><li><a href="#">Article Series</a></li><li><a href="#">Market Reports</a></li><li><a href="#">API Docs</a></li><li><a href="#">Status</a></li></ul></div>
+    </div>
+  </div>
+</footer>
+
+<div class="final-footer">
+  <div class="ff-w">
+    <div class="ff-legal"><span>&copy; 2026 Windfield Real Estate, LLC</span><span class="ff-sep"></span><span>Intelligent Operations AI</span><span class="ff-sep"></span><span class="ff-series">Windfield IO Launch Series</span><span class="ff-sep"></span><span>IO-WF-2026-001 &middot; A01</span></div>
+    <div class="ff-mcp"><span class="live-dot"></span>18 Agents Active</div>
+  </div>
+</div>
+
+<script>
+var FEEDS=[{n:'Targeting',c:'#1db954',ct:4},{n:'Enrichment',c:'#1db954',ct:12},{n:'Market',c:'#e8a000',ct:4},{n:'Outreach',c:'#e11d48',ct:6},{n:'LinkedIn',c:'#0891b2',ct:5},{n:'Content',c:'#8b5cf6',ct:3}];
+var pf=document.getElementById('ps-feeds');
+FEEDS.forEach(function(f,i){var chip=document.createElement('div');chip.className='ps-chip';chip.style.background=f.c+'14';chip.style.border='1px solid '+f.c+'28';chip.style.color=f.c;var dot=document.createElement('div');dot.className='ps-dot';dot.style.background=f.c;chip.appendChild(dot);chip.appendChild(document.createTextNode(f.n+' \u00b7 '+f.ct));pf.appendChild(chip);if(i<FEEDS.length-1){var a=document.createElement('div');a.className='ps-arrow';a.textContent='\u00b7';pf.appendChild(a)}});
+
+function togglePipe(){var s=document.getElementById('pstrip'),m=document.getElementById('pipemap'),b=document.getElementById('pipe-btn');if(m.classList.contains('open')){m.classList.remove('open');s.classList.remove('open');b.classList.remove('on')}else if(s.classList.contains('open')){s.classList.remove('open');m.classList.add('open');b.classList.add('on')}else{s.classList.add('open');b.classList.add('on')}}
+
+function toggleFaq(q){var it=q.parentElement,w=it.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(function(i){i.classList.remove('open');i.querySelector('.faq-toggle').textContent='+'});if(!w){it.classList.add('open');q.querySelector('.faq-toggle').textContent='\u00d7'}}
+
+window.addEventListener('scroll',function(){var d=document.documentElement;document.getElementById('prog').style.width=((window.scrollY/(d.scrollHeight-d.clientHeight))*100)+'%'},{passive:true});
+
+var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('in')})},{threshold:.05,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.r').forEach(function(el){ro.observe(el)});
+
+var sections=['s-idea','s-built','s-hard','s-outside','s-means','s-gratitude','s-next','s-faq'];
+var tocItems=document.querySelectorAll('.toc-item');
+var tocObs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var idx=sections.indexOf(en.target.id);if(idx>-1){tocItems.forEach(function(t){t.classList.remove('active')});if(tocItems[idx])tocItems[idx].classList.add('active')}}})},{threshold:.3});
+sections.forEach(function(s){var el=document.getElementById(s);if(el)tocObs.observe(el)});
+
+function scrollToSection(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+</script>
+</body>
+</html>
