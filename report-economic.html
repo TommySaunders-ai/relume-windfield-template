@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windfield IO — Economic Impact Model</title>
+<meta name="description" content="The unit economics and 36-month projection for Windfield Dual-Mode MCP IO — $286K build, 22.47x LTV:CAC, $22.7M Base 3-year net contribution.">
+<meta name="theme-color" content="#09090b">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400;1,14..32,500;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===================================================================
+   WINDFIELD IO DESIGN TOKENS
+   =================================================================== */
+:root {
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+
+  --wf-blue: #4589FF;
+  --wf-teal: #08BDBA;
+  --wf-green: #42BE65;
+  --wf-red: #E85D4A;
+  --wf-purple: #BE95FF;
+  --wf-orange: #FF832B;
+
+  --wf-r-sm: 6px;
+  --wf-r-md: 8px;
+  --wf-r-lg: 12px;
+
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+
+  /* Derived brand shades */
+  --brand-lt: #3dd576;
+  --brand-dim: rgba(29,185,84,0.12);
+  --brand-glow: rgba(29,185,84,0.18);
+  --purple-dim: rgba(190,149,255,0.12);
+  --purple-border: rgba(190,149,255,0.28);
+  --amber: #e8a000;
+  --amber-lt: #fcd34d;
+  --amber-dim: rgba(232,160,0,0.12);
+  --rose: #e11d48;
+  --rose-dim: rgba(225,29,72,0.12);
+  --cyan: #0891b2;
+  --cyan-lt: #22d3ee;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0 }
+html { font-size: 16px; scroll-behavior: smooth; scroll-padding-top: 72px }
+body { background: var(--wf-bg); color: var(--wf-fg); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; line-height: 1.7 }
+a { color: inherit; text-decoration: none }
+code { font-family: var(--font-mono); font-size: .88em; color: var(--wf-fg-muted); background: var(--wf-bg-elevated); padding: 2px 6px; border-radius: 3px; border: 1px solid var(--wf-border-subtle) }
+::selection { background: var(--brand-dim); color: var(--wf-fg) }
+
+/* --- TOPBAR -------------------------------------------------------- */
+.topbar { position: fixed; top: 0; left: 0; right: 0; height: 56px; background: rgba(9,9,11,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--wf-border-subtle); z-index: 100; display: flex; align-items: center; padding: 0 32px }
+.tb-brand { display: flex; align-items: center; gap: 14px }
+.tb-mark { display: flex; align-items: baseline; gap: 1px }
+.tb-mark-w { font: 800 18px/1 var(--font-sans); letter-spacing: -.04em; color: var(--wf-brand); text-transform: uppercase }
+.tb-mark-re { font: 800 18px/1 var(--font-sans); letter-spacing: -.04em; color: var(--wf-fg); text-transform: uppercase; margin-left: 4px }
+.tb-mark-sep { width: 1px; height: 18px; background: var(--wf-border-strong); margin: 0 14px }
+.tb-meta { display: flex; flex-direction: column; gap: 2px }
+.tb-meta-k { font: 700 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-fg-subtle) }
+.tb-meta-v { font: 500 12px/1 var(--font-sans); color: var(--wf-fg) }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 18px }
+.tb-conf { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; background: var(--purple-dim); border: 1px solid var(--purple-border); border-radius: 14px; font: 700 9px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--wf-purple) }
+.tb-conf::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--wf-purple); box-shadow: 0 0 8px rgba(190,149,255,0.4) }
+.tb-date { font: 400 12px/1 var(--font-mono); color: var(--wf-fg-subtle) }
+
+/* --- LAYOUT -------------------------------------------------------- */
+.page { max-width: 1440px; margin: 0 auto; padding: 56px 0 0 }
+.shell { display: grid; grid-template-columns: 260px 1fr; gap: 48px; padding: 0 32px; position: relative }
+@media(max-width:1024px) { .shell { grid-template-columns: 1fr; gap: 0 } }
+
+/* --- TOC ----------------------------------------------------------- */
+.toc { position: sticky; top: 72px; align-self: start; max-height: calc(100vh - 88px); overflow-y: auto; padding: 24px 0 48px; scrollbar-width: thin; scrollbar-color: var(--wf-border-strong) transparent }
+.toc::-webkit-scrollbar { width: 4px }
+.toc::-webkit-scrollbar-thumb { background: var(--wf-border-strong); border-radius: 2px }
+@media(max-width:1024px) { .toc { display: none } }
+.toc-head { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--wf-border-subtle) }
+.toc-head-n { font: 700 10px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-brand) }
+.toc-head-l { font: 400 10px/1 var(--font-mono); color: var(--wf-fg-subtle); margin-left: auto }
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 0 }
+.toc-item { padding: 9px 12px 9px 14px; font-size: 12.5px; color: var(--wf-fg-subtle); cursor: pointer; display: flex; align-items: flex-start; gap: 10px; transition: all var(--wf-dur) var(--wf-ease); border-left: 2px solid transparent; line-height: 1.45 }
+.toc-item:hover { color: var(--wf-fg); border-left-color: var(--wf-border-strong) }
+.toc-item.active { color: var(--wf-fg); border-left-color: var(--wf-brand); background: linear-gradient(90deg, var(--brand-dim) 0%, transparent 100%) }
+.toc-num { font: 700 9px/1.4 var(--font-mono); color: var(--wf-fg-faint); flex-shrink: 0; width: 18px; padding-top: 2px }
+.toc-item.active .toc-num { color: var(--wf-brand) }
+
+/* --- MAIN ---------------------------------------------------------- */
+.main { min-width: 0; max-width: 960px; padding-bottom: 120px }
+
+/* --- HERO ---------------------------------------------------------- */
+.hero { position: relative; padding: 56px 0 72px; border-bottom: 1px solid var(--wf-border-subtle) }
+.hero-bg { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 72% 60% at 88% 20%, rgba(29,185,84,0.09) 0%, transparent 60%), radial-gradient(ellipse 45% 50% at 8% 88%, rgba(190,149,255,0.05) 0%, transparent 60%); z-index: 0 }
+.hero-grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(var(--wf-border-subtle) 1px, transparent 1px), linear-gradient(90deg, var(--wf-border-subtle) 1px, transparent 1px); background-size: 52px 52px; mask-image: radial-gradient(ellipse 70% 100% at 50% 0%, black 30%, transparent 100%); z-index: 0; opacity: .6 }
+.hero-inner { position: relative; z-index: 1 }
+.hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; flex-wrap: wrap }
+.eye-tag { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; background: var(--brand-dim); border: 1px solid var(--wf-brand-border); border-radius: var(--wf-r-sm); font: 700 10px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--brand-lt) }
+.eye-tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--wf-brand); box-shadow: 0 0 6px var(--brand-glow) }
+.eye-tag.purple { background: var(--purple-dim); border-color: var(--purple-border); color: var(--wf-purple) }
+.eye-tag.purple::before { background: var(--wf-purple); box-shadow: 0 0 6px rgba(190,149,255,0.4) }
+.eye-div { width: 16px; height: 1px; background: var(--wf-fg-faint) }
+.eye-sub { font: 600 10px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--wf-fg-subtle) }
+
+h1.hero-h { font-family: var(--font-sans); font-size: clamp(40px,5.4vw,72px); font-weight: 700; line-height: 1.02; letter-spacing: -.035em; color: var(--wf-fg); margin-bottom: 20px }
+h1.hero-h em { font-style: italic; color: var(--wf-brand); font-weight: 600 }
+.hero-deck { font-size: 18px; line-height: 1.65; color: var(--wf-fg-muted); max-width: 680px; margin-bottom: 36px; font-weight: 300 }
+.hero-meta { display: flex; align-items: center; gap: 20px; padding: 18px 0; border-top: 1px solid var(--wf-border); border-bottom: 1px solid var(--wf-border); flex-wrap: wrap }
+.hm-block { display: flex; flex-direction: column; gap: 4px }
+.hm-k { font: 700 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-fg-subtle) }
+.hm-v { font: 500 13px/1.3 var(--font-sans); color: var(--wf-fg) }
+.hm-sep { width: 1px; height: 32px; background: var(--wf-border) }
+
+.hero-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin-top: 40px; border-top: 1px solid var(--wf-border-subtle); border-bottom: 1px solid var(--wf-border-subtle) }
+@media(max-width:640px) { .hero-stats { grid-template-columns: repeat(2,1fr) } }
+.hs { padding: 26px 22px; border-right: 1px solid var(--wf-border-subtle); position: relative }
+.hs:last-child { border-right: none }
+@media(max-width:640px) { .hs:nth-child(2) { border-right: none } .hs:nth-child(1),.hs:nth-child(2) { border-bottom: 1px solid var(--wf-border-subtle) } }
+.hs-sub { font: 700 9px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--wf-brand); margin-bottom: 12px }
+.hs-n { font: 600 38px/1 var(--font-sans); color: var(--wf-fg); letter-spacing: -.02em; margin-bottom: 8px }
+.hs-n em { font-style: italic; color: var(--wf-brand); font-weight: 400 }
+.hs-l { font: 400 11px/1.4 var(--font-mono); color: var(--wf-fg-subtle); letter-spacing: .04em }
+
+/* --- SECTION ------------------------------------------------------- */
+.sec { padding: 72px 0; border-bottom: 1px solid var(--wf-border-subtle); scroll-margin-top: 72px }
+.sec-head { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 28px }
+.sec-num { font: 700 11px/1 var(--font-mono); letter-spacing: .14em; color: var(--wf-brand); padding-top: 6px; flex-shrink: 0; width: 32px }
+.sec-head-text { flex: 1 }
+.sec-kicker { font: 700 10px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-fg-subtle); margin-bottom: 10px }
+h2.sec-h { font-family: var(--font-sans); font-size: clamp(28px,3.2vw,40px); font-weight: 600; line-height: 1.1; letter-spacing: -.02em; color: var(--wf-fg); margin-bottom: 14px }
+h2.sec-h em { font-style: italic; color: var(--wf-brand); font-weight: 500 }
+.sec-deck { font-size: 16px; line-height: 1.7; color: var(--wf-fg-muted); max-width: 720px; font-weight: 300 }
+
+.prose p { font-size: 15.5px; line-height: 1.75; color: var(--wf-fg-muted); margin-bottom: 18px; font-weight: 300 }
+.prose p strong { font-weight: 500; color: var(--wf-fg) }
+.prose p em { font-style: italic; color: var(--brand-lt) }
+
+/* --- PULL QUOTE ---------------------------------------------------- */
+.pq { margin: 40px 0; padding: 28px 32px; border-left: 3px solid var(--wf-brand); background: linear-gradient(90deg, var(--brand-dim) 0%, transparent 100%); border-radius: 0 var(--wf-r-md) var(--wf-r-md) 0 }
+.pq-text { font-family: var(--font-sans); font-size: 22px; font-weight: 400; line-height: 1.45; color: var(--wf-fg); font-style: italic; letter-spacing: -.01em; margin-bottom: 14px }
+.pq-text em { font-style: normal; color: var(--brand-lt) }
+.pq-attr { font: 500 11px/1 var(--font-mono); letter-spacing: .1em; color: var(--wf-fg-subtle); text-transform: uppercase }
+
+/* --- THESIS CARDS -------------------------------------------------- */
+.thesis-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin: 28px 0 }
+@media(max-width:768px) { .thesis-grid { grid-template-columns: 1fr } }
+.thesis-card { background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); padding: 24px }
+.thesis-card.accent { border-color: var(--wf-brand-border-strong); background: linear-gradient(135deg, var(--brand-dim) 0%, var(--wf-bg-elevated) 60%) }
+.th-k { font: 700 10px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-brand); margin-bottom: 14px }
+.th-h { font-family: var(--font-sans); font-size: 20px; font-weight: 600; color: var(--wf-fg); letter-spacing: -.015em; line-height: 1.3; margin-bottom: 10px }
+.th-h em { font-style: italic; color: var(--wf-brand); font-weight: 500 }
+.th-t { font: 300 13.5px/1.7 var(--font-sans); color: var(--wf-fg-muted) }
+.th-t strong { font-weight: 500; color: var(--wf-fg) }
+
+/* --- WATERFALL ----------------------------------------------------- */
+.waterfall { background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); padding: 28px; margin: 28px 0 }
+.wf-head { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 16px; margin-bottom: 18px; border-bottom: 1px solid var(--wf-border-subtle); flex-wrap: wrap; gap: 12px }
+.wf-title { font-family: var(--font-sans); font-size: 18px; font-weight: 600; color: var(--wf-fg) }
+.wf-total { font: 700 11px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--wf-brand) }
+.wf-total em { font-style: normal; font-family: var(--font-sans); font-size: 24px; color: var(--wf-fg); letter-spacing: -.01em; margin-left: 6px; font-weight: 600 }
+.wf-row { display: grid; grid-template-columns: 180px 1fr 70px 90px; gap: 14px; align-items: center; padding: 9px 0; font-size: 13px }
+@media(max-width:640px) { .wf-row { grid-template-columns: 1fr 60px; gap: 8px } .wf-row .wf-bar-wrap,.wf-row .wf-pct { display: none } }
+.wf-name { font: 400 13px/1.3 var(--font-sans); color: var(--wf-fg-muted) }
+.wf-name em { display: block; color: var(--wf-fg-subtle); font-style: normal; font-size: 11px; font-weight: 300; margin-top: 2px }
+.wf-bar-wrap { height: 18px; background: var(--wf-bg); border-radius: 2px; overflow: hidden; border: 1px solid var(--wf-border-subtle) }
+.wf-bar { height: 100%; background: linear-gradient(90deg, var(--wf-brand) 0%, var(--brand-lt) 100%) }
+.wf-bar.minor { background: linear-gradient(90deg, var(--cyan) 0%, var(--cyan-lt) 100%); opacity: .7 }
+.wf-pct { font-family: var(--font-mono); font-size: 11px; color: var(--wf-fg-subtle); font-weight: 400 }
+.wf-cost { font-family: var(--font-mono); font-weight: 600; color: var(--wf-fg); font-size: 13px; text-align: right }
+.wf-foot { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--wf-border-subtle); display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap }
+.wf-f { display: flex; flex-direction: column; gap: 4px }
+.wf-f-k { font: 700 9px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--wf-fg-subtle) }
+.wf-f-v { font: 500 14px/1.3 var(--font-sans); color: var(--wf-fg) }
+.wf-f-v strong { font-family: var(--font-mono); color: var(--brand-lt); font-weight: 600 }
+
+/* --- FUNNEL -------------------------------------------------------- */
+.funnel { margin: 32px 0; display: flex; flex-direction: column; gap: 10px }
+.fn-row { display: grid; grid-template-columns: 200px 1fr 120px; gap: 18px; align-items: center }
+@media(max-width:640px) { .fn-row { grid-template-columns: 1fr; gap: 6px } .fn-row .fn-bar-wrap { order: 3 } }
+.fn-label { display: flex; flex-direction: column; gap: 3px }
+.fn-stage { font: 500 13px/1.3 var(--font-sans); color: var(--wf-fg) }
+.fn-rate { font: 400 11px/1 var(--font-mono); color: var(--brand-lt) }
+.fn-bar-wrap { height: 34px; background: var(--wf-bg); border: 1px solid var(--wf-border-subtle); border-radius: 4px; overflow: hidden; position: relative }
+.fn-bar { height: 100%; background: linear-gradient(90deg, var(--wf-brand) 0%, var(--brand-lt) 100%); display: flex; align-items: center; padding: 0 14px; font: 600 11px/1 var(--font-mono); letter-spacing: .06em; color: var(--wf-bg); transition: width .6s var(--wf-ease) }
+.fn-bar.b1 { width: 100%; background: linear-gradient(90deg, #14532d 0%, var(--wf-brand) 100%) }
+.fn-bar.b2 { width: 10% }
+.fn-bar.b3 { width: 2.5%; min-width: 90px }
+.fn-bar.b4 { width: 1%; min-width: 70px }
+.fn-bar.b5 { width: .3%; min-width: 50px; background: linear-gradient(90deg, var(--brand-lt) 0%, var(--wf-fg) 100%); color: var(--wf-bg) }
+.fn-num { font-family: var(--font-mono); font-size: 14px; font-weight: 600; color: var(--wf-fg); text-align: right }
+.fn-summary { margin-top: 28px; display: grid; grid-template-columns: repeat(3,1fr); gap: 0; border-top: 1px solid var(--wf-border-subtle); border-bottom: 1px solid var(--wf-border-subtle) }
+@media(max-width:640px) { .fn-summary { grid-template-columns: 1fr } .fn-summary .fn-s { border-right: none; border-bottom: 1px solid var(--wf-border-subtle) } .fn-summary .fn-s:last-child { border-bottom: none } }
+.fn-s { padding: 22px 20px; border-right: 1px solid var(--wf-border-subtle) }
+.fn-s:last-child { border-right: none }
+.fn-s-n { font: 600 32px/1 var(--font-sans); color: var(--wf-fg); letter-spacing: -.02em; margin-bottom: 8px }
+.fn-s-n em { font-style: italic; color: var(--wf-brand); font-weight: 400 }
+.fn-s-l { font: 700 9px/1.3 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--wf-fg-subtle) }
+
+/* --- CAC COMPARISON ------------------------------------------------ */
+.cac-comp { margin: 28px 0; display: flex; flex-direction: column; gap: 14px }
+.cac-row { display: grid; grid-template-columns: 220px 1fr 140px; gap: 18px; align-items: center }
+@media(max-width:640px) { .cac-row { grid-template-columns: 1fr; gap: 4px } }
+.cac-label { font: 500 14px/1.3 var(--font-sans); color: var(--wf-fg) }
+.cac-label em { font-style: normal; display: block; color: var(--wf-fg-subtle); font-size: 11px; font-weight: 300; margin-top: 2px }
+.cac-bar-wrap { height: 28px; background: var(--wf-bg); border: 1px solid var(--wf-border-subtle); border-radius: 4px; overflow: hidden; position: relative; display: flex; align-items: center }
+.cac-bar { height: 100%; display: flex; align-items: center; padding: 0 12px; font: 600 11px/1 var(--font-mono); letter-spacing: .04em; color: var(--wf-bg) }
+.cac-bar.win { width: 5.14%; min-width: 80px; background: linear-gradient(90deg, var(--wf-brand) 0%, var(--brand-lt) 100%) }
+.cac-bar.kc { width: 50%; background: linear-gradient(90deg, var(--amber) 0%, var(--amber-lt) 100%); color: var(--wf-bg) }
+.cac-bar.nat { width: 100%; background: linear-gradient(90deg, var(--rose) 0%, #f59e0b 100%); color: var(--wf-bg) }
+.cac-val { font-family: var(--font-mono); font-weight: 600; font-size: 14px; color: var(--wf-fg); text-align: right }
+.cac-val em { display: block; font-style: normal; color: var(--brand-lt); font-size: 11px; margin-top: 2px; font-weight: 500 }
+
+/* --- SCENARIO CHART ------------------------------------------------ */
+.chart-card { background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); padding: 28px; margin: 32px 0; position: relative; overflow: hidden }
+.chart-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--wf-border-subtle); flex-wrap: wrap; gap: 14px }
+.chart-title { font-family: var(--font-sans); font-size: 18px; font-weight: 600; color: var(--wf-fg); letter-spacing: -.01em }
+.chart-sub { font: 400 12px/1 var(--font-mono); color: var(--wf-fg-subtle); letter-spacing: .04em }
+.chart-legend { display: flex; gap: 20px; padding-top: 16px; flex-wrap: wrap }
+.chart-leg { display: flex; align-items: center; gap: 8px; font: 500 11px/1 var(--font-mono); letter-spacing: .04em; color: var(--wf-fg-muted) }
+.chart-leg-d { width: 20px; height: 3px; border-radius: 2px }
+.chart-leg-d.cons { background: var(--cyan-lt); opacity: .7 }
+.chart-leg-d.base { background: var(--wf-brand) }
+.chart-leg-d.amb { background: var(--wf-purple) }
+.chart-svg { width: 100%; height: auto; display: block }
+.chart-annotations { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 24px; border-top: 1px solid var(--wf-border-subtle) }
+@media(max-width:640px) { .chart-annotations { grid-template-columns: 1fr } .chart-annotations .ca { border-right: none; border-bottom: 1px solid var(--wf-border-subtle) } .chart-annotations .ca:last-child { border-bottom: none } }
+.ca { padding: 18px 20px; border-right: 1px solid var(--wf-border-subtle) }
+.ca:last-child { border-right: none }
+.ca-scen { font: 700 10px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px }
+.ca-scen.cons { color: var(--cyan-lt) }
+.ca-scen.base { color: var(--brand-lt) }
+.ca-scen.amb { color: var(--wf-purple) }
+.ca-n { font: 600 24px/1 var(--font-sans); color: var(--wf-fg); letter-spacing: -.02em; margin-bottom: 4px }
+.ca-l { font: 400 11px/1.4 var(--font-mono); color: var(--wf-fg-subtle) }
+
+/* --- SCENARIO TABLE ------------------------------------------------ */
+.scen-table { width: 100%; border-collapse: collapse; margin: 28px 0; font-size: 13px; background: var(--wf-bg-elevated); border: 1px solid var(--wf-border-subtle); border-radius: var(--wf-r-lg); overflow: hidden }
+.scen-table thead th { background: linear-gradient(180deg, var(--wf-surface-active) 0%, var(--wf-bg-elevated) 100%); padding: 14px 16px; text-align: left; font: 700 10px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--brand-lt); border-bottom: 1px solid var(--wf-brand-border) }
+.scen-table thead th.num { text-align: right }
+.scen-table tbody td { padding: 14px 16px; border-bottom: 1px solid var(--wf-border-subtle); color: var(--wf-fg-muted); font-weight: 300; vertical-align: top }
+.scen-table tbody tr:last-child td { border-bottom: none }
+.scen-table tbody tr.base { background: var(--brand-dim) }
+.scen-table .scen-name { font: 500 13px/1.3 var(--font-sans); color: var(--wf-fg) }
+.scen-table .scen-name em { font-style: normal; display: block; color: var(--wf-fg-subtle); font-size: 11px; margin-top: 2px; font-weight: 300 }
+.scen-table td.num { font-family: var(--font-mono); font-weight: 500; color: var(--wf-fg); text-align: right; white-space: nowrap }
+.scen-table td.num.green { color: var(--brand-lt); font-weight: 600 }
+
+/* --- COST STRUCTURE ------------------------------------------------ */
+.cost-split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0 }
+@media(max-width:768px) { .cost-split { grid-template-columns: 1fr } }
+.cost-card { background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); padding: 24px }
+.cost-card-h { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px solid var(--wf-border-subtle) }
+.cost-card-k { font: 700 10px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-brand) }
+.cost-card-t { font-family: var(--font-sans); font-size: 16px; font-weight: 600; color: var(--wf-fg) }
+.cost-card-total { font: 600 18px/1 var(--font-mono); color: var(--wf-fg) }
+.cost-table { width: 100%; border-collapse: collapse; font-size: 12.5px }
+.cost-table td { padding: 8px 4px; border-bottom: 1px solid var(--wf-border-subtle); color: var(--wf-fg-muted); font-weight: 300; vertical-align: top }
+.cost-table tr:last-child td { border-bottom: none }
+.cost-table .ct-line { color: var(--wf-fg-muted) }
+.cost-table .ct-low { color: var(--wf-fg-faint); font-family: var(--font-mono); text-align: right; font-size: 11.5px; white-space: nowrap }
+.cost-table .ct-base { color: var(--wf-fg); font-family: var(--font-mono); font-weight: 500; text-align: right; font-size: 12px; white-space: nowrap }
+.cost-table .ct-high { color: var(--wf-fg-subtle); font-family: var(--font-mono); text-align: right; font-size: 11.5px; white-space: nowrap }
+.cost-table thead th { font: 700 8px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--wf-fg-subtle); padding-bottom: 8px; border-bottom: 1px solid var(--wf-border-subtle); text-align: right }
+.cost-table thead th:first-child { text-align: left }
+.cost-table tfoot td { padding-top: 12px; border-top: 1px solid var(--wf-brand-border); color: var(--brand-lt); font-weight: 500; font-family: var(--font-mono); font-size: 13px }
+.cost-table tfoot td:first-child { color: var(--wf-fg); font-family: var(--font-sans); letter-spacing: .04em; font-weight: 600; font-size: 11px; text-transform: uppercase }
+
+/* --- LABOR COMPRESSION --------------------------------------------- */
+.comp-compare { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: stretch; gap: 0; margin: 28px 0; background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); overflow: hidden }
+@media(max-width:768px) { .comp-compare { grid-template-columns: 1fr } .comp-compare .comp-vs { padding: 12px; border-top: 1px solid var(--wf-border-subtle); border-bottom: 1px solid var(--wf-border-subtle) } }
+.comp-side { padding: 24px 26px; display: flex; flex-direction: column; justify-content: center }
+.comp-side.human { background: var(--wf-bg-sunken) }
+.comp-k { font: 700 10px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-fg-subtle); margin-bottom: 10px }
+.comp-h { font-family: var(--font-sans); font-size: 18px; font-weight: 600; color: var(--wf-fg); letter-spacing: -.01em; margin-bottom: 14px; line-height: 1.25 }
+.comp-n { font: 600 40px/1 var(--font-sans); color: var(--wf-fg); letter-spacing: -.025em; margin-bottom: 8px }
+.comp-n.green { color: var(--brand-lt) }
+.comp-l { font: 400 12px/1.55 var(--font-mono); color: var(--wf-fg-subtle); letter-spacing: .04em }
+.comp-vs { display: flex; align-items: center; justify-content: center; font: 800 14px/1 var(--font-mono); color: var(--wf-brand); letter-spacing: .1em; background: var(--wf-surface-active); border-left: 1px solid var(--wf-border-subtle); border-right: 1px solid var(--wf-border-subtle) }
+
+/* --- KPI PYRAMID --------------------------------------------------- */
+.pyramid { margin: 32px 0; display: flex; flex-direction: column; gap: 10px }
+.pyr-layer { background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); padding: 22px 24px; display: grid; grid-template-columns: 90px 1fr; gap: 20px; position: relative; transition: border-color var(--wf-dur) var(--wf-ease) }
+@media(max-width:640px) { .pyr-layer { grid-template-columns: 1fr; gap: 10px } }
+.pyr-layer:hover { border-color: var(--wf-brand-border-strong) }
+.pyr-l4 { margin-left: 0; margin-right: 0 }
+.pyr-l3 { margin-left: 4%; margin-right: 4% }
+.pyr-l2 { margin-left: 8%; margin-right: 8% }
+.pyr-l1 { margin-left: 12%; margin-right: 12% }
+@media(max-width:900px) { .pyr-l4,.pyr-l3,.pyr-l2,.pyr-l1 { margin-left: 0; margin-right: 0 } }
+.pyr-left { display: flex; flex-direction: column; gap: 4px }
+.pyr-num { font-family: var(--font-sans); font-style: italic; font-size: 36px; color: var(--wf-brand); line-height: 1; font-weight: 600; letter-spacing: -.02em }
+.pyr-cadence { font: 500 10px/1.2 var(--font-mono); color: var(--wf-fg-faint); letter-spacing: .06em }
+.pyr-name { font-family: var(--font-sans); font-size: 18px; font-weight: 600; color: var(--wf-fg); letter-spacing: -.015em; margin-bottom: 4px; line-height: 1.25 }
+.pyr-name em { font-style: italic; color: var(--wf-brand); font-weight: 500 }
+.pyr-desc { font: 300 12.5px/1.55 var(--font-sans); color: var(--wf-fg-muted); margin-bottom: 12px }
+.pyr-metrics { display: flex; flex-wrap: wrap; gap: 6px }
+.pyr-chip { display: inline-block; padding: 4px 10px; background: var(--wf-surface-active); border: 1px solid var(--wf-border-subtle); border-radius: 3px; font: 500 10.5px/1.3 var(--font-mono); color: var(--wf-fg-muted); letter-spacing: .02em }
+
+/* --- COMPETITIVE --------------------------------------------------- */
+.comp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 28px 0 }
+@media(max-width:768px) { .comp-grid { grid-template-columns: 1fr } }
+.comp-card { background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); padding: 24px; position: relative }
+.comp-card.lead { border-color: var(--wf-brand-border-strong); background: linear-gradient(135deg, var(--brand-dim) 0%, var(--wf-bg-elevated) 70%) }
+.comp-big { font: 700 54px/1 var(--font-sans); color: var(--brand-lt); letter-spacing: -.03em; margin-bottom: 10px }
+.comp-big em { font-family: var(--font-sans); font-size: .5em; font-style: italic; color: var(--wf-fg-muted); font-weight: 400; margin-left: 4px; letter-spacing: 0 }
+.comp-name { font: 600 14px/1.3 var(--font-sans); color: var(--wf-fg); margin-bottom: 6px }
+.comp-desc { font: 300 12.5px/1.6 var(--font-sans); color: var(--wf-fg-muted) }
+
+/* --- GATE CONDITIONS ----------------------------------------------- */
+.gate-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 28px 0 }
+@media(max-width:768px) { .gate-grid { grid-template-columns: 1fr } }
+.gate-card { background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); padding: 22px; position: relative; overflow: hidden }
+.gate-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px }
+.gate-card.scale::before { background: var(--wf-brand) }
+.gate-card.hold::before { background: var(--amber) }
+.gate-card.kill::before { background: var(--rose) }
+.gate-k { font: 700 10px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 14px }
+.gate-card.scale .gate-k { color: var(--wf-brand) }
+.gate-card.hold .gate-k { color: var(--amber) }
+.gate-card.kill .gate-k { color: var(--rose) }
+.gate-h { font-family: var(--font-sans); font-size: 16px; font-weight: 600; color: var(--wf-fg); letter-spacing: -.01em; line-height: 1.3; margin-bottom: 14px }
+.gate-h em { font-style: italic; color: var(--wf-brand); font-weight: 500 }
+.gate-list { list-style: none; display: flex; flex-direction: column; gap: 8px }
+.gate-list li { font: 300 12.5px/1.55 var(--font-sans); color: var(--wf-fg-muted); padding-left: 14px; position: relative }
+.gate-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 1px; background: currentColor; opacity: .5 }
+.gate-card.scale .gate-list li::before { background: var(--wf-brand) }
+.gate-card.hold .gate-list li::before { background: var(--amber) }
+.gate-card.kill .gate-list li::before { background: var(--rose) }
+.gate-list li strong { font-weight: 500; color: var(--wf-fg) }
+
+/* --- TAKEAWAY / CALLOUT -------------------------------------------- */
+.takeaway { background: linear-gradient(135deg, var(--brand-dim) 0%, rgba(29,185,84,0.03) 100%); border-left: 3px solid var(--wf-brand); padding: 20px 24px; border-radius: 0 var(--wf-r-md) var(--wf-r-md) 0; margin: 28px 0 }
+.takeaway-l { font: 700 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-brand); margin-bottom: 8px }
+.takeaway-t { font: 400 15.5px/1.65 var(--font-sans); color: var(--wf-fg-muted) }
+.takeaway-t strong { font-weight: 500; color: var(--wf-fg) }
+
+.callout { background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-left: 3px solid var(--wf-purple); padding: 20px 24px; border-radius: 0 var(--wf-r-md) var(--wf-r-md) 0; margin: 28px 0 }
+.callout.amber { border-left-color: var(--amber) }
+.callout-l { font: 700 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px }
+.callout .callout-l { color: var(--wf-purple) }
+.callout.amber .callout-l { color: var(--amber) }
+.callout-t { font: 400 15px/1.65 var(--font-sans); color: var(--wf-fg-muted) }
+.callout-t strong { font-weight: 500; color: var(--wf-fg) }
+
+/* --- INVESTMENT SUMMARY -------------------------------------------- */
+.inv-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin: 28px 0; border: 1px solid var(--wf-border-subtle); border-radius: var(--wf-r-lg); overflow: hidden; background: var(--wf-bg-elevated) }
+@media(max-width:768px) { .inv-grid { grid-template-columns: repeat(2,1fr) } }
+.inv { padding: 26px 22px; border-right: 1px solid var(--wf-border-subtle); border-bottom: 1px solid var(--wf-border-subtle) }
+@media(min-width:769px) { .inv:nth-child(4n) { border-right: none } .inv:nth-child(n+5) { border-bottom: none } }
+@media(max-width:768px) { .inv:nth-child(2n) { border-right: none } .inv:last-child,.inv:nth-last-child(2):nth-child(odd) { border-bottom: none } }
+.inv-k { font: 700 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-brand); margin-bottom: 14px }
+.inv-n { font: 600 32px/1 var(--font-sans); color: var(--wf-fg); letter-spacing: -.02em; margin-bottom: 6px }
+.inv-n em { font-style: italic; color: var(--wf-brand); font-weight: 400 }
+.inv-l { font: 400 11px/1.5 var(--font-mono); color: var(--wf-fg-subtle) }
+
+/* --- FOOTER -------------------------------------------------------- */
+.footer { border-top: 1px solid var(--wf-border-subtle); padding: 56px 32px; margin-top: 0; background: var(--wf-bg-sunken) }
+.footer-inner { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr 320px; gap: 48px }
+@media(max-width:768px) { .footer-inner { grid-template-columns: 1fr } }
+.footer-mark { display: flex; align-items: baseline; gap: 4px; margin-bottom: 14px }
+.footer-mark-w { font: 800 22px/1 var(--font-sans); letter-spacing: -.04em; color: var(--wf-brand); text-transform: uppercase }
+.footer-mark-re { font: 800 22px/1 var(--font-sans); letter-spacing: -.04em; color: var(--wf-fg); text-transform: uppercase }
+.footer-tag { font: 400 11px/1.4 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-fg-subtle); margin-bottom: 20px }
+.footer-addr { font: 300 13px/1.7 var(--font-sans); color: var(--wf-fg-muted) }
+.footer-addr strong { font-weight: 500; color: var(--wf-fg) }
+.footer-meta { display: flex; flex-direction: column; gap: 14px }
+.fm-block {}
+.fm-k { font: 700 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--wf-fg-subtle); margin-bottom: 5px }
+.fm-v { font: 300 12.5px/1.55 var(--font-sans); color: var(--wf-fg-muted) }
+.fm-v strong { font-weight: 500; color: var(--wf-fg) }
+.footer-legal { max-width: 1440px; margin: 32px auto 0; padding: 24px 32px 0; border-top: 1px solid var(--wf-border-subtle); display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font: 400 11px/1.5 var(--font-mono); color: var(--wf-fg-faint) }
+.footer-legal-v { display: flex; gap: 14px }
+.footer-legal-v span { color: var(--wf-fg-faint) }
+.footer-prepared { display: inline-flex; align-items: center; gap: 8px }
+.footer-prepared::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--wf-brand) }
+
+/* --- SCROLLX ------------------------------------------------------- */
+.scrollx { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 28px 0; }
+.scrollx > table { margin: 0; min-width: 600px; }
+.scrollx::-webkit-scrollbar { height: 4px }
+.scrollx::-webkit-scrollbar-thumb { background: var(--wf-border-strong); border-radius: 2px }
+
+/* --- REVEAL ANIMATION ---------------------------------------------- */
+@media(prefers-reduced-motion:no-preference) {
+  .reveal { opacity: 0; transform: translateY(12px); transition: opacity .6s var(--wf-ease), transform .6s var(--wf-ease) }
+  .reveal.on { opacity: 1; transform: translateY(0) }
+}
+
+/* --- RESPONSIVE 768px ---------------------------------------------- */
+@media (max-width: 768px) {
+  .topbar { padding: 0 16px; height: 52px }
+  .tb-mark-sep, .tb-meta { display: none }
+  .tb-brand { gap: 0 }
+  .tb-right { gap: 10px }
+  .tb-conf { font-size: 8px; padding: 4px 8px; letter-spacing: .08em }
+  .tb-conf::before { width: 5px; height: 5px }
+  .tb-date { font-size: 10px }
+  .tb-mark-w, .tb-mark-re { font-size: 16px }
+  .page { padding-top: 52px }
+  .shell { padding: 0 18px; gap: 0 }
+  .main { padding-bottom: 80px }
+  .hero { padding: 36px 0 44px }
+  .hero-eyebrow { gap: 8px; margin-bottom: 20px }
+  .eye-tag { font-size: 9px; padding: 4px 8px; letter-spacing: .1em }
+  .eye-sub { font-size: 9px; letter-spacing: .1em }
+  .hero-deck { font-size: 15.5px; line-height: 1.6; margin-bottom: 26px }
+  .hero-meta { gap: 14px 20px; padding: 14px 0 }
+  .hm-sep { display: none }
+  .hm-v { font-size: 12.5px }
+  .hm-k { font-size: 8.5px; letter-spacing: .12em }
+  .hero-stats { margin-top: 26px }
+  .hs { padding: 20px 14px }
+  .hs-sub { font-size: 8.5px; margin-bottom: 10px; letter-spacing: .1em }
+  .hs-n { font-size: 30px; margin-bottom: 6px }
+  .hs-l { font-size: 10px; letter-spacing: .03em }
+  .sec { padding: 48px 0; scroll-margin-top: 60px }
+  .sec-head { gap: 12px; margin-bottom: 22px }
+  .sec-num { width: 26px; font-size: 10px; padding-top: 4px }
+  .sec-kicker { font-size: 9px; margin-bottom: 8px; letter-spacing: .12em }
+  .sec-deck { font-size: 15px }
+  .prose p { font-size: 15px; line-height: 1.7; margin-bottom: 16px }
+  .pq { padding: 22px; margin: 30px 0 }
+  .pq-text { font-size: 18px; line-height: 1.4; margin-bottom: 12px }
+  .pq-attr { font-size: 10px }
+  .takeaway, .callout { padding: 16px 18px; margin: 22px 0 }
+  .takeaway-t, .callout-t { font-size: 14.5px; line-height: 1.55 }
+  .takeaway-l, .callout-l { font-size: 8.5px }
+  .thesis-card { padding: 20px }
+  .th-k { font-size: 9px; margin-bottom: 10px }
+  .th-h { font-size: 17px; line-height: 1.25; margin-bottom: 8px }
+  .th-t { font-size: 13px; line-height: 1.65 }
+  .waterfall { padding: 22px }
+  .wf-head { margin-bottom: 14px; padding-bottom: 14px }
+  .wf-title { font-size: 16px }
+  .wf-total { font-size: 10px }
+  .wf-total em { font-size: 22px; margin-left: 5px }
+  .wf-row { grid-template-columns: 1fr 60px; gap: 10px; padding: 8px 0 }
+  .wf-name { font-size: 12.5px }
+  .wf-name em { font-size: 10.5px }
+  .wf-cost { font-size: 12.5px }
+  .wf-foot { flex-direction: column; gap: 12px; margin-top: 16px; padding-top: 14px }
+  .wf-f-v { font-size: 13px }
+  .fn-row { grid-template-columns: 1fr; gap: 6px; margin-bottom: 10px }
+  .fn-stage { font-size: 13px }
+  .fn-rate { font-size: 10.5px }
+  .fn-bar-wrap { height: 30px }
+  .fn-bar { font-size: 10px; padding: 0 10px; letter-spacing: .04em }
+  .fn-num { font-size: 12.5px; text-align: left; margin-top: 2px; color: var(--wf-fg-muted) }
+  .fn-summary { margin-top: 26px }
+  .fn-s { padding: 18px 14px }
+  .fn-s-n { font-size: 26px; margin-bottom: 6px }
+  .fn-s-l { font-size: 9.5px }
+  .cac-row { grid-template-columns: 1fr; gap: 6px }
+  .cac-label { font-size: 13px }
+  .cac-label em { font-size: 10.5px }
+  .cac-val { font-size: 13px; text-align: left; display: flex; align-items: baseline; gap: 10px }
+  .cac-val em { display: inline; font-size: 10.5px; margin-top: 0 }
+  .cac-bar-wrap { height: 24px }
+  .cac-bar { font-size: 10px; padding: 0 10px }
+  .chart-card { padding: 18px }
+  .chart-head { gap: 10px; padding-bottom: 14px; margin-bottom: 14px; flex-direction: column; align-items: flex-start }
+  .chart-title { font-size: 15.5px }
+  .chart-sub { font-size: 10.5px }
+  .chart-legend { gap: 14px; padding-top: 8px }
+  .chart-leg { font-size: 10px }
+  .chart-leg-d { width: 16px }
+  .chart-svg { min-height: 260px }
+  .chart-annotations { margin-top: 18px }
+  .ca { padding: 14px }
+  .ca-scen { font-size: 9px; margin-bottom: 6px }
+  .ca-n { font-size: 22px }
+  .ca-l { font-size: 10px }
+  .scen-table thead th, .scen-table tbody td { padding: 11px 10px; font-size: 12px }
+  .scen-table thead th { font-size: 9px }
+  .scen-name em { font-size: 10.5px }
+  .cost-split { gap: 12px }
+  .cost-card { padding: 20px }
+  .cost-card-h { flex-wrap: wrap; gap: 8px; margin-bottom: 14px; padding-bottom: 12px }
+  .cost-card-t { font-size: 15px }
+  .cost-card-k { font-size: 9px }
+  .cost-card-total { font-size: 16px }
+  .cost-table { font-size: 11.5px }
+  .cost-table td { padding: 7px 3px }
+  .cost-table .ct-low, .cost-table .ct-base, .cost-table .ct-high { font-size: 10.5px }
+  .cost-table thead th { font-size: 7.5px; padding-bottom: 7px }
+  .cost-table tfoot td { font-size: 11px; padding-top: 10px }
+  .cost-table tfoot td:first-child { font-size: 9.5px }
+  .comp-compare { display: flex; flex-direction: column; gap: 10px; background: transparent; border: none; border-radius: 0; overflow: visible }
+  .comp-side { background: var(--wf-bg-elevated); border: 1px solid var(--wf-border); border-radius: var(--wf-r-lg); padding: 22px }
+  .comp-vs { background: transparent; border: none; padding: 6px 0; font-size: 12px; color: var(--wf-brand) }
+  .comp-k { font-size: 9px; margin-bottom: 8px }
+  .comp-h { font-size: 15px; margin-bottom: 12px; line-height: 1.3 }
+  .comp-n { font-size: 32px; margin-bottom: 6px }
+  .comp-l { font-size: 10.5px }
+  .pyramid { gap: 8px }
+  .pyr-layer { grid-template-columns: 1fr; gap: 12px; padding: 18px 20px }
+  .pyr-left { flex-direction: row; align-items: baseline; gap: 12px }
+  .pyr-num { font-size: 28px }
+  .pyr-cadence { font-size: 10px }
+  .pyr-name { font-size: 16px; line-height: 1.25 }
+  .pyr-desc { font-size: 12.5px; margin-bottom: 10px }
+  .pyr-chip { font-size: 10px; padding: 3px 7px }
+  .comp-grid { gap: 10px }
+  .comp-card { padding: 20px }
+  .comp-big { font-size: 44px; margin-bottom: 8px }
+  .comp-name { font-size: 13.5px; margin-bottom: 5px }
+  .comp-desc { font-size: 12.5px }
+  .gate-grid { gap: 10px }
+  .gate-card { padding: 18px 20px }
+  .gate-k { font-size: 9px; margin-bottom: 10px }
+  .gate-h { font-size: 14.5px; line-height: 1.3; margin-bottom: 12px }
+  .gate-list li { font-size: 12px; line-height: 1.55 }
+  .inv-grid { grid-template-columns: 1fr 1fr }
+  .inv { padding: 20px 16px }
+  .inv-k { font-size: 8.5px; margin-bottom: 10px }
+  .inv-n { font-size: 26px; margin-bottom: 5px }
+  .inv-l { font-size: 10px }
+  .footer { padding: 40px 20px }
+  .footer-inner { gap: 28px }
+  .footer-legal { padding: 22px 20px 0; margin-top: 24px; flex-direction: column; align-items: flex-start }
+  .footer-mark-w, .footer-mark-re { font-size: 19px }
+  .footer-addr { font-size: 12.5px }
+}
+
+@media (max-width: 500px) {
+  .shell { padding: 0 14px }
+  .topbar { padding: 0 12px }
+  .tb-mark-w, .tb-mark-re { font-size: 15px }
+  .tb-conf { display: none }
+  .footer { padding: 36px 16px }
+  .footer-legal { padding: 20px 16px 0 }
+  .hero-stats { grid-template-columns: 1fr 1fr }
+  .hs:nth-child(1), .hs:nth-child(2) { border-bottom: 1px solid var(--wf-border-subtle) }
+  .hs:nth-child(2), .hs:nth-child(4) { border-right: none }
+  .hs-n { font-size: 26px }
+  h1.hero-h { font-size: 32px; line-height: 1.05 }
+  h2.sec-h { font-size: 24px }
+  .sec { padding: 40px 0 }
+  .sec-head { gap: 10px }
+  .sec-num { width: 22px; font-size: 9.5px }
+  .scrollx { margin: 24px -14px; padding: 0 14px }
+  .chart-svg { min-height: 220px }
+  .chart-card { padding: 14px }
+  .comp-big { font-size: 38px }
+}
+
+/* --- PRINT --------------------------------------------------------- */
+@media print {
+  body { background: #fff; color: #111 }
+  .topbar,.toc { display: none }
+  .shell { grid-template-columns: 1fr; padding: 0 }
+  .main { max-width: 100%; padding-bottom: 0 }
+  .page { padding: 0 }
+  .sec { padding: 32px 0; page-break-inside: avoid; border-color: #ddd }
+  .thesis-card,.waterfall,.chart-card,.cost-card,.comp-compare,.pyr-layer,.comp-card,.gate-card { page-break-inside: avoid; border-color: #ddd }
+  .hero { padding: 20px 0 32px }
+  .hero-bg,.hero-grid { display: none }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact }
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-mark">
+      <span class="tb-mark-w">Windfield</span>
+      <span class="tb-mark-re">IO</span>
+    </div>
+    <div class="tb-mark-sep"></div>
+    <div class="tb-meta">
+      <div class="tb-meta-k">Economic Impact Model</div>
+      <div class="tb-meta-v">36-Month Projection &middot; Internal Strategy</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="tb-date">April 22, 2026</span>
+    <span class="tb-conf">Projection &middot; Not Forecast</span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="shell">
+
+    <!-- TOC -->
+    <aside class="toc" id="toc">
+      <div class="toc-head">
+        <span class="toc-head-n">Contents</span>
+        <span class="toc-head-l">12 sections</span>
+      </div>
+      <ul class="toc-list">
+        <li class="toc-item" data-target="s-thesis"><span class="toc-num">01</span><span class="toc-label">Strategic Framing</span></li>
+        <li class="toc-item" data-target="s-unit"><span class="toc-num">02</span><span class="toc-label">Unit Economics</span></li>
+        <li class="toc-item" data-target="s-funnel"><span class="toc-num">03</span><span class="toc-label">The Funnel</span></li>
+        <li class="toc-item" data-target="s-cac"><span class="toc-num">04</span><span class="toc-label">CAC Benchmark</span></li>
+        <li class="toc-item" data-target="s-ltv"><span class="toc-num">05</span><span class="toc-label">LTV:CAC Ratio</span></li>
+        <li class="toc-item" data-target="s-scenarios"><span class="toc-num">06</span><span class="toc-label">3-Year Scenarios</span></li>
+        <li class="toc-item" data-target="s-cost"><span class="toc-num">07</span><span class="toc-label">Cost Structure</span></li>
+        <li class="toc-item" data-target="s-labor"><span class="toc-num">08</span><span class="toc-label">Labor Compression</span></li>
+        <li class="toc-item" data-target="s-kpi"><span class="toc-num">09</span><span class="toc-label">KPI Pyramid</span></li>
+        <li class="toc-item" data-target="s-comp"><span class="toc-num">10</span><span class="toc-label">Competitive Position</span></li>
+        <li class="toc-item" data-target="s-gate"><span class="toc-num">11</span><span class="toc-label">Gates &amp; Investment</span></li>
+        <li class="toc-item" data-target="s-method"><span class="toc-num">12</span><span class="toc-label">Methodology</span></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- HERO -->
+      <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-inner">
+          <div class="hero-eyebrow">
+            <span class="eye-tag">Economic Impact Model</span>
+            <span class="eye-div"></span>
+            <span class="eye-sub">Dual-Mode MCP IO &middot; Internal / Proprietary</span>
+          </div>
+          <h1 class="hero-h">$286K in. <em>$22.7M</em> out. The math behind <em>Windfield IO</em>.</h1>
+          <p class="hero-deck">An agentic operating system for commercial real estate, priced like a performance-marketing engine. Every action has a measured cost. Every funnel stage has a measured rate. Every deal has a measured contribution. This is what the numbers say when you run it end-to-end.</p>
+
+          <div class="hero-meta">
+            <div class="hm-block">
+              <div class="hm-k">Prepared For</div>
+              <div class="hm-v">Andrew Danner &middot; Windfield Real Estate</div>
+            </div>
+            <div class="hm-sep"></div>
+            <div class="hm-block">
+              <div class="hm-k">Prepared By</div>
+              <div class="hm-v">Intelligent Operations AI</div>
+            </div>
+            <div class="hm-sep"></div>
+            <div class="hm-block">
+              <div class="hm-k">Classification</div>
+              <div class="hm-v">Internal &middot; Strategic &middot; Trade Secret</div>
+            </div>
+            <div class="hm-sep"></div>
+            <div class="hm-block">
+              <div class="hm-k">Date</div>
+              <div class="hm-v">April 22, 2026</div>
+            </div>
+          </div>
+
+          <div class="hero-stats">
+            <div class="hs">
+              <div class="hs-sub">Year 1 Build</div>
+              <div class="hs-n">$286K</div>
+              <div class="hs-l">one-time &middot; dev + AI + infra + legal + content seed</div>
+            </div>
+            <div class="hs">
+              <div class="hs-sub">LTV:CAC (12-mo)</div>
+              <div class="hs-n">22.47<em>&times;</em></div>
+              <div class="hs-l">institutional-grade &middot; &gt;10&times; threshold</div>
+            </div>
+            <div class="hs">
+              <div class="hs-sub">CAC vs Industry</div>
+              <div class="hs-n">9.7<em>&times;</em></div>
+              <div class="hs-l">$2,570 Windfield &middot; $25K typical KC</div>
+            </div>
+            <div class="hs">
+              <div class="hs-sub">3Y Net (Base)</div>
+              <div class="hs-n">$22.7M</div>
+              <div class="hs-l">net economic contribution &middot; Base scenario</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 01 - STRATEGIC FRAMING -->
+      <section class="sec reveal" id="s-thesis">
+        <div class="sec-head">
+          <div class="sec-num">01</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Strategic Framing</div>
+            <h2 class="sec-h">Not a product. <em>An operating system</em>.</h2>
+          </div>
+        </div>
+
+        <div class="pq">
+          <div class="pq-text">"Windfield IO is not an AI product. It is a proprietary operating system that lets Windfield execute commercial real estate at a <em>scale, speed, and intelligence density</em> no KC competitor can match."</div>
+          <div class="pq-attr">The operating thesis</div>
+        </div>
+
+        <div class="thesis-grid">
+          <div class="thesis-card accent">
+            <div class="th-k">The Performance-Marketing Framing</div>
+            <div class="th-h"><em>Every action measured</em>. Every dollar accounted.</div>
+            <div class="th-t">Each agent-driven action has a measured cost <strong>(~$7.71)</strong>, a measured conversion funnel <strong>(0.3% action &rarr; closed deal)</strong>, and a measured revenue <strong>(~$38.5K GCI per deal)</strong>. Projected CAC of ~$2,570 is 6-15&times; below the industry baseline of $15-40K per closed deal.</div>
+          </div>
+          <div class="thesis-card">
+            <div class="th-k">The Competitive Positioning</div>
+            <div class="th-h">A <em>12-24 month</em> uncontested lead.</div>
+            <div class="th-t"><strong>91% of KC CRE firms score below 8/25</strong> on Digital Maturity. Only 10 firms are real digital threats. Not one has MCP endpoints, AEO-ready schema, or agentic loops. Windfield's Dual-Mode MCP approach is uncontested in this market.</div>
+          </div>
+          <div class="thesis-card">
+            <div class="th-k">The Economic Asymmetry</div>
+            <div class="th-h"><em>$286K</em> builds it. <em>$22.7M</em> comes back.</div>
+            <div class="th-t">Year 1 build of <strong>~$286K</strong>. Year 2+ recurring <strong>~$565K/yr</strong>. Replaces the productive equivalent of <strong>12-25 FTEs</strong> at $1.08M-$2.25M/yr. Base 3Y outcome: +~$22.7M net contribution. Ambitious: +~$51.5M. Plus portfolio acquisition optionality on every deal sourced.</div>
+          </div>
+          <div class="thesis-card">
+            <div class="th-k">The Operating Discipline</div>
+            <div class="th-h">Build one loop. <em>Measure against CAC.</em> Kill what fails.</div>
+            <div class="th-t">Build one loop at a time, measure every loop against its own CAC and LTV, kill what doesn't work, compound what does. Instrument the four-layer KPI pyramid from day one. <strong>Year 1 is experimentation. Year 2 is where compounding kicks in.</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 - UNIT ECONOMICS -->
+      <section class="sec reveal" id="s-unit">
+        <div class="sec-head">
+          <div class="sec-num">02</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Unit Economics</div>
+            <h2 class="sec-h">Fully-loaded cost per <em>agent-driven action</em>: $7.71.</h2>
+            <p class="sec-deck">Every LLC sourced, every outbound voice call, every enriched contact, every research brief &mdash; priced to the last cent. The waterfall below shows where the $7.71 goes. Notice what dominates.</p>
+          </div>
+        </div>
+
+        <div class="waterfall">
+          <div class="wf-head">
+            <div class="wf-title">Cost-per-action waterfall</div>
+            <div class="wf-total">Total<em>$7.71</em></div>
+          </div>
+          <div class="wf-row">
+            <div class="wf-name">Broker review time<em>2 min &times; $3/min fully-loaded</em></div>
+            <div class="wf-bar-wrap"><div class="wf-bar" style="width:77.8%"></div></div>
+            <div class="wf-pct">77.8%</div>
+            <div class="wf-cost">$6.00</div>
+          </div>
+          <div class="wf-row">
+            <div class="wf-name">Clay enrichment waterfall<em>Full credit stack per record</em></div>
+            <div class="wf-bar-wrap"><div class="wf-bar" style="width:10.4%"></div></div>
+            <div class="wf-pct">10.4%</div>
+            <div class="wf-cost">$0.80</div>
+          </div>
+          <div class="wf-row">
+            <div class="wf-name">Voice AI (Retell/Vapi)<em>Avg 3-min call &times; $0.09/min</em></div>
+            <div class="wf-bar-wrap"><div class="wf-bar minor" style="width:3.5%"></div></div>
+            <div class="wf-pct">3.5%</div>
+            <div class="wf-cost">$0.27</div>
+          </div>
+          <div class="wf-row">
+            <div class="wf-name">Infrastructure allocation<em>Amortized Supabase/Vercel/storage</em></div>
+            <div class="wf-bar-wrap"><div class="wf-bar minor" style="width:2.6%"></div></div>
+            <div class="wf-pct">2.6%</div>
+            <div class="wf-cost">$0.20</div>
+          </div>
+          <div class="wf-row">
+            <div class="wf-name">Claude API (Sonnet 4.6)<em>~25K in + 5K out tokens</em></div>
+            <div class="wf-bar-wrap"><div class="wf-bar minor" style="width:1.9%"></div></div>
+            <div class="wf-pct">1.9%</div>
+            <div class="wf-cost">$0.15</div>
+          </div>
+          <div class="wf-row">
+            <div class="wf-name">Apify / scraping<em>Per actor run &middot; LLC records, public data</em></div>
+            <div class="wf-bar-wrap"><div class="wf-bar minor" style="width:1.9%"></div></div>
+            <div class="wf-pct">1.9%</div>
+            <div class="wf-cost">$0.15</div>
+          </div>
+          <div class="wf-row">
+            <div class="wf-name">Retell orchestration<em>Per session</em></div>
+            <div class="wf-bar-wrap"><div class="wf-bar minor" style="width:1.3%"></div></div>
+            <div class="wf-pct">1.3%</div>
+            <div class="wf-cost">$0.10</div>
+          </div>
+          <div class="wf-row">
+            <div class="wf-name">ASR + TTS (Deepgram + Cartesia)<em>Avg 3 min voice &times; $0.013/min</em></div>
+            <div class="wf-bar-wrap"><div class="wf-bar minor" style="width:0.5%"></div></div>
+            <div class="wf-pct">0.5%</div>
+            <div class="wf-cost">$0.04</div>
+          </div>
+          <div class="wf-foot">
+            <div class="wf-f"><div class="wf-f-k">Equivalent human-broker action</div><div class="wf-f-v"><strong>$90.00</strong> &middot; 30 min broker time at fully-loaded $180/hr</div></div>
+            <div class="wf-f"><div class="wf-f-k">Cost compression</div><div class="wf-f-v"><strong>11.67&times;</strong> &middot; human &divide; agent</div></div>
+          </div>
+        </div>
+
+        <div class="takeaway">
+          <div class="takeaway-l">The $6 Insight</div>
+          <div class="takeaway-t"><strong>Broker review time is 78% of cost-per-action.</strong> Every minute shaved off the approval gate drops CAC linearly. Moving from 2-min review (Year 1) to 1-min review (Year 3) reduces cost-per-action from $7.71 to $4.71 &mdash; a <strong>38% improvement</strong> with zero additional tooling spend. This is the single highest-leverage tuning variable in the model.</div>
+        </div>
+      </section>
+
+      <!-- 03 - THE FUNNEL -->
+      <section class="sec reveal" id="s-funnel">
+        <div class="sec-head">
+          <div class="sec-num">03</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">The Funnel</div>
+            <h2 class="sec-h">1,000 actions. <em>3 closed deals</em>.</h2>
+            <p class="sec-deck">Four conversion stages, multiplied. Each rate sourced from industry benchmarks for CRE outbound; the product is the end-to-end action-to-deal rate.</p>
+          </div>
+        </div>
+
+        <div class="funnel">
+          <div class="fn-row">
+            <div class="fn-label"><div class="fn-stage">Outbound actions</div><div class="fn-rate">100%</div></div>
+            <div class="fn-bar-wrap"><div class="fn-bar b1">1,000 actions</div></div>
+            <div class="fn-num">1,000</div>
+          </div>
+          <div class="fn-row">
+            <div class="fn-label"><div class="fn-stage">Live conversations</div><div class="fn-rate">10% action &rarr; conversation</div></div>
+            <div class="fn-bar-wrap"><div class="fn-bar b2">100</div></div>
+            <div class="fn-num">100</div>
+          </div>
+          <div class="fn-row">
+            <div class="fn-label"><div class="fn-stage">Qualified opportunities</div><div class="fn-rate">25% conversation &rarr; qualified</div></div>
+            <div class="fn-bar-wrap"><div class="fn-bar b3">25</div></div>
+            <div class="fn-num">25</div>
+          </div>
+          <div class="fn-row">
+            <div class="fn-label"><div class="fn-stage">Engaged clients</div><div class="fn-rate">40% qualified &rarr; engaged</div></div>
+            <div class="fn-bar-wrap"><div class="fn-bar b4">10</div></div>
+            <div class="fn-num">10</div>
+          </div>
+          <div class="fn-row">
+            <div class="fn-label"><div class="fn-stage">Closed deals (12-mo)</div><div class="fn-rate">30% engaged &rarr; closed</div></div>
+            <div class="fn-bar-wrap"><div class="fn-bar b5">3</div></div>
+            <div class="fn-num">3</div>
+          </div>
+        </div>
+
+        <div class="fn-summary">
+          <div class="fn-s">
+            <div class="fn-s-n">0.3<em>%</em></div>
+            <div class="fn-s-l">End-to-end rate &middot; action &rarr; deal</div>
+          </div>
+          <div class="fn-s">
+            <div class="fn-s-n">333</div>
+            <div class="fn-s-l">Actions required per closed deal</div>
+          </div>
+          <div class="fn-s">
+            <div class="fn-s-n">$2,570</div>
+            <div class="fn-s-l">Implied CAC &middot; 333 &times; $7.71</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 - CAC BENCHMARK -->
+      <section class="sec reveal" id="s-cac">
+        <div class="sec-head">
+          <div class="sec-num">04</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">CAC Benchmark</div>
+            <h2 class="sec-h">Windfield's CAC is an <em>order of magnitude</em> below industry.</h2>
+            <p class="sec-deck">Typical KC brokerage CAC runs $15-40K per closed deal (relationship nurture, events, print, referrals). Institutional CBRE/JLL-scale firms run $50K+. Windfield IO projects $2,570.</p>
+          </div>
+        </div>
+
+        <div class="cac-comp">
+          <div class="cac-row">
+            <div class="cac-label">Windfield IO<em>Projected, model-derived</em></div>
+            <div class="cac-bar-wrap"><div class="cac-bar win">$2,570</div></div>
+            <div class="cac-val">$2,570<em>1.0&times; baseline</em></div>
+          </div>
+          <div class="cac-row">
+            <div class="cac-label">Typical KC brokerage<em>Industry benchmark &middot; mid-market CRE</em></div>
+            <div class="cac-bar-wrap"><div class="cac-bar kc">$25,000</div></div>
+            <div class="cac-val">$25,000<em>9.7&times; Windfield</em></div>
+          </div>
+          <div class="cac-row">
+            <div class="cac-label">National brokerage<em>CBRE / JLL-equivalent</em></div>
+            <div class="cac-bar-wrap"><div class="cac-bar nat">$50,000</div></div>
+            <div class="cac-val">$50,000<em>19.5&times; Windfield</em></div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="callout-l">Why the gap exists</div>
+          <div class="callout-t">Traditional CRE acquires clients through <strong>high-touch, low-volume</strong> relationship work &mdash; expensive events, printed reports, broker-dinner hours, conference sponsorships. Windfield IO inverts this: <strong>low-touch, high-volume, AI-orchestrated</strong> sourcing with a broker-approval gate. The unit cost falls by a decimal point. The volume rises by another.</div>
+        </div>
+      </section>
+
+      <!-- 05 - LTV:CAC RATIO -->
+      <section class="sec reveal" id="s-ltv">
+        <div class="sec-head">
+          <div class="sec-num">05</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Lifetime Value</div>
+            <h2 class="sec-h">LTV:CAC of <em>22.47&times;</em>. Institutional-grade.</h2>
+            <p class="sec-deck">Most SaaS companies target 3:1. Marketplaces target 5:1. Anything above 10:1 is considered structurally exceptional. Windfield IO's projection sits above 20:1 even before second-deal expansion is priced in.</p>
+          </div>
+        </div>
+
+        <div class="inv-grid">
+          <div class="inv">
+            <div class="inv-k">Avg GCI / Deal</div>
+            <div class="inv-n">$38.5K</div>
+            <div class="inv-l">Blended across investment sales, tenant rep, landlord rep</div>
+          </div>
+          <div class="inv">
+            <div class="inv-k">CAC / Closed Deal</div>
+            <div class="inv-n">$2,570</div>
+            <div class="inv-l">333 actions &times; $7.71 fully-loaded</div>
+          </div>
+          <div class="inv">
+            <div class="inv-k">LTV:CAC (1st deal)</div>
+            <div class="inv-n">14.98<em>&times;</em></div>
+            <div class="inv-l">GCI &divide; CAC &middot; single transaction</div>
+          </div>
+          <div class="inv">
+            <div class="inv-k">LTV:CAC (12-mo)</div>
+            <div class="inv-n">22.47<em>&times;</em></div>
+            <div class="inv-l">+50% repeat multiplier &middot; 1-in-3 does a second deal</div>
+          </div>
+        </div>
+
+        <div class="takeaway">
+          <div class="takeaway-l">Why 22&times; matters</div>
+          <div class="takeaway-t">The <strong>1.5&times; repeat-client multiplier</strong> baked into the LTV is the most important assumption in the model. It assumes 1-in-3 clients who close their first deal through Windfield close a second within 12 months. The Relationship Intelligence Report confirms this is <em>conservative</em> &mdash; actual repeat rates for Tier 1 clients run 5-10 deals per client over multi-year relationships. If we swap the 12-month LTV for the observed 3-year LTV, the ratio exceeds 100&times;.</div>
+        </div>
+      </section>
+
+      <!-- 06 - 3-YEAR SCENARIOS -->
+      <section class="sec reveal" id="s-scenarios">
+        <div class="sec-head">
+          <div class="sec-num">06</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">3-Year Scenario Projections</div>
+            <h2 class="sec-h">Three bets. <em>36 months</em>. Same build cost.</h2>
+            <p class="sec-deck">The model runs three parallel projections &mdash; Conservative (90% confidence), Base (50%), Ambitious (10%). Volume caps and conversion factors differ; the build cost and unit economics do not. The curves below show cumulative net economic contribution, month by month.</p>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-head">
+            <div>
+              <div class="chart-title">Cumulative net economic contribution</div>
+              <div class="chart-sub">Months 1&ndash;36 &middot; net of all build + operating costs</div>
+            </div>
+            <div class="chart-legend">
+              <div class="chart-leg"><span class="chart-leg-d cons"></span>Conservative</div>
+              <div class="chart-leg"><span class="chart-leg-d base"></span>Base</div>
+              <div class="chart-leg"><span class="chart-leg-d amb"></span>Ambitious</div>
+            </div>
+          </div>
+
+          <svg class="chart-svg" viewBox="0 0 900 440" preserveAspectRatio="xMidYMid meet" id="scen-chart">
+            <g id="chart-grid"></g>
+            <g id="chart-axes"></g>
+            <line id="zero-line" stroke="rgba(250,250,250,0.15)" stroke-width="1" stroke-dasharray="4 3"/>
+            <path id="path-cons" stroke="#22d3ee" stroke-width="2" fill="none" opacity="0.7" stroke-linecap="round" stroke-linejoin="round"/>
+            <path id="path-base" stroke="#1db954" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path id="path-amb" stroke="#BE95FF" stroke-width="2" fill="none" stroke-dasharray="4 4" stroke-linecap="round" stroke-linejoin="round"/>
+            <g id="chart-labels"></g>
+            <g id="year-dividers"></g>
+          </svg>
+
+          <div class="chart-annotations">
+            <div class="ca">
+              <div class="ca-scen cons">Conservative &middot; 90% confidence</div>
+              <div class="ca-n">$5.76M</div>
+              <div class="ca-l">Net contribution &middot; what we commit to internally</div>
+            </div>
+            <div class="ca">
+              <div class="ca-scen base">Base &middot; 50% confidence</div>
+              <div class="ca-n">$22.70M</div>
+              <div class="ca-l">Net contribution &middot; what we plan operations around</div>
+            </div>
+            <div class="ca">
+              <div class="ca-scen amb">Ambitious &middot; 10% confidence</div>
+              <div class="ca-n">$51.50M</div>
+              <div class="ca-l">Net contribution &middot; plausible upside</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scrollx">
+        <table class="scen-table">
+          <thead>
+            <tr><th>Scenario</th><th class="num">Total Deals (3Y)</th><th class="num">Total GCI (3Y)</th><th class="num">Total Cost (3Y)</th><th class="num">Net Contribution (3Y)</th><th class="num">Y3 Mkt Share</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="scen-name">Conservative<em>90% confidence &middot; 70% of base funnel rates</em></td>
+              <td class="num">236</td>
+              <td class="num">$9.09M</td>
+              <td class="num">$3.33M</td>
+              <td class="num green">+$5.76M</td>
+              <td class="num">6.8%</td>
+            </tr>
+            <tr class="base">
+              <td class="scen-name">Base<em>50% confidence &middot; 100% of base funnel rates</em></td>
+              <td class="num">671</td>
+              <td class="num">$25.83M</td>
+              <td class="num">$3.13M</td>
+              <td class="num green">+$22.70M</td>
+              <td class="num">19.5%</td>
+            </tr>
+            <tr>
+              <td class="scen-name">Ambitious<em>10% confidence &middot; 115% of base funnel rates</em></td>
+              <td class="num">1,429</td>
+              <td class="num">$55.02M</td>
+              <td class="num">$3.52M</td>
+              <td class="num green">+$51.50M</td>
+              <td class="num">41.5%</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="callout amber">
+          <div class="callout-l">Reality check &middot; Model self-audit</div>
+          <div class="callout-t">Ambitious Y3 projects <strong>41.5% share of KC CRE transaction volume</strong>. That implies Windfield alone transacting ~$2.7B annually in a $6.5B metro market &mdash; <strong>implausible in practice</strong>. The model explicitly flags this: if any scenario exceeds 40%, reduce the Y1 volume cap on the Assumptions sheet. Treat Ambitious as a mathematical upper bound, not a plan. Base is the operating plan.</div>
+        </div>
+      </section>
+
+      <!-- 07 - COST STRUCTURE -->
+      <section class="sec reveal" id="s-cost">
+        <div class="sec-head">
+          <div class="sec-num">07</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Cost Structure</div>
+            <h2 class="sec-h">$286K builds it. <em>$565K/year</em> runs it.</h2>
+            <p class="sec-deck">Year 1 is heavy on one-time build costs (developer time, legal setup, content seeding). Year 2+ is dominated by AI credits and ongoing engineering maintenance. Low/Base/High columns show the sensitivity band for each line item.</p>
+          </div>
+        </div>
+
+        <div class="cost-split">
+          <div class="cost-card">
+            <div class="cost-card-h">
+              <div>
+                <div class="cost-card-k">Year 1 Build</div>
+                <div class="cost-card-t">One-time &middot; 9 line items</div>
+              </div>
+              <div class="cost-card-total">$286K</div>
+            </div>
+            <table class="cost-table">
+              <thead><tr><th>Line item</th><th>Low</th><th>Base</th><th>High</th></tr></thead>
+              <tbody>
+                <tr><td class="ct-line">Developer time</td><td class="ct-low">$0</td><td class="ct-base">$120K</td><td class="ct-high">$280K</td></tr>
+                <tr><td class="ct-line">Design system + UI polish</td><td class="ct-low">$0</td><td class="ct-base">$15K</td><td class="ct-high">$35K</td></tr>
+                <tr><td class="ct-line">AI credits (build + testing)</td><td class="ct-low">$20K</td><td class="ct-base">$48K</td><td class="ct-high">$120K</td></tr>
+                <tr><td class="ct-line">Clay + Apollo + Apify licenses</td><td class="ct-low">$12K</td><td class="ct-base">$24K</td><td class="ct-high">$48K</td></tr>
+                <tr><td class="ct-line">Voice AI Y1 commit</td><td class="ct-low">$6K</td><td class="ct-base">$18K</td><td class="ct-high">$60K</td></tr>
+                <tr><td class="ct-line">MCP server infrastructure</td><td class="ct-low">$4K</td><td class="ct-base">$12K</td><td class="ct-high">$30K</td></tr>
+                <tr><td class="ct-line">Supabase / Vercel / storage</td><td class="ct-low">$3K</td><td class="ct-base">$9K</td><td class="ct-high">$24K</td></tr>
+                <tr><td class="ct-line">Legal + compliance setup</td><td class="ct-low">$5K</td><td class="ct-base">$20K</td><td class="ct-high">$45K</td></tr>
+                <tr><td class="ct-line">Initial content seeding</td><td class="ct-low">$0</td><td class="ct-base">$20K</td><td class="ct-high">$50K</td></tr>
+              </tbody>
+              <tfoot><tr><td>Total Year 1</td><td>$50K</td><td>$286K</td><td>$692K</td></tr></tfoot>
+            </table>
+          </div>
+
+          <div class="cost-card">
+            <div class="cost-card-h">
+              <div>
+                <div class="cost-card-k">Year 2+ Recurring</div>
+                <div class="cost-card-t">Annual &middot; 5 line items</div>
+              </div>
+              <div class="cost-card-total">$565K</div>
+            </div>
+            <table class="cost-table">
+              <thead><tr><th>Line item</th><th>Low</th><th>Base</th><th>High</th></tr></thead>
+              <tbody>
+                <tr><td class="ct-line">AI + tool credits</td><td class="ct-low">$180K</td><td class="ct-base">$300K</td><td class="ct-high">$480K</td></tr>
+                <tr><td class="ct-line">Infrastructure (Supabase, Vercel)</td><td class="ct-low">$30K</td><td class="ct-base">$45K</td><td class="ct-high">$60K</td></tr>
+                <tr><td class="ct-line">Engineering maintenance</td><td class="ct-low">$60K</td><td class="ct-base">$120K</td><td class="ct-high">$180K</td></tr>
+                <tr><td class="ct-line">Content + marketing ops</td><td class="ct-low">$40K</td><td class="ct-base">$75K</td><td class="ct-high">$120K</td></tr>
+                <tr><td class="ct-line">Compliance + legal</td><td class="ct-low">$15K</td><td class="ct-base">$25K</td><td class="ct-high">$40K</td></tr>
+              </tbody>
+              <tfoot><tr><td>Total Annual</td><td>$325K</td><td>$565K</td><td>$880K</td></tr></tfoot>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 - LABOR COMPRESSION -->
+      <section class="sec reveal" id="s-labor">
+        <div class="sec-head">
+          <div class="sec-num">08</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Labor Compression</div>
+            <h2 class="sec-h">$565K replaces <em>18 FTEs</em> at the same throughput.</h2>
+            <p class="sec-deck">To match Windfield IO's Year 2 action volume using human analysts, SDRs, researchers, and ops staff would require an equivalent of 12-25 full-time employees. At $90K fully-loaded per FTE, that's $1.08M-$2.25M annually. The machine runs at one-third the cost.</p>
+          </div>
+        </div>
+
+        <div class="comp-compare">
+          <div class="comp-side human">
+            <div class="comp-k">The Human Way</div>
+            <div class="comp-h">18 analysts, SDRs, researchers, ops FTEs</div>
+            <div class="comp-n">$1.62M</div>
+            <div class="comp-l">annual fully-loaded &middot; $90K per FTE &times; 18</div>
+          </div>
+          <div class="comp-vs">vs</div>
+          <div class="comp-side machine">
+            <div class="comp-k">The Windfield IO Way</div>
+            <div class="comp-h">AI credits + infra + eng + content + legal</div>
+            <div class="comp-n green">$565K</div>
+            <div class="comp-l">annual recurring &middot; 2.87&times; compression</div>
+          </div>
+        </div>
+
+        <div class="inv-grid">
+          <div class="inv">
+            <div class="inv-k">Low-bound FTEs</div>
+            <div class="inv-n">12</div>
+            <div class="inv-l">3.32&times; compression &middot; $1.08M human equivalent</div>
+          </div>
+          <div class="inv">
+            <div class="inv-k">Base FTEs</div>
+            <div class="inv-n">18</div>
+            <div class="inv-l">2.87&times; compression &middot; $1.62M human equivalent</div>
+          </div>
+          <div class="inv">
+            <div class="inv-k">High-bound FTEs</div>
+            <div class="inv-n">25</div>
+            <div class="inv-l">2.56&times; compression &middot; $2.25M human equivalent</div>
+          </div>
+          <div class="inv">
+            <div class="inv-k">Avg compression</div>
+            <div class="inv-n">2.9<em>&times;</em></div>
+            <div class="inv-l">Capital efficiency vs equivalent human ops</div>
+          </div>
+        </div>
+
+        <div class="takeaway">
+          <div class="takeaway-l">What compression actually buys</div>
+          <div class="takeaway-t">The savings aren't the point. The point is <strong>scalability without headcount risk</strong>. Adding a 19th FTE means recruiting, interviewing, onboarding, training, benefits, office space, and 3-6 months to productivity. Adding 50% more Windfield IO action volume means raising the Year 1 cap on the Assumptions sheet and turning a dial. That is a structurally different business.</div>
+        </div>
+      </section>
+
+      <!-- 09 - KPI PYRAMID -->
+      <section class="sec reveal" id="s-kpi">
+        <div class="sec-head">
+          <div class="sec-num">09</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">KPI Pyramid</div>
+            <h2 class="sec-h">Four layers. <em>Instrumented from day one</em>.</h2>
+            <p class="sec-deck">The measurement system replaces projected cells with observed actuals as the system goes live. Layer 1 updates daily. Layer 4 updates quarterly. The goal: replace every assumption in this model with measured data within 18 months.</p>
+          </div>
+        </div>
+
+        <div class="pyramid">
+
+          <div class="pyr-layer pyr-l1">
+            <div class="pyr-left">
+              <div class="pyr-num">01</div>
+              <div class="pyr-cadence">Daily &middot; agent-level</div>
+            </div>
+            <div class="pyr-right">
+              <div class="pyr-name">Input Metrics &mdash; <em>what the loops do</em></div>
+              <div class="pyr-desc">Raw operational telemetry. Track every loop execution, its cost, latency, and error rate. If these break, nothing downstream works.</div>
+              <div class="pyr-metrics">
+                <span class="pyr-chip">Loop executions / day</span>
+                <span class="pyr-chip">$ per run</span>
+                <span class="pyr-chip">Error rate %</span>
+                <span class="pyr-chip">Human-approval time</span>
+                <span class="pyr-chip">Override rate %</span>
+                <span class="pyr-chip">Data freshness</span>
+                <span class="pyr-chip">MCP uptime %</span>
+                <span class="pyr-chip">MCP query success</span>
+                <span class="pyr-chip">Agent latency p95</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pyr-layer pyr-l2">
+            <div class="pyr-left">
+              <div class="pyr-num">02</div>
+              <div class="pyr-cadence">Weekly &middot; funnel-level</div>
+            </div>
+            <div class="pyr-right">
+              <div class="pyr-name">Activity Metrics &mdash; <em>funnel progression</em></div>
+              <div class="pyr-desc">Does the sourcing engine fill the top of the funnel, and does it convert through the stages? This is where the Scenario projections get validated against reality.</div>
+              <div class="pyr-metrics">
+                <span class="pyr-chip">Owners identified</span>
+                <span class="pyr-chip">Owners enriched to Grade A</span>
+                <span class="pyr-chip">First-contact attempts</span>
+                <span class="pyr-chip">Connected conversations</span>
+                <span class="pyr-chip">Qualified opps</span>
+                <span class="pyr-chip">Engaged clients</span>
+                <span class="pyr-chip">Active pipeline deals</span>
+                <span class="pyr-chip">Research reports published</span>
+                <span class="pyr-chip">Inbound MCP queries</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pyr-layer pyr-l3">
+            <div class="pyr-left">
+              <div class="pyr-num">03</div>
+              <div class="pyr-cadence">Monthly &middot; outcome-level</div>
+            </div>
+            <div class="pyr-right">
+              <div class="pyr-name">Business Outcomes &mdash; <em>the revenue story</em></div>
+              <div class="pyr-desc">Closed deals, GCI, market share, measured CAC and LTV. Once these are being observed, the Scenarios sheet formulas can be replaced with actuals &mdash; and the whole model becomes auditable.</div>
+              <div class="pyr-metrics">
+                <span class="pyr-chip">Closed deals</span>
+                <span class="pyr-chip">Weighted GCI $</span>
+                <span class="pyr-chip">Windfield-sourced %</span>
+                <span class="pyr-chip">Portfolio AUM added</span>
+                <span class="pyr-chip">Mkt share deal count</span>
+                <span class="pyr-chip">Mkt share volume</span>
+                <span class="pyr-chip">Content share of voice</span>
+                <span class="pyr-chip">2nd-deal rate</span>
+                <span class="pyr-chip">Broker productivity</span>
+                <span class="pyr-chip">Measured CAC</span>
+                <span class="pyr-chip">Measured LTV:CAC</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pyr-layer pyr-l4">
+            <div class="pyr-left">
+              <div class="pyr-num">04</div>
+              <div class="pyr-cadence">Quarterly &middot; strategic</div>
+            </div>
+            <div class="pyr-right">
+              <div class="pyr-name">Compounding Metrics &mdash; <em>the moat metrics</em></div>
+              <div class="pyr-desc">Whether the business is actually building structural advantage over time &mdash; contact-graph depth, off-market deal origination, AI-query volume, key-person risk shrinking into loops.</div>
+              <div class="pyr-metrics">
+                <span class="pyr-chip">Contact-graph completeness</span>
+                <span class="pyr-chip">Off-market origination %</span>
+                <span class="pyr-chip">Time-to-insight vs comp</span>
+                <span class="pyr-chip">External AI query volume</span>
+                <span class="pyr-chip">Portfolio NOI from sourcing</span>
+                <span class="pyr-chip">Portfolio appreciation $</span>
+                <span class="pyr-chip">Key-person risk index</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 10 - COMPETITIVE POSITION -->
+      <section class="sec reveal" id="s-comp">
+        <div class="sec-head">
+          <div class="sec-num">10</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Competitive Position</div>
+            <h2 class="sec-h">A <em>12-24 month</em> uncontested lead in KC CRE.</h2>
+            <p class="sec-deck">The KC commercial real estate market is technologically flat. No incumbent has MCP endpoints. None are AEO-indexed. None are running agentic loops against proprietary data. This is the window.</p>
+          </div>
+        </div>
+
+        <div class="comp-grid">
+          <div class="comp-card lead">
+            <div class="comp-big">91<em>%</em></div>
+            <div class="comp-name">KC CRE firms below 8/25 Digital Maturity</div>
+            <div class="comp-desc">Most of the field isn't running sophisticated digital ops at all. Static websites, no content engine, no data pipeline, no AI.</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-big">10</div>
+            <div class="comp-name">Real digital-threat firms in the market</div>
+            <div class="comp-desc">Even among the top decile, no one has an agentic AI stack. The ceiling of "best in KC CRE" is still solidly pre-agentic.</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-big">0</div>
+            <div class="comp-name">Firms running MCP + agentic loops</div>
+            <div class="comp-desc">Not one KC firm has MCP endpoints. Not one has AEO-ready schema. Not one has agentic loops. The field is wide open.</div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="callout-l">Why the window closes</div>
+          <div class="callout-t">CBRE, JLL, and Newmark will absolutely build this at national scale within 24 months &mdash; but their rollouts will prioritize NYC, LA, Chicago, DC. KC metro is <strong>a tertiary market from their perspective</strong>. Windfield has a finite window to establish itself as the intelligent-ops brokerage in KC before the national players catch up. The Economic Impact Model assumes Year 2 is when compounding kicks in &mdash; which means Year 1 execution determines whether the window gets captured or missed.</div>
+        </div>
+      </section>
+
+      <!-- 11 - GATES & INVESTMENT -->
+      <section class="sec reveal" id="s-gate">
+        <div class="sec-head">
+          <div class="sec-num">11</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Gate Conditions &amp; Investment Required</div>
+            <h2 class="sec-h">What Year 1 must prove <em>to unlock Year 2</em>.</h2>
+            <p class="sec-deck">The commitment isn't $286K &rarr; $22.7M. The commitment is $286K to prove Year 1 works &mdash; then decide whether to invest the Year 2 recurring. Explicit gates below.</p>
+          </div>
+        </div>
+
+        <div class="gate-grid">
+          <div class="gate-card scale">
+            <div class="gate-k">Scale Triggers &middot; Green</div>
+            <div class="gate-h">If these hit by end of Year 1, <em>commit Year 2 recurring</em>.</div>
+            <ul class="gate-list">
+              <li>Measured <strong>action &rarr; deal rate &ge; 0.25%</strong> across 4+ loops</li>
+              <li>At least <strong>5 closed deals</strong> sourced via system by M12</li>
+              <li>Measured <strong>CAC &le; $4,000</strong> (generous band on $2,570 projection)</li>
+              <li>MCP endpoints serving <strong>&ge;50 inbound AI queries/month</strong></li>
+              <li>At least <strong>one second-deal repeat</strong> from a system-sourced client</li>
+            </ul>
+          </div>
+          <div class="gate-card hold">
+            <div class="gate-k">Hold &amp; Tune &middot; Yellow</div>
+            <div class="gate-h">If these are the reality, <em>extend Year 1 by 6 months</em> before committing.</div>
+            <ul class="gate-list">
+              <li>Action &rarr; deal rate in <strong>0.15-0.25% band</strong></li>
+              <li><strong>2-4 closed deals</strong> sourced &mdash; evidence but not velocity</li>
+              <li>Measured CAC in <strong>$4K-$8K band</strong> &mdash; still 3&times; better than industry</li>
+              <li>MCP uptime &lt;95% or high error rates in sourcing loops</li>
+              <li>Voice AI approval gate too slow &mdash; tune down the broker review time first</li>
+            </ul>
+          </div>
+          <div class="gate-card kill">
+            <div class="gate-k">Kill Conditions &middot; Red</div>
+            <div class="gate-h">If these are the reality, <em>shut it down</em> &mdash; don't escalate.</div>
+            <ul class="gate-list">
+              <li>Action &rarr; deal rate <strong>&lt; 0.1%</strong> across all loops</li>
+              <li><strong>Zero closed deals</strong> sourced by M12</li>
+              <li>Measured CAC <strong>&gt; $10,000</strong> with no clear path to compression</li>
+              <li>Broker approval time trending <strong>up, not down</strong> (model diverging)</li>
+              <li>No inbound MCP queries &mdash; external AI ecosystem ignoring the endpoints</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="inv-grid">
+          <div class="inv">
+            <div class="inv-k">Y1 Commitment</div>
+            <div class="inv-n">$286K</div>
+            <div class="inv-l">One-time &middot; build cost &middot; decides whether to continue</div>
+          </div>
+          <div class="inv">
+            <div class="inv-k">Payback (Base)</div>
+            <div class="inv-n">1.5 mo</div>
+            <div class="inv-l">Months of Base-scenario Y1 GCI to recover build cost</div>
+          </div>
+          <div class="inv">
+            <div class="inv-k">Y2 Decision</div>
+            <div class="inv-n">$565K</div>
+            <div class="inv-l">Annual recurring &middot; committed only if Y1 gates clear</div>
+          </div>
+          <div class="inv">
+            <div class="inv-k">3Y Break-even (Base)</div>
+            <div class="inv-n">$22.7M</div>
+            <div class="inv-l">Net contribution over three years &middot; Base scenario</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12 - METHODOLOGY -->
+      <section class="sec reveal" id="s-method" style="border-bottom:none">
+        <div class="sec-head">
+          <div class="sec-num">12</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Methodology &amp; Model Structure</div>
+            <h2 class="sec-h">How this <em>computes</em>.</h2>
+          </div>
+        </div>
+        <div class="prose">
+          <p>The Economic Impact Model is a live Excel model across seven sheets. <code>Assumptions</code> holds all editable inputs (blue cells). <code>Unit Economics</code> computes the $7.71 cost-per-action and derives CAC. <code>Scenarios</code> projects 36 months of monthly volume, conversions, deals, GCI, and net contribution across Conservative / Base / Ambitious scenarios &mdash; every cell a formula. <code>Cost Structure</code> details Year 1 build and Year 2+ recurring with Low / Base / High sensitivity bands. <code>KPI Dashboard</code> is the four-layer measurement template for replacing projections with actuals.</p>
+          <p><strong>This is not a forecast. It is a decision support framework.</strong> The projections should not be committed to externally or used as customer-facing claims. Their job is to size the Year 1 investment, calibrate the gate conditions, and provide a baseline against which real instrumented data can be compared once the system is running.</p>
+          <p>Pair this model with the <strong>Relationship Intelligence Report</strong> (<code>RPT_windfield_relationship_intelligence_2026-04-22.html</code>) &mdash; that report establishes the historical transaction base that this model's assumptions derive from: blended $38.5K GCI per deal, 65% repeat-client rate, Tier 1 depth that supports the 1.5&times; multiplier. The two documents are intended to be read as a pair: the first proves the insight value, this one prices the investment required to operationalize it.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">
+          <span class="footer-mark-w">Windfield</span>
+          <span class="footer-mark-re">IO</span>
+        </div>
+        <div class="footer-tag">Dual-Mode MCP &middot; Agentic Brokerage OS</div>
+        <div class="footer-addr">
+          <strong>Windfield Real Estate, LLC</strong><br>
+          1440 Erie St, Suite A<br>
+          North Kansas City, MO 64116<br>
+          windfieldrealestate.com
+        </div>
+      </div>
+      <div class="footer-meta">
+        <div class="fm-block">
+          <div class="fm-k">Principal</div>
+          <div class="fm-v"><strong>Andrew Danner</strong> &middot; Broker/Owner<br>Andrew@windfieldrealestate.com</div>
+        </div>
+        <div class="fm-block">
+          <div class="fm-k">Build Partner</div>
+          <div class="fm-v"><strong>Tommy Saunders</strong> &middot; Intelligent Operations AI<br>intelligentoperations.ai</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <div class="footer-prepared">Prepared by Intelligent Operations AI &middot; April 22, 2026</div>
+      <div class="footer-legal-v">
+        <span>Internal / Strategic / Trade Secret</span>
+        <span>&middot;</span>
+        <span>Projection &middot; Not Forecast</span>
+        <span>&middot;</span>
+        <span>v1.0</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ================================================================
+     BEHAVIOR - Chart renderer + scroll-spy + reveals
+     ================================================================ -->
+<script>
+(function(){
+  // Scenario data: cumulative net contribution ($)
+  var cons = [-24103,-49008,-75254,-103374,-95400,-90371,-50319,-14284,55694,120591,218368,348485,484214,618016,788390,956836,1123356,1287947,1450611,1649848,1847157,2042539,2235993,2466020,2691228,2914315,3173783,3431130,3686357,3977964,4267450,4554816,4840062,5123188,5442693,5760078];
+  var base = [-24072,-48869,-36369,12942,60087,143080,299943,491689,756342,1054915,1425430,1905902,2469950,3032263,3631341,4267185,4939794,5610668,6318307,7062712,7805382,8584817,9401018,10215483,11102608,12026329,12986637,13945041,14940033,15971621,17039797,18106068,19208927,20348382,21524424,22698563];
+  var amb  = [-24126,-10639,39875,126831,288134,523200,869933,1327757,1896068,2612791,3477322,4527583,5813494,7174284,8571454,10005003,11513433,13058242,14677931,16334000,18064948,19832276,21635984,23514572,25541855,27605310,29743428,31917719,34166673,36451798,38811588,41246049,43716674,46261971,48843431,51499563];
+
+  var W = 900, H = 440;
+  var plotL = 70, plotR = 880, plotT = 40, plotB = 380;
+  var plotW = plotR - plotL, plotH = plotB - plotT;
+  var yMin = -2000000, yMax = 55000000;
+  var xMin = 1, xMax = 36;
+
+  function xPos(m) { return plotL + ((m - xMin) / (xMax - xMin)) * plotW; }
+  function yPos(v) { return plotB - ((v - yMin) / (yMax - yMin)) * plotH; }
+
+  function buildPath(arr) {
+    return arr.map(function(v, i) {
+      return (i === 0 ? 'M' : 'L') + ' ' + xPos(i + 1).toFixed(2) + ' ' + yPos(v).toFixed(2);
+    }).join(' ');
+  }
+
+  document.getElementById('path-cons').setAttribute('d', buildPath(cons));
+  document.getElementById('path-base').setAttribute('d', buildPath(base));
+  document.getElementById('path-amb').setAttribute('d', buildPath(amb));
+
+  // Zero line
+  var zl = document.getElementById('zero-line');
+  zl.setAttribute('x1', plotL);
+  zl.setAttribute('x2', plotR);
+  zl.setAttribute('y1', yPos(0));
+  zl.setAttribute('y2', yPos(0));
+
+  // Grid lines + Y-axis labels
+  var grid = document.getElementById('chart-grid');
+  var yTicks = [0, 10000000, 20000000, 30000000, 40000000, 50000000];
+  yTicks.forEach(function(v) {
+    var y = yPos(v);
+    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', plotL); line.setAttribute('x2', plotR);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('stroke', 'rgba(250,250,250,0.06)'); line.setAttribute('stroke-width', '1');
+    grid.appendChild(line);
+    var lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    lbl.setAttribute('x', plotL - 10); lbl.setAttribute('y', y + 4);
+    lbl.setAttribute('text-anchor', 'end');
+    lbl.setAttribute('font-family', '"JetBrains Mono", monospace');
+    lbl.setAttribute('font-size', '10'); lbl.setAttribute('fill', '#71717a');
+    lbl.setAttribute('letter-spacing', '0.04em');
+    lbl.textContent = v === 0 ? '$0' : '$' + (v / 1000000) + 'M';
+    grid.appendChild(lbl);
+  });
+
+  // X-axis labels
+  var axes = document.getElementById('chart-axes');
+  var xTicks = [1, 6, 12, 18, 24, 30, 36];
+  xTicks.forEach(function(m) {
+    var x = xPos(m);
+    var tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    tick.setAttribute('x1', x); tick.setAttribute('x2', x);
+    tick.setAttribute('y1', plotB); tick.setAttribute('y2', plotB + 4);
+    tick.setAttribute('stroke', 'rgba(250,250,250,0.12)'); tick.setAttribute('stroke-width', '1');
+    axes.appendChild(tick);
+    var lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    lbl.setAttribute('x', x); lbl.setAttribute('y', plotB + 18);
+    lbl.setAttribute('text-anchor', 'middle');
+    lbl.setAttribute('font-family', '"JetBrains Mono", monospace');
+    lbl.setAttribute('font-size', '10'); lbl.setAttribute('fill', '#71717a');
+    lbl.setAttribute('letter-spacing', '0.04em');
+    lbl.textContent = 'M' + m;
+    axes.appendChild(lbl);
+  });
+
+  // Year divider labels
+  var yearDiv = document.getElementById('year-dividers');
+  [
+    { x: xPos(6), label: 'Year 1' },
+    { x: xPos(18), label: 'Year 2' },
+    { x: xPos(30), label: 'Year 3' }
+  ].forEach(function(d) {
+    var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', d.x); t.setAttribute('y', 24);
+    t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('font-family', '"JetBrains Mono", monospace');
+    t.setAttribute('font-size', '9'); t.setAttribute('fill', '#52525b');
+    t.setAttribute('letter-spacing', '0.14em');
+    t.textContent = d.label.toUpperCase();
+    yearDiv.appendChild(t);
+  });
+  [12.5, 24.5].forEach(function(m) {
+    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', xPos(m)); line.setAttribute('x2', xPos(m));
+    line.setAttribute('y1', plotT); line.setAttribute('y2', plotB);
+    line.setAttribute('stroke', 'rgba(250,250,250,0.04)'); line.setAttribute('stroke-width', '1');
+    line.setAttribute('stroke-dasharray', '2 4');
+    yearDiv.appendChild(line);
+  });
+
+  // Endpoint labels
+  var labels = document.getElementById('chart-labels');
+  [
+    { v: cons[35], color: '#22d3ee', text: '$5.76M', offset: 0 },
+    { v: base[35], color: '#3dd576', text: '$22.70M', offset: 0 },
+    { v: amb[35],  color: '#BE95FF', text: '$51.50M', offset: 0 }
+  ].forEach(function(d) {
+    var cx = xPos(36);
+    var cy = yPos(d.v);
+    var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot.setAttribute('cx', cx); dot.setAttribute('cy', cy);
+    dot.setAttribute('r', '4'); dot.setAttribute('fill', d.color);
+    labels.appendChild(dot);
+    var lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    lbl.setAttribute('x', cx + 10); lbl.setAttribute('y', cy + 4 + d.offset);
+    lbl.setAttribute('font-family', '"JetBrains Mono", monospace');
+    lbl.setAttribute('font-size', '11'); lbl.setAttribute('font-weight', '600');
+    lbl.setAttribute('fill', d.color);
+    lbl.textContent = d.text;
+    labels.appendChild(lbl);
+  });
+
+  // TOC scroll-spy
+  var tocItems = document.querySelectorAll('.toc-item');
+  tocItems.forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      var targetId = item.getAttribute('data-target');
+      var target = document.getElementById(targetId);
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 72, behavior: 'smooth' });
+      }
+    });
+  });
+
+  var sections = Array.from(document.querySelectorAll('.sec[id]'));
+  var tocMap = new Map();
+  tocItems.forEach(function(item) { tocMap.set(item.getAttribute('data-target'), item); });
+
+  function updateActive() {
+    var scrollPos = window.scrollY + 120;
+    var active = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= scrollPos) active = sections[i];
+      else break;
+    }
+    tocItems.forEach(function(i) { i.classList.remove('active'); });
+    var activeItem = tocMap.get(active.id);
+    if (activeItem) {
+      activeItem.classList.add('active');
+      var tocEl = document.getElementById('toc');
+      var rect = activeItem.getBoundingClientRect();
+      var tocRect = tocEl.getBoundingClientRect();
+      if (rect.top < tocRect.top + 40 || rect.bottom > tocRect.bottom - 40) {
+        activeItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) { requestAnimationFrame(function() { updateActive(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+  updateActive();
+
+  // Reveal animation
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('on'); });
+  }
+})();
+</script>
+
+</body>
+</html>
