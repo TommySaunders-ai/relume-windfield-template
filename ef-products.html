@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edward Flynn — Products | Windfield IO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-brand-ring:rgba(29,185,84,0.28);--wf-violet:#7c3aed;--wf-violet-muted:rgba(124,58,237,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-r-xl:16px;--wf-r-pill:9999px;--wf-shadow-sm:0 1px 2px rgba(0,0,0,0.25);--wf-shadow-md:0 4px 16px rgba(0,0,0,0.28);--wf-shadow-lg:0 16px 48px rgba(0,0,0,0.4);--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+.container{width:100%;max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* ── Navbar ── */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(9,9,11,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--wf-border-subtle);height:64px}
+.navbar .container{display:flex;align-items:center;justify-content:space-between;height:100%}
+.navbar-logo{font-size:20px;font-weight:700;letter-spacing:-0.02em}
+.navbar-logo span{color:var(--wf-brand)}
+.navbar-links{display:flex;align-items:center;gap:32px}
+.navbar-links a{font-size:14px;font-weight:500;color:var(--wf-fg-muted);transition:color var(--wf-dur) var(--wf-ease)}
+.navbar-links a:hover{color:var(--wf-fg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;font-size:14px;font-weight:600;font-family:var(--font-sans);border-radius:var(--wf-r-md);cursor:pointer;transition:all var(--wf-dur) var(--wf-ease);border:none;line-height:1}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--wf-fg);border:1px solid var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-brand);color:var(--wf-brand);transform:translateY(-1px)}
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn-lg{padding:14px 28px;font-size:15px}
+
+.section{padding:80px 0}
+.section--elevated{background:var(--wf-bg-elevated)}
+.kicker{display:inline-block;font-size:13px;font-weight:600;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+.section-heading{font-size:36px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin-bottom:24px}
+.section-subtext{font-size:16px;color:var(--wf-fg-muted);max-width:640px;line-height:1.7}
+
+/* ── Hero ── */
+.hero-banner{margin:24px auto;max-width:1280px;padding:0 40px}
+.hero-inner{background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(29,185,84,0.10));border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:80px 48px;text-align:center}
+.hero-inner h1{font-size:clamp(2rem,4.5vw,3rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px}
+.hero-inner p{font-size:16px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto 28px;line-height:1.7}
+
+/* ── Filter Pills ── */
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:48px}
+.filter-pill{display:inline-flex;padding:8px 18px;border-radius:var(--wf-r-pill);font-size:13px;font-weight:600;background:var(--wf-surface);border:1px solid var(--wf-border);color:var(--wf-fg-muted);cursor:pointer;transition:all var(--wf-dur) var(--wf-ease);font-family:var(--font-sans)}
+.filter-pill:hover{border-color:var(--wf-brand);color:var(--wf-brand)}
+.filter-pill.active{background:var(--wf-brand-muted);border-color:var(--wf-brand-ring);color:var(--wf-brand)}
+
+/* ── Product Grid ── */
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.product-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px;transition:all var(--wf-dur) var(--wf-ease)}
+.product-card:hover{transform:translateY(-2px);border-color:var(--wf-border-strong);box-shadow:var(--wf-shadow-md)}
+.product-badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--wf-brand);background:var(--wf-brand-muted);padding:4px 10px;border-radius:var(--wf-r-pill);margin-bottom:12px}
+.product-card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.product-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:16px}
+.product-bottom{display:flex;align-items:center;justify-content:space-between}
+.product-price{font-size:20px;font-weight:700;color:var(--wf-brand)}
+.product-link{font-size:13px;font-weight:600;color:var(--wf-fg-muted);transition:color var(--wf-dur)}
+.product-link:hover{color:var(--wf-brand)}
+.product-card.hidden{display:none}
+
+/* ── Format Cards ── */
+.format-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.format-card{padding:28px}
+.format-icon{width:56px;height:56px;border-radius:var(--wf-r-lg);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.format-icon svg{width:26px;height:26px;color:var(--wf-brand)}
+.format-card h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.format-card p{font-size:13px;color:var(--wf-fg-muted);line-height:1.5}
+
+/* ── Free CTA ── */
+.free-cta{text-align:center}
+.email-form{display:flex;gap:12px;max-width:480px;margin:24px auto 0;justify-content:center}
+.email-input{flex:1;padding:12px 16px;font-size:14px;font-family:var(--font-sans);background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);color:var(--wf-fg);outline:none;transition:border-color var(--wf-dur) var(--wf-ease)}
+.email-input:focus{border-color:var(--wf-brand)}
+.email-input::placeholder{color:var(--wf-fg-faint)}
+.privacy-note{font-size:12px;color:var(--wf-fg-faint);margin-top:12px}
+
+/* ── Footer ── */
+.footer{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:60px 0 24px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand{font-size:20px;font-weight:700;margin-bottom:12px}
+.footer-brand span{color:var(--wf-brand)}
+.footer-desc{font-size:13px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:20px}
+.footer-newsletter{display:flex;gap:8px}
+.footer-newsletter input{flex:1;padding:8px 12px;font-size:13px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-col{display:flex;flex-direction:column;gap:10px}
+.footer-col-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--wf-fg-subtle);margin-bottom:4px}
+.footer-col a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur) var(--wf-ease)}
+.footer-col a:hover{color:var(--wf-brand)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-faint)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{color:var(--wf-fg-faint);transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg-muted)}
+
+@media(max-width:900px){
+  .product-grid{grid-template-columns:repeat(2,1fr)}
+  .format-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+  .navbar-links{display:none}
+}
+@media(max-width:600px){
+  .container{padding:0 20px}
+  .hero-banner{padding:0 20px}
+  .hero-inner{padding:48px 24px}
+  .product-grid{grid-template-columns:1fr}
+  .format-grid{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .email-form{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar">
+  <div class="container">
+    <a href="ef-home.html" class="navbar-logo"><span>Logo</span></a>
+    <div class="navbar-links">
+      <a href="ef-home.html">Home</a>
+      <a href="ef-portfolio.html">Portfolio</a>
+      <a href="ef-specializations.html">Specializations</a>
+      <a href="ef-products.html">Products</a>
+      <a href="ef-contact.html">Contact</a>
+    </div>
+    <a href="#" class="btn btn-primary btn-sm">Book a consultation</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<div class="hero-banner">
+  <div class="hero-inner">
+    <span class="kicker">Digital Resources</span>
+    <h1>Mind-Body-Spirit Hypnosis Library</h1>
+    <p>Clinically designed guided hypnosis sessions, DBT workbooks, guided journals, and affirmation cards to support your therapeutic journey between sessions.</p>
+    <a href="#" class="btn btn-primary btn-lg">Download Free Audio</a>
+  </div>
+</div>
+
+<!-- ── Products ── -->
+<section class="section">
+  <div class="container">
+    <!-- Filter Pills -->
+    <div class="filter-bar">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="audio">Audio MP3s</button>
+      <button class="filter-pill" data-filter="workbook">DBT Workbooks</button>
+      <button class="filter-pill" data-filter="journal">Guided Journals</button>
+      <button class="filter-pill" data-filter="cards">Affirmation Cards</button>
+      <button class="filter-pill" data-filter="tracker">Skill Trackers</button>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" id="productGrid">
+      <div class="product-card" data-category="audio">
+        <span class="product-badge">Audio MP3</span>
+        <h3>Anxiety &amp; Panic Relief</h3>
+        <p>Guided hypnosis session targeting physiological anxiety responses with progressive relaxation and cognitive reframing techniques.</p>
+        <div class="product-bottom">
+          <div class="product-price">$29</div>
+          <a href="#" class="product-link">View Details &rarr;</a>
+        </div>
+      </div>
+      <div class="product-card" data-category="audio">
+        <span class="product-badge">Audio MP3</span>
+        <h3>Deep Sleep Induction</h3>
+        <p>Clinical-grade sleep hypnosis combining body scan, breath work, and peaceful imagery for deep, restorative rest.</p>
+        <div class="product-bottom">
+          <div class="product-price">$29</div>
+          <a href="#" class="product-link">View Details &rarr;</a>
+        </div>
+      </div>
+      <div class="product-card" data-category="audio">
+        <span class="product-badge">Audio MP3</span>
+        <h3>Smoking Cessation Program</h3>
+        <p>Multi-session hypnotherapy program addressing nicotine dependency through subconscious reprogramming and behavioral modification.</p>
+        <div class="product-bottom">
+          <div class="product-price">$79</div>
+          <a href="#" class="product-link">View Details &rarr;</a>
+        </div>
+      </div>
+      <div class="product-card" data-category="workbook">
+        <span class="product-badge">DBT Workbook</span>
+        <h3>Distress Tolerance Toolkit</h3>
+        <p>Printable DBT skills worksheets covering TIPP, ACCEPTS, self-soothe, and crisis survival strategies for daily practice.</p>
+        <div class="product-bottom">
+          <div class="product-price">$19</div>
+          <a href="#" class="product-link">View Details &rarr;</a>
+        </div>
+      </div>
+      <div class="product-card" data-category="workbook">
+        <span class="product-badge">DBT Workbook</span>
+        <h3>DEAR MAN Communication Guide</h3>
+        <p>Comprehensive workbook for mastering interpersonal effectiveness skills including DEAR MAN, GIVE, and FAST techniques.</p>
+        <div class="product-bottom">
+          <div class="product-price">$24</div>
+          <a href="#" class="product-link">View Details &rarr;</a>
+        </div>
+      </div>
+      <div class="product-card" data-category="workbook">
+        <span class="product-badge">DBT Workbook</span>
+        <h3>B.E.T.H. Framework Workbook</h3>
+        <p>Original framework workbook for Behavioral Engagement Through Healing with structured exercises and reflection prompts.</p>
+        <div class="product-bottom">
+          <div class="product-price">$19</div>
+          <a href="#" class="product-link">View Details &rarr;</a>
+        </div>
+      </div>
+      <div class="product-card" data-category="journal">
+        <span class="product-badge">Guided Journal</span>
+        <h3>Emotion Regulation Journal</h3>
+        <p>Structured journaling prompts built on the DBT emotion regulation module with daily mood tracking and skill application logs.</p>
+        <div class="product-bottom">
+          <div class="product-price">$15</div>
+          <a href="#" class="product-link">View Details &rarr;</a>
+        </div>
+      </div>
+      <div class="product-card" data-category="tracker">
+        <span class="product-badge">Skill Tracker</span>
+        <h3>Emotion Regulation Tracker</h3>
+        <p>Daily tracking sheets for monitoring emotional states, skill usage, and progress across all four DBT modules.</p>
+        <div class="product-bottom">
+          <div class="product-price">$19</div>
+          <a href="#" class="product-link">View Details &rarr;</a>
+        </div>
+      </div>
+      <div class="product-card" data-category="cards">
+        <span class="product-badge">Affirmation Cards</span>
+        <h3>Radical Acceptance Deck</h3>
+        <p>52 printable affirmation cards rooted in DBT radical acceptance and mindfulness principles for daily inspiration.</p>
+        <div class="product-bottom">
+          <div class="product-price">$12</div>
+          <a href="#" class="product-link">View Details &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Format Cards ── -->
+<section class="section section--elevated">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px">
+      <span class="kicker">Formats</span>
+      <h2 class="section-heading">Available Formats</h2>
+    </div>
+    <div class="format-grid">
+      <div class="format-card">
+        <div class="format-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"/></svg>
+        </div>
+        <h3>Audio MP3s</h3>
+        <p>Professional guided hypnosis recordings for anxiety, sleep, and smoking cessation.</p>
+      </div>
+      <div class="format-card">
+        <div class="format-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/></svg>
+        </div>
+        <h3>DBT Workbooks</h3>
+        <p>Printable worksheets and structured exercises for all four DBT skill modules.</p>
+      </div>
+      <div class="format-card">
+        <div class="format-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/></svg>
+        </div>
+        <h3>Guided Journals</h3>
+        <p>Structured daily prompts for emotional tracking, reflection, and skill application.</p>
+      </div>
+      <div class="format-card">
+        <div class="format-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z"/></svg>
+        </div>
+        <h3>Affirmation Cards</h3>
+        <p>Printable card decks with daily affirmations rooted in DBT and mindfulness principles.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Free Resource CTA ── -->
+<section class="section">
+  <div class="container free-cta">
+    <span class="kicker">Free Resource</span>
+    <h2 class="section-heading">Get Your Free Guided Meditation</h2>
+    <p class="section-subtext" style="margin:0 auto 24px">Enter your email to receive a complimentary 15-minute guided meditation audio designed for stress relief and present-moment awareness.</p>
+    <div class="email-form">
+      <input type="email" class="email-input" placeholder="Enter your email address">
+      <button class="btn btn-primary">Download Free</button>
+    </div>
+    <p class="privacy-note">No spam, ever. Unsubscribe at any time.</p>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span>Logo</span></div>
+        <p class="footer-desc">Mind, Body &amp; Spirit Coordination. Evidence-based therapeutic resources for lasting resilience and personal growth.</p>
+        <div class="footer-newsletter">
+          <input type="email" placeholder="Your email">
+          <button class="btn btn-primary btn-sm">Subscribe</button>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <a href="ef-specializations.html">Specializations</a>
+        <a href="#">Individual Therapy</a>
+        <a href="#">Group Therapy</a>
+        <a href="#">Hypnotherapy</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <a href="ef-products.html">Products</a>
+        <a href="#">Courses</a>
+        <a href="#">Community</a>
+        <a href="ef-portfolio.html">Portfolio</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Connect</div>
+        <a href="ef-contact.html">Contact</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Facebook</a>
+        <a href="#">Zocdoc</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Category filter
+const pills = document.querySelectorAll('.filter-pill');
+const cards = document.querySelectorAll('.product-card');
+
+pills.forEach(pill => {
+  pill.addEventListener('click', () => {
+    pills.forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    const filter = pill.dataset.filter;
+    cards.forEach(card => {
+      if (filter === 'all' || card.dataset.category === filter) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>

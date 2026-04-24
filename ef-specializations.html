@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edward Flynn — Specializations | Windfield IO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-brand-ring:rgba(29,185,84,0.28);--wf-violet:#7c3aed;--wf-violet-muted:rgba(124,58,237,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-r-xl:16px;--wf-r-pill:9999px;--wf-shadow-sm:0 1px 2px rgba(0,0,0,0.25);--wf-shadow-md:0 4px 16px rgba(0,0,0,0.28);--wf-shadow-lg:0 16px 48px rgba(0,0,0,0.4);--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+.container{width:100%;max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* ── Navbar ── */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(9,9,11,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--wf-border-subtle);height:64px}
+.navbar .container{display:flex;align-items:center;justify-content:space-between;height:100%}
+.navbar-logo{font-size:20px;font-weight:700;letter-spacing:-0.02em}
+.navbar-logo span{color:var(--wf-brand)}
+.navbar-links{display:flex;align-items:center;gap:32px}
+.navbar-links a{font-size:14px;font-weight:500;color:var(--wf-fg-muted);transition:color var(--wf-dur) var(--wf-ease)}
+.navbar-links a:hover{color:var(--wf-fg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;font-size:14px;font-weight:600;font-family:var(--font-sans);border-radius:var(--wf-r-md);cursor:pointer;transition:all var(--wf-dur) var(--wf-ease);border:none;line-height:1}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--wf-fg);border:1px solid var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-brand);color:var(--wf-brand);transform:translateY(-1px)}
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn-lg{padding:14px 28px;font-size:15px}
+
+.section{padding:80px 0}
+.section--elevated{background:var(--wf-bg-elevated)}
+.kicker{display:inline-block;font-size:13px;font-weight:600;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+.section-heading{font-size:36px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin-bottom:24px}
+.section-subtext{font-size:16px;color:var(--wf-fg-muted);max-width:640px;line-height:1.7}
+
+/* ── Hero ── */
+.hero{padding:100px 0 60px}
+.hero h1{font-size:clamp(2.5rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px}
+.hero p{font-size:16px;color:var(--wf-fg-muted);max-width:640px;line-height:1.7}
+
+/* ── Specialization Cards ── */
+.spec-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.spec-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;transition:all var(--wf-dur) var(--wf-ease)}
+.spec-card:hover{transform:translateY(-2px);border-color:var(--wf-border-strong);box-shadow:var(--wf-shadow-md)}
+.spec-num{font-size:14px;font-weight:700;color:var(--wf-brand);font-family:var(--font-mono);margin-bottom:12px}
+.spec-card h3{font-size:20px;font-weight:700;margin-bottom:10px}
+.spec-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.7;margin-bottom:16px}
+.spec-divider{border:none;border-top:1px solid var(--wf-border);margin:16px 0}
+.spec-label{font-size:12px;font-weight:600;color:var(--wf-fg-subtle);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+.spec-tags{display:flex;flex-wrap:wrap;gap:8px}
+.spec-tag{display:inline-flex;padding:5px 14px;border-radius:var(--wf-r-pill);font-size:12px;font-weight:600;background:var(--wf-brand-muted);color:var(--wf-brand)}
+
+/* ── Methodology ── */
+.method-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.method-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;transition:all var(--wf-dur) var(--wf-ease)}
+.method-card:hover{transform:translateY(-2px);border-color:var(--wf-border-strong);box-shadow:var(--wf-shadow-md)}
+.method-icon{width:48px;height:48px;border-radius:var(--wf-r-md);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.method-icon svg{width:24px;height:24px;color:var(--wf-brand)}
+.method-card h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.method-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+
+/* ── Group Pills ── */
+.pill-wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.group-pill{display:inline-flex;padding:8px 18px;border-radius:var(--wf-r-pill);font-size:13px;font-weight:500;background:var(--wf-surface);border:1px solid var(--wf-border);color:var(--wf-fg-muted);transition:all var(--wf-dur) var(--wf-ease)}
+.group-pill:hover{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+
+/* ── Location Cards ── */
+.loc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.loc-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;transition:all var(--wf-dur) var(--wf-ease)}
+.loc-card:hover{border-color:var(--wf-border-strong)}
+.loc-card h3{font-size:20px;font-weight:700;margin-bottom:4px}
+.loc-type{font-size:12px;font-weight:700;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+.loc-address{font-size:14px;color:var(--wf-fg-muted);margin-bottom:8px}
+.loc-desc{font-size:14px;color:var(--wf-fg-subtle);line-height:1.6}
+
+/* ── CTA ── */
+.cta-section{text-align:center}
+.cta-section h2{font-size:32px;font-weight:800;margin-bottom:12px}
+.cta-section p{font-size:16px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto 28px;line-height:1.7}
+.cta-actions{display:flex;gap:12px;justify-content:center}
+
+/* ── Footer ── */
+.footer{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:60px 0 24px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand{font-size:20px;font-weight:700;margin-bottom:12px}
+.footer-brand span{color:var(--wf-brand)}
+.footer-desc{font-size:13px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:20px}
+.footer-newsletter{display:flex;gap:8px}
+.footer-newsletter input{flex:1;padding:8px 12px;font-size:13px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-col{display:flex;flex-direction:column;gap:10px}
+.footer-col-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--wf-fg-subtle);margin-bottom:4px}
+.footer-col a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur) var(--wf-ease)}
+.footer-col a:hover{color:var(--wf-brand)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-faint)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{color:var(--wf-fg-faint);transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg-muted)}
+
+@media(max-width:900px){
+  .spec-grid,.method-grid,.loc-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+  .navbar-links{display:none}
+}
+@media(max-width:600px){
+  .container{padding:0 20px}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar">
+  <div class="container">
+    <a href="ef-home.html" class="navbar-logo"><span>Logo</span></a>
+    <div class="navbar-links">
+      <a href="ef-home.html">Home</a>
+      <a href="ef-portfolio.html">Portfolio</a>
+      <a href="ef-specializations.html">Specializations</a>
+      <a href="ef-products.html">Products</a>
+      <a href="ef-contact.html">Contact</a>
+    </div>
+    <a href="#" class="btn btn-primary btn-sm">Book a consultation</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <span class="kicker">Clinical Practice</span>
+    <h1>Clinical Specializations</h1>
+    <p>Over 13 years of focused clinical experience across six core specialization areas, delivering evidence-based treatment through private practice and intensive outpatient programs.</p>
+  </div>
+</section>
+
+<!-- ── What I Treat ── -->
+<section class="section">
+  <div class="container">
+    <span class="kicker">Areas of Focus</span>
+    <h2 class="section-heading" style="margin-bottom:40px">What I Treat</h2>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-num">01</div>
+        <h3>Dialectical Behavior Therapy</h3>
+        <p>Comprehensive DBT skills training for individuals struggling with emotional dysregulation, impulsivity, and interpersonal difficulties. Full adherent DBT including individual therapy, skills group, phone coaching, and consultation team.</p>
+        <hr class="spec-divider">
+        <div class="spec-label">Treatment includes:</div>
+        <div class="spec-tags">
+          <span class="spec-tag">Distress Tolerance</span>
+          <span class="spec-tag">Emotion Regulation</span>
+          <span class="spec-tag">Interpersonal Effectiveness</span>
+          <span class="spec-tag">Core Mindfulness</span>
+          <span class="spec-tag">Diary Cards</span>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-num">02</div>
+        <h3>Clinical Hypnotherapy</h3>
+        <p>Board-certified clinical hypnotherapy utilizing evidence-based trance induction and suggestion techniques for anxiety, smoking cessation, sleep disorders, chronic pain, and behavioral modification.</p>
+        <hr class="spec-divider">
+        <div class="spec-label">Treatment includes:</div>
+        <div class="spec-tags">
+          <span class="spec-tag">Trance Induction</span>
+          <span class="spec-tag">Positive Imagery</span>
+          <span class="spec-tag">Smoking Cessation</span>
+          <span class="spec-tag">Sleep Protocols</span>
+          <span class="spec-tag">Pain Management</span>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-num">03</div>
+        <h3>Trauma-Informed Care</h3>
+        <p>Gentle, phased approach to trauma processing that prioritizes safety, stabilization, and empowerment. Specialized in complex trauma, developmental trauma, and PTSD using a neurobiologically informed framework.</p>
+        <hr class="spec-divider">
+        <div class="spec-label">Treatment includes:</div>
+        <div class="spec-tags">
+          <span class="spec-tag">Safety Planning</span>
+          <span class="spec-tag">Grounding Techniques</span>
+          <span class="spec-tag">Window of Tolerance</span>
+          <span class="spec-tag">Narrative Processing</span>
+          <span class="spec-tag">PTSD Protocols</span>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-num">04</div>
+        <h3>Anxiety &amp; Mood Disorders</h3>
+        <p>Integrative treatment for generalized anxiety, panic disorder, social anxiety, depression, and bipolar spectrum conditions using cognitive-behavioral, mindfulness, and hypnotherapy approaches.</p>
+        <hr class="spec-divider">
+        <div class="spec-label">Treatment includes:</div>
+        <div class="spec-tags">
+          <span class="spec-tag">CBT Techniques</span>
+          <span class="spec-tag">Exposure Therapy</span>
+          <span class="spec-tag">Mindfulness</span>
+          <span class="spec-tag">Behavioral Activation</span>
+          <span class="spec-tag">Relaxation Training</span>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-num">05</div>
+        <h3>BPD &amp; Self-Injury</h3>
+        <p>Specialized DBT-based treatment for borderline personality disorder features, self-harm behaviors, suicidal ideation, and chronic emotional dysregulation with compassionate, non-judgmental support.</p>
+        <hr class="spec-divider">
+        <div class="spec-label">Treatment includes:</div>
+        <div class="spec-tags">
+          <span class="spec-tag">Chain Analysis</span>
+          <span class="spec-tag">Safety Planning</span>
+          <span class="spec-tag">Opposite Action</span>
+          <span class="spec-tag">Radical Acceptance</span>
+          <span class="spec-tag">Crisis Skills</span>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-num">06</div>
+        <h3>LGBTQIA+ Affirming Care</h3>
+        <p>Culturally competent, affirming therapeutic space for LGBTQIA+ individuals navigating identity development, coming out, relationships, family dynamics, minority stress, and gender-related concerns.</p>
+        <hr class="spec-divider">
+        <div class="spec-label">Treatment includes:</div>
+        <div class="spec-tags">
+          <span class="spec-tag">Identity Exploration</span>
+          <span class="spec-tag">Minority Stress</span>
+          <span class="spec-tag">Family Dynamics</span>
+          <span class="spec-tag">Relationship Skills</span>
+          <span class="spec-tag">Affirmative Therapy</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Methodology ── -->
+<section class="section section--elevated">
+  <div class="container">
+    <span class="kicker">Approach</span>
+    <h2 class="section-heading" style="margin-bottom:40px">Methodology</h2>
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="method-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z"/></svg>
+        </div>
+        <h3>Dialectical Behavior Therapy</h3>
+        <p>A structured, skills-based approach that teaches clients to manage intense emotions, reduce self-destructive behaviors, and improve relationships through four core skill modules.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
+        </div>
+        <h3>Mindfulness-Based Stress Reduction</h3>
+        <p>Structured mindfulness training integrating body scan, sitting meditation, and mindful movement to cultivate present-moment awareness and reduce stress reactivity.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/></svg>
+        </div>
+        <h3>Clinical Hypnotherapy</h3>
+        <p>Evidence-based hypnotic techniques utilizing trance states to access subconscious patterns, promote positive behavioral change, and reinforce therapeutic gains.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+        </div>
+        <h3>Positive Outcome Imagery</h3>
+        <p>Guided visualization leveraging the mind-body connection to create new neural pathways, rehearse positive outcomes, and build confidence for real-world situations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Group Work ── -->
+<section class="section">
+  <div class="container" style="text-align:center">
+    <span class="kicker">IOP Groups</span>
+    <h2 class="section-heading" style="margin-bottom:40px">Group Work</h2>
+    <div class="pill-wrap">
+      <span class="group-pill">Distress Tolerance</span>
+      <span class="group-pill">Emotion Regulation</span>
+      <span class="group-pill">Interpersonal Effectiveness</span>
+      <span class="group-pill">Core Mindfulness</span>
+      <span class="group-pill">Anxiety</span>
+      <span class="group-pill">Depression</span>
+      <span class="group-pill">Trauma</span>
+      <span class="group-pill">Self-Injury</span>
+      <span class="group-pill">Radical Acceptance</span>
+      <span class="group-pill">Smoking Cessation</span>
+      <span class="group-pill">Sleep</span>
+      <span class="group-pill">LGBTQIA+</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── Locations ── -->
+<section class="section section--elevated">
+  <div class="container">
+    <span class="kicker">Practice</span>
+    <h2 class="section-heading" style="margin-bottom:40px">Locations</h2>
+    <div class="loc-grid">
+      <div class="loc-card">
+        <h3>Private Practice</h3>
+        <div class="loc-type">Individual &amp; Telehealth</div>
+        <div class="loc-address">123 Wellness Drive, Suite 200<br>Philadelphia, PA 19103</div>
+        <p class="loc-desc">Individual therapy, clinical hypnotherapy, and telehealth sessions for clients across the state. Flexible scheduling including evening appointments.</p>
+      </div>
+      <div class="loc-card">
+        <h3>IOP Program</h3>
+        <div class="loc-type">Group &amp; Intensive</div>
+        <div class="loc-address">456 Recovery Boulevard<br>Philadelphia, PA 19107</div>
+        <p class="loc-desc">Intensive outpatient program offering structured DBT skills groups, process groups, and individual sessions within a supportive clinical setting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="section">
+  <div class="container cta-section">
+    <span class="kicker">Next Step</span>
+    <h2>Ready to Begin?</h2>
+    <p>Schedule an initial consultation to discuss your goals and find the right treatment approach for your unique needs.</p>
+    <div class="cta-actions">
+      <a href="ef-contact.html" class="btn btn-primary btn-lg">Book a Consultation</a>
+      <a href="ef-portfolio.html" class="btn btn-outline">View Portfolio</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span>Logo</span></div>
+        <p class="footer-desc">Mind, Body &amp; Spirit Coordination. Evidence-based therapeutic resources for lasting resilience and personal growth.</p>
+        <div class="footer-newsletter">
+          <input type="email" placeholder="Your email">
+          <button class="btn btn-primary btn-sm">Subscribe</button>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <a href="ef-specializations.html">Specializations</a>
+        <a href="#">Individual Therapy</a>
+        <a href="#">Group Therapy</a>
+        <a href="#">Hypnotherapy</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <a href="ef-products.html">Products</a>
+        <a href="#">Courses</a>
+        <a href="#">Community</a>
+        <a href="ef-portfolio.html">Portfolio</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Connect</div>
+        <a href="ef-contact.html">Contact</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Facebook</a>
+        <a href="#">Zocdoc</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

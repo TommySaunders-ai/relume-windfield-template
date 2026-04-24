@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distress Tolerance Digital First Aid Kit — Edward Flynn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-violet: #7c3aed;
+  --wf-violet-muted: rgba(124,58,237,0.10);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px; --wf-r-pill: 9999px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}.btn-sm{height:36px;padding:0 16px;font-size:13px}.btn-lg{height:52px;padding:0 32px;font-size:16px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.btn-full{width:100%;justify-content:center}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}.navbar-link:hover{color:var(--wf-fg)}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+
+/* Hero */
+.hero{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.hero-grid{display:grid;grid-template-columns:1fr 360px;gap:64px;align-items:start}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-muted);margin-bottom:20px}
+.breadcrumb svg{width:12px;height:12px;color:var(--wf-fg-faint)}
+.breadcrumb a{transition:color var(--wf-dur)}.breadcrumb a:hover{color:var(--wf-fg)}
+.hero h1{font-size:clamp(2.5rem,4vw,3.5rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:12px}
+.hero-desc{font-size:16px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:16px}
+.hero-rating{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.stars{display:flex;gap:2px}
+.stars svg{width:18px;height:18px;fill:#fbbf24}
+.rating-text{font-size:14px;color:var(--wf-fg-muted)}
+.hero-meta{font-size:14px;color:var(--wf-fg-subtle);margin-bottom:20px}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap}
+.hero-badge{font-size:12px;font-weight:500;color:var(--wf-fg-muted);background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-pill);padding:6px 14px;display:flex;align-items:center;gap:6px}
+.hero-badge svg{width:14px;height:14px;color:var(--wf-brand)}
+
+/* Sidebar */
+.pricing-card{position:sticky;top:88px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:32px;display:flex;flex-direction:column;gap:16px}
+.price-main{font-size:48px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.03em}
+.price-sub{font-size:14px;color:var(--wf-fg-muted)}
+.pricing-divider{height:1px;background:var(--wf-border)}
+.pricing-guarantee{font-size:13px;color:var(--wf-fg-subtle);text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.pricing-guarantee svg{width:14px;height:14px;color:var(--wf-brand)}
+
+/* Sections */
+.section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.section-header{text-align:center;margin-bottom:48px}
+.section-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.section-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto}
+
+/* Includes */
+.includes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0}
+.include-item{display:flex;gap:14px;align-items:flex-start;padding:24px;border:1px solid var(--wf-border);margin:-1px 0 0 -1px}
+.include-check{width:22px;height:22px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.include-check svg{width:12px;height:12px;color:var(--wf-brand)}
+.include-item h3{font-size:15px;font-weight:600;color:var(--wf-fg);margin-bottom:4px}
+.include-item p{font-size:13px;color:var(--wf-fg-muted);line-height:1.5}
+
+/* Steps */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.step-card{text-align:center;padding:32px}
+.step-num{width:48px;height:48px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--wf-brand);margin:0 auto 20px;font-family:var(--font-mono)}
+.step-card h3{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.step-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+
+/* Exercise grid */
+.exercise-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.exercise-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:16px 18px;display:flex;align-items:center;gap:12px;transition:all var(--wf-dur)}
+.exercise-card:hover{border-color:var(--wf-border-strong);box-shadow:0 4px 16px rgba(124,58,237,0.08)}
+.exercise-num{font-size:11px;font-weight:700;color:var(--wf-brand);font-family:var(--font-mono);min-width:24px}
+.exercise-card span{font-size:13px;font-weight:600;color:var(--wf-fg)}
+.exercise-more{grid-column:1/-1;background:var(--wf-brand-muted);border:1px solid var(--wf-brand);border-radius:var(--wf-r-lg);padding:20px;text-align:center;font-size:15px;font-weight:600;color:var(--wf-brand)}
+
+/* Who it's for */
+.audience-list{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.audience-item{display:flex;align-items:center;gap:14px;font-size:15px;color:var(--wf-fg-muted);background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:18px 22px}
+.audience-item svg{width:18px;height:18px;color:var(--wf-brand);flex-shrink:0}
+
+/* Rating display */
+.rating-display{text-align:center}
+.rating-big{font-size:72px;font-weight:700;color:var(--wf-brand);letter-spacing:-0.04em;line-height:1}
+.rating-stars{display:flex;justify-content:center;gap:4px;margin:12px 0 8px}
+.rating-stars svg{width:24px;height:24px;fill:#fbbf24}
+.rating-count{font-size:14px;color:var(--wf-fg-muted)}
+
+/* Cross-sell */
+.crosssell-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.crosssell-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:24px;transition:border-color var(--wf-dur)}
+.crosssell-card:hover{border-color:var(--wf-border-strong)}
+.crosssell-tag{font-size:11px;font-weight:600;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px}
+.crosssell-card h3{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:6px}
+.crosssell-card p{font-size:13px;color:var(--wf-fg-muted);line-height:1.5;margin-bottom:14px}
+.crosssell-bottom{display:flex;justify-content:space-between;align-items:center}
+.crosssell-price{font-size:16px;font-weight:700;color:var(--wf-fg)}
+.crosssell-link{font-size:13px;font-weight:600;color:var(--wf-brand);display:flex;align-items:center;gap:4px;transition:gap var(--wf-dur)}
+.crosssell-link:hover{gap:8px}
+
+/* CTA band */
+.cta-band{padding:80px 0;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--wf-border)}
+.cta-band::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--wf-violet-muted) 0%,var(--wf-brand-muted) 100%);pointer-events:none}
+.cta-band .inner{position:relative;z-index:1}
+.cta-band h2{font-size:32px;font-weight:700;letter-spacing:-0.02em;margin-bottom:12px}
+.cta-band .cta-price{font-size:48px;font-weight:700;color:var(--wf-fg);margin-bottom:20px;letter-spacing:-0.03em}
+.cta-band .guarantee{font-size:13px;color:var(--wf-fg-subtle);margin-top:16px}
+
+/* Footer */
+.footer{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:64px 0 0}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:48px}
+.footer-col h4{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.footer-col a{display:block;font-size:13px;color:var(--wf-fg-muted);margin-bottom:10px;transition:color var(--wf-dur)}.footer-col a:hover{color:var(--wf-fg)}
+.footer-bottom{border-top:1px solid var(--wf-border);padding:24px 0;display:flex;justify-content:space-between;align-items:center}
+.footer-bottom span{font-size:13px;color:var(--wf-fg-subtle)}
+
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .pricing-card{position:static}
+  .exercise-grid{grid-template-columns:repeat(3,1fr)}
+  .crosssell-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .container{padding:0 20px}
+  .includes-grid,.exercise-grid{grid-template-columns:1fr}
+  .steps-grid,.crosssell-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="#" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="#" class="navbar-link">About</a>
+      <a href="#" class="navbar-link">Services</a>
+      <a href="#" class="navbar-link">Resources</a>
+      <a href="#" class="navbar-link">Blog</a>
+      <a href="#" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-primary btn-sm">Book a consultation</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="breadcrumb">
+          <a href="#">Products</a>
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l4 4-4 4"/></svg>
+          <a href="#">DBT Toolkits</a>
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l4 4-4 4"/></svg>
+          <span>Distress Tolerance</span>
+        </div>
+        <h1>Distress Tolerance Digital First Aid Kit</h1>
+        <p class="hero-desc">A comprehensive collection of evidence-based crisis survival skills from Dialectical Behavior Therapy. Designed for moments when emotions feel overwhelming and you need structured, immediate tools to regain stability.</p>
+        <div class="hero-rating">
+          <div class="stars">
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+          </div>
+          <span class="rating-text">4.9/5</span>
+        </div>
+        <p class="hero-meta">34 exercises &middot; 4 skill areas &middot; 28 reviews</p>
+        <div class="hero-badges">
+          <span class="hero-badge"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg> Instant Download</span>
+          <span class="hero-badge"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg> Evidence-Based</span>
+          <span class="hero-badge"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg> Printable PDF</span>
+        </div>
+      </div>
+      <div class="pricing-card">
+        <div class="price-main">$19</div>
+        <div class="price-sub">One-time purchase</div>
+        <div class="pricing-divider"></div>
+        <a href="#" class="btn btn-primary btn-lg btn-full">Get Workbook</a>
+        <div class="pricing-guarantee"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg> 30-day money-back guarantee</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- What's Included -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>What's Included</h2>
+      <p>Six core skill modules covering the full spectrum of distress tolerance techniques.</p>
+    </div>
+    <div class="includes-grid">
+      <div class="include-item">
+        <div class="include-check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8l4 4 8-8"/></svg></div>
+        <div>
+          <h3>TIPP Skills</h3>
+          <p>Temperature, Intense exercise, Paced breathing, and Progressive relaxation exercises for immediate physiological regulation.</p>
+        </div>
+      </div>
+      <div class="include-item">
+        <div class="include-check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8l4 4 8-8"/></svg></div>
+        <div>
+          <h3>STOP Skill</h3>
+          <p>Stop, Take a step back, Observe, Proceed mindfully. A structured pause technique for high-emotion situations.</p>
+        </div>
+      </div>
+      <div class="include-item">
+        <div class="include-check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8l4 4 8-8"/></svg></div>
+        <div>
+          <h3>Wise Mind ACCEPTS</h3>
+          <p>Activities, Contributing, Comparisons, Emotions, Pushing away, Thoughts, Sensations. Seven distraction strategies for crisis moments.</p>
+        </div>
+      </div>
+      <div class="include-item">
+        <div class="include-check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8l4 4 8-8"/></svg></div>
+        <div>
+          <h3>Radical Acceptance</h3>
+          <p>Exercises for accepting reality as it is without judgment, reducing suffering caused by fighting unchangeable circumstances.</p>
+        </div>
+      </div>
+      <div class="include-item">
+        <div class="include-check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8l4 4 8-8"/></svg></div>
+        <div>
+          <h3>Pros and Cons</h3>
+          <p>Structured decision-making worksheets for evaluating actions during emotional crises, supporting wise choices.</p>
+        </div>
+      </div>
+      <div class="include-item">
+        <div class="include-check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8l4 4 8-8"/></svg></div>
+        <div>
+          <h3>Crisis Survival Quick-Reference</h3>
+          <p>Printable one-page guide with all key skills summarized for fast access during high-stress moments.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How To Use -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>How To Use</h2>
+      <p>A simple three-step framework for applying these skills in real time.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Identify the Crisis</h3>
+        <p>Recognize when your emotional intensity exceeds your window of tolerance. Use the included rating scale to assess urgency level.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Select the Skill</h3>
+        <p>Use the quick-reference guide to match your crisis type with the most effective skill. Each module is organized by situation.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Practice &amp; Log</h3>
+        <p>Follow the step-by-step exercise, then log your experience in the built-in tracker to build skill mastery over time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Exercises Grid -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>34 Guided Exercises</h2>
+      <p>Structured, step-by-step exercises across all four skill areas.</p>
+    </div>
+    <div class="exercise-grid">
+      <div class="exercise-card"><span class="exercise-num">01</span><span>Ice Dive Reset</span></div>
+      <div class="exercise-card"><span class="exercise-num">02</span><span>Sprint Release</span></div>
+      <div class="exercise-card"><span class="exercise-num">03</span><span>4-7-8 Breathing</span></div>
+      <div class="exercise-card"><span class="exercise-num">04</span><span>Body Scan PMR</span></div>
+      <div class="exercise-card"><span class="exercise-num">05</span><span>STOP Sequence</span></div>
+      <div class="exercise-card"><span class="exercise-num">06</span><span>Observe & Describe</span></div>
+      <div class="exercise-card"><span class="exercise-num">07</span><span>Activity Pivot</span></div>
+      <div class="exercise-card"><span class="exercise-num">08</span><span>Contribution Action</span></div>
+      <div class="exercise-card"><span class="exercise-num">09</span><span>Opposite Emotion</span></div>
+      <div class="exercise-card"><span class="exercise-num">10</span><span>Thought Redirect</span></div>
+      <div class="exercise-card"><span class="exercise-num">11</span><span>Sensory Ground</span></div>
+      <div class="exercise-card"><span class="exercise-num">12</span><span>Safe Place Visual</span></div>
+      <div class="exercise-card"><span class="exercise-num">13</span><span>Acceptance Statement</span></div>
+      <div class="exercise-card"><span class="exercise-num">14</span><span>Reality Check</span></div>
+      <div class="exercise-card"><span class="exercise-num">15</span><span>Half-Smile Practice</span></div>
+      <div class="exercise-card"><span class="exercise-num">16</span><span>Willing Hands</span></div>
+      <div class="exercise-card"><span class="exercise-num">17</span><span>Pros/Cons Matrix</span></div>
+      <div class="exercise-card"><span class="exercise-num">18</span><span>Urge Surfing</span></div>
+      <div class="exercise-card"><span class="exercise-num">19</span><span>Self-Soothe Kit</span></div>
+      <div class="exercise-card"><span class="exercise-num">20</span><span>Crisis Plan Builder</span></div>
+      <div class="exercise-more">+14 more exercises included in the full workbook</div>
+    </div>
+  </div>
+</section>
+
+<!-- Who It's For -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Who It's For</h2>
+    </div>
+    <div class="audience-list">
+      <div class="audience-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Individuals in DBT therapy who need structured between-session practice materials
+      </div>
+      <div class="audience-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Anyone experiencing intense emotions and wanting evidence-based coping strategies
+      </div>
+      <div class="audience-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Therapists looking for client-ready worksheets and handouts for distress tolerance skills
+      </div>
+      <div class="audience-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Self-guided learners exploring DBT skills for emotional resilience and self-regulation
+      </div>
+      <div class="audience-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Support groups and group therapy facilitators needing structured exercise materials
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Rating Display -->
+<section class="section">
+  <div class="container">
+    <div class="rating-display">
+      <div class="rating-big">4.9</div>
+      <div class="rating-stars">
+        <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+      </div>
+      <div class="rating-count">28 reviews</div>
+    </div>
+  </div>
+</section>
+
+<!-- Cross-sell -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>You Might Also Like</h2>
+    </div>
+    <div class="crosssell-grid">
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Bundle</div>
+        <h3>Complete Hypnosis Library</h3>
+        <p>6 professionally recorded clinical hypnotherapy sessions for anxiety, sleep, and smoking cessation.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$79</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Workbook</div>
+        <h3>Emotion Regulation Toolkit</h3>
+        <p>Comprehensive DBT-based workbook for understanding and managing emotional responses.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$19</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Workbook</div>
+        <h3>Mindfulness Skills Workbook</h3>
+        <p>Structured exercises for developing present-moment awareness and non-judgmental observation.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$19</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Workbook</div>
+        <h3>Interpersonal Effectiveness</h3>
+        <p>DEAR MAN, GIVE, FAST skills for assertive communication and healthy relationship boundaries.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$19</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Course</div>
+        <h3>DBT Skills Fundamentals</h3>
+        <p>6-module self-paced course covering all four DBT skill areas with video walkthroughs.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$49</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Journal</div>
+        <h3>Daily DBT Diary Card</h3>
+        <p>30-day digital diary card for tracking skill usage, urges, and emotional patterns over time.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$9</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Band -->
+<section class="cta-band">
+  <div class="container">
+    <div class="inner">
+      <h2>Build your crisis toolkit</h2>
+      <div class="cta-price">$19</div>
+      <a href="#" class="btn btn-primary btn-lg">Get Workbook</a>
+      <p class="guarantee">One-time purchase &middot; Instant download &middot; 30-day guarantee</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Practice</h4>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Specializations</a>
+        <a href="#">Approach</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Hypnosis Library</a>
+        <a href="#">DBT Workbooks</a>
+        <a href="#">Blog</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="#">Book a Session</a>
+        <a href="#">Contact</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Psychology Today</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">HIPAA Notice</a>
+        <a href="#">Disclaimer</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn, LPC, CHt. All rights reserved.</span>
+      <span>St. Louis, MO</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

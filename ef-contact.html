@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edward Flynn — Contact | Windfield IO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-brand-ring:rgba(29,185,84,0.28);--wf-violet:#7c3aed;--wf-violet-muted:rgba(124,58,237,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-r-xl:16px;--wf-r-pill:9999px;--wf-shadow-sm:0 1px 2px rgba(0,0,0,0.25);--wf-shadow-md:0 4px 16px rgba(0,0,0,0.28);--wf-shadow-lg:0 16px 48px rgba(0,0,0,0.4);--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+.container{width:100%;max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* ── Navbar ── */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(9,9,11,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--wf-border-subtle);height:64px}
+.navbar .container{display:flex;align-items:center;justify-content:space-between;height:100%}
+.navbar-logo{font-size:20px;font-weight:700;letter-spacing:-0.02em}
+.navbar-logo span{color:var(--wf-brand)}
+.navbar-links{display:flex;align-items:center;gap:32px}
+.navbar-links a{font-size:14px;font-weight:500;color:var(--wf-fg-muted);transition:color var(--wf-dur) var(--wf-ease)}
+.navbar-links a:hover{color:var(--wf-fg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;font-size:14px;font-weight:600;font-family:var(--font-sans);border-radius:var(--wf-r-md);cursor:pointer;transition:all var(--wf-dur) var(--wf-ease);border:none;line-height:1}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--wf-fg);border:1px solid var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-brand);color:var(--wf-brand);transform:translateY(-1px)}
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn-lg{padding:14px 28px;font-size:15px}
+
+.section{padding:80px 0}
+.section--elevated{background:var(--wf-bg-elevated)}
+.kicker{display:inline-block;font-size:13px;font-weight:600;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+.section-heading{font-size:36px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin-bottom:24px}
+.section-subtext{font-size:16px;color:var(--wf-fg-muted);max-width:640px;line-height:1.7}
+
+/* ── Hero ── */
+.hero{padding:100px 0 60px}
+.hero h1{font-size:clamp(2.5rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px}
+.hero p{font-size:16px;color:var(--wf-fg-muted);max-width:640px;line-height:1.7}
+
+/* ── Emergency Alert ── */
+.alert{background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.25);border-radius:var(--wf-r-lg);padding:24px 28px;margin-bottom:48px;display:flex;align-items:flex-start;gap:16px}
+.alert-icon{width:24px;height:24px;color:#ef4444;flex-shrink:0;margin-top:2px}
+.alert h3{font-size:16px;font-weight:700;color:#ef4444;margin-bottom:4px}
+.alert p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+.alert strong{color:var(--wf-fg)}
+
+/* ── Form ── */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--wf-fg-muted);margin-bottom:6px}
+.form-input,.form-select,.form-textarea{width:100%;padding:12px 16px;font-size:14px;font-family:var(--font-sans);background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);color:var(--wf-fg);outline:none;transition:border-color var(--wf-dur) var(--wf-ease)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--wf-brand)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--wf-fg-faint)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2371717a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+.form-select option{background:var(--wf-surface);color:var(--wf-fg)}
+.form-textarea{resize:vertical;min-height:120px}
+.form-privacy{font-size:12px;color:var(--wf-fg-faint);margin-top:12px}
+
+/* ── Info Card ── */
+.info-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px}
+.info-card h3{font-size:20px;font-weight:700;margin-bottom:20px}
+.info-item{margin-bottom:16px}
+.info-item:last-child{margin-bottom:0}
+.info-label{font-size:12px;font-weight:600;color:var(--wf-fg-subtle);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
+.info-value{font-size:15px;color:var(--wf-fg-muted)}
+.info-value a{color:var(--wf-brand);transition:color var(--wf-dur)}
+.info-value a:hover{color:var(--wf-brand-hover)}
+
+/* ── Location Cards ── */
+.loc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.loc-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px;transition:all var(--wf-dur) var(--wf-ease)}
+.loc-card:hover{border-color:var(--wf-border-strong)}
+.loc-card h3{font-size:18px;font-weight:700;margin-bottom:4px}
+.loc-type{font-size:12px;font-weight:700;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+.loc-address{font-size:14px;color:var(--wf-fg-muted);margin-bottom:8px}
+.loc-desc{font-size:14px;color:var(--wf-fg-subtle);line-height:1.6}
+
+/* ── Booking Card ── */
+.booking-card{background:var(--wf-brand-muted);border:1px solid var(--wf-brand-ring);border-radius:var(--wf-r-lg);padding:48px;text-align:center}
+.booking-card h3{font-size:24px;font-weight:800;margin-bottom:12px}
+.booking-card p{font-size:15px;color:var(--wf-fg-muted);max-width:480px;margin:0 auto 24px;line-height:1.7}
+
+/* ── Social Links ── */
+.social-links{display:flex;gap:12px;justify-content:center}
+.social-link{width:40px;height:40px;border-radius:10px;border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;transition:all var(--wf-dur) var(--wf-ease);color:var(--wf-fg-muted)}
+.social-link:hover{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+.social-link svg{width:18px;height:18px}
+
+/* ── FAQ Accordion ── */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--wf-border)}
+.faq-question{display:flex;align-items:center;justify-content:space-between;padding:20px 0;cursor:pointer;gap:16px}
+.faq-question h3{font-size:16px;font-weight:600;flex:1}
+.faq-toggle{width:28px;height:28px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--wf-fg-muted);transition:all var(--wf-dur) var(--wf-ease);flex-shrink:0;background:transparent;cursor:pointer;font-family:var(--font-sans)}
+.faq-toggle:hover{border-color:var(--wf-brand);color:var(--wf-brand)}
+.faq-answer{font-size:14px;color:var(--wf-fg-muted);line-height:1.7;padding-bottom:20px;display:none}
+.faq-item.open .faq-answer{display:block}
+.faq-item.open .faq-toggle{background:var(--wf-brand-muted);border-color:var(--wf-brand);color:var(--wf-brand)}
+
+/* ── CTA ── */
+.cta-section{text-align:center}
+.cta-section h2{font-size:32px;font-weight:800;margin-bottom:12px}
+.cta-section p{font-size:16px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto 28px;line-height:1.7}
+
+/* ── Footer ── */
+.footer{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:60px 0 24px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand{font-size:20px;font-weight:700;margin-bottom:12px}
+.footer-brand span{color:var(--wf-brand)}
+.footer-desc{font-size:13px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:20px}
+.footer-newsletter{display:flex;gap:8px}
+.footer-newsletter input{flex:1;padding:8px 12px;font-size:13px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-col{display:flex;flex-direction:column;gap:10px}
+.footer-col-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--wf-fg-subtle);margin-bottom:4px}
+.footer-col a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur) var(--wf-ease)}
+.footer-col a:hover{color:var(--wf-brand)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-faint)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{color:var(--wf-fg-faint);transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg-muted)}
+
+@media(max-width:900px){
+  .contact-grid,.loc-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+  .navbar-links{display:none}
+}
+@media(max-width:600px){
+  .container{padding:0 20px}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar">
+  <div class="container">
+    <a href="ef-home.html" class="navbar-logo"><span>Logo</span></a>
+    <div class="navbar-links">
+      <a href="ef-home.html">Home</a>
+      <a href="ef-portfolio.html">Portfolio</a>
+      <a href="ef-specializations.html">Specializations</a>
+      <a href="ef-products.html">Products</a>
+      <a href="ef-contact.html">Contact</a>
+    </div>
+    <a href="#" class="btn btn-primary btn-sm">Book a consultation</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <span class="kicker">Get in Touch</span>
+    <h1>Contact Edward</h1>
+    <p>Schedule an initial consultation, ask about services, or learn more about available treatment options. Responses typically within 24 business hours.</p>
+  </div>
+</section>
+
+<!-- ── Emergency Alert ── -->
+<section style="padding-bottom:0">
+  <div class="container">
+    <div class="alert">
+      <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/></svg>
+      <div>
+        <h3>If You Are in Crisis</h3>
+        <p>If you or someone you know is in immediate danger, please call <strong>911</strong>. For mental health crises, contact the <strong>Suicide &amp; Crisis Lifeline by calling or texting 988</strong>. You are not alone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact Form ── -->
+<section class="section">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <span class="kicker">Send a Message</span>
+        <h2 class="section-heading">Contact Form</h2>
+        <form onsubmit="event.preventDefault()">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Service Interest</label>
+            <select class="form-select">
+              <option value="" disabled selected>Select a service</option>
+              <option>Individual Therapy</option>
+              <option>Clinical Hypnotherapy</option>
+              <option>DBT Skills Group</option>
+              <option>Trauma-Informed Care</option>
+              <option>IOP Program</option>
+              <option>Digital Products</option>
+              <option>General Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-textarea" placeholder="Tell me a bit about what you're looking for..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%">Send Message</button>
+          <p class="form-privacy">Your information is confidential and will never be shared with third parties.</p>
+        </form>
+      </div>
+      <div>
+        <div class="info-card">
+          <h3>Practice Information</h3>
+          <div class="info-item">
+            <div class="info-label">Hours</div>
+            <div class="info-value">Monday &ndash; Friday, 9:00 AM &ndash; 6:00 PM<br>Evening appointments available</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Email</div>
+            <div class="info-value"><a href="mailto:edward@example.com">edward@example.com</a></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Phone</div>
+            <div class="info-value"><a href="tel:+12155551234">(215) 555-1234</a></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Credentials</div>
+            <div class="info-value">LPC, NBCCH, DBTC, NCC</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Insurance</div>
+            <div class="info-value">Most major insurance plans accepted. Contact for verification.</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Telehealth</div>
+            <div class="info-value">Available for Pennsylvania residents via secure video platform.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Locations ── -->
+<section class="section section--elevated">
+  <div class="container">
+    <span class="kicker">Locations</span>
+    <h2 class="section-heading" style="margin-bottom:40px">Practice Locations</h2>
+    <div class="loc-grid">
+      <div class="loc-card">
+        <h3>Private Practice</h3>
+        <div class="loc-type">Individual &amp; Telehealth</div>
+        <div class="loc-address">123 Wellness Drive, Suite 200<br>Philadelphia, PA 19103</div>
+        <p class="loc-desc">Individual therapy, clinical hypnotherapy, and telehealth sessions. Flexible scheduling including evening appointments.</p>
+      </div>
+      <div class="loc-card">
+        <h3>IOP Program</h3>
+        <div class="loc-type">Group &amp; Intensive</div>
+        <div class="loc-address">456 Recovery Boulevard<br>Philadelphia, PA 19107</div>
+        <p class="loc-desc">Intensive outpatient program with structured DBT skills groups, process groups, and individual sessions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Booking Card ── -->
+<section class="section">
+  <div class="container">
+    <div class="booking-card">
+      <h3>Book Online</h3>
+      <p>Schedule your initial consultation or follow-up appointment through Zocdoc for real-time availability and instant confirmation.</p>
+      <a href="#" class="btn btn-primary btn-lg">Book on Zocdoc</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Social Links ── -->
+<section style="padding:0 0 80px">
+  <div class="container" style="text-align:center">
+    <span class="kicker">Follow</span>
+    <h2 class="section-heading" style="margin-bottom:24px">Connect Online</h2>
+    <div class="social-links">
+      <a href="#" class="social-link" title="LinkedIn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="#" class="social-link" title="Facebook">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="#" class="social-link" title="Zocdoc">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="section section--elevated">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px">
+      <span class="kicker">FAQ</span>
+      <h2 class="section-heading">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h3>What should I expect during an initial consultation?</h3>
+          <button class="faq-toggle">+</button>
+        </div>
+        <div class="faq-answer">
+          The initial consultation is a 50-minute session where we discuss your concerns, goals, and history. This is a collaborative process to determine the best treatment approach for your unique needs. There is no pressure to commit, and you are welcome to ask questions throughout.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h3>Do you accept insurance?</h3>
+          <button class="faq-toggle">+</button>
+        </div>
+        <div class="faq-answer">
+          Yes, most major insurance plans are accepted. Please contact the office with your insurance information for verification of benefits and coverage details. Out-of-pocket and sliding scale options are also available.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h3>Is telehealth available?</h3>
+          <button class="faq-toggle">+</button>
+        </div>
+        <div class="faq-answer">
+          Yes, telehealth sessions are available for Pennsylvania residents via a secure, HIPAA-compliant video platform. Telehealth offers the same quality of care as in-person sessions and is ideal for those with scheduling or transportation challenges.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+          <h3>How is clinical hypnotherapy different from stage hypnosis?</h3>
+          <button class="faq-toggle">+</button>
+        </div>
+        <div class="faq-answer">
+          Clinical hypnotherapy is a therapeutic technique performed by a licensed clinician in a clinical setting. Unlike stage hypnosis, clinical hypnotherapy is evidence-based, goal-directed, and focused on helping individuals address specific concerns like anxiety, sleep issues, and smoking cessation. You remain fully aware and in control throughout the process.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="section section--elevated" style="border-top:1px solid var(--wf-border)">
+  <div class="container cta-section">
+    <span class="kicker">Take the First Step</span>
+    <h2>Begin Your Healing Journey</h2>
+    <p>You don't have to navigate this alone. Reach out today and take the first step toward lasting resilience and well-being.</p>
+    <a href="#" class="btn btn-primary btn-lg">Book a Consultation</a>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span>Logo</span></div>
+        <p class="footer-desc">Mind, Body &amp; Spirit Coordination. Evidence-based therapeutic resources for lasting resilience and personal growth.</p>
+        <div class="footer-newsletter">
+          <input type="email" placeholder="Your email">
+          <button class="btn btn-primary btn-sm">Subscribe</button>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <a href="ef-specializations.html">Specializations</a>
+        <a href="#">Individual Therapy</a>
+        <a href="#">Group Therapy</a>
+        <a href="#">Hypnotherapy</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <a href="ef-products.html">Products</a>
+        <a href="#">Courses</a>
+        <a href="#">Community</a>
+        <a href="ef-portfolio.html">Portfolio</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Connect</div>
+        <a href="ef-contact.html">Contact</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Facebook</a>
+        <a href="#">Zocdoc</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Toggle FAQ accordion icon text
+document.querySelectorAll('.faq-item').forEach(item => {
+  const toggle = item.querySelector('.faq-toggle');
+  const observer = new MutationObserver(() => {
+    toggle.textContent = item.classList.contains('open') ? '\u2212' : '+';
+  });
+  observer.observe(item, { attributes: true, attributeFilter: ['class'] });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edward Flynn — Licensed Professional Counselor & Clinical Hypnotherapist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-violet: #7c3aed;
+  --wf-violet-muted: rgba(124,58,237,0.10);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px; --wf-r-pill: 9999px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-lg{height:52px;padding:0 32px;font-size:16px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}.navbar-link:hover{color:var(--wf-fg)}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+
+/* Hero */
+.hero{padding:80px 0 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--wf-border)}
+.hero::before{content:"";position:absolute;top:-200px;right:-100px;width:600px;height:600px;background:radial-gradient(circle,var(--wf-violet-muted) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:"";position:absolute;bottom:-200px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,var(--wf-violet-muted) 0%,transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr 320px;gap:64px;align-items:start;position:relative;z-index:1}
+.hero-eyebrow{font-size:12px;font-weight:600;color:var(--wf-brand);letter-spacing:0.1em;text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.hero-eyebrow::after{content:"";flex:1;max-width:60px;height:1px;background:var(--wf-brand);opacity:0.4}
+.hero h1{font-size:clamp(2.75rem,5vw,5rem);font-weight:700;letter-spacing:-0.03em;line-height:1.08;margin-bottom:16px;color:var(--wf-fg)}
+.hero-subtitle{font-size:18px;font-style:italic;font-weight:300;color:var(--wf-fg-muted);margin-bottom:20px}
+.hero-body{font-size:15px;color:var(--wf-fg-muted);line-height:1.7;margin-bottom:28px;max-width:520px}
+.hero-btns{display:flex;gap:12px}
+
+/* Profile card */
+.profile-col{display:flex;flex-direction:column;align-items:center;gap:20px}
+.profile-img{width:200px;height:200px;border-radius:24px;background:var(--wf-surface);border:3px solid var(--wf-brand);box-shadow:0 8px 32px rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center}
+.profile-img span{font-size:48px;font-weight:700;color:var(--wf-fg-faint)}
+.credentials-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:16px 20px;text-align:center;width:100%}
+.credentials-card .name{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:4px}
+.credentials-card .creds{font-size:12px;color:var(--wf-brand);letter-spacing:0.04em}
+
+/* Stats */
+.stats{padding:0;border-bottom:1px solid var(--wf-border)}
+.stats-row{display:flex;gap:40px;padding:32px 0;border-top:1px solid var(--wf-border)}
+.stat-item{text-align:center;flex:1}
+.stat-value{font-size:32px;font-weight:300;color:var(--wf-fg);letter-spacing:-0.02em}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--wf-fg-subtle);margin-top:4px}
+
+/* Section */
+.section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.section-header{text-align:center;margin-bottom:48px}
+.section-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.section-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto}
+
+/* Specializations */
+.spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.spec-card{background:var(--wf-surface);border:1px solid var(--wf-border);padding:32px;transition:all var(--wf-dur) var(--wf-ease);position:relative}
+.spec-card:hover{border-color:var(--wf-border-strong);box-shadow:0 4px 24px rgba(124,58,237,0.08)}
+.spec-arrow{width:32px;height:32px;border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--wf-dur);position:absolute;top:24px;right:24px}
+.spec-card:hover .spec-arrow{opacity:1}
+.spec-arrow svg{width:14px;height:14px;color:var(--wf-fg-muted)}
+.spec-cat{font-size:12px;font-weight:600;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+.spec-card h3{font-size:20px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.spec-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+
+/* About */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.about-text p{font-size:15px;color:var(--wf-fg-muted);line-height:1.7;margin-bottom:20px}
+.philosophy-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:28px;position:relative;overflow:hidden;margin-bottom:24px}
+.philosophy-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--wf-brand),var(--wf-violet))}
+.philosophy-card blockquote{font-size:18px;font-style:italic;font-weight:300;color:var(--wf-fg);line-height:1.6}
+.approach-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:28px;margin-bottom:24px}
+.approach-card h4{font-size:15px;font-weight:600;color:var(--wf-fg);margin-bottom:12px}
+.approach-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+.skills-tags{display:flex;flex-wrap:wrap;gap:8px}
+.skill-tag{font-size:12px;padding:6px 14px;border-radius:var(--wf-r-pill);border:1px solid var(--wf-border);color:var(--wf-fg-muted);background:var(--wf-surface)}
+.skill-tag.highlight{border-color:var(--wf-brand);color:var(--wf-brand);background:var(--wf-brand-muted)}
+
+/* Timeline */
+.timeline{position:relative;padding-left:40px;margin-left:20px}
+.timeline::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--wf-border)}
+.timeline-item{position:relative;padding-bottom:56px}
+.timeline-item:last-child{padding-bottom:0}
+.timeline-dot{position:absolute;left:-40px;top:4px;width:11px;height:11px;border-radius:50%;border:2px solid var(--wf-brand);background:var(--wf-bg);transform:translateX(-5px)}
+.timeline-year{font-size:12px;font-weight:600;color:var(--wf-brand);letter-spacing:0.04em;margin-bottom:6px;font-family:var(--font-mono)}
+.timeline-item h3{font-size:22px;font-weight:500;color:var(--wf-fg);margin-bottom:4px;letter-spacing:-0.01em}
+.timeline-org{font-size:13px;color:var(--wf-fg-muted);letter-spacing:0.05em;margin-bottom:10px}
+.timeline-item p{font-size:14px;color:var(--wf-fg-muted);line-height:1.65;max-width:480px}
+
+/* Process */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);overflow:hidden}
+.process-step{padding:40px 28px;border-right:1px solid var(--wf-border);transition:background var(--wf-dur) var(--wf-ease)}
+.process-step:last-child{border-right:none}
+.process-step:hover{background:var(--wf-brand-muted)}
+.process-num{font-size:56px;font-weight:300;color:var(--wf-fg-faint);letter-spacing:-0.03em;margin-bottom:20px;font-family:var(--font-mono)}
+.process-step h3{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--wf-fg);margin-bottom:12px}
+.process-step p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:16px}
+.process-tags{display:flex;flex-wrap:wrap;gap:6px}
+.process-tag{font-size:11px;color:var(--wf-fg-muted);border:1px solid var(--wf-border);border-radius:var(--wf-r-pill);padding:4px 10px}
+
+/* Philosophy */
+.philosophy-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.philosophy-quote{font-size:clamp(24px,3vw,40px);font-weight:300;font-style:italic;color:var(--wf-fg);line-height:1.4;border-left:2px solid var(--wf-brand);padding-left:28px}
+.principle-list{display:flex;flex-direction:column;gap:24px}
+.principle{display:flex;gap:16px;align-items:flex-start}
+.principle-num{font-size:14px;font-weight:600;color:var(--wf-brand);font-family:var(--font-mono);min-width:28px}
+.principle p{font-size:17px;font-weight:300;color:var(--wf-fg-muted);line-height:1.5}
+
+/* Testimonials */
+.testimonials{max-width:800px;margin:0 auto;text-align:center;position:relative;min-height:280px}
+.testimonials-quote-mark{font-size:100px;color:var(--wf-brand);opacity:0.15;line-height:1;margin-bottom:-20px}
+.testimonial-slide{display:none;flex-direction:column;align-items:center}
+.testimonial-slide.active{display:flex}
+.testimonial-slide blockquote{font-size:clamp(20px,2.5vw,28px);font-weight:300;font-style:italic;color:var(--wf-fg);line-height:1.45;margin-bottom:28px}
+.testimonial-author{display:flex;align-items:center;gap:14px}
+.testimonial-avatar{width:44px;height:44px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:var(--wf-brand)}
+.testimonial-name{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.testimonial-role{font-size:13px;color:var(--wf-fg-muted)}
+.testimonial-dots{display:flex;gap:8px;justify-content:center;margin-top:32px}
+.testimonial-dot{width:8px;height:8px;border-radius:50%;background:var(--wf-border-strong);cursor:pointer;transition:background var(--wf-dur)}
+.testimonial-dot.active{background:var(--wf-brand)}
+
+/* Contact CTA */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.contact-link{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.contact-icon{width:36px;height:36px;border:1px solid var(--wf-border);border-radius:var(--wf-r-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contact-icon svg{width:16px;height:16px;color:var(--wf-fg-muted)}
+.contact-link span{font-size:14px;color:var(--wf-fg-muted)}
+.availability-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:32px}
+.pulse-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.pulse-dot{width:8px;height:8px;border-radius:50%;background:var(--wf-brand);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--wf-brand-ring)}50%{box-shadow:0 0 0 6px transparent}}
+.pulse-label{font-size:11px;font-weight:600;color:var(--wf-brand);letter-spacing:0.15em;text-transform:uppercase}
+.availability-card h3{font-size:24px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.service-list{display:flex;flex-direction:column;gap:10px}
+.service-item{font-size:14px;color:var(--wf-fg-muted);padding-left:14px;border-left:1px solid var(--wf-brand)}
+
+/* Footer */
+.footer{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:64px 0 0}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:48px}
+.footer-col h4{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px;letter-spacing:0.02em}
+.footer-col a{display:block;font-size:13px;color:var(--wf-fg-muted);margin-bottom:10px;transition:color var(--wf-dur)}.footer-col a:hover{color:var(--wf-fg)}
+.footer-bottom{border-top:1px solid var(--wf-border);padding:24px 0;display:flex;justify-content:space-between;align-items:center}
+.footer-bottom span{font-size:13px;color:var(--wf-fg-subtle)}
+
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .profile-col{flex-direction:row;align-items:center;gap:20px}
+  .spec-grid{grid-template-columns:repeat(2,1fr)}
+  .about-grid,.philosophy-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+  .process-grid{grid-template-columns:repeat(2,1fr)}
+  .process-step:nth-child(2){border-right:none}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .container{padding:0 20px}
+  .stats-row{flex-wrap:wrap;gap:20px}
+  .stat-item{min-width:calc(33% - 14px)}
+  .spec-grid,.process-grid{grid-template-columns:1fr}
+  .process-step{border-right:none;border-bottom:1px solid var(--wf-border)}
+  .process-step:last-child{border-bottom:none}
+  .hero-btns{flex-direction:column}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="#" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="#" class="navbar-link">About</a>
+      <a href="#" class="navbar-link">Services</a>
+      <a href="#" class="navbar-link">Resources</a>
+      <a href="#" class="navbar-link">Blog</a>
+      <a href="#" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-primary btn-sm">Book a consultation</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">Licensed Professional Counselor &amp; Clinical Hypnotherapist</div>
+        <h1>Edward Flynn</h1>
+        <p class="hero-subtitle">St. Louis, MO &middot; Mind, Body &amp; Spirit</p>
+        <p class="hero-body">Helping individuals navigate anxiety, trauma, and life transitions through evidence-based therapy and clinical hypnotherapy. My integrative approach combines cognitive-behavioral techniques with holistic practices for lasting change.</p>
+        <div class="hero-btns">
+          <a href="#" class="btn btn-primary btn-md">Book a session</a>
+          <a href="#" class="btn btn-outline btn-md">View services</a>
+        </div>
+      </div>
+      <div class="profile-col">
+        <div class="profile-img"><span>EF</span></div>
+        <div class="credentials-card">
+          <div class="name">Edward Flynn, LPC, CHt</div>
+          <div class="creds">Licensed Professional Counselor &middot; Clinical Hypnotherapist</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-value">2012</div><div class="stat-label">Started</div></div>
+      <div class="stat-item"><div class="stat-value">13+</div><div class="stat-label">Years</div></div>
+      <div class="stat-item"><div class="stat-value">STL</div><div class="stat-label">Based</div></div>
+      <div class="stat-item"><div class="stat-value">4</div><div class="stat-label">Core Modules</div></div>
+      <div class="stat-item"><div class="stat-value">6</div><div class="stat-label">Specializations</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Specializations -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Specializations</h2>
+      <p>Focused areas of clinical expertise developed over 13+ years of practice.</p>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12L12 4M12 4H6M12 4v6"/></svg></div>
+        <div class="spec-cat">Clinical</div>
+        <h3>Anxiety &amp; Panic Disorders</h3>
+        <p>Evidence-based treatment for generalized anxiety, social anxiety, panic attacks, and phobias using CBT and exposure therapy.</p>
+      </div>
+      <div class="spec-card">
+        <div class="spec-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12L12 4M12 4H6M12 4v6"/></svg></div>
+        <div class="spec-cat">Trauma</div>
+        <h3>PTSD &amp; Trauma Recovery</h3>
+        <p>Specialized trauma-informed care integrating EMDR, somatic experiencing, and cognitive processing therapy.</p>
+      </div>
+      <div class="spec-card">
+        <div class="spec-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12L12 4M12 4H6M12 4v6"/></svg></div>
+        <div class="spec-cat">Behavioral</div>
+        <h3>Habit &amp; Addiction Support</h3>
+        <p>Clinical hypnotherapy for smoking cessation, weight management, and behavioral pattern disruption.</p>
+      </div>
+      <div class="spec-card">
+        <div class="spec-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12L12 4M12 4H6M12 4v6"/></svg></div>
+        <div class="spec-cat">Holistic</div>
+        <h3>Clinical Hypnotherapy</h3>
+        <p>Therapeutic hypnosis for deep relaxation, subconscious pattern work, and accelerated healing alongside traditional therapy.</p>
+      </div>
+      <div class="spec-card">
+        <div class="spec-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12L12 4M12 4H6M12 4v6"/></svg></div>
+        <div class="spec-cat">Wellness</div>
+        <h3>Stress &amp; Burnout</h3>
+        <p>Mindfulness-based stress reduction, work-life balance strategies, and resiliency building for professionals.</p>
+      </div>
+      <div class="spec-card">
+        <div class="spec-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12L12 4M12 4H6M12 4v6"/></svg></div>
+        <div class="spec-cat">Developmental</div>
+        <h3>Life Transitions</h3>
+        <p>Support through career changes, relationship shifts, grief, identity exploration, and major life decisions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <h2 style="font-size:32px;font-weight:700;letter-spacing:-0.02em;margin-bottom:24px">About</h2>
+        <p>With over 13 years of clinical experience, I've dedicated my practice to helping individuals discover their innate capacity for healing and growth. My journey into counseling began with a deep curiosity about the connection between mind, body, and spirit&mdash;a philosophy that continues to guide my work today.</p>
+        <p>I believe that every person possesses the internal resources needed to overcome challenges. My role is to create a safe, non-judgmental space where those resources can be accessed, strengthened, and applied. Whether through traditional talk therapy, clinical hypnosis, or mindfulness practices, I tailor each session to meet you where you are.</p>
+      </div>
+      <div>
+        <div class="philosophy-card">
+          <blockquote>"The greatest discovery of my generation is that human beings can alter their lives by altering their attitudes of mind."</blockquote>
+        </div>
+        <div class="approach-card">
+          <h4>Integrative Approach</h4>
+          <p>Combining cognitive-behavioral therapy, clinical hypnotherapy, and mindfulness-based interventions to address the whole person&mdash;not just the symptoms.</p>
+        </div>
+        <div class="skills-tags">
+          <span class="skill-tag highlight">CBT</span>
+          <span class="skill-tag highlight">Clinical Hypnosis</span>
+          <span class="skill-tag">EMDR</span>
+          <span class="skill-tag highlight">Mindfulness</span>
+          <span class="skill-tag">DBT</span>
+          <span class="skill-tag">Somatic Experiencing</span>
+          <span class="skill-tag">Motivational Interviewing</span>
+          <span class="skill-tag highlight">Trauma-Informed Care</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience Timeline -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Experience</h2>
+      <p>A career built on continuous learning and deepening clinical expertise.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">2008 &ndash; 2012</div>
+        <h3>Master of Arts in Counseling</h3>
+        <div class="timeline-org">Webster University, St. Louis</div>
+        <p>Completed graduate studies with a focus on clinical mental health counseling. Practicum and internship at community mental health centers serving diverse populations.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">2012 &ndash; Present</div>
+        <h3>Therapist II, Clinical Team Lead</h3>
+        <div class="timeline-org">Lakeside Behavioral Health</div>
+        <p>Providing individual and group therapy for adults experiencing anxiety, depression, PTSD, and substance use disorders. Leading clinical supervision for associate-level counselors.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">2017 &ndash; Present</div>
+        <h3>Founder &amp; Clinical Director</h3>
+        <div class="timeline-org">Flynn Counseling &amp; Hypnotherapy</div>
+        <p>Launched private practice specializing in clinical hypnotherapy and integrative mental health. Creator of the Complete Hypnosis Library and DBT digital workbook series.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>The Process</h2>
+      <p>A structured yet flexible approach to therapeutic growth.</p>
+    </div>
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="process-num">01</div>
+        <h3>Assessment</h3>
+        <p>Comprehensive intake evaluation to understand your history, current challenges, and therapeutic goals.</p>
+        <div class="process-tags">
+          <span class="process-tag">Intake</span>
+          <span class="process-tag">History</span>
+          <span class="process-tag">Goals</span>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">02</div>
+        <h3>Treatment Planning</h3>
+        <p>Collaborative development of a personalized treatment plan with measurable outcomes and timeline.</p>
+        <div class="process-tags">
+          <span class="process-tag">Collaborative</span>
+          <span class="process-tag">Measurable</span>
+          <span class="process-tag">Timeline</span>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">03</div>
+        <h3>Active Therapy</h3>
+        <p>Weekly sessions using evidence-based modalities tailored to your specific needs and progress.</p>
+        <div class="process-tags">
+          <span class="process-tag">CBT</span>
+          <span class="process-tag">Hypnosis</span>
+          <span class="process-tag">Mindfulness</span>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">04</div>
+        <h3>Maintenance</h3>
+        <p>Transition to self-guided practice with periodic check-ins and relapse prevention strategies.</p>
+        <div class="process-tags">
+          <span class="process-tag">Prevention</span>
+          <span class="process-tag">Self-guided</span>
+          <span class="process-tag">Growth</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Philosophy -->
+<section class="section">
+  <div class="container">
+    <div class="philosophy-grid">
+      <div>
+        <p class="philosophy-quote">"Healing is not about becoming someone new. It is about reconnecting with who you were before the world told you to be someone else."</p>
+      </div>
+      <div class="principle-list">
+        <div class="principle">
+          <span class="principle-num">01</span>
+          <p>Every person has the internal resources needed to heal&mdash;therapy helps you access them.</p>
+        </div>
+        <div class="principle">
+          <span class="principle-num">02</span>
+          <p>The mind and body are inseparable partners in the healing process.</p>
+        </div>
+        <div class="principle">
+          <span class="principle-num">03</span>
+          <p>Change happens at the pace of trust&mdash;never faster, never slower.</p>
+        </div>
+        <div class="principle">
+          <span class="principle-num">04</span>
+          <p>Evidence-based practice and holistic wisdom are not opposites; they are allies.</p>
+        </div>
+        <div class="principle">
+          <span class="principle-num">05</span>
+          <p>The therapeutic relationship itself is one of the most powerful tools for transformation.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>What Clients Say</h2>
+    </div>
+    <div class="testimonials">
+      <div class="testimonials-quote-mark">&ldquo;</div>
+      <div class="testimonial-slide active" data-index="0">
+        <blockquote>Working with Edward transformed my relationship with anxiety. His calm, grounded presence and clinical expertise helped me find tools I never knew I had. I finally feel like myself again.</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SK</div>
+          <div><div class="testimonial-name">Sarah K.</div><div class="testimonial-role">Anxiety &amp; Stress Management Client</div></div>
+        </div>
+      </div>
+      <div class="testimonial-slide" data-index="1">
+        <blockquote>The hypnotherapy sessions were unlike anything I expected. Edward created such a safe space that I was able to let go of patterns I'd carried for decades. Truly life-changing work.</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">MR</div>
+          <div><div class="testimonial-name">Michael R.</div><div class="testimonial-role">Clinical Hypnotherapy Client</div></div>
+        </div>
+      </div>
+      <div class="testimonial-slide" data-index="2">
+        <blockquote>After years of trying different therapists, I found someone who actually listens and adapts. Edward's integrative approach addressed things I didn't even realize were connected.</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">JT</div>
+          <div><div class="testimonial-name">Jennifer T.</div><div class="testimonial-role">Trauma Recovery Client</div></div>
+        </div>
+      </div>
+      <div class="testimonial-dots">
+        <div class="testimonial-dot active" data-index="0"></div>
+        <div class="testimonial-dot" data-index="1"></div>
+        <div class="testimonial-dot" data-index="2"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="section">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <h2 style="font-size:32px;font-weight:700;letter-spacing:-0.02em;margin-bottom:32px">Get in Touch</h2>
+        <div class="contact-link">
+          <div class="contact-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l6 4 6-4M2 4v8h12V4H2z"/></svg></div>
+          <span>edward@flynntherapy.com</span>
+        </div>
+        <div class="contact-link">
+          <div class="contact-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2h3l2 4-2 2a8 8 0 003 3l2-2 4 2v3a1 1 0 01-1 1C6 15 1 10 1 3a1 1 0 011-1z"/></svg></div>
+          <span>(314) 555-0192</span>
+        </div>
+        <div class="contact-link">
+          <div class="contact-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5 1 2 4 2 7c0 4 6 8 6 8s6-4 6-8c0-3-3-6-6-6z"/><circle cx="8" cy="7" r="2"/></svg></div>
+          <span>St. Louis, Missouri</span>
+        </div>
+      </div>
+      <div class="availability-card">
+        <div class="pulse-row">
+          <div class="pulse-dot"></div>
+          <span class="pulse-label">Currently Accepting Clients</span>
+        </div>
+        <h3>Lakeside Behavioral Health</h3>
+        <div class="service-list">
+          <div class="service-item">Individual Therapy (Adults 18+)</div>
+          <div class="service-item">Clinical Hypnotherapy</div>
+          <div class="service-item">Group Therapy Sessions</div>
+          <div class="service-item">Virtual / Telehealth Available</div>
+          <div class="service-item">Digital Resources &amp; Workbooks</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Practice</h4>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Specializations</a>
+        <a href="#">Approach</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Hypnosis Library</a>
+        <a href="#">DBT Workbooks</a>
+        <a href="#">Blog</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="#">Book a Session</a>
+        <a href="#">Contact</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Psychology Today</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">HIPAA Notice</a>
+        <a href="#">Disclaimer</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn, LPC, CHt. All rights reserved.</span>
+      <span>St. Louis, MO</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.testimonial-slide');
+  const dots = document.querySelectorAll('.testimonial-dot');
+  let current = 0;
+  function show(i){
+    slides.forEach(s => s.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+    slides[i].classList.add('active');
+    dots[i].classList.add('active');
+    current = i;
+  }
+  dots.forEach(d => d.addEventListener('click', () => show(parseInt(d.dataset.index))));
+  setInterval(() => show((current + 1) % slides.length), 6000);
+})();
+</script>
+</body>
+</html>

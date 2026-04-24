@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edward Flynn — Home | Windfield IO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-brand-ring:rgba(29,185,84,0.28);--wf-violet:#7c3aed;--wf-violet-muted:rgba(124,58,237,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-r-xl:16px;--wf-r-pill:9999px;--wf-shadow-sm:0 1px 2px rgba(0,0,0,0.25);--wf-shadow-md:0 4px 16px rgba(0,0,0,0.28);--wf-shadow-lg:0 16px 48px rgba(0,0,0,0.4);--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+.container{width:100%;max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* ── Navbar ── */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(9,9,11,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--wf-border-subtle);height:64px}
+.navbar .container{display:flex;align-items:center;justify-content:space-between;height:100%}
+.navbar-logo{font-size:20px;font-weight:700;letter-spacing:-0.02em}
+.navbar-logo span{color:var(--wf-brand)}
+.navbar-links{display:flex;align-items:center;gap:32px}
+.navbar-links a{font-size:14px;font-weight:500;color:var(--wf-fg-muted);transition:color var(--wf-dur) var(--wf-ease)}
+.navbar-links a:hover{color:var(--wf-fg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;font-size:14px;font-weight:600;font-family:var(--font-sans);border-radius:var(--wf-r-md);cursor:pointer;transition:all var(--wf-dur) var(--wf-ease);border:none;line-height:1}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}
+.btn-primary:hover{background:var(--wf-brand-hover);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--wf-fg);border:1px solid var(--wf-border-strong)}
+.btn-outline:hover{border-color:var(--wf-brand);color:var(--wf-brand);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--wf-fg-muted);border:1px solid var(--wf-border)}
+.btn-ghost:hover{color:var(--wf-fg);border-color:var(--wf-border-strong)}
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn-lg{padding:14px 28px;font-size:15px}
+
+.section{padding:80px 0}
+.section--elevated{background:var(--wf-bg-elevated)}
+.kicker{display:inline-block;font-size:13px;font-weight:600;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+.section-heading{font-size:36px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin-bottom:24px}
+.section-subtext{font-size:16px;color:var(--wf-fg-muted);max-width:640px;line-height:1.7}
+
+/* ── Hero ── */
+.hero{text-align:center;padding:100px 0 60px}
+.hero-avatar{width:140px;height:140px;border-radius:50%;border:3px solid var(--wf-brand);margin:0 auto 32px;background:var(--wf-surface);display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px var(--wf-violet-muted)}
+.hero-avatar svg{width:48px;height:48px;color:var(--wf-fg-faint)}
+.hero-name{font-size:clamp(2.5rem,5vw,4rem);font-weight:700;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px}
+.hero-subtitle{font-size:17px;color:var(--wf-fg-muted);max-width:680px;margin:0 auto 16px;line-height:1.7}
+.hero-tagline{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--wf-brand);margin-bottom:12px}
+.hero-stats{font-size:14px;font-weight:600;color:var(--wf-fg-subtle);margin-bottom:32px;letter-spacing:0.02em}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+
+/* ── Ticker ── */
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border);padding:14px 0;background:var(--wf-bg)}
+.ticker{display:flex;gap:48px;animation:scroll 40s linear infinite;white-space:nowrap}
+.ticker span{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--wf-fg-faint)}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── Treat Grid ── */
+.treat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.treat-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;transition:all var(--wf-dur) var(--wf-ease)}
+.treat-card:hover{transform:translateY(-2px);border-color:var(--wf-border-strong);box-shadow:var(--wf-shadow-md)}
+.treat-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:var(--wf-r-md);background:var(--wf-brand-muted);color:var(--wf-brand);font-size:13px;font-weight:700;margin-bottom:16px}
+.treat-card h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.treat-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:16px}
+.treat-link{font-size:13px;font-weight:600;color:var(--wf-brand);transition:color var(--wf-dur) var(--wf-ease)}
+.treat-link:hover{color:var(--wf-brand-hover)}
+
+/* ── Promo Band ── */
+.promo{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.promo-visual{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);height:320px;display:flex;align-items:center;justify-content:center}
+.promo-visual svg{width:64px;height:64px;color:var(--wf-fg-faint)}
+.promo-pills{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.pill{display:inline-flex;padding:6px 14px;border-radius:var(--wf-r-pill);font-size:12px;font-weight:600;background:var(--wf-brand-muted);color:var(--wf-brand)}
+.promo-price{font-size:32px;font-weight:700;color:var(--wf-brand);margin-bottom:20px}
+.promo-actions{display:flex;gap:12px}
+
+/* ── Product Cards ── */
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.product-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px;transition:all var(--wf-dur) var(--wf-ease)}
+.product-card:hover{transform:translateY(-2px);border-color:var(--wf-border-strong);box-shadow:var(--wf-shadow-md)}
+.product-badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--wf-brand);background:var(--wf-brand-muted);padding:4px 10px;border-radius:var(--wf-r-pill);margin-bottom:12px}
+.product-card h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.product-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:12px}
+.product-price{font-size:20px;font-weight:700;color:var(--wf-brand)}
+
+/* ── Course ── */
+.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.course-hero{background:linear-gradient(135deg,rgba(29,185,84,0.15),rgba(29,185,84,0.05));border:1px solid var(--wf-brand-ring);border-radius:var(--wf-r-lg);padding:48px;display:flex;flex-direction:column;justify-content:center}
+.course-hero h3{font-size:28px;font-weight:800;margin-bottom:12px}
+.course-hero p{font-size:15px;color:var(--wf-fg-muted);line-height:1.7;margin-bottom:24px}
+.course-syllabus{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;max-height:480px;overflow-y:auto}
+.course-syllabus::-webkit-scrollbar{width:6px}
+.course-syllabus::-webkit-scrollbar-track{background:var(--wf-bg)}
+.course-syllabus::-webkit-scrollbar-thumb{background:var(--wf-border-strong);border-radius:3px}
+.module{padding:14px 0;border-bottom:1px solid var(--wf-border)}
+.module:last-child{border-bottom:none}
+.module-num{font-size:12px;font-weight:700;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.06em}
+.module-title{font-size:15px;font-weight:600;margin-top:4px}
+.module-desc{font-size:13px;color:var(--wf-fg-muted);margin-top:4px}
+
+/* ── Pricing ── */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pricing-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:36px;position:relative;transition:all var(--wf-dur) var(--wf-ease)}
+.pricing-card:hover{transform:translateY(-2px);box-shadow:var(--wf-shadow-md)}
+.pricing-card--popular{border-color:var(--wf-brand)}
+.pricing-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--wf-brand);color:var(--wf-brand-fg);font-size:12px;font-weight:700;padding:4px 16px;border-radius:var(--wf-r-pill)}
+.pricing-tier{font-size:14px;font-weight:600;color:var(--wf-fg-subtle);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.pricing-amount{font-size:40px;font-weight:800;margin-bottom:8px}
+.pricing-amount span{font-size:16px;font-weight:500;color:var(--wf-fg-subtle)}
+.pricing-desc{font-size:14px;color:var(--wf-fg-muted);margin-bottom:24px}
+.pricing-features{list-style:none;margin-bottom:28px}
+.pricing-features li{font-size:14px;color:var(--wf-fg-muted);padding:8px 0;border-bottom:1px solid var(--wf-border);display:flex;align-items:center;gap:8px}
+.pricing-features li::before{content:"";display:inline-block;width:16px;height:16px;background:var(--wf-brand-muted);border-radius:50%;flex-shrink:0}
+
+/* ── Community ── */
+.community-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.community-price{font-size:40px;font-weight:800;color:var(--wf-brand);margin-bottom:8px}
+.community-price span{font-size:16px;font-weight:500;color:var(--wf-fg-subtle)}
+.feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0}
+.feature-item{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);padding:16px;text-align:center}
+.feature-item h4{font-size:13px;font-weight:600;margin-bottom:4px}
+.feature-item p{font-size:12px;color:var(--wf-fg-muted)}
+.cancel-note{font-size:13px;color:var(--wf-fg-subtle);margin-top:12px}
+
+/* ── Email Signup ── */
+.email-section{text-align:center}
+.email-form{display:flex;gap:12px;max-width:480px;margin:24px auto 0;justify-content:center}
+.email-input{flex:1;padding:12px 16px;font-size:14px;font-family:var(--font-sans);background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);color:var(--wf-fg);outline:none;transition:border-color var(--wf-dur) var(--wf-ease)}
+.email-input:focus{border-color:var(--wf-brand)}
+.email-input::placeholder{color:var(--wf-fg-faint)}
+.privacy-note{font-size:12px;color:var(--wf-fg-faint);margin-top:12px}
+
+/* ── About ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.about-avatar{width:260px;height:260px;border-radius:50%;border:3px solid var(--wf-brand);background:var(--wf-surface);display:flex;align-items:center;justify-content:center;margin:0 auto}
+.about-avatar svg{width:64px;height:64px;color:var(--wf-fg-faint)}
+.about-content h3{font-size:28px;font-weight:700;margin-bottom:12px}
+.about-content p{font-size:15px;color:var(--wf-fg-muted);line-height:1.7;margin-bottom:16px}
+.cred-list{list-style:none;margin-top:16px}
+.cred-list li{font-size:14px;color:var(--wf-fg-muted);padding:6px 0;display:flex;align-items:center;gap:8px}
+.cred-list li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--wf-brand);flex-shrink:0}
+
+/* ── Footer ── */
+.footer{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:60px 0 24px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand{font-size:20px;font-weight:700;margin-bottom:12px}
+.footer-brand span{color:var(--wf-brand)}
+.footer-desc{font-size:13px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:20px}
+.footer-newsletter{display:flex;gap:8px}
+.footer-newsletter input{flex:1;padding:8px 12px;font-size:13px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);color:var(--wf-fg);font-family:var(--font-sans)}
+.footer-col{display:flex;flex-direction:column;gap:10px}
+.footer-col-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--wf-fg-subtle);margin-bottom:4px}
+.footer-col a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur) var(--wf-ease)}
+.footer-col a:hover{color:var(--wf-brand)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-faint)}
+.footer-legal{display:flex;gap:16px}
+.footer-legal a{color:var(--wf-fg-faint);transition:color var(--wf-dur)}
+.footer-legal a:hover{color:var(--wf-fg-muted)}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  .treat-grid,.product-grid,.pricing-grid{grid-template-columns:repeat(2,1fr)}
+  .promo,.course-grid,.community-grid,.about-grid{grid-template-columns:1fr}
+  .feature-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+  .navbar-links{display:none}
+}
+@media(max-width:600px){
+  .container{padding:0 20px}
+  .treat-grid,.product-grid,.pricing-grid{grid-template-columns:1fr}
+  .feature-grid{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column}
+  .email-form{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar">
+  <div class="container">
+    <a href="ef-home.html" class="navbar-logo"><span>Logo</span></a>
+    <div class="navbar-links">
+      <a href="ef-home.html">Home</a>
+      <a href="ef-portfolio.html">Portfolio</a>
+      <a href="ef-specializations.html">Specializations</a>
+      <a href="ef-products.html">Products</a>
+      <a href="ef-contact.html">Contact</a>
+    </div>
+    <a href="#" class="btn btn-primary btn-sm">Book a consultation</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-avatar">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
+    </div>
+    <h1 class="hero-name">Edward Flynn</h1>
+    <p class="hero-subtitle">Licensed Professional Counselor, Nationally Board Certified Clinical Hypnotherapist, and Dialectical Behavior Therapy Certified clinician with over 13 years of experience helping individuals navigate anxiety, trauma, mood disorders, and self-destructive patterns.</p>
+    <div class="hero-tagline">Mind, Body &amp; Spirit Coordination</div>
+    <div class="hero-stats">13+ Years &nbsp;|&nbsp; LPC &nbsp;|&nbsp; NBCCH &nbsp;|&nbsp; DBTC</div>
+    <div class="hero-actions">
+      <a href="#" class="btn btn-primary btn-lg">Book a Session</a>
+      <a href="ef-specializations.html" class="btn btn-outline">View Specializations</a>
+      <a href="ef-products.html" class="btn btn-ghost">Browse Products</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Credentials Ticker ── -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>Licensed Professional Counselor</span>
+    <span>Nationally Board Certified Clinical Hypnotherapist</span>
+    <span>Dialectical Behavior Therapy Certified</span>
+    <span>Trauma-Informed Care</span>
+    <span>Intensive Outpatient Program</span>
+    <span>Mind-Body-Spirit Integration</span>
+    <span>LGBTQIA+ Affirming</span>
+    <span>Positive Outcome Imagery</span>
+    <span>Mindfulness-Based Stress Reduction</span>
+    <span>DBT Skills Training</span>
+    <span>Clinical Hypnotherapy</span>
+    <span>Keirsey Temperament Assessment</span>
+    <!-- duplicate for seamless scroll -->
+    <span>Licensed Professional Counselor</span>
+    <span>Nationally Board Certified Clinical Hypnotherapist</span>
+    <span>Dialectical Behavior Therapy Certified</span>
+    <span>Trauma-Informed Care</span>
+    <span>Intensive Outpatient Program</span>
+    <span>Mind-Body-Spirit Integration</span>
+    <span>LGBTQIA+ Affirming</span>
+    <span>Positive Outcome Imagery</span>
+    <span>Mindfulness-Based Stress Reduction</span>
+    <span>DBT Skills Training</span>
+    <span>Clinical Hypnotherapy</span>
+    <span>Keirsey Temperament Assessment</span>
+  </div>
+</div>
+
+<!-- ── What I Treat ── -->
+<section class="section">
+  <div class="container">
+    <span class="kicker">Specializations</span>
+    <h2 class="section-heading">What I Treat</h2>
+    <p class="section-subtext" style="margin-bottom:40px">Evidence-based therapeutic approaches tailored to each individual's unique healing journey.</p>
+    <div class="treat-grid">
+      <div class="treat-card">
+        <div class="treat-num">01</div>
+        <h3>Dialectical Behavior Therapy</h3>
+        <p>Comprehensive DBT skills training including distress tolerance, emotion regulation, interpersonal effectiveness, and core mindfulness for lasting behavioral change.</p>
+        <a href="ef-specializations.html" class="treat-link">Learn more &rarr;</a>
+      </div>
+      <div class="treat-card">
+        <div class="treat-num">02</div>
+        <h3>Clinical Hypnotherapy</h3>
+        <p>Board-certified clinical hypnotherapy for anxiety, smoking cessation, sleep disorders, and chronic pain management using evidence-based trance techniques.</p>
+        <a href="ef-specializations.html" class="treat-link">Learn more &rarr;</a>
+      </div>
+      <div class="treat-card">
+        <div class="treat-num">03</div>
+        <h3>Trauma-Informed Care</h3>
+        <p>Gentle, phased approach to trauma processing that prioritizes safety, stabilization, and empowerment for survivors of complex trauma and PTSD.</p>
+        <a href="ef-specializations.html" class="treat-link">Learn more &rarr;</a>
+      </div>
+      <div class="treat-card">
+        <div class="treat-num">04</div>
+        <h3>Anxiety &amp; Mood Disorders</h3>
+        <p>Integrative treatment for generalized anxiety, panic disorder, social anxiety, depression, and bipolar spectrum conditions with measurable outcomes.</p>
+        <a href="ef-specializations.html" class="treat-link">Learn more &rarr;</a>
+      </div>
+      <div class="treat-card">
+        <div class="treat-num">05</div>
+        <h3>BPD &amp; Self-Injury</h3>
+        <p>Specialized DBT-based treatment for borderline personality disorder features, self-harm behaviors, and emotional dysregulation with compassionate support.</p>
+        <a href="ef-specializations.html" class="treat-link">Learn more &rarr;</a>
+      </div>
+      <div class="treat-card">
+        <div class="treat-num">06</div>
+        <h3>LGBTQIA+ Affirming Care</h3>
+        <p>Culturally competent, affirming therapeutic space for LGBTQIA+ individuals navigating identity, relationships, family dynamics, and minority stress.</p>
+        <a href="ef-specializations.html" class="treat-link">Learn more &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Product Promo Band ── -->
+<section class="section section--elevated">
+  <div class="container">
+    <div class="promo">
+      <div>
+        <span class="kicker">Featured Resource</span>
+        <h2 class="section-heading">Mind-Body-Spirit Hypnosis Audio Library</h2>
+        <p class="section-subtext" style="margin-bottom:16px">Clinically designed guided hypnosis sessions you can use at home for anxiety relief, better sleep, and smoking cessation.</p>
+        <div class="promo-pills">
+          <span class="pill">Guided Audio</span>
+          <span class="pill">MP3 Download</span>
+          <span class="pill">Clinical Grade</span>
+          <span class="pill">Self-Paced</span>
+        </div>
+        <div class="promo-price">from $19</div>
+        <div class="promo-actions">
+          <a href="ef-products.html" class="btn btn-primary">Browse Library</a>
+          <a href="#" class="btn btn-outline">Free Sample</a>
+        </div>
+      </div>
+      <div class="promo-visual">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Tools for Resilience ── -->
+<section class="section">
+  <div class="container">
+    <span class="kicker">Digital Products</span>
+    <h2 class="section-heading">Tools for Resilience</h2>
+    <p class="section-subtext" style="margin-bottom:40px">Evidence-based resources designed to support your therapeutic journey between sessions.</p>
+    <div class="product-grid">
+      <div class="product-card">
+        <span class="product-badge">Audio MP3</span>
+        <h3>Anxiety &amp; Panic Relief</h3>
+        <p>Guided hypnosis session targeting physiological anxiety responses with progressive relaxation and cognitive reframing.</p>
+        <div class="product-price">$29</div>
+      </div>
+      <div class="product-card">
+        <span class="product-badge">Audio MP3</span>
+        <h3>Deep Sleep Induction</h3>
+        <p>Clinical-grade sleep hypnosis combining body scan, breath work, and imagery for restorative rest.</p>
+        <div class="product-price">$29</div>
+      </div>
+      <div class="product-card">
+        <span class="product-badge">Audio MP3</span>
+        <h3>Smoking Cessation Program</h3>
+        <p>Multi-session hypnotherapy program addressing nicotine dependency through subconscious reprogramming.</p>
+        <div class="product-price">$79</div>
+      </div>
+      <div class="product-card">
+        <span class="product-badge">DBT Workbook</span>
+        <h3>Distress Tolerance Toolkit</h3>
+        <p>Printable DBT skills worksheets covering TIPP, ACCEPTS, self-soothe, and crisis survival strategies.</p>
+        <div class="product-price">$19</div>
+      </div>
+      <div class="product-card">
+        <span class="product-badge">Guided Journal</span>
+        <h3>Emotion Regulation Journal</h3>
+        <p>Structured journaling prompts built on the DBT emotion regulation module with daily tracking.</p>
+        <div class="product-price">$15</div>
+      </div>
+      <div class="product-card">
+        <span class="product-badge">Affirmation Cards</span>
+        <h3>Radical Acceptance Deck</h3>
+        <p>52 printable affirmation cards rooted in DBT radical acceptance and mindfulness principles.</p>
+        <div class="product-price">$12</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Course ── -->
+<section class="section section--elevated">
+  <div class="container">
+    <span class="kicker">Self-Paced Course</span>
+    <h2 class="section-heading" style="margin-bottom:40px">DBT Skills Mastery</h2>
+    <div class="course-grid">
+      <div class="course-hero">
+        <h3>Build Lasting Resilience</h3>
+        <p>A comprehensive 10-module course teaching the four pillars of Dialectical Behavior Therapy: Mindfulness, Distress Tolerance, Emotion Regulation, and Interpersonal Effectiveness.</p>
+        <a href="#" class="btn btn-primary btn-lg">Enroll Now &mdash; $197</a>
+      </div>
+      <div class="course-syllabus">
+        <div class="module">
+          <div class="module-num">Module 01</div>
+          <div class="module-title">Introduction to DBT</div>
+          <div class="module-desc">History, principles, and the biosocial theory of emotional dysregulation.</div>
+        </div>
+        <div class="module">
+          <div class="module-num">Module 02</div>
+          <div class="module-title">Core Mindfulness</div>
+          <div class="module-desc">Wise Mind, observe, describe, and participate skills for present-moment awareness.</div>
+        </div>
+        <div class="module">
+          <div class="module-num">Module 03</div>
+          <div class="module-title">Distress Tolerance I</div>
+          <div class="module-desc">Crisis survival skills: TIPP, ACCEPTS, and self-soothe techniques.</div>
+        </div>
+        <div class="module">
+          <div class="module-num">Module 04</div>
+          <div class="module-title">Distress Tolerance II</div>
+          <div class="module-desc">Reality acceptance: radical acceptance, turning the mind, and willingness.</div>
+        </div>
+        <div class="module">
+          <div class="module-num">Module 05</div>
+          <div class="module-title">Emotion Regulation I</div>
+          <div class="module-desc">Understanding emotions, checking the facts, and opposite action.</div>
+        </div>
+        <div class="module">
+          <div class="module-num">Module 06</div>
+          <div class="module-title">Emotion Regulation II</div>
+          <div class="module-desc">ABC PLEASE skills, building mastery, and reducing vulnerability.</div>
+        </div>
+        <div class="module">
+          <div class="module-num">Module 07</div>
+          <div class="module-title">Interpersonal Effectiveness I</div>
+          <div class="module-desc">DEAR MAN: objective effectiveness in relationships and communication.</div>
+        </div>
+        <div class="module">
+          <div class="module-num">Module 08</div>
+          <div class="module-title">Interpersonal Effectiveness II</div>
+          <div class="module-desc">GIVE and FAST skills for maintaining relationships and self-respect.</div>
+        </div>
+        <div class="module">
+          <div class="module-num">Module 09</div>
+          <div class="module-title">Hypnotherapy Integration</div>
+          <div class="module-desc">Combining DBT skills with clinical hypnotherapy for deeper integration.</div>
+        </div>
+        <div class="module">
+          <div class="module-num">Module 10</div>
+          <div class="module-title">Building Your Practice</div>
+          <div class="module-desc">Creating sustainable daily routines and a personalized skills toolkit.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Pricing ── -->
+<section class="section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px">
+      <span class="kicker">Pricing</span>
+      <h2 class="section-heading">Choose Your Path</h2>
+      <p class="section-subtext" style="margin:0 auto">Flexible options to support your healing journey at every stage.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Free</div>
+        <div class="pricing-amount">$0</div>
+        <p class="pricing-desc">Essential resources to get started on your wellness journey.</p>
+        <ul class="pricing-features">
+          <li>Free guided meditation audio</li>
+          <li>DBT skills overview PDF</li>
+          <li>Weekly newsletter</li>
+          <li>Community forum access</li>
+          <li>1 free journal prompt pack</li>
+        </ul>
+        <a href="#" class="btn btn-outline" style="width:100%">Get Started Free</a>
+      </div>
+      <div class="pricing-card pricing-card--popular">
+        <span class="pricing-badge">Most Popular</span>
+        <div class="pricing-tier">Popular</div>
+        <div class="pricing-amount">$197</div>
+        <p class="pricing-desc">Complete DBT Skills Mastery course with lifetime access.</p>
+        <ul class="pricing-features">
+          <li>Everything in Free</li>
+          <li>10-module DBT course</li>
+          <li>All guided hypnosis audios</li>
+          <li>Printable workbooks</li>
+          <li>Private community access</li>
+          <li>Monthly live Q&amp;A</li>
+        </ul>
+        <a href="#" class="btn btn-primary" style="width:100%">Enroll Now</a>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-tier">Premium</div>
+        <div class="pricing-amount">$497</div>
+        <p class="pricing-desc">VIP experience with direct clinician support and personalized guidance.</p>
+        <ul class="pricing-features">
+          <li>Everything in Popular</li>
+          <li>2 private sessions/month</li>
+          <li>Personalized treatment plan</li>
+          <li>Priority email support</li>
+          <li>Custom hypnosis recording</li>
+          <li>Early access to new content</li>
+        </ul>
+        <a href="#" class="btn btn-outline" style="width:100%">Apply Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Community ── -->
+<section class="section section--elevated">
+  <div class="container">
+    <div class="community-grid">
+      <div>
+        <span class="kicker">Community</span>
+        <h2 class="section-heading">The Resilience Circle</h2>
+        <p class="section-subtext" style="margin-bottom:8px">A supportive community of individuals committed to growth, healing, and evidence-based mental wellness practices.</p>
+        <div class="community-price">$25<span>/month</span></div>
+        <div class="feature-grid">
+          <div class="feature-item"><h4>Live Sessions</h4><p>Weekly group calls</p></div>
+          <div class="feature-item"><h4>Resource Library</h4><p>Full catalog access</p></div>
+          <div class="feature-item"><h4>Peer Support</h4><p>Private forum</p></div>
+          <div class="feature-item"><h4>Expert Q&amp;A</h4><p>Monthly sessions</p></div>
+          <div class="feature-item"><h4>Skill Challenges</h4><p>Weekly prompts</p></div>
+          <div class="feature-item"><h4>Guest Speakers</h4><p>Quarterly events</p></div>
+          <div class="feature-item"><h4>Progress Tracker</h4><p>Personal dashboard</p></div>
+          <div class="feature-item"><h4>Early Access</h4><p>New content first</p></div>
+        </div>
+        <p class="cancel-note">Cancel anytime. No long-term commitment required.</p>
+      </div>
+      <div style="text-align:center">
+        <a href="#" class="btn btn-primary btn-lg">Join the Circle</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Email Signup ── -->
+<section class="section section--elevated" style="border-top:1px solid var(--wf-border)">
+  <div class="container email-section">
+    <span class="kicker">Stay Connected</span>
+    <h2 class="section-heading">Get Weekly Wellness Insights</h2>
+    <p class="section-subtext" style="margin:0 auto 24px">Evidence-based tips, new resources, and therapeutic insights delivered to your inbox.</p>
+    <div class="email-form">
+      <input type="email" class="email-input" placeholder="Enter your email address">
+      <button class="btn btn-primary">Subscribe</button>
+    </div>
+    <p class="privacy-note">We respect your privacy. Unsubscribe at any time.</p>
+  </div>
+</section>
+
+<!-- ── About ── -->
+<section class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div style="text-align:center">
+        <div class="about-avatar">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
+        </div>
+      </div>
+      <div class="about-content">
+        <span class="kicker">About</span>
+        <h3>Edward Flynn, LPC, NBCCH, DBTC</h3>
+        <p>With over 13 years of clinical experience, Edward Flynn specializes in helping individuals build lasting resilience through evidence-based approaches. His integrative practice combines Dialectical Behavior Therapy, Clinical Hypnotherapy, and Mindfulness-Based techniques.</p>
+        <p>Edward's work spans private practice, intensive outpatient programs, and digital wellness resources, making clinical-grade tools accessible to those who need them most.</p>
+        <ul class="cred-list">
+          <li>Licensed Professional Counselor (LPC)</li>
+          <li>Nationally Board Certified Clinical Hypnotherapist (NBCCH)</li>
+          <li>Dialectical Behavior Therapy Certified (DBTC)</li>
+          <li>13+ Years Clinical Experience</li>
+          <li>IOP Group Facilitator</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span>Logo</span></div>
+        <p class="footer-desc">Mind, Body &amp; Spirit Coordination. Evidence-based therapeutic resources for lasting resilience and personal growth.</p>
+        <div class="footer-newsletter">
+          <input type="email" placeholder="Your email">
+          <button class="btn btn-primary btn-sm">Subscribe</button>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <a href="ef-specializations.html">Specializations</a>
+        <a href="#">Individual Therapy</a>
+        <a href="#">Group Therapy</a>
+        <a href="#">Hypnotherapy</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <a href="ef-products.html">Products</a>
+        <a href="#">Courses</a>
+        <a href="#">Community</a>
+        <a href="ef-portfolio.html">Portfolio</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Connect</div>
+        <a href="ef-contact.html">Contact</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Facebook</a>
+        <a href="#">Zocdoc</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

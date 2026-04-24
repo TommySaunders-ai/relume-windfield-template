@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete Hypnosis Library — Edward Flynn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-violet: #7c3aed;
+  --wf-violet-muted: rgba(124,58,237,0.10);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px; --wf-r-xl: 16px; --wf-r-pill: 9999px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}.btn-sm{height:36px;padding:0 16px;font-size:13px}.btn-lg{height:52px;padding:0 32px;font-size:16px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.btn-full{width:100%;justify-content:center}
+
+/* Navbar */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}.navbar-link:hover{color:var(--wf-fg)}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+
+/* Hero */
+.hero{padding:80px 0;border-bottom:1px solid var(--wf-border);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-180px;right:-80px;width:500px;height:500px;background:radial-gradient(circle,var(--wf-violet-muted) 0%,transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr 360px;gap:64px;align-items:start;position:relative;z-index:1}
+.badge-flagship{display:inline-flex;align-items:center;gap:8px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-pill);padding:6px 16px;font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:20px}
+.badge-dot{width:8px;height:8px;border-radius:50%;background:var(--wf-brand);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--wf-brand-ring)}50%{box-shadow:0 0 0 6px transparent}}
+.hero h1{font-size:clamp(2.5rem,4vw,3.5rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:12px}
+.hero-desc{font-size:16px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:16px}
+.hero-rating{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.stars{display:flex;gap:2px}
+.stars svg{width:18px;height:18px;fill:#fbbf24}
+.rating-text{font-size:14px;color:var(--wf-fg-muted)}
+.hero-meta{font-size:14px;color:var(--wf-fg-subtle);margin-bottom:20px}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap}
+.hero-badge{font-size:12px;font-weight:500;color:var(--wf-fg-muted);background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-pill);padding:6px 14px;display:flex;align-items:center;gap:6px}
+.hero-badge svg{width:14px;height:14px;color:var(--wf-brand)}
+
+/* Sidebar pricing card */
+.pricing-card{position:sticky;top:88px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:32px;display:flex;flex-direction:column;gap:16px}
+.price-row{display:flex;align-items:baseline;gap:12px}
+.price-main{font-size:48px;font-weight:700;color:var(--wf-brand);letter-spacing:-0.03em}
+.price-orig{font-size:14px;color:var(--wf-fg-muted);text-decoration:line-through}
+.price-save{font-size:13px;color:var(--wf-brand);font-weight:600}
+.pricing-divider{height:1px;background:var(--wf-border)}
+.pricing-guarantee{font-size:13px;color:var(--wf-fg-subtle);text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.pricing-guarantee svg{width:14px;height:14px;color:var(--wf-brand)}
+
+/* Sections */
+.section{padding:80px 0;border-bottom:1px solid var(--wf-border)}
+.section-header{text-align:center;margin-bottom:48px}
+.section-header h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.section-header p{font-size:15px;color:var(--wf-fg-muted);max-width:560px;margin:0 auto}
+
+/* Recording cards */
+.recordings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.recording-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:28px;transition:border-color var(--wf-dur)}
+.recording-card:hover{border-color:var(--wf-border-strong)}
+.recording-icon{width:48px;height:48px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.recording-icon svg{width:22px;height:22px;color:var(--wf-brand)}
+.recording-card h3{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:6px}
+.recording-duration{font-size:13px;font-weight:500;color:var(--wf-brand);margin-bottom:8px}
+.recording-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+
+/* Steps */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.step-card{text-align:center;padding:32px}
+.step-num{width:48px;height:48px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--wf-brand);margin:0 auto 20px;font-family:var(--font-mono)}
+.step-card h3{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:8px}
+.step-card p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+
+/* Comparison table */
+.comparison-wrap{overflow-x:auto}
+.comparison-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:var(--wf-r-xl);overflow:hidden;border:1px solid var(--wf-border)}
+.comparison-table th{padding:16px 24px;font-size:14px;font-weight:600;text-align:left;background:var(--wf-surface)}
+.comparison-table th:first-child{background:var(--wf-bg)}
+.comparison-table th.col-without{color:var(--wf-fg-muted)}
+.comparison-table th.col-with{color:var(--wf-brand)}
+.comparison-table td{padding:14px 24px;font-size:14px;border-top:1px solid var(--wf-border)}
+.comparison-table td:first-child{color:var(--wf-fg-subtle);font-weight:500;background:var(--wf-bg)}
+.comparison-table td.without{color:var(--wf-fg-muted)}
+.comparison-table td.with{color:var(--wf-fg)}
+.comparison-table tr:hover td{background:var(--wf-surface-hover)}
+.comparison-table tr:hover td:first-child{background:var(--wf-surface)}
+
+/* Use cases */
+.use-cases{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.use-case-item{display:flex;align-items:center;gap:14px;font-size:16px;color:var(--wf-fg-muted);background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:20px 24px}
+.use-case-item svg{width:20px;height:20px;color:var(--wf-brand);flex-shrink:0}
+
+/* FAQ */
+.faq-list{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+.faq-item{border-bottom:1px solid var(--wf-border)}
+.faq-item:first-child{border-top:1px solid var(--wf-border)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:20px 0;cursor:pointer;font-size:16px;font-weight:500;color:var(--wf-fg);gap:16px}
+.faq-q svg{width:16px;height:16px;color:var(--wf-fg-subtle);flex-shrink:0;transition:transform 0.3s var(--wf-ease)}
+.faq-item.open .faq-q svg{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s var(--wf-ease)}
+.faq-item.open .faq-a{max-height:300px}
+.faq-a p{font-size:14px;color:var(--wf-fg-muted);line-height:1.7;padding-bottom:20px}
+
+/* Cross-sell */
+.crosssell-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.crosssell-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:24px;transition:border-color var(--wf-dur)}
+.crosssell-card:hover{border-color:var(--wf-border-strong)}
+.crosssell-tag{font-size:11px;font-weight:600;color:var(--wf-brand);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px}
+.crosssell-card h3{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:6px}
+.crosssell-card p{font-size:13px;color:var(--wf-fg-muted);line-height:1.5;margin-bottom:14px}
+.crosssell-bottom{display:flex;justify-content:space-between;align-items:center}
+.crosssell-price{font-size:16px;font-weight:700;color:var(--wf-fg)}
+.crosssell-link{font-size:13px;font-weight:600;color:var(--wf-brand);display:flex;align-items:center;gap:4px;transition:gap var(--wf-dur)}
+.crosssell-link:hover{gap:8px}
+
+/* CTA band */
+.cta-band{padding:80px 0;text-align:center;position:relative;overflow:hidden}
+.cta-band::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--wf-violet-muted) 0%,var(--wf-brand-muted) 100%);pointer-events:none}
+.cta-band .inner{position:relative;z-index:1}
+.cta-band h2{font-size:32px;font-weight:700;letter-spacing:-0.02em;margin-bottom:12px}
+.cta-band .cta-price{font-size:48px;font-weight:700;color:var(--wf-brand);margin-bottom:20px;letter-spacing:-0.03em}
+.cta-band .guarantee{font-size:13px;color:var(--wf-fg-subtle);margin-top:16px}
+
+/* Author bio */
+.author-card{max-width:640px;margin:0 auto;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-xl);padding:32px;display:flex;gap:24px;align-items:center}
+.author-avatar{width:80px;height:80px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:24px;font-weight:700;color:var(--wf-brand)}
+.author-info h3{font-size:18px;font-weight:600;color:var(--wf-fg);margin-bottom:2px}
+.author-info .author-creds{font-size:12px;color:var(--wf-brand);margin-bottom:8px}
+.author-info p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:10px}
+.author-links{display:flex;gap:12px}
+.author-links a{font-size:13px;font-weight:500;color:var(--wf-fg-subtle);transition:color var(--wf-dur)}.author-links a:hover{color:var(--wf-fg)}
+
+/* Footer */
+.footer{background:var(--wf-bg-elevated);border-top:1px solid var(--wf-border);padding:64px 0 0}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:48px}
+.footer-col h4{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.footer-col a{display:block;font-size:13px;color:var(--wf-fg-muted);margin-bottom:10px;transition:color var(--wf-dur)}.footer-col a:hover{color:var(--wf-fg)}
+.footer-bottom{border-top:1px solid var(--wf-border);padding:24px 0;display:flex;justify-content:space-between;align-items:center}
+.footer-bottom span{font-size:13px;color:var(--wf-fg-subtle)}
+
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .pricing-card{position:static}
+  .recordings-grid,.crosssell-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .container{padding:0 20px}
+  .recordings-grid,.steps-grid,.crosssell-grid{grid-template-columns:1fr}
+  .author-card{flex-direction:column;text-align:center}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="#" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="#" class="navbar-link">About</a>
+      <a href="#" class="navbar-link">Services</a>
+      <a href="#" class="navbar-link">Resources</a>
+      <a href="#" class="navbar-link">Blog</a>
+      <a href="#" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-primary btn-sm">Book a consultation</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="badge-flagship"><span class="badge-dot"></span> Flagship Bundle</div>
+        <h1>Complete Hypnosis Library</h1>
+        <p class="hero-desc">Six professionally recorded clinical hypnotherapy sessions designed to address anxiety, sleep, smoking cessation, and positive self-image. Created by a licensed clinical hypnotherapist with 13+ years of experience.</p>
+        <div class="hero-rating">
+          <div class="stars">
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+            <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.71l-4 3.9.94 5.5L10 13.56 5.06 16.1 6 10.6 2 6.71l5.61-.87z"/></svg>
+          </div>
+          <span class="rating-text">4.8/5</span>
+        </div>
+        <p class="hero-meta">6 recordings &middot; 3+ hours &middot; 42 reviews</p>
+        <div class="hero-badges">
+          <span class="hero-badge"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg> Instant Download</span>
+          <span class="hero-badge"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg> Clinical Grade</span>
+          <span class="hero-badge"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg> 30-Day Guarantee</span>
+        </div>
+      </div>
+      <div class="pricing-card">
+        <div class="price-row">
+          <span class="price-main">$79</span>
+          <span class="price-orig">$145</span>
+        </div>
+        <div class="price-save">Save $66 with the bundle</div>
+        <div class="pricing-divider"></div>
+        <a href="#" class="btn btn-primary btn-lg btn-full">Get the Library</a>
+        <div class="pricing-guarantee"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg> 30-day money-back guarantee</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- What's Included -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>What's Included</h2>
+      <p>Six professionally produced recordings covering the most common therapeutic needs.</p>
+    </div>
+    <div class="recordings-grid">
+      <div class="recording-card">
+        <div class="recording-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <h3>Anxiety Relief</h3>
+        <div class="recording-duration">25 minutes</div>
+        <p>Progressive relaxation and cognitive restructuring to calm anxious thought patterns and activate the parasympathetic nervous system.</p>
+      </div>
+      <div class="recording-card">
+        <div class="recording-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0zM12 7v5"/><circle cx="12" cy="16" r="1"/></svg></div>
+        <h3>Deep Sleep Induction</h3>
+        <div class="recording-duration">35 minutes</div>
+        <p>Guided body scan and visualization designed to quiet racing thoughts and establish healthy sleep architecture.</p>
+      </div>
+      <div class="recording-card">
+        <div class="recording-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+        <h3>Smoking Cessation I</h3>
+        <div class="recording-duration">30 minutes</div>
+        <p>Foundation session addressing the subconscious triggers and associations that maintain the smoking habit.</p>
+      </div>
+      <div class="recording-card">
+        <div class="recording-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+        <h3>Smoking Cessation II</h3>
+        <div class="recording-duration">35 minutes</div>
+        <p>Reinforcement session that deepens the commitment to being smoke-free and builds new coping mechanisms.</p>
+      </div>
+      <div class="recording-card">
+        <div class="recording-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+        <h3>Smoking Cessation III</h3>
+        <div class="recording-duration">25 minutes</div>
+        <p>Maintenance session for long-term relapse prevention and identity reinforcement as a non-smoker.</p>
+      </div>
+      <div class="recording-card">
+        <div class="recording-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7l-8 5-8-5V5l8 5 8-5v2z"/><path d="M4 7v10l8 5 8-5V7"/></svg></div>
+        <h3>Positive Imagery</h3>
+        <div class="recording-duration">20 minutes</div>
+        <p>Self-image enhancement through guided visualization, building confidence and a positive internal narrative.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- The Process -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>The Process</h2>
+      <p>Every hypnotherapy session follows a structured three-phase approach.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Induction</h3>
+        <p>Guided relaxation brings your body and mind into a deeply focused, receptive state. You remain aware and in control throughout.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Suggestion</h3>
+        <p>Therapeutic suggestions are delivered to your subconscious mind, targeting specific behavioral patterns and thought processes.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Emergence</h3>
+        <p>A gentle return to full awareness, carrying the benefits of the session into your waking consciousness and daily life.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison Table -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>The Difference</h2>
+      <p>See how clinical hypnotherapy compares to going without it.</p>
+    </div>
+    <div class="comparison-wrap">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="col-without">Without Hypnotherapy</th>
+            <th class="col-with">With Hypnotherapy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Anxiety</td>
+            <td class="without">Persistent worry, physical tension, avoidance behaviors</td>
+            <td class="with">Reduced activation, faster recovery, calm baseline</td>
+          </tr>
+          <tr>
+            <td>Sleep</td>
+            <td class="without">Racing thoughts, inconsistent patterns, fatigue</td>
+            <td class="with">Faster onset, deeper cycles, refreshed mornings</td>
+          </tr>
+          <tr>
+            <td>Smoking</td>
+            <td class="without">Willpower alone, frequent relapse, constant cravings</td>
+            <td class="with">Subconscious rewiring, reduced cravings, lasting change</td>
+          </tr>
+          <tr>
+            <td>Self-Image</td>
+            <td class="without">Negative self-talk, imposter syndrome, low confidence</td>
+            <td class="with">Positive internal narrative, authentic confidence</td>
+          </tr>
+          <tr>
+            <td>Stress</td>
+            <td class="without">Chronic activation, burnout, emotional reactivity</td>
+            <td class="with">Built-in relaxation response, emotional regulation</td>
+          </tr>
+          <tr>
+            <td>Cost</td>
+            <td class="without">Ongoing prescriptions, repeated therapy sessions</td>
+            <td class="with">One-time purchase, unlimited lifetime access</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Use Cases -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Who It's For</h2>
+    </div>
+    <div class="use-cases">
+      <div class="use-case-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Adults experiencing anxiety, stress, or panic who want a self-guided complement to therapy
+      </div>
+      <div class="use-case-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Anyone struggling with sleep onset or maintaining consistent rest patterns
+      </div>
+      <div class="use-case-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Smokers who have tried quitting before and want a subconscious-level approach
+      </div>
+      <div class="use-case-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Individuals working on self-confidence and building a healthier self-image
+      </div>
+      <div class="use-case-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
+        Therapists looking for high-quality recordings to recommend to their own clients
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Is hypnotherapy safe? <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg></div>
+        <div class="faq-a"><p>Yes. Clinical hypnotherapy is a well-researched, evidence-based therapeutic technique. You remain conscious and in control throughout every session. It is not mind control and you cannot be made to do anything against your will.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Will I lose control during the session? <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg></div>
+        <div class="faq-a"><p>No. Hypnosis is a state of focused attention, not unconsciousness. You can open your eyes or stop the recording at any time. Think of it as a deeply relaxed state of concentration, similar to being absorbed in a good book.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How often should I listen to the recordings? <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg></div>
+        <div class="faq-a"><p>For best results, listen to your chosen recording daily for the first two weeks, then 2-3 times per week for maintenance. The smoking cessation series should be followed in sequence, one session per week.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I use these alongside therapy or medication? <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg></div>
+        <div class="faq-a"><p>Absolutely. These recordings are designed to complement, not replace, professional treatment. Many therapists recommend self-guided hypnosis as a between-session tool. Always consult your provider about integrating new practices.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What format are the recordings in? <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg></div>
+        <div class="faq-a"><p>All recordings are delivered as high-quality MP3 files that work on any device. You'll receive an instant download link after purchase. Files can be saved to your phone, tablet, or computer.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if it doesn't work for me? <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v10M3 8h10"/></svg></div>
+        <div class="faq-a"><p>Every purchase comes with a 30-day money-back guarantee. If you've used the recordings as directed and don't notice a difference, simply reach out for a full refund. No questions asked.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cross-sell -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>You Might Also Like</h2>
+    </div>
+    <div class="crosssell-grid">
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Workbook</div>
+        <h3>Distress Tolerance First Aid Kit</h3>
+        <p>34 exercises across 4 DBT skill areas for crisis survival and emotional regulation.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$19</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Recording</div>
+        <h3>Anxiety Relief Session</h3>
+        <p>25-minute standalone hypnotherapy session for anxiety and panic management.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$15</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Recording</div>
+        <h3>Deep Sleep Induction</h3>
+        <p>35-minute guided session designed to establish healthy sleep onset patterns.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$15</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Bundle</div>
+        <h3>Smoking Cessation Series</h3>
+        <p>Three-part progressive hypnotherapy program for lasting smoking cessation.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$39</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Workbook</div>
+        <h3>Emotion Regulation Toolkit</h3>
+        <p>Comprehensive DBT-based workbook for understanding and managing emotional responses.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$19</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div class="crosssell-card">
+        <div class="crosssell-tag">Course</div>
+        <h3>Mindfulness Fundamentals</h3>
+        <p>6-module self-paced course on building a sustainable mindfulness practice.</p>
+        <div class="crosssell-bottom">
+          <span class="crosssell-price">$49</span>
+          <a href="#" class="crosssell-link">View <span>&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Band -->
+<section class="cta-band">
+  <div class="container">
+    <div class="inner">
+      <h2>Start Your Transformation Today</h2>
+      <div class="cta-price">$79</div>
+      <a href="#" class="btn btn-primary btn-lg">Get the Complete Library</a>
+      <p class="guarantee">30-day money-back guarantee &middot; Instant download &middot; Lifetime access</p>
+    </div>
+  </div>
+</section>
+
+<!-- Author Bio -->
+<section class="section">
+  <div class="container">
+    <div class="author-card">
+      <div class="author-avatar">EF</div>
+      <div class="author-info">
+        <h3>Edward Flynn</h3>
+        <div class="author-creds">LPC, CHt &middot; Licensed Professional Counselor</div>
+        <p>With 13+ years of clinical experience, Edward combines evidence-based therapy with clinical hypnotherapy to help individuals overcome anxiety, break habits, and build lasting confidence. Creator of the Complete Hypnosis Library and DBT digital workbook series.</p>
+        <div class="author-links">
+          <a href="#">LinkedIn</a>
+          <a href="#">Psychology Today</a>
+          <a href="#">Website</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Practice</h4>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Specializations</a>
+        <a href="#">Approach</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Hypnosis Library</a>
+        <a href="#">DBT Workbooks</a>
+        <a href="#">Blog</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="#">Book a Session</a>
+        <a href="#">Contact</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Psychology Today</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">HIPAA Notice</a>
+        <a href="#">Disclaimer</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Edward Flynn, LPC, CHt. All rights reserved.</span>
+      <span>St. Louis, MO</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
