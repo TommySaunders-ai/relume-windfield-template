@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windfield Intelligence Workflow — Operations Documentation</title>
+<meta name="description" content="Complete operational breakdown of how the Windfield Relationship Intelligence Report gets generated — every phase, every prompt, every output, every MCP tool. Internal workflow documentation.">
+<meta name="theme-color" content="#09090b">
+<meta property="og:title" content="Windfield Intelligence Workflow — How the report gets made">
+<meta property="og:description" content="From Dropbox audit to AI-queryable artifact. The full workflow: 6 phases, 10 prompts, 3 outputs, MCP server surface.">
+<meta property="og:type" content="article">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400;1,14..32,600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   DESIGN TOKENS — Windfield IO Design System
+   ═══════════════════════════════════════════════════════════════════ */
+:root{
+  --wf-bg:#09090b;
+  --wf-bg-elevated:#111113;
+  --wf-surface:#141417;
+  --wf-surface-hover:#1a1a1e;
+  --wf-fg:#fafafa;
+  --wf-fg-muted:#a1a1aa;
+  --wf-fg-subtle:#71717a;
+  --wf-fg-faint:#52525b;
+
+  --green:#1db954; --green-lt:#3dd576; --green-dim:rgba(29,185,84,.12); --green-border:rgba(29,185,84,.28); --green-glow:rgba(29,185,84,.18);
+  --purple:#8b5cf6; --purple-lt:#a78bfa; --purple-dim:rgba(139,92,246,.12); --purple-border:rgba(139,92,246,.28);
+  --amber:#e8a000; --amber-lt:#fcd34d; --amber-dim:rgba(232,160,0,.12);
+  --rose:#e11d48; --rose-dim:rgba(225,29,72,.12);
+  --cyan:#0891b2; --cyan-lt:#22d3ee;
+
+  --wf-border:#27272a;
+  --wf-border2:rgba(250,250,250,.1);
+  --wf-border3:rgba(250,250,250,.16);
+
+  --sans:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+
+  --ease:cubic-bezier(.25,.46,.45,.94);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--wf-bg);color:var(--wf-fg);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.7}
+a{color:inherit;text-decoration:none}
+code{font-family:var(--mono);font-size:.88em;color:var(--wf-fg);background:var(--wf-surface);padding:2px 6px;border-radius:3px;border:1px solid var(--wf-border)}
+::selection{background:var(--green-dim);color:var(--wf-fg)}
+
+/* ─── TOPBAR ──────────────────────────────────────────────────────── */
+.topbar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(9,9,11,.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--wf-border);z-index:100;display:flex;align-items:center;padding:0 32px}
+.tb-brand{display:flex;align-items:center;gap:14px}
+.tb-mark{display:flex;align-items:baseline;gap:1px}
+.tb-mark-w{font:800 18px/1 var(--sans);letter-spacing:-.04em;color:var(--green);text-transform:uppercase}
+.tb-mark-re{font:800 18px/1 var(--sans);letter-spacing:-.04em;color:var(--wf-fg);text-transform:uppercase;margin-left:4px}
+.tb-mark-sep{width:1px;height:18px;background:var(--wf-border2);margin:0 14px}
+.tb-meta{display:flex;flex-direction:column;gap:2px}
+.tb-meta-k{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.tb-meta-v{font:500 12px/1 var(--sans);color:var(--wf-fg)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:18px}
+.tb-conf{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;background:rgba(139,92,246,.12);border:1px solid var(--purple-border);border-radius:14px;font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--purple-lt)}
+.tb-conf::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--purple);box-shadow:0 0 8px rgba(139,92,246,.4)}
+.tb-date{font:400 12px/1 var(--mono);color:var(--wf-fg-subtle)}
+
+/* ─── LAYOUT ──────────────────────────────────────────────────────── */
+.page{max-width:1440px;margin:0 auto;padding:56px 0 0}
+.shell{display:grid;grid-template-columns:260px 1fr;gap:48px;padding:0 32px;position:relative}
+@media(max-width:1024px){.shell{grid-template-columns:1fr;gap:0}}
+
+/* ─── TOC ─────────────────────────────────────────────────────────── */
+.toc{position:sticky;top:72px;align-self:start;max-height:calc(100vh - 88px);overflow-y:auto;padding:24px 0 48px;scrollbar-width:thin;scrollbar-color:var(--wf-border2) transparent}
+.toc::-webkit-scrollbar{width:4px}
+.toc::-webkit-scrollbar-thumb{background:var(--wf-border2);border-radius:2px}
+@media(max-width:1024px){.toc{display:none}}
+.toc-head{display:flex;align-items:center;gap:8px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--wf-border)}
+.toc-head-n{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
+.toc-head-l{font:400 10px/1 var(--mono);color:var(--wf-fg-subtle);margin-left:auto}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.toc-item{padding:9px 12px 9px 14px;font-size:12.5px;color:var(--wf-fg-subtle);cursor:pointer;display:flex;align-items:flex-start;gap:10px;transition:all .18s var(--ease);border-left:2px solid transparent;line-height:1.45}
+.toc-item:hover{color:var(--wf-fg);border-left-color:var(--wf-border2)}
+.toc-item.active{color:var(--wf-fg);border-left-color:var(--green);background:linear-gradient(90deg,var(--green-dim) 0%,transparent 100%)}
+.toc-num{font:700 9px/1.4 var(--mono);color:var(--wf-fg-faint);flex-shrink:0;width:18px;padding-top:2px}
+.toc-item.active .toc-num{color:var(--green)}
+
+/* ─── MAIN ────────────────────────────────────────────────────────── */
+.main{min-width:0;max-width:960px;padding-bottom:120px}
+
+/* ─── HERO ────────────────────────────────────────────────────────── */
+.hero{position:relative;padding:56px 0 72px;border-bottom:1px solid var(--wf-border)}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 72% 60% at 88% 20%,rgba(29,185,84,.09) 0%,transparent 60%),radial-gradient(ellipse 45% 50% at 8% 88%,rgba(139,92,246,.05) 0%,transparent 60%);z-index:0}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--wf-border) 1px,transparent 1px),linear-gradient(90deg,var(--wf-border) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 70% 100% at 50% 0%,black 30%,transparent 100%);z-index:0;opacity:.6}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+.eye-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:3px;font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--green-lt)}
+.eye-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green-glow)}
+.eye-div{width:16px;height:1px;background:var(--wf-fg-faint)}
+.eye-sub{font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+
+h1.hero-h{font-family:var(--sans);font-size:clamp(40px,5.4vw,72px);font-weight:700;line-height:1.02;letter-spacing:-.035em;color:var(--wf-fg);margin-bottom:20px}
+h1.hero-h em{font-style:italic;color:var(--green);font-weight:600}
+.hero-deck{font-size:18px;line-height:1.65;color:var(--wf-fg-muted);max-width:680px;margin-bottom:36px;font-weight:300}
+.hero-meta{display:flex;align-items:center;gap:20px;padding:18px 0;border-top:1px solid var(--wf-border2);border-bottom:1px solid var(--wf-border2);flex-wrap:wrap}
+.hm-block{display:flex;flex-direction:column;gap:4px}
+.hm-k{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle)}
+.hm-v{font:500 13px/1.3 var(--sans);color:var(--wf-fg)}
+.hm-sep{width:1px;height:32px;background:var(--wf-border2)}
+
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:40px;border-top:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border)}
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(2,1fr)}}
+.hs{padding:26px 22px;border-right:1px solid var(--wf-border);position:relative}
+.hs:last-child{border-right:none}
+@media(max-width:768px){.hs:nth-child(2){border-right:none}.hs:nth-child(1),.hs:nth-child(2){border-bottom:1px solid var(--wf-border)}}
+.hs-sub{font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:12px}
+.hs-n{font:600 38px/1 var(--sans);color:var(--wf-fg);letter-spacing:-.02em;margin-bottom:8px}
+.hs-n em{font-style:italic;color:var(--green);font-weight:400}
+.hs-l{font:400 11px/1.4 var(--mono);color:var(--wf-fg-subtle);letter-spacing:.04em}
+
+/* ─── SECTION ─────────────────────────────────────────────────────── */
+.sec{padding:72px 0;border-bottom:1px solid var(--wf-border);scroll-margin-top:72px}
+.sec-head{display:flex;align-items:flex-start;gap:18px;margin-bottom:28px}
+.sec-num{font:700 11px/1 var(--mono);letter-spacing:.14em;color:var(--green);padding-top:6px;flex-shrink:0;width:32px}
+.sec-head-text{flex:1}
+.sec-kicker{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:10px}
+h2.sec-h{font-family:var(--sans);font-size:clamp(28px,3.2vw,40px);font-weight:600;line-height:1.1;letter-spacing:-.02em;color:var(--wf-fg);margin-bottom:14px}
+h2.sec-h em{font-style:italic;color:var(--green);font-weight:500}
+.sec-deck{font-size:16px;line-height:1.7;color:var(--wf-fg-muted);max-width:720px;font-weight:300}
+
+.prose p{font-size:15.5px;line-height:1.75;color:var(--wf-fg-muted);margin-bottom:18px;font-weight:300}
+.prose p strong{font-weight:500;color:var(--wf-fg)}
+.prose p em{font-style:italic;color:var(--green-lt)}
+.prose ul{margin:0 0 18px;padding-left:0;list-style:none}
+.prose ul li{font-size:14.5px;line-height:1.7;color:var(--wf-fg-muted);padding:4px 0 4px 18px;position:relative;font-weight:300}
+.prose ul li::before{content:'';position:absolute;left:0;top:14px;width:8px;height:1px;background:var(--green);opacity:.6}
+.prose ul li strong{font-weight:500;color:var(--wf-fg)}
+
+/* ─── PULL QUOTE ──────────────────────────────────────────────────── */
+.pq{margin:40px 0;padding:28px 32px;border-left:3px solid var(--green);background:linear-gradient(90deg,var(--green-dim) 0%,transparent 100%);border-radius:0 8px 8px 0}
+.pq-text{font-family:var(--sans);font-size:22px;font-weight:400;line-height:1.45;color:var(--wf-fg);font-style:italic;letter-spacing:-.01em;margin-bottom:14px}
+.pq-text em{font-style:normal;color:var(--green-lt)}
+.pq-attr{font:500 11px/1 var(--mono);letter-spacing:.1em;color:var(--wf-fg-subtle);text-transform:uppercase}
+
+/* ─── TAKEAWAY / CALLOUT ──────────────────────────────────────────── */
+.takeaway{background:linear-gradient(135deg,var(--green-dim) 0%,rgba(29,185,84,.03) 100%);border-left:3px solid var(--green);padding:20px 24px;border-radius:0 8px 8px 0;margin:28px 0}
+.takeaway-l{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+.takeaway-t{font:400 15.5px/1.65 var(--sans);color:var(--wf-fg-muted)}
+.takeaway-t strong{font-weight:500;color:var(--wf-fg)}
+
+.callout{background:var(--wf-surface);border:1px solid var(--wf-border2);border-left:3px solid var(--purple);padding:20px 24px;border-radius:0 8px 8px 0;margin:28px 0}
+.callout.amber{border-left-color:var(--amber)}
+.callout.cyan{border-left-color:var(--cyan-lt)}
+.callout-l{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.callout .callout-l{color:var(--purple)}
+.callout.amber .callout-l{color:var(--amber)}
+.callout.cyan .callout-l{color:var(--cyan-lt)}
+.callout-t{font:400 15px/1.65 var(--sans);color:var(--wf-fg-muted)}
+.callout-t strong{font-weight:500;color:var(--wf-fg)}
+
+/* ─── FLOW DIAGRAM ────────────────────────────────────────────────── */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:32px 0;position:relative}
+.flow-stage{padding:20px 20px;background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:10px;position:relative;margin-right:24px;min-height:170px}
+.flow-stage:last-child{margin-right:0}
+.flow-stage::after{content:'\2192';position:absolute;right:-18px;top:50%;transform:translateY(-50%);color:var(--green);font-family:var(--mono);font-size:16px;z-index:2;font-weight:700;background:var(--wf-bg);padding:0 4px}
+.flow-stage:last-child::after{display:none}
+.fs-n{font:700 10px/1 var(--mono);color:var(--green);margin-bottom:10px;letter-spacing:.14em}
+.fs-name{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:8px;line-height:1.25;letter-spacing:-.01em}
+.fs-name em{font-style:italic;color:var(--green)}
+.fs-desc{font:300 11.5px/1.55 var(--sans);color:var(--wf-fg-muted);margin-bottom:10px}
+.fs-meta{margin-top:auto;padding-top:10px;border-top:1px solid var(--wf-border);font:600 10px/1.4 var(--mono);color:var(--green-lt);letter-spacing:.04em}
+
+/* ─── PHASE CARDS ─────────────────────────────────────────────────── */
+.phase{background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:10px;padding:28px;margin:20px 0;position:relative;overflow:hidden}
+.phase-watermark{position:absolute;top:8px;right:20px;font-family:var(--sans);font-size:84px;font-weight:700;font-style:italic;color:var(--green);opacity:.08;line-height:1;letter-spacing:-.03em;pointer-events:none;user-select:none}
+.phase-head{display:flex;align-items:baseline;gap:14px;padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid var(--wf-border);position:relative;z-index:1;flex-wrap:wrap}
+.phase-kicker{font:700 10px/1 var(--mono);letter-spacing:.14em;color:var(--green);flex-shrink:0;padding:5px 9px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:3px}
+.phase-name{font-family:var(--sans);font-size:22px;font-weight:600;color:var(--wf-fg);letter-spacing:-.01em;line-height:1.25;flex:1;min-width:200px}
+.phase-name em{font-style:italic;color:var(--green)}
+.phase-duration{font:500 10.5px/1 var(--mono);color:var(--wf-fg-subtle);white-space:nowrap}
+.phase-body{position:relative;z-index:1;font:300 14.5px/1.7 var(--sans);color:var(--wf-fg-muted);margin-bottom:18px}
+.phase-body p{margin-bottom:14px}
+.phase-body strong{font-weight:500;color:var(--wf-fg)}
+.phase-grid{display:grid;grid-template-columns:140px 1fr;gap:12px 16px;margin:18px 0;padding:16px 0;border-top:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border);position:relative;z-index:1}
+@media(max-width:768px){.phase-grid{grid-template-columns:1fr;gap:4px 0}}
+.phase-k{font:700 9.5px/1.4 var(--mono);color:var(--wf-fg-subtle);letter-spacing:.1em;text-transform:uppercase}
+.phase-v{font:400 13px/1.55 var(--sans);color:var(--wf-fg-muted)}
+.phase-v strong{font-weight:500;color:var(--wf-fg)}
+.phase-v code{font-size:11.5px}
+
+/* ─── MCP TOOL GRID ───────────────────────────────────────────────── */
+.tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:28px 0}
+@media(max-width:768px){.tool-grid{grid-template-columns:1fr}}
+.tool-card{background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:10px;padding:18px 20px;transition:border-color .2s}
+.tool-card:hover{border-color:var(--green-border)}
+.tool-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.tool-name{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--green-lt);flex:1;word-break:break-all}
+.tool-tier{display:inline-block;padding:3px 7px;font:700 8.5px/1 var(--mono);letter-spacing:.1em;border-radius:3px;white-space:nowrap;text-transform:uppercase}
+.tool-tier.t1{background:var(--green-dim);color:var(--green-lt);border:1px solid var(--green-border)}
+.tool-tier.t2{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(232,160,0,.3)}
+.tool-tier.t3{background:var(--rose-dim);color:var(--rose);border:1px solid rgba(225,29,72,.3)}
+.tool-desc{font:300 12.5px/1.6 var(--sans);color:var(--wf-fg-muted);margin-bottom:10px}
+.tool-desc strong{font-weight:500;color:var(--wf-fg)}
+.tool-args{font:500 10px/1.5 var(--mono);color:var(--wf-fg-subtle);padding-top:8px;border-top:1px solid var(--wf-border);letter-spacing:.02em}
+.tool-args em{font-style:normal;color:var(--wf-fg-muted)}
+
+/* ─── TIER PROTOCOL ───────────────────────────────────────────────── */
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}
+@media(max-width:768px){.tier-grid{grid-template-columns:1fr}}
+.tier-proto{background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:10px;padding:22px;position:relative;overflow:hidden}
+.tier-proto::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.tier-proto.t1::before{background:var(--green)}
+.tier-proto.t2::before{background:var(--amber)}
+.tier-proto.t3::before{background:var(--rose)}
+.tier-proto-k{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+.tier-proto.t1 .tier-proto-k{color:var(--green)}
+.tier-proto.t2 .tier-proto-k{color:var(--amber)}
+.tier-proto.t3 .tier-proto-k{color:var(--rose)}
+.tier-proto-h{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--wf-fg);letter-spacing:-.01em;line-height:1.3;margin-bottom:12px}
+.tier-proto-h em{font-style:italic;color:var(--green);font-weight:500}
+.tier-proto.t2 .tier-proto-h em{color:var(--amber-lt)}
+.tier-proto.t3 .tier-proto-h em{color:var(--rose)}
+.tier-proto-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.tier-proto-list li{font:300 12.5px/1.55 var(--sans);color:var(--wf-fg-muted);padding-left:14px;position:relative}
+.tier-proto-list li::before{content:'';position:absolute;left:0;top:9px;width:6px;height:1px;opacity:.6}
+.tier-proto.t1 li::before{background:var(--green)}
+.tier-proto.t2 li::before{background:var(--amber)}
+.tier-proto.t3 li::before{background:var(--rose)}
+.tier-proto-list li strong{font-weight:500;color:var(--wf-fg)}
+
+/* ─── CODE BLOCKS (prompts & JSON) ────────────────────────────────── */
+.code-block{background:var(--wf-bg);border:1px solid var(--wf-border2);border-radius:10px;margin:20px 0 28px;overflow:hidden;position:relative}
+.code-head{padding:11px 16px;background:var(--wf-surface-hover);border-bottom:1px solid var(--wf-border);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.code-lang{font:700 9px/1 var(--mono);color:var(--green-lt);letter-spacing:.14em;text-transform:uppercase}
+.code-lang.json{color:var(--amber-lt)}
+.code-lang.md{color:var(--cyan-lt)}
+.code-file{font:400 11px/1 var(--mono);color:var(--wf-fg-subtle)}
+.code-copy{font:500 9px/1 var(--mono);color:var(--wf-fg-faint);letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border:1px solid var(--wf-border2);border-radius:3px;cursor:pointer;background:transparent;transition:all .15s}
+.code-copy:hover{color:var(--wf-fg);border-color:var(--wf-border3)}
+.code-body{padding:18px 20px;font-family:var(--mono);font-size:12.5px;line-height:1.75;color:var(--wf-fg-muted);overflow-x:auto;white-space:pre;scrollbar-width:thin}
+.code-body::-webkit-scrollbar{height:4px;width:4px}
+.code-body::-webkit-scrollbar-thumb{background:var(--wf-border2);border-radius:2px}
+.code-body .kw{color:var(--purple-lt)}
+.code-body .str{color:var(--green-lt)}
+.code-body .num{color:var(--amber-lt)}
+.code-body .cmt{color:var(--wf-fg-subtle);font-style:italic}
+.code-body .fn{color:var(--cyan-lt)}
+.code-body .prop{color:var(--cyan-lt)}
+.code-body .tok{color:var(--purple-lt);background:rgba(139,92,246,.08);padding:0 3px;border-radius:2px}
+
+/* ─── NORMALIZATION RULES ─────────────────────────────────────────── */
+.norm-list{margin:24px 0;display:flex;flex-direction:column;gap:8px}
+.norm-row{display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;padding:14px 18px;background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:8px;gap:14px;transition:border-color .18s}
+.norm-row:hover{border-color:var(--green-border)}
+@media(max-width:768px){.norm-row{grid-template-columns:1fr;gap:6px;padding:14px 16px}.norm-row .norm-arrow{text-align:left;font-size:13px}}
+.norm-from{font:400 13px/1.45 var(--sans);color:var(--wf-fg-muted)}
+.norm-from strong{font-weight:500;color:var(--wf-fg)}
+.norm-from em{font-style:italic;color:var(--wf-fg-subtle);font-size:11px;display:block;margin-top:2px}
+.norm-arrow{text-align:center;color:var(--green);font-family:var(--mono);font-size:16px;font-weight:700}
+.norm-to{font:400 13px/1.45 var(--sans);color:var(--green-lt)}
+.norm-to strong{font-weight:500;color:var(--wf-fg)}
+.norm-to em{font-style:italic;color:var(--wf-fg-subtle);font-size:11px;display:block;margin-top:2px}
+
+/* ─── ARTIFACT CARDS ──────────────────────────────────────────────── */
+.artifact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:28px 0}
+@media(max-width:768px){.artifact-grid{grid-template-columns:1fr}}
+.artifact-card{background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:10px;padding:22px 20px;position:relative;transition:all .18s;display:flex;flex-direction:column}
+.artifact-card:hover{border-color:var(--green-border);transform:translateY(-1px)}
+.artifact-ext{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:3px;font:700 9px/1 var(--mono);color:var(--green-lt);margin-bottom:14px;letter-spacing:.12em;align-self:flex-start}
+.artifact-ext.md{background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.25);color:var(--cyan-lt)}
+.artifact-ext.html{background:rgba(139,92,246,.1);border-color:var(--purple-border);color:var(--purple-lt)}
+.artifact-name{font-family:var(--mono);font-size:11.5px;color:var(--wf-fg-muted);margin-bottom:10px;word-break:break-all;line-height:1.4}
+.artifact-h{font-family:var(--sans);font-size:16.5px;font-weight:600;color:var(--wf-fg);margin-bottom:10px;line-height:1.3;letter-spacing:-.01em}
+.artifact-h em{font-style:italic;color:var(--green);font-weight:500}
+.artifact-desc{font:300 12.5px/1.6 var(--sans);color:var(--wf-fg-muted);flex:1}
+.artifact-desc strong{font-weight:500;color:var(--wf-fg)}
+.artifact-foot{margin-top:14px;padding-top:12px;border-top:1px solid var(--wf-border);font:500 10px/1.4 var(--mono);color:var(--wf-fg-subtle);letter-spacing:.04em}
+
+/* ─── CHECKLIST ───────────────────────────────────────────────────── */
+.checklist{display:flex;flex-direction:column;gap:8px;margin:24px 0}
+.check-item{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:8px;transition:border-color .18s}
+.check-item:hover{border-color:var(--green-border)}
+.check-mark{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--green-dim);border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;color:var(--green-lt);font-size:11px;font-weight:700;margin-top:1px}
+.check-n{flex-shrink:0;font:700 10px/1.4 var(--mono);color:var(--wf-fg-faint);width:24px;padding-top:4px;letter-spacing:.06em}
+.check-body{flex:1;font:300 13.5px/1.6 var(--sans);color:var(--wf-fg-muted)}
+.check-body strong{font-weight:500;color:var(--wf-fg)}
+
+/* ─── ENDPOINT CARDS (MCP server tools) ───────────────────────────── */
+.endpoint-grid{display:flex;flex-direction:column;gap:10px;margin:24px 0}
+.endpoint{background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:8px;padding:16px 20px;display:grid;grid-template-columns:220px 1fr 120px;gap:18px;align-items:center;transition:border-color .18s}
+@media(max-width:768px){.endpoint{grid-template-columns:1fr;gap:6px}}
+.endpoint:hover{border-color:var(--green-border)}
+.endpoint-method{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--green-lt);word-break:break-all}
+.endpoint-desc{font:300 13px/1.55 var(--sans);color:var(--wf-fg-muted)}
+.endpoint-desc strong{font-weight:500;color:var(--wf-fg)}
+.endpoint-type{font:700 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;text-align:right;color:var(--wf-fg-subtle)}
+@media(max-width:768px){.endpoint-type{text-align:left}}
+.endpoint-type.read{color:var(--green-lt)}
+.endpoint-type.search{color:var(--cyan-lt)}
+
+/* ─── OPS GRID ────────────────────────────────────────────────────── */
+.ops-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:28px 0;border:1px solid var(--wf-border);border-radius:10px;overflow:hidden;background:var(--wf-surface)}
+@media(max-width:768px){.ops-grid{grid-template-columns:repeat(2,1fr)}}
+.ops{padding:22px 20px;border-right:1px solid var(--wf-border);border-bottom:1px solid var(--wf-border)}
+@media(min-width:769px){.ops:nth-child(4n){border-right:none}.ops:nth-child(n+1):nth-child(-n+4){border-bottom:none}}
+@media(max-width:768px){.ops:nth-child(2n){border-right:none}.ops:last-child,.ops:nth-last-child(2):nth-child(odd){border-bottom:none}}
+.ops-k{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px}
+.ops-v{font-family:var(--sans);font-size:22px;font-weight:600;color:var(--wf-fg);letter-spacing:-.015em;margin-bottom:6px;line-height:1.2}
+.ops-v em{font-style:italic;color:var(--green);font-weight:500}
+.ops-l{font:400 11px/1.5 var(--mono);color:var(--wf-fg-subtle)}
+
+/* ─── RELATED DOCS ────────────────────────────────────────────────── */
+.related{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:24px 0}
+@media(max-width:768px){.related{grid-template-columns:1fr}}
+.related-card{background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:8px;padding:18px 20px;transition:border-color .18s}
+.related-card:hover{border-color:var(--green-border)}
+.related-k{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--purple-lt);margin-bottom:8px}
+.related-file{font-family:var(--mono);font-size:11.5px;color:var(--wf-fg-muted);margin-bottom:8px;word-break:break-all}
+.related-desc{font:300 12.5px/1.55 var(--sans);color:var(--wf-fg-muted)}
+
+/* ─── FOOTER ──────────────────────────────────────────────────────── */
+.footer{border-top:1px solid var(--wf-border);padding:56px 32px;margin-top:0;background:var(--wf-bg-elevated)}
+.footer-inner{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:48px}
+@media(max-width:768px){.footer-inner{grid-template-columns:1fr}}
+.footer-mark{display:flex;align-items:baseline;gap:4px;margin-bottom:14px}
+.footer-mark-w{font:800 22px/1 var(--sans);letter-spacing:-.04em;color:var(--green);text-transform:uppercase}
+.footer-mark-re{font:800 22px/1 var(--sans);letter-spacing:-.04em;color:var(--wf-fg);text-transform:uppercase}
+.footer-tag{font:400 11px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:20px}
+.footer-addr{font:300 13px/1.7 var(--sans);color:var(--wf-fg-muted)}
+.footer-addr strong{font-weight:500;color:var(--wf-fg)}
+.footer-meta{display:flex;flex-direction:column;gap:14px}
+.fm-k{font:700 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wf-fg-subtle);margin-bottom:5px}
+.fm-v{font:300 12.5px/1.55 var(--sans);color:var(--wf-fg-muted)}
+.fm-v strong{font-weight:500;color:var(--wf-fg)}
+.footer-legal{max-width:1440px;margin:32px auto 0;padding:24px 32px 0;border-top:1px solid var(--wf-border);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font:400 11px/1.5 var(--mono);color:var(--wf-fg-faint)}
+.footer-legal-v{display:flex;gap:14px}
+.footer-prepared{display:inline-flex;align-items:center;gap:8px}
+.footer-prepared::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green)}
+
+/* ─── SCROLL REVEAL ──────────────────────────────────────────────── */
+@media(prefers-reduced-motion:no-preference){
+  .reveal{opacity:0;transform:translateY(12px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  .reveal.on{opacity:1;transform:translateY(0)}
+}
+
+/* ─── SUB-HEADERS (in-section h3) ───────────────────────────────── */
+.sub-h{font-family:var(--sans);font-size:19px;font-weight:600;color:var(--wf-fg);margin:36px 0 14px;letter-spacing:-.01em;line-height:1.3}
+.sub-h em{font-style:italic;color:var(--green);font-weight:500}
+.sub-h.tight{margin:28px 0 8px}
+.sub-h-deck{font-size:14px;color:var(--wf-fg-muted);margin:-8px 0 12px;line-height:1.65;font-weight:300}
+
+/* ─── MOBILE TOC DRAWER ───────────────────────────────────────────── */
+.mobile-toc{display:none;margin:0 0 32px;background:var(--wf-surface);border:1px solid var(--wf-border2);border-radius:10px;overflow:hidden}
+.mobile-toc-summary{padding:14px 18px;font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--green-lt);cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;user-select:none;-webkit-tap-highlight-color:transparent}
+.mobile-toc-summary::-webkit-details-marker{display:none}
+.mobile-toc-summary::marker{content:''}
+.mobile-toc-chev{font-family:var(--mono);font-size:14px;color:var(--green);transition:transform .25s var(--ease);display:inline-block}
+.mobile-toc[open] .mobile-toc-chev{transform:rotate(180deg)}
+.mobile-toc[open] .mobile-toc-summary{border-bottom:1px solid var(--wf-border);background:var(--wf-surface-hover)}
+.mobile-toc-list{list-style:none;padding:6px 0;display:flex;flex-direction:column;max-height:60vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--wf-border2) transparent}
+.mobile-toc-list::-webkit-scrollbar{width:3px}
+.mobile-toc-list::-webkit-scrollbar-thumb{background:var(--wf-border2);border-radius:2px}
+.mobile-toc-item{padding:10px 18px;font-size:13px;color:var(--wf-fg-muted);cursor:pointer;display:flex;align-items:baseline;gap:12px;border-left:2px solid transparent;line-height:1.4;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.mobile-toc-item:active,.mobile-toc-item:hover{background:var(--green-dim);color:var(--wf-fg);border-left-color:var(--green)}
+.mobile-toc-n{font:700 10px/1.4 var(--mono);color:var(--wf-fg-faint);flex-shrink:0;width:22px}
+.mobile-toc-item:active .mobile-toc-n,.mobile-toc-item:hover .mobile-toc-n{color:var(--green)}
+.mobile-toc-kick{padding:4px 18px 10px;font:400 10.5px/1.5 var(--mono);color:var(--wf-fg-subtle);letter-spacing:.02em;border-bottom:1px solid var(--wf-border);background:var(--wf-surface-hover)}
+
+/* Show drawer when sidebar TOC is hidden */
+@media (max-width: 1024px) {
+  .mobile-toc { display: block; }
+}
+
+/* ─── RESPONSIVE: 1024px ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .shell { padding: 0 24px; }
+}
+
+/* ─── RESPONSIVE: 768px ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .topbar { padding: 0 16px; height: 52px; }
+  .tb-mark-sep, .tb-meta { display: none; }
+  .tb-brand { gap: 0; }
+  .tb-right { gap: 10px; }
+  .tb-conf { font-size: 8px; padding: 4px 8px; letter-spacing: .08em; }
+  .tb-conf::before { width: 5px; height: 5px; }
+  .tb-date { font-size: 10px; }
+  .tb-mark-w, .tb-mark-re { font-size: 16px; }
+
+  .page { padding-top: 52px; }
+  .shell { padding: 0 16px; gap: 0; }
+  .main { padding-bottom: 80px; }
+
+  .hero { padding: 36px 0 44px; }
+  .hero-eyebrow { gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .eye-tag { font-size: 9px; padding: 4px 8px; }
+  .eye-sub { font-size: 9px; }
+  h1.hero-h { font-size: 32px; line-height: 1.05; }
+  .hero-deck { font-size: 15.5px; line-height: 1.6; margin-bottom: 26px; }
+  .hero-meta { gap: 14px 20px; padding: 14px 0; }
+  .hm-sep { display: none; }
+  .hm-v { font-size: 12.5px; }
+  .hm-k { font-size: 8.5px; }
+  .hero-stats { margin-top: 26px; }
+  .hs { padding: 20px 14px; }
+  .hs-n { font-size: 26px; }
+  .hs-l { font-size: 10px; }
+
+  .sec { padding: 48px 0; scroll-margin-top: 60px; }
+  .sec-head { gap: 12px; margin-bottom: 22px; }
+  .sec-num { width: 22px; font-size: 10px; padding-top: 4px; }
+  .sec-kicker { font-size: 9px; margin-bottom: 8px; }
+  h2.sec-h { font-size: 24px; }
+  .sec-deck { font-size: 15px; }
+
+  .prose p { font-size: 15px; line-height: 1.7; margin-bottom: 16px; }
+  .prose ul li { font-size: 13.5px; line-height: 1.65; padding-left: 16px; }
+
+  .pq { padding: 22px 22px; margin: 30px 0; }
+  .pq-text { font-size: 18px; line-height: 1.4; margin-bottom: 12px; }
+
+  .takeaway, .callout { padding: 16px 18px; margin: 22px 0; }
+  .takeaway-t, .callout-t { font-size: 14.5px; line-height: 1.55; }
+
+  /* Flow diagram — stack vertically on mobile */
+  .flow { grid-template-columns: 1fr; gap: 24px; }
+  .flow-stage { margin-right: 0; min-height: 0; padding: 18px 20px; }
+  .flow-stage::after { right: 50%; top: auto; bottom: -20px; transform: translateX(50%) rotate(90deg); }
+  .fs-name { font-size: 15px; margin-bottom: 6px; }
+  .fs-desc { font-size: 12px; line-height: 1.55; margin-bottom: 10px; }
+  .fs-meta { font-size: 9.5px; padding-top: 8px; }
+
+  /* Phase cards */
+  .phase { padding: 20px 18px; margin: 14px 0; }
+  .phase-watermark { font-size: 48px; opacity: .06; top: 4px; right: 12px; }
+  .phase-head { gap: 10px; padding-bottom: 14px; margin-bottom: 16px; }
+  .phase-name { font-size: 17px; }
+  .phase-kicker { font-size: 9.5px; padding: 4px 8px; }
+  .phase-duration { font-size: 10px; }
+  .phase-body { font-size: 13px; line-height: 1.6; margin-bottom: 12px; }
+  .phase-body p { margin-bottom: 10px; }
+
+  /* Phase-grid — add visual separators when stacked */
+  .phase-grid { grid-template-columns: 1fr; gap: 0; padding: 12px 0; margin: 16px 0; }
+  .phase-grid .phase-k { margin-top: 10px; margin-bottom: 3px; font-size: 8.5px; letter-spacing: .12em; }
+  .phase-grid .phase-k:first-child { margin-top: 0; }
+  .phase-grid .phase-v { padding-bottom: 10px; border-bottom: 1px solid var(--wf-border); }
+  .phase-grid .phase-v:last-child { border-bottom: none; padding-bottom: 0; }
+  .phase-k { font-size: 9px; }
+  .phase-v { font-size: 12.5px; }
+
+  /* Tools */
+  .tool-card { padding: 14px 16px; }
+  .tool-name { font-size: 11.5px; }
+  .tool-tier { font-size: 8px; padding: 3px 6px; }
+  .tool-desc { font-size: 11.5px; line-height: 1.55; }
+  .tool-args { font-size: 9px; word-break: break-word; }
+
+  /* Tier protocol */
+  .tier-proto { padding: 16px 18px; }
+  .tier-proto-h { font-size: 13.5px; margin-bottom: 10px; line-height: 1.3; }
+  .tier-proto-list li { font-size: 11.5px; line-height: 1.5; }
+
+  /* Code blocks */
+  .code-head { padding: 9px 14px; gap: 8px; flex-wrap: wrap; }
+  .code-lang { font-size: 8px; }
+  .code-file { font-size: 9.5px; word-break: break-all; }
+  .code-body { font-size: 10.5px; padding: 12px 14px; line-height: 1.65; }
+  .code-copy { display: none; }
+  .code-block { margin: 16px 0 20px; }
+
+  /* Normalization */
+  .norm-row { gap: 2px; padding: 12px 14px; }
+  .norm-row .norm-arrow {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .14em;
+    color: var(--green-lt);
+    font-weight: 700;
+    padding: 2px 0;
+  }
+  .norm-row .norm-arrow::before { content: '\2193 MAPS TO'; }
+  .norm-from, .norm-to { font-size: 12px; line-height: 1.45; }
+  .norm-from em, .norm-to em { font-size: 10.5px; }
+
+  /* Artifacts */
+  .artifact-card { padding: 18px 16px; }
+  .artifact-h { font-size: 14.5px; margin-bottom: 8px; }
+  .artifact-name { font-size: 10.5px; margin-bottom: 8px; line-height: 1.35; }
+  .artifact-desc { font-size: 12px; line-height: 1.55; }
+  .artifact-ext { font-size: 8.5px; padding: 4px 8px; letter-spacing: .1em; margin-bottom: 12px; }
+  .artifact-foot { font-size: 9px; padding-top: 10px; margin-top: 10px; }
+
+  /* Checklist */
+  .check-item { padding: 11px 12px; gap: 8px; }
+  .check-mark { width: 18px; height: 18px; font-size: 10px; }
+  .check-n { font-size: 9.5px; width: 20px; }
+  .check-body { font-size: 12.5px; line-height: 1.5; }
+
+  /* Endpoints */
+  .endpoint { padding: 14px 14px; gap: 4px; }
+  .endpoint-method { font-size: 11px; margin-bottom: 2px; }
+  .endpoint-desc { font-size: 12px; line-height: 1.5; }
+  .endpoint-type { font-size: 8.5px; margin-top: 4px; padding: 3px 8px; display: inline-block; background: var(--wf-surface-hover); border: 1px solid var(--wf-border); border-radius: 3px; align-self: flex-start; letter-spacing: .1em; }
+
+  /* Ops grid */
+  .ops { padding: 18px 14px; }
+  .ops-k { font-size: 8px; margin-bottom: 10px; }
+  .ops-v { font-size: 18px; }
+  .ops-l { font-size: 9.5px; line-height: 1.45; }
+
+  /* Related cards */
+  .related-card { padding: 14px 16px; }
+  .related-k { font-size: 8px; }
+  .related-file { font-size: 10.5px; }
+  .related-desc { font-size: 11.5px; line-height: 1.5; }
+
+  /* Sub-headers */
+  .sub-h { font-size: 15.5px; margin: 26px 0 10px; }
+  .sub-h.tight { margin: 20px 0 8px; }
+  .sub-h-deck { font-size: 13px; margin-top: -6px; }
+
+  /* Footer */
+  .footer { padding: 40px 20px; }
+  .footer-inner { gap: 28px; }
+  .footer-legal { padding: 22px 20px 0; margin-top: 24px; flex-direction: column; align-items: flex-start; }
+  .footer-mark-w, .footer-mark-re { font-size: 19px; }
+  .footer-addr { font-size: 12.5px; }
+
+  /* Mobile TOC tweaks */
+  .mobile-toc-summary { padding: 12px 14px; font-size: 10.5px; }
+  .mobile-toc-item { padding: 10px 14px; font-size: 12.5px; }
+  .mobile-toc-n { font-size: 9.5px; }
+  .mobile-toc-kick { padding: 4px 14px 10px; }
+}
+
+/* ─── PRINT ───────────────────────────────────────────────────────── */
+@media print{
+  body{background:#fff;color:#111}
+  .topbar,.toc{display:none}
+  .shell{grid-template-columns:1fr;padding:0}
+  .main{max-width:100%;padding-bottom:0}
+  .page{padding:0}
+  .sec{padding:32px 0;page-break-inside:avoid;border-color:#ddd}
+  .phase,.tool-card,.tier-proto,.code-block,.norm-row,.artifact-card,.check-item,.endpoint,.related-card{page-break-inside:avoid;border-color:#ddd}
+  .hero{padding:20px 0 32px}
+  .hero-bg,.hero-grid{display:none}
+  * { -webkit-print-color-adjust:exact; print-color-adjust:exact }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ─── TOPBAR ──────────────────────────────────────────────────────── -->
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-mark">
+      <span class="tb-mark-w">Windfield</span>
+      <span class="tb-mark-re">Operations</span>
+    </div>
+    <div class="tb-mark-sep"></div>
+    <div class="tb-meta">
+      <div class="tb-meta-k">Workflow Documentation</div>
+      <div class="tb-meta-v">Intelligence Report · Runbook</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="tb-date">April 22, 2026</span>
+    <span class="tb-conf">Internal · Runbook</span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="shell">
+
+    <!-- ─── TOC ─────────────────────────────────────────────────────── -->
+    <aside class="toc" id="toc">
+      <div class="toc-head">
+        <span class="toc-head-n">Workflow</span>
+        <span class="toc-head-l">13 sections</span>
+      </div>
+      <ul class="toc-list">
+        <li class="toc-item" data-target="s-context"><span class="toc-num">01</span><span class="toc-label">Context &amp; Problem</span></li>
+        <li class="toc-item" data-target="s-arch"><span class="toc-num">02</span><span class="toc-label">Architecture Overview</span></li>
+        <li class="toc-item" data-target="s-source"><span class="toc-num">03</span><span class="toc-label">The Source Layer</span></li>
+        <li class="toc-item" data-target="s-mcp"><span class="toc-num">04</span><span class="toc-label">MCP Toolkit &amp; Protocol</span></li>
+        <li class="toc-item" data-target="s-p12"><span class="toc-num">05</span><span class="toc-label">Phase 1–2: Enumerate &amp; Extract</span></li>
+        <li class="toc-item" data-target="s-p3"><span class="toc-num">06</span><span class="toc-label">Phase 3: Normalize Entities</span></li>
+        <li class="toc-item" data-target="s-p4"><span class="toc-num">07</span><span class="toc-label">Phase 4: Reconcile Sources</span></li>
+        <li class="toc-item" data-target="s-p5"><span class="toc-num">08</span><span class="toc-label">Phase 5: Tier &amp; Pattern</span></li>
+        <li class="toc-item" data-target="s-p6"><span class="toc-num">09</span><span class="toc-label">Phase 6: ICP Generation</span></li>
+        <li class="toc-item" data-target="s-artifacts"><span class="toc-num">10</span><span class="toc-label">Output Artifacts</span></li>
+        <li class="toc-item" data-target="s-server"><span class="toc-num">11</span><span class="toc-label">MCP Server Surface</span></li>
+        <li class="toc-item" data-target="s-gates"><span class="toc-num">12</span><span class="toc-label">Quality Gates &amp; Refresh</span></li>
+        <li class="toc-item" data-target="s-ops"><span class="toc-num">13</span><span class="toc-label">Operations &amp; Contacts</span></li>
+      </ul>
+    </aside>
+
+    <!-- ─── MAIN ────────────────────────────────────────────────────── -->
+    <main class="main">
+
+      <!-- HERO -->
+      <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-inner">
+          <div class="hero-eyebrow">
+            <span class="eye-tag">Operations Runbook</span>
+            <span class="eye-div"></span>
+            <span class="eye-sub">Relationship Intelligence Pipeline · v1.0</span>
+          </div>
+          <h1 class="hero-h">How the <em>intelligence</em> gets made.</h1>
+          <p class="hero-deck">From Dropbox audit to AI-queryable artifact — the full operational breakdown of the Windfield Relationship Intelligence pipeline. Every phase, every prompt, every output artifact, every MCP surface. This is the runbook a new operator could use to re-produce the report from scratch.</p>
+
+          <div class="hero-meta">
+            <div class="hm-block"><div class="hm-k">Generates</div><div class="hm-v">Relationship Intelligence Report</div></div>
+            <div class="hm-sep"></div>
+            <div class="hm-block"><div class="hm-k">Source</div><div class="hm-v">Dropbox · Brokerage Transactions</div></div>
+            <div class="hm-sep"></div>
+            <div class="hm-block"><div class="hm-k">Owner</div><div class="hm-v">Tommy Saunders · IO</div></div>
+            <div class="hm-sep"></div>
+            <div class="hm-block"><div class="hm-k">Runtime</div><div class="hm-v">~45 min end-to-end</div></div>
+          </div>
+
+          <div class="hero-stats">
+            <div class="hs"><div class="hs-sub">Workflow Phases</div><div class="hs-n">6</div><div class="hs-l">Enumerate → Extract → Normalize → Reconcile → Classify → Assemble</div></div>
+            <div class="hs"><div class="hs-sub">Prompts</div><div class="hs-n">10</div><div class="hs-l">Phase-decomposed · single-responsibility chain</div></div>
+            <div class="hs"><div class="hs-sub">Output Formats</div><div class="hs-n">3</div><div class="hs-l">CSV ledger · Markdown narrative · HTML landing</div></div>
+            <div class="hs"><div class="hs-sub">MCP Tools Used</div><div class="hs-n">8</div><div class="hs-l">Dropbox read + write + search + share surface</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── MOBILE TOC DRAWER (shown below 1024px) ─────────────────── -->
+      <details class="mobile-toc">
+        <summary class="mobile-toc-summary">
+          <span>Jump to section</span>
+          <span class="mobile-toc-chev">&#9662;</span>
+        </summary>
+        <div class="mobile-toc-kick">13 sections · Windfield Intelligence Workflow</div>
+        <ul class="mobile-toc-list">
+          <li class="mobile-toc-item" data-target="s-context"><span class="mobile-toc-n">01</span><span>Context &amp; Problem</span></li>
+          <li class="mobile-toc-item" data-target="s-arch"><span class="mobile-toc-n">02</span><span>Architecture Overview</span></li>
+          <li class="mobile-toc-item" data-target="s-source"><span class="mobile-toc-n">03</span><span>The Source Layer</span></li>
+          <li class="mobile-toc-item" data-target="s-mcp"><span class="mobile-toc-n">04</span><span>MCP Toolkit &amp; Protocol</span></li>
+          <li class="mobile-toc-item" data-target="s-p12"><span class="mobile-toc-n">05</span><span>Phase 1–2: Enumerate &amp; Extract</span></li>
+          <li class="mobile-toc-item" data-target="s-p3"><span class="mobile-toc-n">06</span><span>Phase 3: Normalize Entities</span></li>
+          <li class="mobile-toc-item" data-target="s-p4"><span class="mobile-toc-n">07</span><span>Phase 4: Reconcile Sources</span></li>
+          <li class="mobile-toc-item" data-target="s-p5"><span class="mobile-toc-n">08</span><span>Phase 5: Tier &amp; Pattern</span></li>
+          <li class="mobile-toc-item" data-target="s-p6"><span class="mobile-toc-n">09</span><span>Phase 6: ICP Generation</span></li>
+          <li class="mobile-toc-item" data-target="s-artifacts"><span class="mobile-toc-n">10</span><span>Output Artifacts</span></li>
+          <li class="mobile-toc-item" data-target="s-server"><span class="mobile-toc-n">11</span><span>MCP Server Surface</span></li>
+          <li class="mobile-toc-item" data-target="s-gates"><span class="mobile-toc-n">12</span><span>Quality Gates &amp; Refresh</span></li>
+          <li class="mobile-toc-item" data-target="s-ops"><span class="mobile-toc-n">13</span><span>Operations &amp; Contacts</span></li>
+        </ul>
+      </details>
+
+      <!-- ─── 01 · CONTEXT ──────────────────────────────────────────── -->
+      <section class="sec reveal" id="s-context">
+        <div class="sec-head">
+          <div class="sec-num">01</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Context &amp; Problem Statement</div>
+            <h2 class="sec-h">Why this workflow <em>exists</em>.</h2>
+          </div>
+        </div>
+
+        <div class="prose">
+          <p>Windfield's eight-year transaction archive lives in Dropbox as <strong>250+ individual deals</strong> spread across year-folders, each containing listing agreements, contracts, commission statements, lease agreements, and offering memoranda — all in varied formats, with inconsistent entity naming, and no master index. The insights that would tell Andrew Danner who his Tier 1 clients are, which patterns generate the most commission, and where to prospect next — those insights exist in the data, but they're buried across hundreds of PDFs.</p>
+          <p>Historically, surfacing these insights required <strong>days of broker time</strong> — reading contracts, cross-referencing LLCs, building pivot tables, manually spotting patterns. This workflow replaces that with an <em>agentic pipeline</em> that reads every document, normalizes every entity, classifies every client, and publishes three synchronized outputs in about 45 minutes. And critically — once instrumented, it re-runs on demand.</p>
+        </div>
+
+        <div class="pq">
+          <div class="pq-text">"The insights were always in the data. The workflow's only job is to <em>make them visible</em> — in a form a broker can act on, and in a form another AI agent can query."</div>
+          <div class="pq-attr">Operating principle · IO platform</div>
+        </div>
+
+        <div class="takeaway">
+          <div class="takeaway-l">What this workflow replaces</div>
+          <div class="takeaway-t">A <strong>recurring 3-day analyst engagement</strong> producing a static PowerPoint, run maybe once a year. Now: an <strong>on-demand pipeline</strong> producing three synchronized artifacts (CSV, Markdown, HTML), queryable by AI agents, auto-refreshable on every major deal close.</div>
+        </div>
+      </section>
+
+      <!-- ─── 02 · ARCHITECTURE ─────────────────────────────────────── -->
+      <section class="sec reveal" id="s-arch">
+        <div class="sec-head">
+          <div class="sec-num">02</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Architecture Overview</div>
+            <h2 class="sec-h">Four stages. <em>End-to-end pipeline</em>.</h2>
+            <p class="sec-deck">Data flows through four clearly-scoped stages. Each stage has its own tooling, its own outputs, and its own quality gates. Drift in any stage is caught before it contaminates the next.</p>
+          </div>
+        </div>
+
+        <div class="flow">
+          <div class="flow-stage">
+            <div class="fs-n">Stage 01</div>
+            <div class="fs-name"><em>Input</em><br>Dropbox</div>
+            <div class="fs-desc">Source of truth for all transaction evidence: contracts, commission statements, listing agreements, master logs.</div>
+            <div class="fs-meta">250+ transactions · 8 years</div>
+          </div>
+          <div class="flow-stage">
+            <div class="fs-n">Stage 02</div>
+            <div class="fs-name"><em>Processing</em><br>Claude Code + MCP</div>
+            <div class="fs-desc">Six-phase agentic pipeline. 10 prompts. Entity normalization, source reconciliation, tiering, pattern detection.</div>
+            <div class="fs-meta">8 MCP tools · ~45 min</div>
+          </div>
+          <div class="flow-stage">
+            <div class="fs-n">Stage 03</div>
+            <div class="fs-name"><em>Artifacts</em><br>Three Formats</div>
+            <div class="fs-desc">CSV master ledger (row-level source of truth). Markdown narrative (portable, git-friendly). HTML landing page (branded, shareable).</div>
+            <div class="fs-meta">Synchronized · versioned</div>
+          </div>
+          <div class="flow-stage">
+            <div class="fs-n">Stage 04</div>
+            <div class="fs-name"><em>Distribution</em><br>MCP Server</div>
+            <div class="fs-desc">Artifacts published back to Dropbox and exposed via MCP server — queryable by external AI agents, AEO-ready.</div>
+            <div class="fs-meta">6 endpoints exposed</div>
+          </div>
+        </div>
+
+        <div class="callout cyan">
+          <div class="callout-l">Why the separation matters</div>
+          <div class="callout-t">Stage boundaries are <strong>audit points</strong>. After Stage 2 processing, the raw extraction is checkpointed to Dropbox — meaning if Stage 3 assembly has a bug, we don't re-read every PDF. The pipeline is idempotent at stage boundaries. This is the single most important architectural decision in the workflow.</div>
+        </div>
+      </section>
+
+      <!-- ─── 03 · SOURCE LAYER ─────────────────────────────────────── -->
+      <section class="sec reveal" id="s-source">
+        <div class="sec-head">
+          <div class="sec-num">03</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">The Source Layer · Dropbox</div>
+            <h2 class="sec-h">Eight year folders. <em>Hundreds of documents</em>.</h2>
+            <p class="sec-deck">The pipeline reads from a single known location in Dropbox. Folder structure is semi-consistent across years; naming conventions vary enough that the enumeration phase cannot skip any folder.</p>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-head">
+            <span class="code-lang">Directory tree</span>
+            <span class="code-file">/Tommy Saunders/Brokerage Transactions/</span>
+          </div>
+<pre class="code-body"><span class="cmt"># Source root</span>
+<span class="kw">/Tommy Saunders/Brokerage Transactions/</span>
+├── <span class="prop">2018/</span>
+├── <span class="prop">2019/</span>
+├── <span class="prop">2020/</span>
+│   ├── <span class="str">Master Transaction Log 2020.xlsx</span>
+│   ├── <span class="str">Listing Agreements/</span>
+│   ├── <span class="str">Contracts/</span>
+│   ├── <span class="str">Commission Statements/</span>
+│   └── <span class="str">Lease Agreements/</span>
+├── <span class="prop">2021/</span>  <span class="cmt"># same structure</span>
+├── <span class="prop">2022/</span>
+├── <span class="prop">2023/</span>
+├── <span class="prop">2024/</span>
+├── <span class="prop">2025/</span>
+├── <span class="prop">2026/</span>  <span class="cmt"># active / in-progress</span>
+└── <span class="prop">_Reports/</span>  <span class="cmt"># output destination (created by pipeline)</span>
+    ├── <span class="str">RPT_windfield_master_transaction_ledger_2026-04-22.csv</span>
+    ├── <span class="str">RPT_windfield_relationship_intelligence_2026-04-22.md</span>
+    └── <span class="str">RPT_windfield_relationship_intelligence_2026-04-22.html</span></pre>
+        </div>
+
+        <div class="prose">
+          <p>Inside each year folder the pipeline expects:</p>
+          <ul>
+            <li><strong>A master transaction log</strong> — typically XLSX, one row per deal, fields vary year-to-year but always include property, parties, price, commission, status.</li>
+            <li><strong>Listing agreements</strong> — PDFs naming the property, the seller/landlord, and the listing terms. Used to verify who Windfield represented.</li>
+            <li><strong>Purchase contracts</strong> — PDFs with buyer/seller, price, earnest money, close date, contingencies. <em>Contract price and parties take precedence</em> over master-log values.</li>
+            <li><strong>Commission statements</strong> — PDFs with agent split, co-broker split, final commission. <em>Commission statement is source of truth</em> for the commission column in the final ledger.</li>
+            <li><strong>Lease agreements</strong> — PDFs with tenant, landlord, rent, term. Used for lease-transaction rows and landlord-rep tracking.</li>
+          </ul>
+          <p>File naming is <strong>non-standardized across years</strong>. A purchase contract for "8331 N Green Hills" might live under any of: <code>Contract_8331NGreenHills.pdf</code>, <code>8331 Green Hills - Executed Contract.pdf</code>, <code>NSA Purchase Agreement - Signed.pdf</code>, or <code>PSA_8331_Danner_NSA.pdf</code>. The pipeline's search phase uses fuzzy-match against property addresses and party names rather than filename conventions.</p>
+        </div>
+      </section>
+
+      <!-- ─── 04 · MCP TOOLKIT ──────────────────────────────────────── -->
+      <section class="sec reveal" id="s-mcp">
+        <div class="sec-head">
+          <div class="sec-num">04</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">MCP Toolkit &amp; Confirmation Protocol</div>
+            <h2 class="sec-h">Eight tools. <em>Three confirmation tiers</em>.</h2>
+            <p class="sec-deck">The pipeline operates through the Dropbox MCP server. Every tool is tagged by confirmation tier — read-only tools auto-execute, mutations require explicit user confirmation, share operations require confirmation plus an explicit warning.</p>
+          </div>
+        </div>
+
+        <div class="tool-grid">
+          <div class="tool-card">
+            <div class="tool-head">
+              <span class="tool-name">mcp__dropbox__list_folder</span>
+              <span class="tool-tier t1">T1 · Read</span>
+            </div>
+            <div class="tool-desc">Enumerate contents of a folder. <strong>Cursor-based pagination</strong> for folders over 200 entries. Used in the Enumeration phase to map every year folder.</div>
+            <div class="tool-args"><em>args:</em> path, recursive?, cursor?</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-head">
+              <span class="tool-name">mcp__dropbox__search</span>
+              <span class="tool-tier t1">T1 · Read</span>
+            </div>
+            <div class="tool-desc">Full-text and filename search across Dropbox. Used to find contracts and commission statements <strong>by address and party name</strong>, not filename — since filenames are non-standardized.</div>
+            <div class="tool-args"><em>args:</em> query, path?, max_results?</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-head">
+              <span class="tool-name">mcp__dropbox__get_file_content</span>
+              <span class="tool-tier t1">T1 · Read</span>
+            </div>
+            <div class="tool-desc">Extract content from PDF, DOCX, XLSX, TXT. <strong>5MB extraction ceiling</strong> per call — larger files must be chunked or streamed by page. This is the core extraction tool.</div>
+            <div class="tool-args"><em>args:</em> path, as_text?</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-head">
+              <span class="tool-name">mcp__dropbox__get_file_metadata</span>
+              <span class="tool-tier t1">T1 · Read</span>
+            </div>
+            <div class="tool-desc">File size, modified date, content hash. Used to decide whether a file has changed since last pipeline run (incremental refresh).</div>
+            <div class="tool-args"><em>args:</em> path</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-head">
+              <span class="tool-name">mcp__dropbox__get_usage_and_quota</span>
+              <span class="tool-tier t1">T1 · Read</span>
+            </div>
+            <div class="tool-desc">Account quota and usage. Monitored to ensure the workflow stays well under Dropbox limits during full re-runs.</div>
+            <div class="tool-args"><em>args:</em> (none)</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-head">
+              <span class="tool-name">mcp__dropbox__create_folder</span>
+              <span class="tool-tier t2">T2 · Mutate</span>
+            </div>
+            <div class="tool-desc">Creates the <code>_Reports/</code> destination folder if it doesn't exist. <strong>Tier 2</strong> — requires user confirmation before execution.</div>
+            <div class="tool-args"><em>args:</em> path, autorename?</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-head">
+              <span class="tool-name">mcp__dropbox__create_file</span>
+              <span class="tool-tier t2">T2 · Mutate</span>
+            </div>
+            <div class="tool-desc">Writes the three output artifacts — CSV, MD, HTML — to <code>_Reports/</code>. <strong>Tier 2</strong>. Pipeline pauses for human confirmation before each file write.</div>
+            <div class="tool-args"><em>args:</em> path, content, mode (add|overwrite)</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-head">
+              <span class="tool-name">mcp__dropbox__create_shared_link</span>
+              <span class="tool-tier t3">T3 · Share</span>
+            </div>
+            <div class="tool-desc">Generates a shareable Dropbox link for the report. <strong>Tier 3 — highest caution</strong>. Requires explicit confirmation <em>and</em> a warning about external exposure. Never auto-run.</div>
+            <div class="tool-args"><em>args:</em> path, visibility, password?</div>
+          </div>
+        </div>
+
+        <h3 class="sub-h">The three confirmation tiers</h3>
+
+        <div class="tier-grid">
+          <div class="tier-proto t1">
+            <div class="tier-proto-k">Tier 1 · Read-Only</div>
+            <div class="tier-proto-h"><em>Auto-execute</em>. No confirmation required.</div>
+            <ul class="tier-proto-list">
+              <li>Listing folders, reading files, fetching metadata, searching</li>
+              <li>Cannot modify or share anything</li>
+              <li><strong>Fail-safe by definition</strong> — worst case, stale read</li>
+              <li>Applies to: <code>list_folder</code>, <code>search</code>, <code>get_file_content</code>, <code>get_file_metadata</code>, <code>get_usage_and_quota</code></li>
+            </ul>
+          </div>
+          <div class="tier-proto t2">
+            <div class="tier-proto-k">Tier 2 · Mutations</div>
+            <div class="tier-proto-h">Confirm <em>before action</em>.</div>
+            <ul class="tier-proto-list">
+              <li>Any write, create, or modification</li>
+              <li>Pipeline pauses, surfaces the intended change, waits for approval</li>
+              <li>Never batched — <strong>one confirmation per file write</strong></li>
+              <li>Applies to: <code>create_folder</code>, <code>create_file</code></li>
+            </ul>
+          </div>
+          <div class="tier-proto t3">
+            <div class="tier-proto-k">Tier 3 · Sharing</div>
+            <div class="tier-proto-h">Confirm <em>plus warning</em>.</div>
+            <ul class="tier-proto-list">
+              <li>Any operation that exposes data externally</li>
+              <li>Explicit warning shown: "This will create a link accessible outside Windfield"</li>
+              <li><strong>Never auto-run after a file write</strong> — even if the user is in a sharing flow</li>
+              <li>Applies to: <code>create_shared_link</code></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── 05 · PHASE 1-2 ────────────────────────────────────────── -->
+      <section class="sec reveal" id="s-p12">
+        <div class="sec-head">
+          <div class="sec-num">05</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Phases 1 &amp; 2</div>
+            <h2 class="sec-h">Enumerate, then <em>extract</em>.</h2>
+            <p class="sec-deck">The first two phases turn the Dropbox folder tree into a structured in-memory representation of every transaction. No interpretation happens here — just reading and parsing.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-watermark">01</div>
+          <div class="phase-head">
+            <div class="phase-kicker">Phase 01</div>
+            <div class="phase-name">The <em>Enumeration</em></div>
+            <div class="phase-duration">~3 minutes</div>
+          </div>
+          <div class="phase-body">
+            <p>Map the entire Dropbox folder tree before extracting anything. The output is a <strong>manifest</strong>: every folder, every file, its type, its size, its last-modified date. This manifest is the contract every downstream phase operates against.</p>
+          </div>
+          <div class="phase-grid">
+            <div class="phase-k">Tools Used</div>
+            <div class="phase-v"><code>list_folder</code> with cursor pagination</div>
+            <div class="phase-k">Inputs</div>
+            <div class="phase-v">Root path <code>/Tommy Saunders/Brokerage Transactions/</code></div>
+            <div class="phase-k">Outputs</div>
+            <div class="phase-v">JSON manifest: 8 year folders, 200+ sub-files, all metadata</div>
+            <div class="phase-k">Quality Gate</div>
+            <div class="phase-v">All 8 year folders present (2018–2026), no broken pagination cursors</div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-head">
+              <span class="code-lang">Prompt</span>
+              <span class="code-file">phase-01-enumerate.prompt</span>
+              <button class="code-copy" onclick="copyCode(this)">Copy</button>
+            </div>
+<pre class="code-body"><span class="cmt"># Phase 01 — Enumerate the Brokerage Transactions archive</span>
+
+You are Claude operating via the Dropbox MCP server. Your job is to map the
+entire <span class="str">/Tommy Saunders/Brokerage Transactions/</span> folder tree.
+
+<span class="kw">Instructions:</span>
+1. Start at the root path.
+2. Call <span class="fn">mcp__dropbox__list_folder</span> recursively.
+3. Follow cursor pagination on every folder over <span class="num">200</span> entries.
+4. Build a JSON manifest with: <span class="prop">path, type, size, modified, year_bucket</span>.
+5. Do <span class="kw">NOT</span> extract any file content in this phase.
+6. Return the manifest as a Tier 1 read-only output.
+
+<span class="kw">Expected output schema:</span>
+{
+  <span class="str">"year"</span>: <span class="str">"2024"</span>,
+  <span class="str">"files"</span>: [
+    { <span class="str">"path"</span>: <span class="str">"...Master Transaction Log 2024.xlsx"</span>, <span class="str">"type"</span>: <span class="str">"xlsx"</span>, <span class="str">"size"</span>: <span class="num">45021</span> },
+    { <span class="str">"path"</span>: <span class="str">"...Listing Agreements/..."</span>, <span class="str">"type"</span>: <span class="str">"pdf"</span>, ... }
+  ]
+}
+
+<span class="kw">Quality check before ending phase:</span>
+- All year folders 2018 through 2026 must appear in the manifest.
+- If any folder is missing, HALT and surface to the operator.</pre>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-watermark">02</div>
+          <div class="phase-head">
+            <div class="phase-kicker">Phase 02</div>
+            <div class="phase-name">The <em>Extraction</em></div>
+            <div class="phase-duration">~15 minutes</div>
+          </div>
+          <div class="phase-body">
+            <p>For each file identified in the manifest, pull the content and parse it into structured records. This is the <strong>longest phase</strong> by runtime — it's the only phase that touches every PDF.</p>
+            <p>Extraction is conservative: if a field is ambiguous (e.g., price appears in three places with three different numbers), all three are captured and flagged for Phase 4 reconciliation. <strong>Don't resolve ambiguity during extraction</strong> — preserve it for the reconciliation phase which has the cross-document context to resolve correctly.</p>
+          </div>
+          <div class="phase-grid">
+            <div class="phase-k">Tools Used</div>
+            <div class="phase-v"><code>get_file_content</code>, <code>search</code> (for cross-referencing related docs)</div>
+            <div class="phase-k">Inputs</div>
+            <div class="phase-v">The manifest from Phase 01</div>
+            <div class="phase-k">Outputs</div>
+            <div class="phase-v">Raw transaction records: one per deal, all fields preserved with source attribution</div>
+            <div class="phase-k">Quality Gate</div>
+            <div class="phase-v">Every transaction has at least one source document. Commission records match master log ± 5% tolerance (anything outside flagged for Phase 04).</div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-head">
+              <span class="code-lang">Prompt</span>
+              <span class="code-file">phase-02-extract.prompt</span>
+              <button class="code-copy" onclick="copyCode(this)">Copy</button>
+            </div>
+<pre class="code-body"><span class="cmt"># Phase 02 — Extract transaction records per year folder</span>
+
+<span class="kw">Input:</span> Manifest from Phase 01.
+
+<span class="kw">For each year folder:</span>
+
+1. <span class="kw">Master log extraction:</span>
+   - Call <span class="fn">get_file_content</span> on the master transaction log XLSX
+   - Parse rows. For each row, build a base transaction record with:
+     <span class="prop">property, parties, price, commission, status, date</span>
+   - Tag source: <span class="str">master_log</span>
+
+2. <span class="kw">Contract extraction (for each property in master log):</span>
+   - Call <span class="fn">search</span> with property address as query, path scoped to year/Contracts
+   - For each match: <span class="fn">get_file_content</span>
+   - Extract: buyer, seller, price, earnest money, close date
+   - Tag source: <span class="str">contract</span>
+
+3. <span class="kw">Commission statement extraction:</span>
+   - Same search pattern, scoped to year/Commission Statements
+   - Extract: agent split, co-broker split, net commission
+   - Tag source: <span class="str">commission_statement</span>
+
+4. <span class="kw">Listing agreement extraction:</span>
+   - Scoped to year/Listing Agreements
+   - Extract: seller, listing terms, exclusivity
+   - Tag source: <span class="str">listing_agreement</span>
+
+5. <span class="kw">Lease agreement extraction (for lease transactions):</span>
+   - Scoped to year/Lease Agreements
+   - Extract: tenant, landlord, rent, term
+   - Tag source: <span class="str">lease_agreement</span>
+
+<span class="kw">CRITICAL:</span> Preserve all source values even when they disagree. Do NOT
+resolve discrepancies in this phase. Output records with multi-valued fields
+marked <span class="tok">{{conflict}}</span> for Phase 04 to handle.
+
+<span class="kw">Skip conditions:</span>
+- Files over 5MB: chunk by page, combine extracts
+- Scanned PDFs with no OCR: surface to operator, skip rather than guess</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── 06 · PHASE 3 NORMALIZE ────────────────────────────────── -->
+      <section class="sec reveal" id="s-p3">
+        <div class="sec-head">
+          <div class="sec-num">06</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Phase 3 · Entity Normalization</div>
+            <h2 class="sec-h">One <em>real</em> relationship. Many LLCs.</h2>
+            <p class="sec-deck">Shane Crees doesn't buy properties — "Kansas City Properties and Investments LLC" does. Sandy Knoernschild doesn't sell — "CKC Holdings LLC" does. Andrew Danner himself buys through dozens of single-purpose LLCs. Without normalization, the data shows hundreds of distinct counterparties. With normalization, it shows <em>a dozen real relationships</em>.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-watermark">03</div>
+          <div class="phase-head">
+            <div class="phase-kicker">Phase 03</div>
+            <div class="phase-name">The <em>Normalization</em></div>
+            <div class="phase-duration">~6 minutes</div>
+          </div>
+          <div class="phase-body">
+            <p>Apply a canonical entity ID to every party in every transaction. This is the phase that turns the data from a transaction log into a <strong>relationship graph</strong>.</p>
+          </div>
+        </div>
+
+        <h3 class="sub-h">The normalization rules</h3>
+        <p style="font-size:14px;color:var(--wf-fg-muted);margin-bottom:16px;line-height:1.65;font-weight:300">Each rule maps any of a family of observed entity names to a single canonical key. Order matters — Danner-interest rule runs last, after the named-principal rules, to avoid mis-tagging passive investment vehicles.</p>
+
+        <div class="norm-list">
+          <div class="norm-row">
+            <div class="norm-from"><strong>KCPI</strong> · Kansas City Properties and Investments LLC · K.C. Properties<em>Any LLC managed by Shane Crees</em></div>
+            <div class="norm-arrow">&rarr;</div>
+            <div class="norm-to"><strong>Shane Crees (KCPI)</strong><em>Canonical entity ID</em></div>
+          </div>
+          <div class="norm-row">
+            <div class="norm-from"><strong>CKC Holdings LLC</strong> · CKC LLC · various "CKC" entities<em>Any LLC managed by Sandy Knoernschild</em></div>
+            <div class="norm-arrow">&rarr;</div>
+            <div class="norm-to"><strong>Sandy Knoernschild (CKC)</strong></div>
+          </div>
+          <div class="norm-row">
+            <div class="norm-from"><strong>Parkville Development 38/140 LLC</strong> · Parkville Development 50 · Parkville Development VV1<em>Any "Parkville Development N" entity</em></div>
+            <div class="norm-arrow">&rarr;</div>
+            <div class="norm-to"><strong>Brian Mertz (Parkville Development)</strong></div>
+          </div>
+          <div class="norm-row">
+            <div class="norm-from"><strong>Kuehl Capital LLC</strong> · Diversified Building entities<em>Any LLC where Adam Reth is managing member</em></div>
+            <div class="norm-arrow">&rarr;</div>
+            <div class="norm-to"><strong>Adam Reth (Kuehl Capital)</strong></div>
+          </div>
+          <div class="norm-row">
+            <div class="norm-from"><strong>Island Time Group LLC</strong> · Tiki Taco LLC · EK entities<em>Any LLC managed by Eric Knott</em></div>
+            <div class="norm-arrow">&rarr;</div>
+            <div class="norm-to"><strong>Eric Knott (Tiki Taco)</strong></div>
+          </div>
+          <div class="norm-row">
+            <div class="norm-from"><strong>Walker LaBrunerie Trust</strong> · Barry Road Nominee Realty Trust<em>Trust entities associated with Claire LaBrunerie</em></div>
+            <div class="norm-arrow">&rarr;</div>
+            <div class="norm-to"><strong>Claire LaBrunerie (Walker Trust)</strong></div>
+          </div>
+          <div class="norm-row">
+            <div class="norm-from"><strong>SSQ LLC</strong> · NAPT LLC · SDRE LLC · any other Shane-Danner-managed LLC<em>Passive investment LLCs managed by Shane Danner</em></div>
+            <div class="norm-arrow">&rarr;</div>
+            <div class="norm-to"><strong>Shane Danner (Principal Investment)</strong></div>
+          </div>
+          <div class="norm-row">
+            <div class="norm-from"><strong>Any LLC</strong> where Andrew Danner is a listed manager or member<em>Catch-all — runs last, after specific rules above</em></div>
+            <div class="norm-arrow">&rarr;</div>
+            <div class="norm-to"><strong>Danner Entity (Principal Interest)</strong><em>Triggers the "Principal Interest" tag</em></div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-head">
+            <span class="code-lang">Prompt</span>
+            <span class="code-file">phase-03-normalize.prompt</span>
+            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+          </div>
+<pre class="code-body"><span class="cmt"># Phase 03 — Entity normalization</span>
+
+<span class="kw">Input:</span> Raw transaction records from Phase 02.
+
+<span class="kw">For every party in every transaction:</span>
+
+1. Apply the following rules <span class="kw">in order</span> (first match wins, except the
+   Danner catch-all which runs last):
+
+   <span class="kw">Rule 1</span> — Shane Crees / KCPI
+     IF party matches <span class="str">/KCPI|Kansas City Properties.*Investments|K\.?C\.? Properties/i</span>
+     THEN canonical_entity = <span class="str">"shane_crees_kcpi"</span>
+
+   <span class="kw">Rule 2</span> — Sandy Knoernschild / CKC
+     IF party matches <span class="str">/CKC/i</span> AND listed manager is Knoernschild
+     THEN canonical_entity = <span class="str">"sandy_knoernschild_ckc"</span>
+
+   <span class="kw">Rule 3</span> — Parkville Development group
+     IF party matches <span class="str">/Parkville Development (38\/140|50|VV1|\d+)/i</span>
+     THEN canonical_entity = <span class="str">"brian_mertz_parkville"</span>
+
+   <span class="kw">Rule 4</span> — Adam Reth / Kuehl Capital
+     IF party matches <span class="str">/Kuehl Capital|Diversified (Building|Investment)/i</span>
+     THEN canonical_entity = <span class="str">"adam_reth_kuehl"</span>
+
+   <span class="kw">Rule 5</span> — Eric Knott / Tiki Taco
+     IF party matches <span class="str">/Island Time|Tiki Taco|EK (Holdings|Restaurants)/i</span>
+     THEN canonical_entity = <span class="str">"eric_knott_tikitaco"</span>
+
+   <span class="kw">Rule 6</span> — Shane Danner passive LLCs
+     IF party is one of <span class="str">[SSQ LLC, NAPT LLC, SDRE LLC, ...]</span>
+     THEN canonical_entity = <span class="str">"shane_danner_principal"</span>
+
+   <span class="kw">Rule 7</span> — Danner catch-all <span class="cmt">(runs LAST)</span>
+     IF party is an LLC AND Andrew Danner is a listed manager or member
+     THEN canonical_entity = <span class="str">"danner_entity_principal"</span>
+     AND add_tag <span class="str">"principal_interest"</span>
+
+2. If no rule matches, record the literal party name as the canonical entity.
+   <span class="cmt"># These are the "long tail" — one-off buyers and sellers.</span>
+
+3. Output: the transaction records enriched with <span class="prop">canonical_buyer_entity</span>,
+   <span class="prop">canonical_seller_entity</span>, and any applied tags.
+
+<span class="kw">Do NOT</span> reassign individuals (people) to entities. Keep Shane Crees as Shane Crees
+even if he appears in the broker column; tag separately from KCPI.</pre>
+        </div>
+
+        <div class="callout">
+          <div class="callout-l">Why Rule 7 runs last</div>
+          <div class="callout-t">Andrew Danner is a managing member of a long list of passive investment LLCs — some of which have other, more specific owners (like the Shane Danner LLCs in Rule 6). If the Danner catch-all ran first, it would <strong>over-attribute deals to Andrew personally</strong> when the real economic interest sits with a different family member or investment vehicle. Rule ordering preserves attribution fidelity.</div>
+        </div>
+      </section>
+
+      <!-- ─── 07 · PHASE 4 RECONCILE ────────────────────────────────── -->
+      <section class="sec reveal" id="s-p4">
+        <div class="sec-head">
+          <div class="sec-num">07</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Phase 4 · Source Reconciliation</div>
+            <h2 class="sec-h">When three sources disagree, <em>which one wins</em>?</h2>
+            <p class="sec-deck">The master log says the price was $1.5M. The contract says $1.65M. The commission statement implies $1.6M. Reconciliation resolves these disagreements using an explicit source-priority rule set — not majority vote, not heuristic.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-watermark">04</div>
+          <div class="phase-head">
+            <div class="phase-kicker">Phase 04</div>
+            <div class="phase-name">The <em>Reconciliation</em></div>
+            <div class="phase-duration">~4 minutes</div>
+          </div>
+          <div class="phase-body">
+            <p>The pipeline applies three reconciliation rules, <strong>in priority order</strong>. Each rule resolves a specific class of field.</p>
+          </div>
+          <div class="phase-grid">
+            <div class="phase-k">Rule 1 — Price &amp; parties</div>
+            <div class="phase-v"><strong>Contract wins.</strong> The executed purchase contract is the legal source of truth for who paid what to whom. Master-log discrepancies are noted in the ledger but not surfaced in the narrative.</div>
+            <div class="phase-k">Rule 2 — Transaction ID</div>
+            <div class="phase-v"><strong>Master log wins.</strong> Internal transaction numbering follows the master log's sequence. Contracts rarely have transaction IDs, commission statements sometimes have their own.</div>
+            <div class="phase-k">Rule 3 — Commission amount</div>
+            <div class="phase-v"><strong>Commission statement wins.</strong> Supersedes both contract-implied and master-log-stated commission. If no commission statement exists, use <code>price × blended_gci_rate</code> as a computed estimate and flag with <code>⚠ estimated</code>.</div>
+            <div class="phase-k">Rule 4 — Unresolvable</div>
+            <div class="phase-v">If a source conflict can't be resolved (e.g., two contracts with different prices for the same property), the row is flagged <code>NEEDS_HUMAN_REVIEW</code> and the pipeline continues. <strong>Never guess.</strong></div>
+          </div>
+        </div>
+
+        <div class="callout amber">
+          <div class="callout-l">The $200K pattern</div>
+          <div class="callout-t">A recurring class of master-log discrepancy: the log shows the <em>listed</em> price (what Windfield put on market), the contract shows the <em>executed</em> price (what the buyer actually paid). On average these diverge by <strong>$100-300K downward</strong> in the Windfield data. The reconciliation rule correctly privileges the contract because it captures what actually happened — but this is the reason the final Total Volume numbers may look slightly lower than Andrew's internal tracking.</div>
+        </div>
+      </section>
+
+      <!-- ─── 08 · PHASE 5 TIER ─────────────────────────────────────── -->
+      <section class="sec reveal" id="s-p5">
+        <div class="sec-head">
+          <div class="sec-num">08</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Phase 5 · Tiering &amp; Pattern Recognition</div>
+            <h2 class="sec-h">From transactions to <em>strategic structure</em>.</h2>
+            <p class="sec-deck">With clean, reconciled, entity-normalized data, the pipeline can finally answer strategic questions. Phase 5 produces the client tiers and identifies the four repeating patterns that define how Windfield actually makes money.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-watermark">05</div>
+          <div class="phase-head">
+            <div class="phase-kicker">Phase 05</div>
+            <div class="phase-name">The <em>Classification</em></div>
+            <div class="phase-duration">~5 minutes</div>
+          </div>
+          <div class="phase-body">
+            <p>Two classifications run in parallel: <strong>client tiering</strong> (who are the inner-circle relationships?) and <strong>pattern recognition</strong> (what are the repeating deal structures?).</p>
+          </div>
+          <div class="phase-grid">
+            <div class="phase-k">Tier 1 criteria</div>
+            <div class="phase-v"><strong>5+ transactions</strong> across any role (buyer, seller, landlord, tenant). The inner circle.</div>
+            <div class="phase-k">Tier 2 criteria</div>
+            <div class="phase-v"><strong>3–4 transactions.</strong> The second ring — highest-leverage conversion opportunities into Tier 1.</div>
+            <div class="phase-k">Tier 3 criteria</div>
+            <div class="phase-v">Single transaction, but <strong>$1.5M+ in volume</strong>. Notable whales. Always flagged because each is a future-Tier-1 candidate.</div>
+            <div class="phase-k">Patterns scanned</div>
+            <div class="phase-v">Subdivide-and-Sell · Relationship Recycler · Personal Interest Multiplier · Anchor Tenant Play — each with specific structural fingerprints</div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-head">
+              <span class="code-lang">Prompt</span>
+              <span class="code-file">phase-05-classify.prompt</span>
+              <button class="code-copy" onclick="copyCode(this)">Copy</button>
+            </div>
+<pre class="code-body"><span class="cmt"># Phase 05 — Tiering and pattern recognition</span>
+
+<span class="kw">Input:</span> Normalized, reconciled transaction records.
+
+<span class="kw">Part A — Tiering</span>
+
+For each unique canonical_entity, count transactions (all roles combined):
+  - <span class="kw">Tier 1</span>: count >= 5
+  - <span class="kw">Tier 2</span>: count 3-4
+  - <span class="kw">Tier 3</span>: count == 1 AND max(price) >= 1_500_000
+  - <span class="kw">Long tail</span>: everything else (not surfaced in the narrative)
+
+For each Tier 1 and Tier 2 entity, produce a client card with:
+  <span class="prop">name, contact_person, total_volume, transaction_count, roles, key_properties</span>
+
+<span class="kw">Part B — Pattern detection</span>
+
+Scan each canonical_entity's transaction history for these structural patterns:
+
+  <span class="kw">Pattern 1 — Subdivide-and-Sell:</span>
+    Entity acquires large tract → subdivides into pad sites → Windfield lists
+    individual pads → sold to different buyers within 24 months of acquisition.
+    Fingerprint: one buy transaction followed by 3+ related sales, same root parcel.
+
+  <span class="kw">Pattern 2 — Relationship Recycler:</span>
+    Entity appears as buyer, then as landlord (lease transactions for same property),
+    then as seller. All through Windfield.
+    Fingerprint: buy → lease_series → sell, same property, same canonical_entity.
+
+  <span class="kw">Pattern 3 — Personal Interest Multiplier:</span>
+    Same as Pattern 2 but the entity is tagged <span class="str">"principal_interest"</span>.
+    Fingerprint: Pattern 2 fingerprint + principal_interest tag.
+
+  <span class="kw">Pattern 4 — Anchor Tenant Play:</span>
+    Vacant ground listing transitions to sale shortly after national tenant commits.
+    Fingerprint: listing_type="vacant_ground" + national_tenant_identified + sale
+    close date within 6 months of listing.
+
+For each detected pattern, produce a pattern card with:
+  <span class="prop">pattern_name, canonical_examples (up to 3), fingerprint_match_count</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── 09 · PHASE 6 ICP ──────────────────────────────────────── -->
+      <section class="sec reveal" id="s-p6">
+        <div class="sec-head">
+          <div class="sec-num">09</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Phase 6 · ICP Generation</div>
+            <h2 class="sec-h">Three <em>Ideal Customer Profiles</em>, derived from the data.</h2>
+            <p class="sec-deck">The ICPs aren't invented — they're extracted. Each one is the common-trait synthesis of a cluster of existing Windfield clients, plus explicit match signals and an actionable prospecting step.</p>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-watermark">06</div>
+          <div class="phase-head">
+            <div class="phase-kicker">Phase 06</div>
+            <div class="phase-name">The <em>ICP Synthesis</em></div>
+            <div class="phase-duration">~5 minutes</div>
+          </div>
+          <div class="phase-body">
+            <p>Three profiles are generated — one per customer cluster observed in the data:</p>
+            <ul>
+              <li><strong>ICP 1 — Local Owner-Operator</strong>: derived from the Tier 1 client cohort. Common traits: 3–10 property portfolio, LLC structure, full-lifecycle transactions through Windfield, Barry Rd / Green Hills / Smithville corridor concentration.</li>
+              <li><strong>ICP 2 — National / Regional Tenant</strong>: derived from the pad-site buyer cohort. Common traits: chain expansion in KC metro, 0.5–3 acre site needs, $300K–$2M per-pad budgets, shovel-ready preference.</li>
+              <li><strong>ICP 3 — Emerging Concept / Franchise</strong>: derived from the recurring lease-tenant cohort. Common traits: 1–3 existing KC locations, expansion-mode, 1,000–3,000 SF footprint, $15–$25/SF NNN budget.</li>
+            </ul>
+            <p>For each ICP, the prompt produces: a <strong>profile</strong>, a list of <strong>match signals</strong>, a catalog of <strong>current examples</strong> from existing Windfield clients, and a specific <strong>prospecting action</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── 10 · ARTIFACTS ────────────────────────────────────────── -->
+      <section class="sec reveal" id="s-artifacts">
+        <div class="sec-head">
+          <div class="sec-num">10</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Output Artifacts</div>
+            <h2 class="sec-h">Three formats. <em>Same truth</em>.</h2>
+            <p class="sec-deck">Every pipeline run produces three synchronized outputs — the same underlying data expressed three different ways for three different consumers. Written to <code>/Tommy Saunders/Brokerage Transactions/_Reports/</code>.</p>
+          </div>
+        </div>
+
+        <div class="artifact-grid">
+          <div class="artifact-card">
+            <div class="artifact-ext">CSV</div>
+            <div class="artifact-name">RPT_windfield_master_transaction_ledger_YYYY-MM-DD.csv</div>
+            <div class="artifact-h">The <em>row-level source of truth</em></div>
+            <div class="artifact-desc">15 columns · one row per transaction · every claim in the report traceable back to a specific row here. For finance, audit, and pivot-table analysis. <strong>Opens in Excel.</strong></div>
+            <div class="artifact-foot">15 columns · 250+ rows · ~60 KB</div>
+          </div>
+
+          <div class="artifact-card">
+            <div class="artifact-ext md">MARKDOWN</div>
+            <div class="artifact-name">RPT_windfield_relationship_intelligence_YYYY-MM-DD.md</div>
+            <div class="artifact-h">The <em>portable narrative</em></div>
+            <div class="artifact-desc">Same content as the HTML report, rendered as plain markdown. <strong>Git-friendly, AI-native, diffable.</strong> Editable in any text editor. The canonical source for re-rendering into any other format.</div>
+            <div class="artifact-foot">19 sections · ~45 KB</div>
+          </div>
+
+          <div class="artifact-card">
+            <div class="artifact-ext html">HTML</div>
+            <div class="artifact-name">RPT_windfield_relationship_intelligence_YYYY-MM-DD.html</div>
+            <div class="artifact-h">The <em>branded landing page</em></div>
+            <div class="artifact-desc">Single-file, self-contained, mobile responsive. Windfield brand system. <strong>What gets shared with Andrew.</strong> Opens in any browser, prints to PDF cleanly.</div>
+            <div class="artifact-foot">Standalone · ~121 KB · print-ready</div>
+          </div>
+        </div>
+
+        <h3 class="sub-h">The CSV ledger schema</h3>
+        <div class="code-block">
+          <div class="code-head">
+            <span class="code-lang">CSV</span>
+            <span class="code-file">RPT_windfield_master_transaction_ledger_YYYY-MM-DD.csv · 15 columns</span>
+            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+          </div>
+<pre class="code-body"><span class="prop">Property Name</span>, <span class="prop">Property Address</span>, <span class="prop">Transaction Date</span>, <span class="prop">Transaction Type</span>,
+<span class="prop">Status</span>, <span class="prop">Price</span>, <span class="prop">WRE Agent</span>, <span class="prop">Corresponding Broker</span>,
+<span class="prop">Corresponding Brokerage</span>, <span class="prop">Seller/Landlord</span>, <span class="prop">Buyer/Tenant</span>,
+<span class="prop">Commission</span>, <span class="prop">Dropbox Reference Folder</span>, <span class="prop">Contract Link</span>, <span class="prop">Notes</span>
+
+<span class="cmt"># Notes field flags:</span>
+<span class="cmt">#   PRINCIPAL_INTEREST  — Danner entity on at least one side</span>
+<span class="cmt">#   ESTIMATED_COMMISSION — commission computed from price × GCI rate</span>
+<span class="cmt">#   NEEDS_HUMAN_REVIEW  — reconciliation conflict not resolvable</span>
+<span class="cmt">#   T1_CLIENT / T2_CLIENT / T3_WHALE — tier assignment</span>
+<span class="cmt">#   PATTERN_{1-4}       — pattern match (one deal may match multiple)</span></pre>
+        </div>
+
+        <h3 class="sub-h">The Markdown artifact — sample section</h3>
+        <p style="font-size:14px;color:var(--wf-fg-muted);margin-bottom:12px;line-height:1.65;font-weight:300">The Markdown version is byte-identical to the HTML in content — only the presentation differs. Here's what Section 03 (Tier 1 Clients) looks like as raw markdown:</p>
+
+        <div class="code-block">
+          <div class="code-head">
+            <span class="code-lang md">Markdown</span>
+            <span class="code-file">RPT_windfield_relationship_intelligence_2026-04-22.md · excerpt</span>
+            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+          </div>
+<pre class="code-body"><span class="kw">## Section 03 · The Inner Circle — Tier 1 Clients</span>
+
+<span class="cmt">**Six relationships run the revenue engine.**</span>
+
+Clients with five or more transactions. Together they represent the
+brokerage's core commission base and the highest-leverage relationship
+investments going forward.
+
+<span class="kw">### KCPI — Kansas City Properties &amp; Investments LLC</span>
+
+- <span class="prop">**Contact:**</span> C. Shane Crees
+- <span class="prop">**Role:**</span> Buyer AND Seller
+- <span class="prop">**Volume:**</span> $12M+
+- <span class="prop">**Transactions:**</span> 10+
+- <span class="prop">**Key properties:**</span> Buckners · 1501 S 169 · Richardson Plaza ·
+  Fairview North · Shoppes of Smithville · 1705 Johnson Industrial ·
+  Stewart Commercial Park
+
+<span class="kw">### CKC Holdings LLC</span>
+
+- <span class="prop">**Contact:**</span> Sandy Knoernschild
+- <span class="prop">**Role:**</span> Buyer AND Seller
+- <span class="prop">**Volume:**</span> $15M+
+- <span class="prop">**Transactions:**</span> 8+
+- <span class="prop">**Key properties:**</span> GH14 Lot 4 ($3.06M) · Kelly Crossing ($2.15M) ·
+  Creekside ($2.5M) · Hwy N Storage ($2.1M) · 7600 Roanridge ($3.1M) ·
+  North Brighton ($1.04M) · Staley Storage ($2M pending)
+
+<span class="cmt"># ... continues for all 6 Tier 1 entities ...</span></pre>
+        </div>
+
+        <div class="takeaway">
+          <div class="takeaway-l">Why three formats</div>
+          <div class="takeaway-t">Each format serves a different consumer. <strong>Andrew opens the HTML</strong> — it's what he sees in his browser and what he'll email externally. <strong>Tommy edits the Markdown</strong> — it's git-trackable, diffable, and the source for any future re-rendering. <strong>The bookkeeper pivots the CSV</strong> — because commission analysis is still a spreadsheet problem. Three formats mean zero format-driven information loss.</div>
+        </div>
+      </section>
+
+      <!-- ─── 11 · MCP SERVER ───────────────────────────────────────── -->
+      <section class="sec reveal" id="s-server">
+        <div class="sec-head">
+          <div class="sec-num">11</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">The MCP Server Surface</div>
+            <h2 class="sec-h">The report as <em>a queryable API</em>.</h2>
+            <p class="sec-deck">The artifacts sit in Dropbox, but a Windfield-hosted MCP server exposes them as structured endpoints — meaning external AI agents (Andrew's own Claude, partners running their own agents, AEO-ready search crawlers) can query specific facets of the report directly.</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          <p>Instead of <em>asking another AI to download and parse a PDF</em>, the MCP server lets an agent call <code>get_tier_1_clients()</code> and receive structured JSON. Instead of web-scraping the HTML to find the LTV:CAC ratio, an agent calls <code>get_kpi(name="ltv_cac")</code>. This is what "AEO-ready" actually means operationally.</p>
+        </div>
+
+        <h3 class="sub-h">The server manifest</h3>
+
+        <div class="code-block">
+          <div class="code-head">
+            <span class="code-lang json">JSON</span>
+            <span class="code-file">windfield-intelligence-mcp.manifest.json</span>
+            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+          </div>
+<pre class="code-body">{
+  <span class="prop">"name"</span>: <span class="str">"windfield-intelligence"</span>,
+  <span class="prop">"version"</span>: <span class="str">"1.0.0"</span>,
+  <span class="prop">"description"</span>: <span class="str">"Windfield Real Estate relationship intelligence — queryable."</span>,
+  <span class="prop">"source"</span>: {
+    <span class="prop">"type"</span>: <span class="str">"dropbox"</span>,
+    <span class="prop">"path"</span>: <span class="str">"/Tommy Saunders/Brokerage Transactions/_Reports/"</span>,
+    <span class="prop">"refresh_cadence"</span>: <span class="str">"monthly"</span>
+  },
+  <span class="prop">"tools"</span>: [
+    {
+      <span class="prop">"name"</span>: <span class="str">"get_tier_1_clients"</span>,
+      <span class="prop">"description"</span>: <span class="str">"Returns the six Tier 1 client cards."</span>,
+      <span class="prop">"input_schema"</span>: {},
+      <span class="prop">"output_schema"</span>: <span class="str">"TierClientCard[]"</span>
+    },
+    {
+      <span class="prop">"name"</span>: <span class="str">"get_tier_2_clients"</span>,
+      <span class="prop">"description"</span>: <span class="str">"Returns Tier 2 client cards (3-4 transactions)."</span>,
+      <span class="prop">"input_schema"</span>: {},
+      <span class="prop">"output_schema"</span>: <span class="str">"TierClientCard[]"</span>
+    },
+    {
+      <span class="prop">"name"</span>: <span class="str">"search_transactions"</span>,
+      <span class="prop">"description"</span>: <span class="str">"Full-text search across the master ledger."</span>,
+      <span class="prop">"input_schema"</span>: { <span class="prop">"query"</span>: <span class="str">"string"</span>, <span class="prop">"limit"</span>: <span class="str">"number"</span> },
+      <span class="prop">"output_schema"</span>: <span class="str">"TransactionRow[]"</span>
+    },
+    {
+      <span class="prop">"name"</span>: <span class="str">"get_pattern"</span>,
+      <span class="prop">"description"</span>: <span class="str">"Get detailed pattern description and examples."</span>,
+      <span class="prop">"input_schema"</span>: { <span class="prop">"name"</span>: <span class="str">"'subdivide'|'recycler'|'principal'|'anchor'"</span> },
+      <span class="prop">"output_schema"</span>: <span class="str">"Pattern"</span>
+    },
+    {
+      <span class="prop">"name"</span>: <span class="str">"get_icp"</span>,
+      <span class="prop">"description"</span>: <span class="str">"Get an Ideal Customer Profile by id (1, 2, or 3)."</span>,
+      <span class="prop">"input_schema"</span>: { <span class="prop">"id"</span>: <span class="str">"number"</span> },
+      <span class="prop">"output_schema"</span>: <span class="str">"ICPProfile"</span>
+    },
+    {
+      <span class="prop">"name"</span>: <span class="str">"get_kpi_scorecard"</span>,
+      <span class="prop">"description"</span>: <span class="str">"Current KPIs with baselines and 2027 targets."</span>,
+      <span class="prop">"input_schema"</span>: {},
+      <span class="prop">"output_schema"</span>: <span class="str">"KPIScorecard"</span>
+    }
+  ]
+}</pre>
+        </div>
+
+        <h3 class="sub-h">Exposed endpoints</h3>
+
+        <div class="endpoint-grid">
+          <div class="endpoint">
+            <div class="endpoint-method">get_tier_1_clients()</div>
+            <div class="endpoint-desc">Returns <strong>six client cards</strong> — KCPI, CKC, Danner Entities, Walker LaBrunerie, Barry Plaza Shoppes, Kuehl Capital. Each with volume, count, role, key properties.</div>
+            <div class="endpoint-type read">Read</div>
+          </div>
+          <div class="endpoint">
+            <div class="endpoint-method">get_tier_2_clients()</div>
+            <div class="endpoint-desc">Returns <strong>10 recurring client cards</strong>. Second-ring relationships with 3-4 transactions each.</div>
+            <div class="endpoint-type read">Read</div>
+          </div>
+          <div class="endpoint">
+            <div class="endpoint-method">search_transactions(query, limit)</div>
+            <div class="endpoint-desc">Full-text search across the master ledger. Example: <code>search_transactions("Tiki Taco", 10)</code> returns all Eric Knott deals with source document links.</div>
+            <div class="endpoint-type search">Search</div>
+          </div>
+          <div class="endpoint">
+            <div class="endpoint-method">get_pattern(name)</div>
+            <div class="endpoint-desc">Returns structured description and up to 3 canonical examples for one of the four Windfield patterns. <strong>Use to explain the commission model.</strong></div>
+            <div class="endpoint-type read">Read</div>
+          </div>
+          <div class="endpoint">
+            <div class="endpoint-method">get_icp(id)</div>
+            <div class="endpoint-desc">Returns ICP profile by ID (1=Local Owner-Operator, 2=National Tenant, 3=Emerging Concept). Includes profile, signals, current examples, prospecting action.</div>
+            <div class="endpoint-type read">Read</div>
+          </div>
+          <div class="endpoint">
+            <div class="endpoint-method">get_kpi_scorecard()</div>
+            <div class="endpoint-desc">Returns the 7-metric current-vs-target scorecard: annual volume, repeat rate, avg commission, lease count, co-broker count, outside-Northland %, new-client acquisition.</div>
+            <div class="endpoint-type read">Read</div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="callout-l">Why this matters strategically</div>
+          <div class="callout-t">When Andrew's personal Claude is asked "what are Windfield's top clients?", it doesn't guess — it calls <code>get_tier_1_clients()</code> and returns accurate, audited data. When a partner broker's Claude wants to know if Windfield has pad sites available for a national QSR client, it calls <code>get_pattern("anchor")</code> and gets the current inventory framing. <strong>The report stops being a PDF and starts being infrastructure.</strong></div>
+        </div>
+      </section>
+
+      <!-- ─── 12 · QUALITY GATES ────────────────────────────────────── -->
+      <section class="sec reveal" id="s-gates">
+        <div class="sec-head">
+          <div class="sec-num">12</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Quality Gates &amp; Refresh Cadence</div>
+            <h2 class="sec-h">Ten checks. <em>Every run</em>. No exceptions.</h2>
+            <p class="sec-deck">Before any artifact is written to Dropbox, the pipeline runs a 10-point completion checklist. A single failure halts the pipeline and surfaces the issue to the operator.</p>
+          </div>
+        </div>
+
+        <div class="checklist">
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">01</div><div class="check-body">All <strong>8 year folders</strong> enumerated (2018–2026). No pagination cursors left unresolved.</div></div>
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">02</div><div class="check-body">All transactions reconciled — <strong>no unflagged source discrepancies</strong> in the ledger.</div></div>
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">03</div><div class="check-body">Entity normalization applied <strong>consistently</strong> — a spot-check sample of 20 random rows confirms canonical IDs match the rule set.</div></div>
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">04</div><div class="check-body">All <strong>Tier 1 clients</strong> have ≥5 verified transactions each. No entity promoted with under-documented deals.</div></div>
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">05</div><div class="check-body">Commission amounts <strong>cross-checked</strong> against commission statements where available. Estimated commissions clearly flagged.</div></div>
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">06</div><div class="check-body"><strong>Principal Interest tag</strong> applied to all Danner-controlled transactions. No Danner-entity deal untagged.</div></div>
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">07</div><div class="check-body">Geographic concentration computed correctly. <strong>Sum of market shares equals 100%</strong> ± 0.5% rounding.</div></div>
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">08</div><div class="check-body">Co-brokerage partner list <strong>complete</strong> — all distinct corresponding brokerages represented, not just the largest.</div></div>
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">09</div><div class="check-body">Markdown and HTML outputs both <strong>render without errors</strong> — HTML validates, MD passes linter, no broken internal links.</div></div>
+          <div class="check-item"><div class="check-mark">&#10003;</div><div class="check-n">10</div><div class="check-body">Markdown and HTML are <strong>content-synced</strong> — same data, different presentation. Same version number. Same timestamp.</div></div>
+        </div>
+
+        <h3 class="sub-h">Refresh cadence</h3>
+
+        <div class="ops-grid">
+          <div class="ops"><div class="ops-k">Monthly</div><div class="ops-v">Full re-run</div><div class="ops-l">First business day of each month · catches all deals closed in the prior month · committed to git with version bump</div></div>
+          <div class="ops"><div class="ops-k">Event-driven</div><div class="ops-v">On $1M+ close</div><div class="ops-l">Any deal closed at $1M+ triggers an incremental refresh within 48 hours — especially for whale deals that move the annual totals</div></div>
+          <div class="ops"><div class="ops-k">Quarterly</div><div class="ops-v">Deep audit</div><div class="ops-l">Full re-run plus manual spot-check of 10 random transactions against source PDFs · confirms pipeline hasn't drifted</div></div>
+          <div class="ops"><div class="ops-k">Versioning</div><div class="ops-v">Semver · v1.2.3</div><div class="ops-l">Major = prompt structural change · Minor = data refresh · Patch = bug fix or clarification edit</div></div>
+        </div>
+      </section>
+
+      <!-- ─── 13 · OPERATIONS ───────────────────────────────────────── -->
+      <section class="sec reveal" id="s-ops" style="border-bottom:none">
+        <div class="sec-head">
+          <div class="sec-num">13</div>
+          <div class="sec-head-text">
+            <div class="sec-kicker">Operations &amp; Contacts</div>
+            <h2 class="sec-h">Who <em>owns</em> what.</h2>
+          </div>
+        </div>
+
+        <div class="ops-grid">
+          <div class="ops"><div class="ops-k">Pipeline Owner</div><div class="ops-v">Tommy Saunders</div><div class="ops-l">Intelligent Operations AI · designs, runs, maintains the workflow · tommy@intelligentoperations.ai</div></div>
+          <div class="ops"><div class="ops-k">Output Reviewer</div><div class="ops-v">Andrew Danner</div><div class="ops-l">Broker/Owner · reviews each refresh before external distribution · Andrew@windfieldrealestate.com</div></div>
+          <div class="ops"><div class="ops-k">Monthly SLA</div><div class="ops-v">3 biz days</div><div class="ops-l">First business day of month → artifacts published to Dropbox by end of third business day</div></div>
+          <div class="ops"><div class="ops-k">Escalation</div><div class="ops-v"><em>Halt &amp; flag</em></div><div class="ops-l">Pipeline never auto-continues on a quality-gate failure · operator reviews before any manual override</div></div>
+        </div>
+
+        <h3 class="sub-h">Related documents</h3>
+
+        <div class="related">
+          <div class="related-card">
+            <div class="related-k">Master Prompt</div>
+            <div class="related-file">TPL_windfield_5yr_brokerage_analysis_master_prompt.md</div>
+            <div class="related-desc">The full 441-line master prompt used by Claude Code to run the pipeline end-to-end. All phase prompts above are sections of this master.</div>
+          </div>
+          <div class="related-card">
+            <div class="related-k">Intelligence Report</div>
+            <div class="related-file">RPT_windfield_relationship_intelligence_2026-04-22.html</div>
+            <div class="related-desc">The latest output artifact — the branded HTML landing page produced by this workflow. What gets shared externally.</div>
+          </div>
+          <div class="related-card">
+            <div class="related-k">Economic Impact Model</div>
+            <div class="related-file">RPT_windfield_economic_impact_2026-04-22.html</div>
+            <div class="related-desc">Paired deliverable — prices the cost of building and running the full Windfield IO platform (of which this workflow is one module).</div>
+          </div>
+          <div class="related-card">
+            <div class="related-k">Dropbox Operations Guide</div>
+            <div class="related-file">IO_Dropbox_Operations_Guide.md</div>
+            <div class="related-desc">Folder structure conventions and naming prefixes (<code>PRJ_</code>, <code>RPT_</code>, <code>TPL_</code>, etc.) that this pipeline adheres to.</div>
+          </div>
+        </div>
+
+        <h3 class="sub-h">Methodology notes</h3>
+
+        <div class="prose">
+          <p>The pipeline is prompt-decomposed, not monolithic — each phase has its own single-responsibility prompt with its own quality gate. This is the same pattern the IO Article Library uses for generating long-form content: a weak Phase 5 output doesn't contaminate Phase 6 because Phase 6 receives only the Phase 5 output plus its own brief, not the cumulative conversation.</p>
+          <p>All extraction is <strong>evidence-first</strong>. Every field in the ledger traces back to a specific source document via the <code>Dropbox Reference Folder</code> and <code>Contract Link</code> columns. The narrative report (HTML and MD) never states a number that doesn't appear verbatim in at least one source document. If the model wants to claim a pattern or trend that isn't directly evidenced, it's downgraded to a "framed observation" in the narrative rather than a factual claim.</p>
+          <p>The pipeline is <strong>designed to be re-runnable indefinitely</strong>. Nothing about the current run is hardcoded except paths and the six canonical-entity rules — those are the only pieces of prior knowledge the workflow needs. Everything else is derived from the source data at runtime. If Windfield's relationship map shifts (new Tier 1 emerges, existing one fades), the next run captures it automatically. <em>The workflow is built to last longer than any specific insight it produces.</em></p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">
+          <span class="footer-mark-w">Windfield</span>
+          <span class="footer-mark-re">Operations</span>
+        </div>
+        <div class="footer-tag">Intelligence Workflow · Runbook · v1.0</div>
+        <div class="footer-addr">
+          <strong>Pipeline-of-record for the Relationship Intelligence Report.</strong><br>
+          Built and maintained by Intelligent Operations AI<br>
+          for Windfield Real Estate, LLC<br>
+          North Kansas City, MO
+        </div>
+      </div>
+      <div class="footer-meta">
+        <div><div class="fm-k">Pipeline Owner</div><div class="fm-v"><strong>Tommy Saunders</strong> · Intelligent Operations AI<br>intelligentoperations.ai</div></div>
+        <div><div class="fm-k">Stakeholder</div><div class="fm-v"><strong>Andrew Danner</strong> · Broker/Owner, Windfield<br>Andrew@windfieldrealestate.com</div></div>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <div class="footer-prepared">Prepared by Intelligent Operations AI · April 22, 2026</div>
+      <div class="footer-legal-v">
+        <span>Internal · Operations</span>
+        <span>·</span>
+        <span>Runbook v1.0</span>
+        <span>·</span>
+        <span>Companion to RPT_windfield_relationship_intelligence</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ─── BEHAVIOR ────────────────────────────────────────────────────── -->
+<script>
+(function(){
+  /* ─── Copy code button ──────────────────────────────────────────── */
+  window.copyCode = function(btn) {
+    const block = btn.closest('.code-block');
+    const code = block.querySelector('.code-body');
+    if (code) {
+      navigator.clipboard.writeText(code.textContent).then(function(){
+        btn.textContent = 'Copied';
+        setTimeout(function(){ btn.textContent = 'Copy'; }, 1800);
+      });
+    }
+  };
+
+  /* ─── Desktop TOC click ─────────────────────────────────────────── */
+  var tocItems = document.querySelectorAll('.toc-item');
+  tocItems.forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      var targetId = item.getAttribute('data-target');
+      var target = document.getElementById(targetId);
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 72, behavior: 'smooth' });
+      }
+    });
+  });
+
+  /* ─── Mobile TOC drawer ─────────────────────────────────────────── */
+  document.querySelectorAll('.mobile-toc-item').forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      var targetId = item.getAttribute('data-target');
+      var target = document.getElementById(targetId);
+      if (target) {
+        e.preventDefault();
+        var drawer = document.querySelector('.mobile-toc');
+        if (drawer && drawer.open) drawer.open = false;
+        setTimeout(function() {
+          window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 64, behavior: 'smooth' });
+        }, 80);
+      }
+    });
+  });
+
+  /* ─── TOC active-state tracking ─────────────────────────────────── */
+  var sections = Array.from(document.querySelectorAll('.sec[id]'));
+  var tocMap = new Map();
+  tocItems.forEach(function(item) { tocMap.set(item.getAttribute('data-target'), item); });
+
+  function updateActive(){
+    var scrollPos = window.scrollY + 120;
+    var active = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= scrollPos) active = sections[i];
+      else break;
+    }
+    tocItems.forEach(function(i) { i.classList.remove('active'); });
+    var activeItem = tocMap.get(active.id);
+    if (activeItem) {
+      activeItem.classList.add('active');
+      var tocEl = document.getElementById('toc');
+      var rect = activeItem.getBoundingClientRect();
+      var tocRect = tocEl.getBoundingClientRect();
+      if (rect.top < tocRect.top + 40 || rect.bottom > tocRect.bottom - 40) {
+        activeItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) { requestAnimationFrame(function() { updateActive(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+  updateActive();
+
+  /* ─── Scroll reveal via IntersectionObserver ────────────────────── */
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('on'); });
+  }
+})();
+</script>
+
+</body>
+</html>
