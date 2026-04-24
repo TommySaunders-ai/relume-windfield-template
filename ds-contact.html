@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Windfield Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-r-sm: 6px;
+  --wf-r-md: 8px;
+  --wf-r-lg: 12px;
+  --wf-r-xl: 16px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+select { appearance: none; -webkit-appearance: none; }
+
+/* ── Layout ── */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+
+/* ── Typography ── */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--wf-brand);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.heading-xl {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--wf-fg);
+}
+.heading-lg {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--wf-fg);
+}
+.heading-md {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--wf-fg);
+}
+.heading-sm {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--wf-fg);
+}
+.body-text {
+  font-size: 16px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-sm { height: 36px; padding: 0 16px; font-size: 13px; }
+.btn-primary { background: var(--wf-brand); color: var(--wf-brand-fg); }
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-ghost { background: transparent; color: var(--wf-fg-muted); border-color: transparent; }
+.btn-ghost:hover { color: var(--wf-fg); }
+.btn-outline { background: transparent; color: var(--wf-fg); border-color: var(--wf-border-strong); }
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+.btn-full { width: 100%; }
+
+/* ── Navbar ── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(9,9,11,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wf-fg);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.navbar-center {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin: 0 auto;
+}
+.navbar-link {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+  font-weight: 500;
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link.active { color: var(--wf-fg); }
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.mobile-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  color: var(--wf-fg);
+}
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* Mobile menu */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--wf-bg);
+  z-index: 99;
+  padding: 24px 20px;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--wf-border);
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  display: block;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--wf-fg-muted);
+  border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur);
+}
+.mobile-menu a:hover,
+.mobile-menu a.active {
+  color: var(--wf-fg);
+  background: var(--wf-surface);
+}
+.mobile-menu-actions {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--wf-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Hero ── */
+.contact-hero {
+  padding: 72px 0 56px;
+  text-align: center;
+}
+.contact-hero .heading-xl {
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+.contact-hero .body-text {
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: 18px;
+}
+
+/* ── Contact Grid ── */
+.contact-section { padding: 0 0 96px; }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* ── Form Card ── */
+.form-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-xl);
+  padding: 40px;
+}
+.form-card-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--wf-fg);
+  margin-bottom: 28px;
+  letter-spacing: -0.01em;
+}
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--wf-fg);
+  margin-bottom: 8px;
+}
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0 14px;
+  background: var(--wf-bg);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-md);
+  font-size: 14px;
+  color: var(--wf-fg);
+  font-family: var(--font-sans);
+  transition: border-color var(--wf-dur) var(--wf-ease);
+}
+.form-input,
+.form-select { height: 44px; }
+.form-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+.form-select option {
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+}
+.form-textarea {
+  padding: 12px 14px;
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.form-input::placeholder,
+.form-textarea::placeholder { color: var(--wf-fg-faint); }
+.form-select:invalid,
+.form-select .placeholder-opt { color: var(--wf-fg-faint); }
+.form-input:hover,
+.form-select:hover,
+.form-textarea:hover { border-color: var(--wf-border-strong); }
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--wf-brand);
+  box-shadow: 0 0 0 3px var(--wf-brand-muted);
+}
+
+/* ── Contact Info Stack ── */
+.info-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.info-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-xl);
+  padding: 28px;
+  transition: border-color var(--wf-dur) var(--wf-ease);
+}
+.info-card:hover { border-color: var(--wf-border-strong); }
+.info-card-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.info-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--wf-r-md);
+  background: var(--wf-brand-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--wf-brand);
+}
+.info-icon svg { width: 20px; height: 20px; }
+.info-content { flex: 1; min-width: 0; }
+.info-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 4px;
+}
+.info-desc {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.5;
+}
+.info-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--wf-brand);
+  transition: color var(--wf-dur);
+}
+.info-link:hover { color: var(--wf-brand-hover); }
+
+/* CORFAC pulse */
+.corfac-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--wf-brand);
+  position: relative;
+  flex-shrink: 0;
+}
+.pulse-dot::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: var(--wf-brand);
+  opacity: 0.3;
+  animation: pulse-ring 2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.4; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* ── Map Section ── */
+.map-section { padding: 0 0 96px; }
+.map-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.map-header .heading-md { margin-bottom: 8px; }
+.map-frame {
+  border-radius: var(--wf-r-xl);
+  overflow: hidden;
+  border: 1px solid var(--wf-border);
+  background: var(--wf-surface);
+}
+.map-frame iframe {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 0;
+  filter: grayscale(0.8) invert(0.92) contrast(0.85) hue-rotate(180deg);
+}
+.map-address {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--wf-fg-subtle);
+}
+
+/* ── Footer ── */
+.footer {
+  border-top: 1px solid var(--wf-border);
+  padding: 64px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 48px;
+  padding-bottom: 40px;
+}
+.footer-brand-desc {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+.footer-corfac {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--wf-brand);
+  background: var(--wf-brand-muted);
+  padding: 6px 12px;
+  border-radius: var(--wf-r-sm);
+  border: 1px solid var(--wf-brand-border);
+}
+.footer-corfac .pulse-dot-sm {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--wf-brand);
+}
+.footer-col-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-link {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-office-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  line-height: 1.5;
+}
+.footer-office-detail svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--wf-fg-faint);
+  margin-top: 2px;
+}
+.footer-office-detail + .footer-office-detail { margin-top: 12px; }
+.footer-office-detail a {
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+}
+.footer-office-detail a:hover { color: var(--wf-brand); }
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid var(--wf-border);
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+.footer-bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+.footer-bottom-right .pulse-dot-sm {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--wf-brand);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .heading-xl { font-size: 36px; }
+  .heading-lg { font-size: 32px; }
+  .heading-md { font-size: 26px; }
+  .contact-hero { padding: 48px 0 32px; }
+  .contact-hero .body-text { font-size: 16px; }
+  .form-card { padding: 24px; }
+  .navbar-center { display: none; }
+  .navbar-actions { display: none; }
+  .mobile-toggle { display: flex; }
+  .map-frame iframe { height: 280px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Windfield</a>
+    <div class="navbar-center">
+      <a href="property.html" class="navbar-link">Properties</a>
+      <a href="services.html" class="navbar-link">Services</a>
+      <a href="blog-home.html" class="navbar-link">Articles</a>
+      <a href="about.html" class="navbar-link">About</a>
+      <a href="ds-contact.html" class="navbar-link active">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-ghost">Dashboard</a>
+      <a href="#contact-form" class="btn btn-sm btn-primary">Get in Touch</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu" onclick="document.getElementById('mobileMenu').classList.toggle('open')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12h18M3 6h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="property.html">Properties</a>
+  <a href="services.html">Services</a>
+  <a href="blog-home.html">Articles</a>
+  <a href="about.html">About</a>
+  <a href="ds-contact.html" class="active">Contact</a>
+  <div class="mobile-menu-actions">
+    <a href="#" class="btn btn-md btn-outline btn-full">Dashboard</a>
+    <a href="#contact-form" class="btn btn-md btn-primary btn-full">Get in Touch</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="contact-hero">
+  <div class="container">
+    <p class="kicker">Contact Us</p>
+    <h1 class="heading-xl">Get in Touch</h1>
+    <p class="body-text">Whether you are buying, selling, leasing, or developing, our team is ready to help you navigate the Kansas City commercial real estate market.</p>
+  </div>
+</section>
+
+<!-- CONTACT GRID -->
+<section class="contact-section" id="contact-form">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- Left: Form Card -->
+      <div class="form-card">
+        <h2 class="form-card-title">Send Us a Message</h2>
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label class="form-label" for="fullName">Full Name</label>
+            <input type="text" id="fullName" class="form-input" placeholder="John Smith">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input type="email" id="email" class="form-input" placeholder="john@company.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input type="tel" id="phone" class="form-input" placeholder="(555) 123-4567">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="interest">Property Interest</label>
+            <select id="interest" class="form-select">
+              <option value="" disabled selected>Select an interest</option>
+              <option value="buying">Buying Commercial Property</option>
+              <option value="selling">Selling Commercial Property</option>
+              <option value="tenant">Leasing -- Tenant</option>
+              <option value="landlord">Leasing -- Landlord</option>
+              <option value="development">Development Consulting</option>
+              <option value="investment">Investment Services</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Message</label>
+            <textarea id="message" class="form-textarea" placeholder="Tell us about your commercial real estate needs..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-md btn-primary btn-full">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Right: Info Stack -->
+      <div class="info-stack">
+
+        <!-- Office -->
+        <div class="info-card">
+          <div class="info-card-row">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div class="info-content">
+              <div class="info-title">Office</div>
+              <p class="info-desc">1440 Erie Street, Suite A</p>
+              <p class="info-desc">North Kansas City, MO 64116</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="info-card">
+          <div class="info-card-row">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+            </div>
+            <div class="info-content">
+              <div class="info-title">Phone</div>
+              <a href="tel:+18166125191" class="info-link">(816) 612-5191</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="info-card">
+          <div class="info-card-row">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="M22 7l-10 7L2 7"/>
+              </svg>
+            </div>
+            <div class="info-content">
+              <div class="info-title">Email</div>
+              <a href="mailto:info@windfieldrealestate.com" class="info-link">info@windfieldrealestate.com</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- CORFAC -->
+        <div class="info-card">
+          <div class="info-card-row">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20"/>
+                <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+              </svg>
+            </div>
+            <div class="info-content">
+              <div class="corfac-badge">
+                <span class="pulse-dot"></span>
+                <span class="info-title" style="margin-bottom:0">CORFAC International</span>
+              </div>
+              <p class="info-desc">Connected to 70+ markets worldwide through our CORFAC International membership.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP SECTION -->
+<section class="map-section">
+  <div class="container">
+    <div class="map-header">
+      <h2 class="heading-md">Find Our Office</h2>
+    </div>
+    <div class="map-frame">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3096.7!2d-94.573!3d39.133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87c0f05e68c00001%3A0x1!2s1440+Erie+St+Suite+A%2C+North+Kansas+City%2C+MO+64116!5e0!3m2!1sen!2sus!4v1"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Windfield Real Estate Office Location"
+      ></iframe>
+    </div>
+    <p class="map-address">1440 Erie Street, Suite A, North Kansas City, MO 64116</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+
+      <!-- Brand Column -->
+      <div>
+        <div class="navbar-logo" style="margin-bottom:4px">Windfield</div>
+        <p class="footer-brand-desc">Premier commercial real estate development, sales, and leasing in the Kansas City metro area.</p>
+        <div class="footer-corfac">
+          <span class="pulse-dot-sm"></span>
+          CORFAC International
+        </div>
+      </div>
+
+      <!-- Services Column -->
+      <div>
+        <div class="footer-col-title">Services</div>
+        <div class="footer-links">
+          <a href="services.html" class="footer-link">Brokerage</a>
+          <a href="services.html" class="footer-link">Tenant Representation</a>
+          <a href="services.html" class="footer-link">Landlord Representation</a>
+          <a href="services.html" class="footer-link">Development Consulting</a>
+          <a href="services.html" class="footer-link">Investment Services</a>
+        </div>
+      </div>
+
+      <!-- Company Column -->
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-links">
+          <a href="about.html" class="footer-link">About Us</a>
+          <a href="property.html" class="footer-link">Properties</a>
+          <a href="ds-contact.html" class="footer-link">Contact</a>
+        </div>
+      </div>
+
+      <!-- Office Column -->
+      <div>
+        <div class="footer-col-title">Office</div>
+        <div class="footer-office-detail">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span>1440 Erie Street, Suite A<br>North Kansas City, MO 64116</span>
+        </div>
+        <div class="footer-office-detail">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+          <a href="tel:+18166125191">(816) 612-5191</a>
+        </div>
+        <div class="footer-office-detail">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M22 7l-10 7L2 7"/>
+          </svg>
+          <a href="mailto:info@windfieldrealestate.com">info@windfieldrealestate.com</a>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      <span>2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div class="footer-bottom-right">
+        <span class="pulse-dot-sm"></span>
+        <span>CORFAC International &mdash; 70+ Markets Worldwide</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Windfield Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;
+  --wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;
+  --wf-brand-muted:rgba(29,185,84,0.10);
+  --wf-brand-border:rgba(29,185,84,0.20);
+  --wf-brand-border-strong:rgba(29,185,84,0.35);
+  --wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;
+  --wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;
+  --wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;
+  --wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;
+  --wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-r-xl:16px;
+  --wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+img{max-width:100%;display:block}
+
+/* ── Layout ── */
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.section{padding:80px 0}
+.text-center{text-align:center}
+
+/* ── Typography ── */
+.kicker{font-size:14px;font-weight:600;color:var(--wf-brand);letter-spacing:0.02em;margin-bottom:12px}
+.heading-xl{font-size:48px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:var(--wf-fg)}
+.heading-lg{font-size:40px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:var(--wf-fg)}
+.heading-md{font-size:32px;font-weight:700;letter-spacing:-0.015em;line-height:1.2;color:var(--wf-fg)}
+.heading-sm{font-size:20px;font-weight:600;letter-spacing:-0.01em;line-height:1.3;color:var(--wf-fg)}
+.body-text{font-size:16px;color:var(--wf-fg-muted);line-height:1.6}
+.body-sm{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+.mono{font-family:var(--font-mono)}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}
+.btn-sm{height:36px;padding:0 16px;font-size:13px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}.link-arrow:hover{gap:10px}.link-arrow svg{width:16px;height:16px}
+
+/* ── Navbar ── */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(9,9,11,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:4px}
+.navbar-link:hover{color:var(--wf-fg)}.navbar-link.active{color:var(--wf-fg);font-weight:500}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}.mobile-toggle svg{width:24px;height:24px}
+
+/* ── Hero ── */
+.about-hero{padding:80px 0 64px;text-align:center}
+.about-hero .kicker{margin-bottom:16px}
+.about-hero .heading-xl{max-width:780px;margin:0 auto 20px}
+.about-hero .body-text{max-width:640px;margin:0 auto}
+
+/* ── Mission ── */
+.mission{padding:64px 0 80px;border-top:1px solid var(--wf-border)}
+.mission-inner{max-width:720px;margin:0 auto;text-align:center}
+.mission-inner .heading-lg{margin-bottom:20px}
+.mission-inner .body-text{margin-bottom:16px}
+
+/* ── Value Props ── */
+.values{padding:0 0 80px}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.value-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;transition:all var(--wf-dur) var(--wf-ease)}
+.value-card:hover{border-color:var(--wf-border-strong);transform:translateY(-2px)}
+.value-icon{width:48px;height:48px;border-radius:var(--wf-r-lg);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--wf-brand)}
+.value-icon svg{width:24px;height:24px}
+.value-title{font-size:20px;font-weight:600;color:var(--wf-fg);margin-bottom:10px;letter-spacing:-0.01em}
+.value-desc{font-size:14px;color:var(--wf-fg-muted);line-height:1.6}
+
+/* ── CORFAC ── */
+.corfac{padding:80px 0;border-top:1px solid var(--wf-border)}
+.corfac-inner{text-align:center}
+.corfac-inner .heading-lg{margin-bottom:16px}
+.corfac-inner .body-text{max-width:640px;margin:0 auto 40px}
+.corfac-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:480px;margin:0 auto 32px}
+.corfac-pill{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-md);padding:14px 16px;text-align:center;transition:border-color var(--wf-dur)}
+.corfac-pill:hover{border-color:var(--wf-border-strong)}
+.corfac-pill-num{font-size:24px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em;line-height:1}
+.corfac-pill-label{font-size:13px;color:var(--wf-fg-muted);margin-top:4px}
+.corfac-pill.highlight{border-color:var(--wf-brand-border-strong);background:var(--wf-brand-muted)}
+.corfac-pill.highlight .corfac-pill-num{color:var(--wf-brand)}
+
+/* ── Team ── */
+.team{padding:80px 0;border-top:1px solid var(--wf-border)}
+.team-header{text-align:center;margin-bottom:48px}
+.team-header .heading-lg{margin-bottom:12px}
+.team-header .body-text{max-width:560px;margin:0 auto}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.team-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:24px;transition:all var(--wf-dur) var(--wf-ease)}
+.team-card:hover{border-color:var(--wf-border-strong);transform:translateY(-1px)}
+.team-avatar{aspect-ratio:1;width:100%;background:var(--wf-surface-active);border-radius:var(--wf-r-md);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:24px;font-weight:700;color:var(--wf-fg-faint);letter-spacing:-0.02em}
+.team-name{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:4px}
+.team-role{font-size:14px;color:var(--wf-fg-muted);margin-bottom:12px}
+.team-phone{font-size:13px;color:var(--wf-fg-subtle);font-family:var(--font-mono);margin-bottom:12px}
+.team-social{display:flex;gap:8px}
+.team-social-btn{width:32px;height:32px;border-radius:var(--wf-r-sm);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;color:var(--wf-fg-subtle);transition:all var(--wf-dur)}
+.team-social-btn:hover{border-color:var(--wf-brand-border);color:var(--wf-brand);background:var(--wf-brand-muted)}
+.team-social-btn svg{width:16px;height:16px}
+
+/* ── Office ── */
+.office{padding:80px 0;border-top:1px solid var(--wf-border)}
+.office-header{text-align:center;margin-bottom:48px}
+.office-header .heading-lg{margin-bottom:12px}
+.office-header .body-text{max-width:480px;margin:0 auto}
+.office-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:stretch}
+.office-info{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:32px;display:flex;flex-direction:column;gap:20px}
+.office-detail{display:flex;align-items:flex-start;gap:12px}
+.office-detail-icon{width:40px;height:40px;flex-shrink:0;border-radius:var(--wf-r-md);background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;color:var(--wf-brand)}
+.office-detail-icon svg{width:20px;height:20px}
+.office-detail-label{font-size:12px;font-weight:600;color:var(--wf-fg-subtle);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
+.office-detail-value{font-size:14px;color:var(--wf-fg-muted);line-height:1.5}
+.office-detail-value a{color:var(--wf-fg-muted);transition:color var(--wf-dur)}.office-detail-value a:hover{color:var(--wf-brand)}
+.office-cta{margin-top:auto;padding-top:8px}
+.office-map{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;min-height:360px}
+.office-map svg{width:64px;height:64px;color:var(--wf-fg-faint)}
+
+/* ── Footer ── */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-brand{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em;margin-bottom:12px}
+.footer-brand-desc{font-size:13px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:12px}
+.footer-brand-corfac{font-size:12px;color:var(--wf-fg-subtle);line-height:1.5}
+.footer-col-title{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-link{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur);display:flex;align-items:center;gap:8px}.footer-link:hover{color:var(--wf-fg)}
+.footer-link svg{width:16px;height:16px;flex-shrink:0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .values-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+  .office-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .corfac-grid{max-width:400px}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .section{padding:56px 0}
+  .heading-xl{font-size:36px}.heading-lg{font-size:32px}.heading-md{font-size:26px}
+  .navbar-links{display:none}.mobile-toggle{display:flex}
+  .about-hero{padding:56px 0 48px}
+  .mission,.values,.corfac,.team,.office{padding:56px 0}
+  .values-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:1fr}
+  .corfac-grid{grid-template-columns:repeat(3,1fr);max-width:100%}
+  .office-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Windfield</a>
+    <div class="navbar-links">
+      <a href="property-listing.html" class="navbar-link">Properties</a>
+      <a href="services.html" class="navbar-link">Services</a>
+      <a href="blog-home.html" class="navbar-link">Articles</a>
+      <a href="ds-about.html" class="navbar-link active">About</a>
+      <a href="contact.html" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-outline">Dashboard</a>
+      <a href="contact.html" class="btn btn-sm btn-primary">Get in Touch</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="about-hero">
+  <div class="container">
+    <p class="kicker">About Us</p>
+    <h1 class="heading-xl">Creating Real Value in Commercial Real Estate</h1>
+    <p class="body-text">Windfield Real Estate LLC / CORFAC International is a full-service commercial real estate firm serving the Kansas City metro area. For over 15 years, we have helped clients buy, sell, lease, develop, and invest in properties, tackling complex challenges and finding opportunities others overlook.</p>
+  </div>
+</section>
+
+<!-- ── MISSION ── -->
+<section class="mission">
+  <div class="container">
+    <div class="mission-inner">
+      <p class="kicker">Our Mission</p>
+      <h2 class="heading-lg">Smarter, Faster, Less Costly</h2>
+      <p class="body-text">Continually explore new ideas and technology to make the Sales, Leasing, and Development of Commercial Real Estate easier, faster, and less costly.</p>
+      <p class="body-text" style="margin-top:16px">We believe in a data-driven approach that leverages the latest market insights, technology, and strategic partnerships to deliver measurable results for our clients.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── VALUE PROPS ── -->
+<section class="values">
+  <div class="container">
+    <div class="values-grid">
+
+      <!-- Local Expertise -->
+      <div class="value-card">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3 class="value-title">Local Expertise</h3>
+        <p class="value-desc">Deep knowledge of the Kansas City metro market, from North Kansas City industrial corridors to downtown office spaces and suburban retail centers.</p>
+      </div>
+
+      <!-- Global Reach -->
+      <div class="value-card">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3 class="value-title">Global Reach</h3>
+        <p class="value-desc">As a member of CORFAC International, we connect our clients to a network of commercial real estate professionals in over 70 markets worldwide.</p>
+      </div>
+
+      <!-- Full-Service Approach -->
+      <div class="value-card">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.89 1.45l8 4A2 2 0 0 1 22 7.24v9.53a2 2 0 0 1-1.11 1.79l-8 4a2 2 0 0 1-1.79 0l-8-4a2 2 0 0 1-1.1-1.8V7.24a2 2 0 0 1 1.11-1.79l8-4a2 2 0 0 1 1.78 0z"/><polyline points="2.32 6.16 12 11 21.68 6.16"/><line x1="12" y1="22.76" x2="12" y2="11"/></svg>
+        </div>
+        <h3 class="value-title">Full-Service Approach</h3>
+        <p class="value-desc">From development consulting to investment services, we provide comprehensive support across the entire commercial real estate lifecycle.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CORFAC INTERNATIONAL ── -->
+<section class="corfac">
+  <div class="container">
+    <div class="corfac-inner">
+      <p class="kicker">CORFAC International</p>
+      <h2 class="heading-lg">Connected to 70+ Markets Worldwide</h2>
+      <p class="body-text">CORFAC International is a global network of independently owned commercial real estate firms. Our membership provides clients with seamless access to expert brokerage services across North America and around the world.</p>
+
+      <div class="corfac-grid">
+        <div class="corfac-pill highlight">
+          <div class="corfac-pill-num">70+</div>
+          <div class="corfac-pill-label">Markets</div>
+        </div>
+        <div class="corfac-pill">
+          <div class="corfac-pill-num" style="font-size:16px">Global</div>
+          <div class="corfac-pill-label">Coverage</div>
+        </div>
+        <div class="corfac-pill">
+          <div class="corfac-pill-num" style="font-size:16px">USA</div>
+          <div class="corfac-pill-label">Region</div>
+        </div>
+        <div class="corfac-pill">
+          <div class="corfac-pill-num" style="font-size:16px">Canada</div>
+          <div class="corfac-pill-label">Region</div>
+        </div>
+        <div class="corfac-pill">
+          <div class="corfac-pill-num" style="font-size:16px">Europe</div>
+          <div class="corfac-pill-label">Region</div>
+        </div>
+        <div class="corfac-pill">
+          <div class="corfac-pill-num" style="font-size:16px">Asia</div>
+          <div class="corfac-pill-label">Region</div>
+        </div>
+        <div class="corfac-pill">
+          <div class="corfac-pill-num" style="font-size:14px">Latin America</div>
+          <div class="corfac-pill-label">Region</div>
+        </div>
+        <div class="corfac-pill">
+          <div class="corfac-pill-num" style="font-size:16px">Africa</div>
+          <div class="corfac-pill-label">Region</div>
+        </div>
+        <div class="corfac-pill">
+          <div class="corfac-pill-num" style="font-size:14px">Middle East</div>
+          <div class="corfac-pill-label">Region</div>
+        </div>
+      </div>
+
+      <a href="https://www.corfac.com" target="_blank" rel="noopener" class="link-arrow">
+        Learn more at corfac.com
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ── -->
+<section class="team">
+  <div class="container">
+    <div class="team-header">
+      <p class="kicker">Our Team</p>
+      <h2 class="heading-lg">Meet the People Behind Windfield</h2>
+      <p class="body-text">Our team brings decades of combined experience in commercial real estate development, brokerage, and client service.</p>
+    </div>
+
+    <div class="team-grid">
+
+      <!-- Andrew Danner -->
+      <div class="team-card">
+        <div class="team-avatar">AD</div>
+        <div class="team-name">Andrew Danner</div>
+        <div class="team-role">Broker</div>
+        <div class="team-phone">(816) 612-5191</div>
+        <div class="team-social">
+          <a href="#" class="team-social-btn" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Matthew Danner -->
+      <div class="team-card">
+        <div class="team-avatar">MD</div>
+        <div class="team-name">Matthew Danner</div>
+        <div class="team-role">Development Associate</div>
+        <div class="team-phone">(816) 612-5191</div>
+        <div class="team-social">
+          <a href="#" class="team-social-btn" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Benjamin Nelson CCIM -->
+      <div class="team-card">
+        <div class="team-avatar">BN</div>
+        <div class="team-name">Benjamin Nelson CCIM</div>
+        <div class="team-role">Senior Associate</div>
+        <div class="team-phone">(816) 868-8473</div>
+        <div class="team-social">
+          <a href="#" class="team-social-btn" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Aaron Truax -->
+      <div class="team-card">
+        <div class="team-avatar">AT</div>
+        <div class="team-name">Aaron Truax</div>
+        <div class="team-role">Office Manager</div>
+        <div class="team-phone">(816) 288-6491</div>
+        <div class="team-social">
+          <a href="#" class="team-social-btn" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tom Solon -->
+      <div class="team-card">
+        <div class="team-avatar">TS</div>
+        <div class="team-name">Tom Solon</div>
+        <div class="team-role">Project Architect</div>
+        <div class="team-phone">(913) 523-5646</div>
+        <div class="team-social"></div>
+      </div>
+
+      <!-- Cody Williams -->
+      <div class="team-card">
+        <div class="team-avatar">CW</div>
+        <div class="team-name">Cody Williams</div>
+        <div class="team-role">Controller</div>
+        <div class="team-phone">(816) 263-1485</div>
+        <div class="team-social"></div>
+      </div>
+
+      <!-- Santina Cessor -->
+      <div class="team-card">
+        <div class="team-avatar">SC</div>
+        <div class="team-name">Santina Cessor</div>
+        <div class="team-role">Marketing</div>
+        <div class="team-social"></div>
+      </div>
+
+      <!-- Rick Quakenbush -->
+      <div class="team-card">
+        <div class="team-avatar">RQ</div>
+        <div class="team-name">Rick Quakenbush</div>
+        <div class="team-role">Agent</div>
+        <div class="team-phone">(816) 806-0077</div>
+        <div class="team-social"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── OFFICE LOCATION ── -->
+<section class="office">
+  <div class="container">
+    <div class="office-header">
+      <p class="kicker">Our Office</p>
+      <h2 class="heading-lg">Visit Us in North Kansas City</h2>
+    </div>
+
+    <div class="office-grid">
+
+      <!-- Info Card -->
+      <div class="office-info">
+        <div class="office-detail">
+          <div class="office-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="office-detail-label">Address</div>
+            <div class="office-detail-value">1440 Erie Street, Suite A<br>North Kansas City, MO 64116</div>
+          </div>
+        </div>
+
+        <div class="office-detail">
+          <div class="office-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div>
+            <div class="office-detail-label">Phone</div>
+            <div class="office-detail-value"><a href="tel:+18166125191">(816) 612-5191</a></div>
+          </div>
+        </div>
+
+        <div class="office-detail">
+          <div class="office-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </div>
+          <div>
+            <div class="office-detail-label">Email</div>
+            <div class="office-detail-value"><a href="mailto:info@windfieldrealestate.com">info@windfieldrealestate.com</a></div>
+          </div>
+        </div>
+
+        <div class="office-cta">
+          <a href="contact.html" class="btn btn-md btn-primary" style="width:100%;justify-content:center">
+            Contact Us
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Map Placeholder -->
+      <div class="office-map">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+
+      <!-- Brand Column -->
+      <div>
+        <div class="footer-brand">Windfield</div>
+        <p class="footer-brand-desc">Full-service commercial real estate firm serving the Kansas City metro area for over 15 years.</p>
+        <p class="footer-brand-corfac">Member of CORFAC International</p>
+      </div>
+
+      <!-- Services -->
+      <div>
+        <div class="footer-col-title">Services</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Brokerage</a>
+          <a href="#" class="footer-link">Tenant Representation</a>
+          <a href="#" class="footer-link">Landlord Representation</a>
+          <a href="#" class="footer-link">Development Consulting</a>
+          <a href="#" class="footer-link">Investment Services</a>
+        </div>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-links">
+          <a href="ds-about.html" class="footer-link">About Us</a>
+          <a href="property-listing.html" class="footer-link">Properties</a>
+          <a href="contact.html" class="footer-link">Contact</a>
+        </div>
+      </div>
+
+      <!-- Office -->
+      <div>
+        <div class="footer-col-title">Office</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            1440 Erie Street, Suite A<br>North Kansas City, MO 64116
+          </a>
+          <a href="tel:+18166125191" class="footer-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            (816) 612-5191
+          </a>
+          <a href="mailto:info@windfieldrealestate.com" class="footer-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            info@windfieldrealestate.com
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <span>Member of CORFAC International &mdash; 70+ Markets Worldwide</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

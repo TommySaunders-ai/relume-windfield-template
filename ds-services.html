@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — Windfield Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-r-sm: 6px;
+  --wf-r-md: 8px;
+  --wf-r-lg: 12px;
+  --wf-r-xl: 16px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+
+/* Layout */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+
+/* Typography */
+.kicker {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  color: var(--wf-brand);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.heading-xl {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--wf-fg);
+}
+.heading-lg {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--wf-fg);
+}
+.heading-md {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--wf-fg);
+}
+.body-text {
+  font-size: 16px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-sm { height: 36px; padding: 0 16px; font-size: 13px; }
+.btn-primary { background: var(--wf-brand); color: var(--wf-brand-fg); }
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-outline { background: transparent; color: var(--wf-fg); border-color: var(--wf-border-strong); }
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+.btn-ghost { background: transparent; color: var(--wf-fg-muted); border-color: transparent; }
+.btn-ghost:hover { color: var(--wf-fg); background: var(--wf-surface); }
+
+/* ─── NAVBAR ─── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--wf-bg);
+  border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wf-fg);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+}
+.navbar-link {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link.active { color: var(--wf-fg); }
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 16px;
+}
+.mobile-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  color: var(--wf-fg);
+}
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ─── HERO ─── */
+.hero {
+  padding: 80px 0 96px;
+  text-align: center;
+}
+.hero .kicker { margin-bottom: 16px; }
+.hero .heading-xl {
+  max-width: 760px;
+  margin: 0 auto 20px;
+}
+.hero .body-text {
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 18px;
+}
+
+/* ─── SERVICES GRID ─── */
+.services-section {
+  padding: 0 0 96px;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.services-grid .svc-card:last-child {
+  grid-column: 1 / -1;
+}
+.svc-card {
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-xl);
+  padding: 40px;
+  transition: all var(--wf-dur) var(--wf-ease);
+  display: flex;
+  flex-direction: column;
+}
+.svc-card:hover {
+  border-color: var(--wf-brand-border-strong);
+  transform: translateY(-1px);
+}
+.svc-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.svc-card-num {
+  font-family: var(--font-mono);
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--wf-brand);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.svc-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--wf-r-lg);
+  background: var(--wf-brand-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wf-brand);
+  flex-shrink: 0;
+}
+.svc-card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+.svc-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--wf-fg);
+  margin-bottom: 16px;
+  letter-spacing: -0.015em;
+}
+.svc-card-desc {
+  font-size: 15px;
+  color: var(--wf-fg-muted);
+  line-height: 1.7;
+}
+
+/* ─── CTA SECTION ─── */
+.cta-section {
+  padding: 96px 0;
+}
+.cta-inner {
+  background: var(--wf-bg-elevated);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-xl);
+  padding: 64px;
+  text-align: center;
+}
+.cta-inner .heading-lg {
+  margin-bottom: 16px;
+}
+.cta-inner .body-text {
+  max-width: 560px;
+  margin: 0 auto 32px;
+}
+.cta-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* ─── FOOTER ─── */
+.footer {
+  border-top: 1px solid var(--wf-border);
+  padding: 56px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+}
+.footer-brand {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wf-fg);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.footer-bio {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  max-width: 320px;
+}
+.footer-corfac {
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+  line-height: 1.5;
+  padding-top: 16px;
+  border-top: 1px solid var(--wf-border);
+  margin-top: 4px;
+}
+.footer-col-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 16px;
+}
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-link {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-link svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--wf-fg-faint);
+}
+.footer-office-item {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.footer-office-item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--wf-fg-faint);
+  margin-top: 3px;
+}
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid var(--wf-border);
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+.footer-legal a {
+  color: var(--wf-fg-subtle);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--wf-dur);
+}
+.footer-legal a:hover { color: var(--wf-fg); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .services-grid .svc-card:last-child { grid-column: auto; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .cta-inner { padding: 48px 32px; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .heading-xl { font-size: 36px; }
+  .heading-lg { font-size: 32px; }
+  .heading-md { font-size: 26px; }
+  .hero { padding: 56px 0 64px; }
+  .hero .body-text { font-size: 16px; }
+  .navbar-links { display: none; }
+  .mobile-toggle { display: flex; }
+  .cta-btns { flex-direction: column; align-items: center; }
+  .cta-inner { padding: 40px 24px; }
+  .svc-card { padding: 32px; }
+  .svc-card-num { font-size: 28px; }
+  .svc-card-title { font-size: 20px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Windfield</a>
+    <div class="navbar-links">
+      <a href="property.html" class="navbar-link">Properties</a>
+      <a href="ds-services.html" class="navbar-link active">Services</a>
+      <a href="wf-article.html" class="navbar-link">Articles</a>
+      <a href="about.html" class="navbar-link">About</a>
+      <a href="contact-us.html" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="#" class="btn btn-sm btn-ghost">Dashboard</a>
+      <a href="contact-us.html" class="btn btn-sm btn-primary">Get in Touch</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <p class="kicker">Our Services</p>
+    <h1 class="heading-xl">Comprehensive Commercial Real Estate Solutions</h1>
+    <p class="body-text">From acquisition through disposition, Windfield Real Estate delivers strategic guidance across every phase of the commercial real estate lifecycle.</p>
+  </div>
+</section>
+
+<!-- SERVICES GRID -->
+<section class="services-section">
+  <div class="container">
+    <div class="services-grid">
+
+      <!-- Card 01 — Brokerage -->
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <span class="svc-card-num">01</span>
+          <div class="svc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="svc-card-title">Brokerage</h3>
+        <p class="svc-card-desc">We guide buyers, sellers, lessors, and lessees through every step of the commercial real estate process. From first call to closing, our team provides strategic insight and smart solutions, identifying opportunities that others may overlook. Whether you are acquiring property, selling an asset, or managing a lease, Windfield ensures the process is smooth, efficient, and results-oriented.</p>
+      </div>
+
+      <!-- Card 02 — Tenant Representation -->
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <span class="svc-card-num">02</span>
+          <div class="svc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="svc-card-title">Tenant Representation</h3>
+        <p class="svc-card-desc">Finding the right space is only the first step. Windfield Real Estate LLC helps tenants evaluate options, negotiate favorable terms, and navigate the leasing process with confidence. Leveraging strong relationships with landlords and brokers, we make the leasing experience simple and productive, ensuring every deal aligns with your business goals.</p>
+      </div>
+
+      <!-- Card 03 — Landlord Representation -->
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <span class="svc-card-num">03</span>
+          <div class="svc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+        </div>
+        <h3 class="svc-card-title">Landlord Representation</h3>
+        <p class="svc-card-desc">We help property owners attract quality tenants at market rates, maximizing returns and minimizing headaches. From marketing listings to screening tenants and managing negotiations, Windfield Real Estate LLC provides professional, reliable, and results-focused representation at every stage.</p>
+      </div>
+
+      <!-- Card 04 — Development Consulting -->
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <span class="svc-card-num">04</span>
+          <div class="svc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 10-4-4L2 18z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="svc-card-title">Development Consulting</h3>
+        <p class="svc-card-desc">Commercial development projects can be complex, with many moving parts. Windfield Real Estate LLC guides owners and tenants through every stage, from pre-development planning to project completion. We identify risks, find solutions, and manage the details so our clients can focus on their business while we ensure projects move forward efficiently and successfully.</p>
+      </div>
+
+      <!-- Card 05 — Investment Services -->
+      <div class="svc-card">
+        <div class="svc-card-header">
+          <span class="svc-card-num">05</span>
+          <div class="svc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="svc-card-title">Investment Services</h3>
+        <p class="svc-card-desc">Windfield Real Estate LLC provides comprehensive support for investors looking to grow or manage their commercial real estate portfolios. Our services include market analysis, acquisition strategies, and ongoing portfolio management. We help clients identify opportunities that match their goals and maximize returns through hands-on guidance and strategic insight.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <h2 class="heading-lg">Need help with a commercial real estate project?</h2>
+      <p class="body-text">Contact our team to discuss how Windfield Real Estate can support your next transaction or development.</p>
+      <div class="cta-btns">
+        <a href="contact-us.html" class="btn btn-md btn-primary">Contact Us</a>
+        <a href="property.html" class="btn btn-md btn-outline">View Properties</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">Windfield Real Estate</div>
+        <p class="footer-bio">Premier commercial real estate development, sales, and leasing in the Kansas City metro area.</p>
+        <div class="footer-corfac">Member of CORFAC International — 70+ Markets Worldwide</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Brokerage</a>
+          <a href="#" class="footer-link">Tenant Representation</a>
+          <a href="#" class="footer-link">Landlord Representation</a>
+          <a href="#" class="footer-link">Development Consulting</a>
+          <a href="#" class="footer-link">Investment Services</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-links">
+          <a href="about.html" class="footer-link">About Us</a>
+          <a href="property.html" class="footer-link">Properties</a>
+          <a href="contact-us.html" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Office</div>
+        <div class="footer-office-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>1440 Erie Street, Suite A<br>North Kansas City, MO 64116</span>
+        </div>
+        <div class="footer-office-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+          <span>(816) 612-5191</span>
+        </div>
+        <div class="footer-office-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>info@windfieldrealestate.com</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Windfield Real Estate, LLC. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
