@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gladstone Land — Windfield Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--wf-brand:#1db954;--wf-brand-hover:#17a34a;--wf-brand-fg:#05150a;--wf-brand-muted:rgba(29,185,84,0.10);--wf-bg:#09090b;--wf-bg-elevated:#111113;--wf-bg-sunken:#050507;--wf-surface:#141417;--wf-surface-hover:#1a1a1e;--wf-surface-active:#1f1f24;--wf-fg:#fafafa;--wf-fg-muted:#a1a1aa;--wf-fg-subtle:#71717a;--wf-fg-faint:#52525b;--wf-border:#27272a;--wf-border-strong:#3f3f46;--wf-border-subtle:#1e1e22;--wf-r-sm:6px;--wf-r-md:8px;--wf-r-lg:12px;--wf-ease:cubic-bezier(0.2,0.8,0.2,1);--wf-dur:160ms}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--wf-bg);color:var(--wf-fg);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:var(--wf-r-md);transition:all var(--wf-dur) var(--wf-ease);white-space:nowrap;border:1px solid transparent}
+.btn-md{height:44px;padding:0 24px;font-size:14px}.btn-sm{height:36px;padding:0 16px;font-size:13px}.btn-lg{height:52px;padding:0 32px;font-size:15px}
+.btn-primary{background:var(--wf-brand);color:var(--wf-brand-fg)}.btn-primary:hover{background:var(--wf-brand-hover)}
+.btn-outline{background:transparent;color:var(--wf-fg);border-color:var(--wf-border-strong)}.btn-outline:hover{border-color:var(--wf-fg-subtle);background:var(--wf-surface)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--wf-brand);transition:gap var(--wf-dur)}.link-arrow:hover{gap:10px}.link-arrow svg{width:16px;height:16px}
+.ph{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* ── Navbar ── */
+.navbar{position:sticky;top:0;z-index:100;background:var(--wf-bg);border-bottom:1px solid var(--wf-border)}
+.navbar-inner{display:flex;align-items:center;height:64px;gap:32px}
+.navbar-logo{font-size:18px;font-weight:700;color:var(--wf-fg);letter-spacing:-0.02em}
+.navbar-links{display:flex;align-items:center;gap:24px;margin-left:auto}
+.navbar-link{font-size:14px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}.navbar-link:hover{color:var(--wf-fg)}.navbar-link.active{color:var(--wf-fg)}
+.navbar-actions{display:flex;align-items:center;gap:12px;margin-left:16px}
+.mobile-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;color:var(--wf-fg)}.mobile-toggle svg{width:24px;height:24px}
+
+/* ── Breadcrumb ── */
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--wf-fg-subtle);padding:20px 0}
+.breadcrumb a{transition:color var(--wf-dur)}.breadcrumb a:hover{color:var(--wf-brand)}
+.breadcrumb svg{width:12px;height:12px;flex-shrink:0}
+.breadcrumb strong{color:var(--wf-fg);font-weight:500}
+
+/* ── Property Header ── */
+.prop-header{padding-bottom:24px}
+.prop-header h1{font-size:36px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;margin-bottom:8px}
+.prop-header-address{font-size:15px;color:var(--wf-fg-muted);margin-bottom:4px}
+.prop-header-county{font-size:14px;color:var(--wf-fg-subtle);margin-bottom:8px}
+.prop-header-price{font-size:24px;font-weight:700;color:var(--wf-brand);letter-spacing:-0.01em}
+
+/* ── Featured Image ── */
+.featured-image{margin-bottom:32px}
+.featured-image .ph{aspect-ratio:16/9;width:100%}
+.featured-image .ph span{font-size:18px;font-weight:600;color:var(--wf-fg-faint)}
+
+/* ── Download Section ── */
+.download-section{margin-bottom:48px}
+
+/* ── Two-column Layout ── */
+.listing-layout{display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:start;padding-bottom:64px}
+
+/* ── Spec Table ── */
+.spec-table{margin-bottom:0}
+.spec-row{display:flex;justify-content:space-between;padding:14px 0;border-top:1px solid var(--wf-border);font-size:14px}
+.spec-row:last-child{border-bottom:1px solid var(--wf-border)}
+.spec-label{font-weight:600;color:var(--wf-fg)}
+.spec-value{color:var(--wf-fg-muted)}
+
+/* ── Sidebar CTA Card ── */
+.sidebar-cta{position:sticky;top:88px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:28px}
+.sidebar-cta h3{font-size:20px;font-weight:700;color:var(--wf-fg);margin-bottom:8px}
+.sidebar-cta p{font-size:14px;color:var(--wf-fg-muted);line-height:1.6;margin-bottom:20px}
+.sidebar-cta .btn{width:100%;justify-content:center;margin-bottom:10px}
+.sidebar-cta .btn:last-child{margin-bottom:0}
+.sidebar-agent{display:flex;align-items:center;gap:12px;padding-top:20px;border-top:1px solid var(--wf-border);margin-top:20px}
+.sidebar-avatar{width:44px;height:44px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}.sidebar-avatar svg{width:22px;height:22px;color:var(--wf-fg-faint)}
+.sidebar-agent-name{font-size:14px;font-weight:600;color:var(--wf-fg)}
+.sidebar-agent-title{font-size:12px;color:var(--wf-fg-subtle)}
+
+/* ── Section Headings ── */
+.section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.section h2{font-size:32px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:20px}
+
+/* ── Property Description ── */
+.prop-desc-body{font-size:15px;color:var(--wf-fg-muted);line-height:1.75;max-width:800px}
+
+/* ── Key Features ── */
+.features-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+.features-list li{display:flex;align-items:flex-start;gap:12px;font-size:15px;color:var(--wf-fg-muted);line-height:1.6}
+.feature-check{width:24px;height:24px;border-radius:50%;background:var(--wf-brand-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--wf-brand)}.feature-check svg{width:14px;height:14px}
+
+/* ── Location Highlights ── */
+.location-highlight-text{font-size:15px;color:var(--wf-fg-muted);line-height:1.65;margin-bottom:32px;max-width:720px}
+
+/* ── Map ── */
+.map-placeholder{width:100%;aspect-ratio:16/9;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.map-placeholder span{font-size:18px;font-weight:600;color:var(--wf-fg-faint)}
+.map-meta{display:flex;align-items:center;gap:24px;font-size:13px;color:var(--wf-fg-subtle);margin-bottom:8px}
+.map-link{font-size:14px;font-weight:500;color:var(--wf-brand);transition:color var(--wf-dur)}.map-link:hover{color:var(--wf-brand-hover)}
+
+/* ── Contact Section ── */
+.contact-section{padding:80px 0;border-top:1px solid var(--wf-border);text-align:center}
+.contact-section h2{font-size:36px;font-weight:700;letter-spacing:-0.02em;color:var(--wf-fg);margin-bottom:12px}
+.contact-section .sub{font-size:16px;color:var(--wf-fg-muted);margin-bottom:28px;max-width:600px;margin-left:auto;margin-right:auto}
+.contact-btns{display:flex;gap:12px;justify-content:center;margin-bottom:48px}
+.broker-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:640px;margin:0 auto 24px}
+.broker-card{background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);padding:24px;text-align:left;display:flex;align-items:flex-start;gap:16px}
+.broker-avatar{width:56px;height:56px;border-radius:50%;background:var(--wf-surface-active);border:1px solid var(--wf-border);display:flex;align-items:center;justify-content:center;flex-shrink:0}.broker-avatar svg{width:28px;height:28px;color:var(--wf-fg-faint)}
+.broker-name{font-size:16px;font-weight:600;color:var(--wf-fg);margin-bottom:2px}
+.broker-title{font-size:13px;color:var(--wf-fg-subtle);margin-bottom:10px}
+.broker-contact{font-size:13px;color:var(--wf-fg-muted);line-height:1.6}
+.broker-contact a{color:var(--wf-brand);transition:color var(--wf-dur)}.broker-contact a:hover{color:var(--wf-brand-hover)}
+.company-info{font-size:13px;color:var(--wf-fg-subtle);margin-top:4px}
+
+/* ── Related Properties ── */
+.related-section{padding:64px 0;border-top:1px solid var(--wf-border)}
+.related-section h2{font-size:32px;font-weight:700;letter-spacing:-0.015em;color:var(--wf-fg);margin-bottom:32px}
+.related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.prop-card{cursor:pointer;transition:transform var(--wf-dur)}.prop-card:hover{transform:translateY(-2px)}
+.prop-card-img{aspect-ratio:16/9;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-lg);display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative;transition:border-color var(--wf-dur)}.prop-card:hover .prop-card-img{border-color:var(--wf-border-strong)}
+.prop-card-img svg{width:36px;height:36px;color:var(--wf-fg-faint)}
+.prop-badge{position:absolute;top:10px;left:10px;display:inline-flex;align-items:center;height:24px;padding:0 10px;font-size:11px;font-weight:600;background:var(--wf-brand);color:var(--wf-brand-fg);border-radius:var(--wf-r-sm)}
+.prop-name{font-size:15px;font-weight:600;color:var(--wf-fg);margin-bottom:2px}
+.prop-address{font-size:13px;color:var(--wf-fg-subtle);margin-bottom:6px}
+.prop-price{font-size:14px;font-weight:600;color:var(--wf-brand)}
+
+/* ── Footer ── */
+.footer{border-top:1px solid var(--wf-border);padding:56px 0 0;background:var(--wf-bg-elevated)}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.footer-company{font-size:13px;color:var(--wf-fg-muted);line-height:1.65}
+.footer-company p{margin-bottom:8px}
+.ft{font-size:13px;font-weight:600;color:var(--wf-fg);margin-bottom:16px}
+.fl{display:flex;flex-direction:column;gap:10px}.fl a{font-size:13px;color:var(--wf-fg-muted);transition:color var(--wf-dur)}.fl a:hover{color:var(--wf-fg)}
+.corfac-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:var(--wf-surface);border:1px solid var(--wf-border);border-radius:var(--wf-r-sm);font-size:12px;font-weight:600;color:var(--wf-fg-muted);margin-top:16px}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid var(--wf-border);font-size:12px;color:var(--wf-fg-subtle)}
+.footer-legal{display:flex;gap:24px}.footer-legal a{color:var(--wf-fg-subtle);text-decoration:underline;text-underline-offset:2px;transition:color var(--wf-dur)}.footer-legal a:hover{color:var(--wf-fg)}
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  .listing-layout{grid-template-columns:1fr;gap:32px}
+  .sidebar-cta{position:static}
+  .related-grid{grid-template-columns:1fr 1fr}
+  .broker-grid{grid-template-columns:1fr 1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .prop-header h1,.section h2,.related-section h2,.contact-section h2{font-size:28px}
+  .navbar-links{display:none}.mobile-toggle{display:flex}
+  .related-grid{grid-template-columns:1fr}
+  .broker-grid{grid-template-columns:1fr}
+  .contact-btns{flex-direction:column;align-items:center}
+  .footer-top{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav class="navbar"><div class="container navbar-inner">
+  <a href="index.html" class="navbar-logo">Windfield Real Estate</a>
+  <div class="navbar-links">
+    <a href="#" class="navbar-link active">Properties</a>
+    <a href="#" class="navbar-link">Services</a>
+    <a href="#" class="navbar-link">Articles</a>
+    <a href="#" class="navbar-link">About</a>
+    <a href="#" class="navbar-link">Contact</a>
+  </div>
+  <div class="navbar-actions"><a href="#contact" class="btn btn-sm btn-primary">Get in Touch</a></div>
+  <button class="mobile-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+</div></nav>
+
+<!-- ═══════════ BREADCRUMB ═══════════ -->
+<div class="container">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    <a href="#">Properties</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    <strong>Gladstone Land</strong>
+  </div>
+</div>
+
+<!-- ═══════════ PROPERTY HEADER ═══════════ -->
+<div class="container">
+  <div class="prop-header">
+    <h1>Gladstone Land</h1>
+    <p class="prop-header-address">6906 N Broadway St, Kansas City, MO 64118</p>
+    <p class="prop-header-county">Clay County</p>
+    <p class="prop-header-price">Call for Pricing</p>
+  </div>
+</div>
+
+<!-- ═══════════ PROPERTY IMAGE ═══════════ -->
+<div class="container">
+  <div class="featured-image">
+    <div class="ph">
+      <svg style="width:64px;height:64px;color:var(--wf-fg-faint)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ DOWNLOAD SECTION ═══════════ -->
+<div class="container">
+  <div class="download-section">
+    <a href="#" class="btn btn-md btn-outline">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download Brochure
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════ PROPERTY DETAILS GRID ═══════════ -->
+<div class="container">
+  <div class="listing-layout">
+    <!-- Left: Specs Table -->
+    <div>
+      <div class="spec-table">
+        <div class="spec-row"><span class="spec-label">Property Type</span><span class="spec-value">Land</span></div>
+        <div class="spec-row"><span class="spec-label">Subtype</span><span class="spec-value">Office</span></div>
+        <div class="spec-row"><span class="spec-label">Size</span><span class="spec-value">61,855 SF</span></div>
+        <div class="spec-row"><span class="spec-label">Acreage</span><span class="spec-value">1.42 Acres</span></div>
+        <div class="spec-row"><span class="spec-label">County</span><span class="spec-value">Clay</span></div>
+      </div>
+    </div>
+
+    <!-- Right: Sidebar CTA -->
+    <div class="sidebar-cta">
+      <h3>Interested in this property?</h3>
+      <p>Contact our team for pricing details, brochures, and to schedule a site visit.</p>
+      <a href="#contact" class="btn btn-md btn-primary">Contact Broker</a>
+      <a href="#" class="btn btn-md btn-outline">Download Brochure PDF</a>
+      <div class="sidebar-agent">
+        <div class="sidebar-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div>
+          <div class="sidebar-agent-name">Andrew Danner</div>
+          <div class="sidebar-agent-title">Principal Broker</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PROPERTY DESCRIPTION ═══════════ -->
+<div class="container"><div class="section">
+  <h2>Property Description</h2>
+  <p class="prop-desc-body">The parcels along N Broadway Street in Gladstone, MO, provide outstanding visibility and are ideal for development to serve the local community. The first parcel measures approximately 1.26 acres (+/-), while the second spans about 1.36 acres (+/-). Together, they offer a combined area of approximately 2.62 acres (+/-), providing ample space for a wide range of development opportunities. Key highlights include excellent frontage along N Broadway Street, close proximity to a high-traffic commercial corridor, and easy access to major roadways, including nearby highways. These parcels are well-suited for retail, office, or mixed-use development, positioned in a growing community with strong demand for services and amenities.</p>
+</div></div>
+
+<!-- ═══════════ KEY FEATURES ═══════════ -->
+<div class="container"><div class="section">
+  <h2>Key Features</h2>
+  <ul class="features-list">
+    <li>
+      <div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <span>Prime investment opportunity for land development</span>
+    </li>
+    <li>
+      <div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <span>High visibility along N Broadway St</span>
+    </li>
+    <li>
+      <div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <span>Potential for significant community impact</span>
+    </li>
+    <li>
+      <div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <span>Accessible to major transportation routes</span>
+    </li>
+    <li>
+      <div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <span>Proximity to essential amenities and services</span>
+    </li>
+    <li>
+      <div class="feature-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <span>Surrounded by growing commercial and residential areas</span>
+    </li>
+  </ul>
+</div></div>
+
+<!-- ═══════════ LOCATION HIGHLIGHTS ═══════════ -->
+<div class="container"><div class="section">
+  <h2>Location Highlights</h2>
+  <p class="location-highlight-text">Land for sale along N Broadway in Gladstone Missouri</p>
+</div></div>
+
+<!-- ═══════════ LOCATION MAP ═══════════ -->
+<div class="container"><div class="section" style="border-top:none;padding-top:0">
+  <div class="map-placeholder"><span>Map</span></div>
+  <div class="map-meta">
+    <span>39.2249, -94.5719</span>
+  </div>
+  <a href="https://maps.google.com/?q=6906+N+Broadway+St+Kansas+City+MO+64118" target="_blank" class="map-link">Open in Google Maps &rarr;</a>
+</div></div>
+
+<!-- ═══════════ CONTACT SECTION ═══════════ -->
+<div class="container" id="contact"><div class="contact-section">
+  <h2>Interested? Request More Information</h2>
+  <p class="sub">Get the full property package including financials, floor plans, and more.</p>
+  <div class="contact-btns">
+    <a href="#" class="btn btn-lg btn-primary">Contact Broker</a>
+    <a href="#" class="btn btn-lg btn-outline">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download Brochure PDF
+    </a>
+  </div>
+
+  <div class="broker-grid">
+    <div class="broker-card">
+      <div class="broker-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div>
+        <div class="broker-name">Andrew Danner</div>
+        <div class="broker-title">Principal Broker</div>
+        <div class="broker-contact">
+          <a href="tel:+18165551234">(816) 555-1234</a><br>
+          <a href="mailto:andrew@windfieldre.com">andrew@windfieldre.com</a>
+        </div>
+      </div>
+    </div>
+    <div class="broker-card">
+      <div class="broker-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div>
+        <div class="broker-name">Ben Nelson CCIM</div>
+        <div class="broker-title">Senior Associate</div>
+        <div class="broker-contact">
+          <a href="tel:+18165555678">(816) 555-5678</a><br>
+          <a href="mailto:ben@windfieldre.com">ben@windfieldre.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="company-info">Windfield Real Estate, LLC &middot; Member of CORFAC International</p>
+</div></div>
+
+<!-- ═══════════ RELATED PROPERTIES ═══════════ -->
+<div class="container"><div class="related-section">
+  <h2>Related Properties</h2>
+  <div class="related-grid">
+    <a href="#" class="prop-card">
+      <div class="prop-card-img">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="prop-badge">For Sale</span>
+      </div>
+      <div class="prop-name">North Oak Business Park</div>
+      <div class="prop-address">7200 N Oak Trafficway, Kansas City, MO</div>
+      <div class="prop-price">$1,250,000</div>
+    </a>
+    <a href="#" class="prop-card">
+      <div class="prop-card-img">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="prop-badge">For Sale</span>
+      </div>
+      <div class="prop-name">Antioch Commerce Center</div>
+      <div class="prop-address">8100 N Antioch Rd, Kansas City, MO</div>
+      <div class="prop-price">$875,000</div>
+    </a>
+    <a href="#" class="prop-card">
+      <div class="prop-card-img">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="prop-badge">For Sale</span>
+      </div>
+      <div class="prop-name">Liberty Industrial Tract</div>
+      <div class="prop-address">1400 S 291 Hwy, Liberty, MO</div>
+      <div class="prop-price">$2,100,000</div>
+    </a>
+    <a href="#" class="prop-card">
+      <div class="prop-card-img">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="prop-badge">For Sale</span>
+      </div>
+      <div class="prop-name">Shoal Creek Village Pad</div>
+      <div class="prop-address">6300 NE Shoal Creek Pkwy, Kansas City, MO</div>
+      <div class="prop-price">Call for Pricing</div>
+    </a>
+  </div>
+</div></div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer"><div class="container">
+  <div class="footer-top">
+    <div>
+      <div class="navbar-logo" style="margin-bottom:16px">Windfield Real Estate</div>
+      <div class="footer-company">
+        <p>4717 Grand Ave, Suite 820<br>Kansas City, MO 64112</p>
+        <p>(816) 474-2000</p>
+      </div>
+      <div class="corfac-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        Member of CORFAC International
+      </div>
+    </div>
+    <div><div class="ft">Properties</div><div class="fl"><a href="#">For Sale</a><a href="#">For Lease</a><a href="#">Land</a><a href="#">Investment</a><a href="#">All Properties</a></div></div>
+    <div><div class="ft">Services</div><div class="fl"><a href="#">Brokerage</a><a href="#">Property Management</a><a href="#">Investment Sales</a><a href="#">Tenant Representation</a><a href="#">Market Research</a></div></div>
+    <div><div class="ft">Company</div><div class="fl"><a href="#">About Us</a><a href="#">Our Team</a><a href="#">Articles</a><a href="#">Careers</a><a href="#">Contact</a></div></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Windfield Real Estate, LLC. All rights reserved.</span>
+    <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookies Settings</a></div>
+  </div>
+</div></footer>
+
+</body>
+</html>

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commercial Properties — Windfield Real Estate</title>
+<meta name="description" content="Browse 78 commercial property listings across the Kansas City metro. Industrial, office, retail, and land — for sale and for lease.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════
+   WINDFIELD IO — PROPERTIES INDEX
+   Design System: Windfield IO MCP Dark Theme
+   Structure: Property listings page (7 sections)
+════════════════════════════════════════════════════════ */
+:root {
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --wf-brand: #1db954; --wf-brand-hover: #17a34a; --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-border: rgba(29,185,84,0.20);
+  --wf-brand-border-strong: rgba(29,185,84,0.35);
+  --wf-bg: #09090b; --wf-bg-elevated: #111113; --wf-bg-sunken: #050507;
+  --wf-surface: #141417; --wf-surface-hover: #1a1a1e; --wf-surface-active: #1f1f24;
+  --wf-fg: #fafafa; --wf-fg-muted: #a1a1aa; --wf-fg-subtle: #71717a; --wf-fg-faint: #52525b;
+  --wf-border: #27272a; --wf-border-strong: #3f3f46; --wf-border-subtle: #1e1e22;
+  --wf-blue: #4589FF; --wf-teal: #08BDBA; --wf-green: #42BE65; --wf-red: #E85D4A;
+  --wf-purple: #BE95FF; --wf-orange: #FF832B;
+  --wf-r-sm: 6px; --wf-r-md: 8px; --wf-r-lg: 12px;
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1); --wf-dur: 160ms;
+  --nav-h: 64px;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { background: var(--wf-bg); color: var(--wf-fg); font-family: var(--font-sans); overflow-x: hidden; line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+ul { list-style: none; }
+::selection { background: var(--wf-brand-muted); color: var(--wf-brand); }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--wf-border-strong); }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+
+/* ════════════════════════════════
+   NAVBAR
+════════════════════════════════ */
+.navbar {
+  position: sticky; top: 0; z-index: 500;
+  height: var(--nav-h);
+  background: rgba(9,9,11,0.97);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 40px;
+  height: 100%; display: flex; align-items: center; gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px; font-weight: 700; color: var(--wf-fg);
+  display: flex; align-items: center; gap: 10px;
+  letter-spacing: -0.02em;
+}
+.navbar-logo-mark {
+  width: 28px; height: 28px; background: var(--wf-brand); border-radius: var(--wf-r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: var(--wf-brand-fg);
+}
+.navbar-links { display: flex; gap: 4px; flex: 1; }
+.navbar-link {
+  font-size: 13px; font-weight: 500; color: var(--wf-fg-subtle);
+  padding: 6px 14px; border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+}
+.navbar-link:hover { color: var(--wf-fg); background: var(--wf-surface); }
+.navbar-link.active { color: var(--wf-brand); background: var(--wf-brand-muted); }
+.navbar-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; font-weight: 600; border-radius: var(--wf-r-md); transition: all var(--wf-dur) var(--wf-ease); cursor: pointer; }
+.btn-sm { font-size: 13px; padding: 8px 18px; }
+.btn-primary { font-size: 13px; padding: 8px 18px; font-weight: 600; background: var(--wf-brand); color: var(--wf-brand-fg); border-radius: var(--wf-r-md); transition: all var(--wf-dur) var(--wf-ease); }
+.btn-primary:hover { background: var(--wf-brand-hover); transform: translateY(-1px); }
+
+/* ════════════════════════════════
+   SECTION 1 — HERO
+════════════════════════════════ */
+.hero {
+  padding: 80px 0 64px;
+  text-align: center;
+  border-bottom: 1px solid var(--wf-border);
+}
+.hero h1 {
+  font-size: 48px; font-weight: 800; letter-spacing: -0.03em;
+  line-height: 1.1; margin-bottom: 16px; color: var(--wf-fg);
+}
+.hero-sub {
+  font-size: 16px; color: var(--wf-fg-subtle); max-width: 560px;
+  margin: 0 auto; line-height: 1.7;
+}
+
+/* ════════════════════════════════
+   SECTION 2 — FILTER CONTROLS
+════════════════════════════════ */
+.filters-section {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--wf-border);
+  background: var(--wf-bg-elevated);
+}
+.filter-tabs {
+  display: flex; gap: 4px; margin-bottom: 20px;
+}
+.filter-tab {
+  font-size: 13px; font-weight: 600; color: var(--wf-fg-subtle);
+  padding: 8px 20px; border-radius: var(--wf-r-md);
+  border: 1px solid transparent;
+  transition: all var(--wf-dur) var(--wf-ease);
+  cursor: pointer;
+}
+.filter-tab:hover { color: var(--wf-fg); background: var(--wf-surface); }
+.filter-tab.active {
+  color: var(--wf-brand); background: var(--wf-brand-muted);
+  border-color: var(--wf-brand-border);
+}
+.filter-dropdowns {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.filter-select {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 500;
+  color: var(--wf-fg-muted); background: var(--wf-surface);
+  border: 1px solid var(--wf-border-strong); border-radius: var(--wf-r-md);
+  padding: 10px 36px 10px 14px; outline: none; cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color var(--wf-dur);
+  min-width: 160px;
+}
+.filter-select:hover { border-color: var(--wf-brand-border); }
+.filter-select:focus { border-color: var(--wf-brand); }
+.filter-select option { background: var(--wf-surface); color: var(--wf-fg); }
+.filter-spacer { flex: 1; }
+
+/* ════════════════════════════════
+   SECTION 3 — PROPERTY GRID
+════════════════════════════════ */
+.properties-section { padding: 48px 0 64px; }
+.property-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
+}
+.property-card {
+  background: var(--wf-surface); border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg); overflow: hidden;
+  transition: all var(--wf-dur) var(--wf-ease); cursor: pointer;
+}
+.property-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--wf-border-strong);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.property-card:hover .property-name { color: var(--wf-brand); }
+
+.property-img {
+  width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, rgba(29,185,84,0.08), rgba(29,185,84,0.02));
+}
+.property-img-ph {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 14px; font-weight: 600;
+  color: rgba(29,185,84,0.3);
+}
+.property-badge {
+  position: absolute; top: 12px; left: 12px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  padding: 4px 12px; border-radius: var(--wf-r-sm);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.property-badge.for-sale {
+  color: #1db954; background: rgba(29,185,84,0.15);
+  border: 1px solid rgba(29,185,84,0.30);
+}
+.property-badge.for-lease {
+  color: #BE95FF; background: rgba(190,149,255,0.15);
+  border: 1px solid rgba(190,149,255,0.30);
+}
+
+.property-body { padding: 20px; }
+.property-name {
+  font-size: 16px; font-weight: 700; color: var(--wf-fg);
+  line-height: 1.3; margin-bottom: 6px; transition: color var(--wf-dur);
+  letter-spacing: -0.01em;
+}
+.property-address {
+  font-size: 13px; color: var(--wf-fg-subtle); margin-bottom: 12px;
+}
+.property-details {
+  display: flex; flex-direction: column; gap: 6px;
+  padding-top: 12px; border-top: 1px solid var(--wf-border-subtle);
+}
+.property-detail-row {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px;
+}
+.property-detail-label {
+  font-family: var(--font-mono); font-size: 11px; color: var(--wf-fg-faint);
+  letter-spacing: 0.02em;
+}
+.property-detail-value {
+  font-size: 13px; font-weight: 600; color: var(--wf-fg-muted);
+}
+.property-price {
+  font-size: 15px; font-weight: 700; color: var(--wf-brand);
+  margin-top: 12px;
+}
+
+/* ════════════════════════════════
+   SECTION 4 — PAGINATION
+════════════════════════════════ */
+.pagination-section {
+  padding: 32px 0 48px;
+  display: flex; justify-content: center; align-items: center; gap: 4px;
+}
+.page-btn {
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: var(--wf-fg-subtle);
+  border: 1px solid var(--wf-border); border-radius: var(--wf-r-md);
+  background: transparent; cursor: pointer;
+  transition: all var(--wf-dur) var(--wf-ease);
+}
+.page-btn:hover { color: var(--wf-fg); border-color: var(--wf-border-strong); background: var(--wf-surface); }
+.page-btn.active {
+  color: var(--wf-brand); border-color: var(--wf-brand-border);
+  background: var(--wf-brand-muted);
+}
+.page-btn.disabled {
+  opacity: 0.3; cursor: not-allowed; pointer-events: none;
+}
+.page-ellipsis {
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--wf-fg-faint);
+}
+.page-arrow svg { width: 16px; height: 16px; }
+
+/* ════════════════════════════════
+   SECTION 5 — STATS BAR
+════════════════════════════════ */
+.stats-bar {
+  padding: 48px 0;
+  background: var(--wf-bg-elevated);
+  border-top: 1px solid var(--wf-border);
+  border-bottom: 1px solid var(--wf-border);
+}
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 24px;
+  text-align: center;
+}
+.stat-item {}
+.stat-value {
+  font-size: 32px; font-weight: 800; color: var(--wf-fg);
+  letter-spacing: -0.03em; line-height: 1.2;
+}
+.stat-value em { font-style: normal; color: var(--wf-brand); }
+.stat-label {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  color: var(--wf-fg-faint); letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+/* ════════════════════════════════
+   SECTION 6 — FOOTER
+════════════════════════════════ */
+.footer { background: var(--wf-bg-elevated); border-top: 1px solid var(--wf-border); padding: 64px 0 40px; }
+.footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.footer-top { display: grid; grid-template-columns: 300px 1fr; gap: 80px; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--wf-border); }
+.footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.footer-mark { width: 32px; height: 32px; background: var(--wf-brand); border-radius: var(--wf-r-sm); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--wf-brand-fg); }
+.footer-name { font-size: 18px; font-weight: 700; color: var(--wf-fg); letter-spacing: -0.02em; }
+.footer-name em { font-style: normal; color: var(--wf-brand); }
+.footer-bio { font-size: 13px; color: var(--wf-fg-subtle); line-height: 1.7; margin-bottom: 12px; }
+.footer-address { font-size: 12px; color: var(--wf-fg-faint); line-height: 1.6; margin-bottom: 8px; }
+.footer-phone { font-size: 13px; color: var(--wf-fg-muted); font-weight: 600; margin-bottom: 16px; }
+.footer-corfac {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  color: var(--wf-fg-faint); background: var(--wf-surface);
+  border: 1px solid var(--wf-border); border-radius: var(--wf-r-sm);
+  padding: 6px 14px; letter-spacing: 0.06em;
+}
+.footer-links { display: grid; grid-template-columns: repeat(3,1fr); gap: 40px; }
+.footer-col-title { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--wf-brand); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--wf-brand-border); font-weight: 600; }
+.footer-link { display: block; font-size: 13px; color: var(--wf-fg-subtle); padding: 4px 0; transition: color var(--wf-dur); }
+.footer-link:hover { color: var(--wf-fg); }
+.footer-bottom { display: flex; align-items: center; justify-content: center; }
+.footer-copy { font-family: var(--font-mono); font-size: 11px; color: var(--wf-fg-faint); }
+
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
+@media(max-width:1024px) {
+  .property-grid { grid-template-columns: repeat(2,1fr); }
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 32px; }
+  .footer-top { grid-template-columns: 1fr; gap: 40px; }
+  .footer-links { grid-template-columns: repeat(3,1fr); }
+}
+@media(max-width:768px) {
+  .container { padding: 0 20px; }
+  .navbar-inner { padding: 0 20px; }
+  .navbar-links { display: none; }
+  .hero h1 { font-size: 32px; }
+  .hero { padding: 48px 0 40px; }
+  .property-grid { grid-template-columns: 1fr; }
+  .filter-tabs { flex-wrap: wrap; }
+  .filter-dropdowns { flex-direction: column; }
+  .filter-select { width: 100%; }
+  .filter-spacer { display: none; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 24px; }
+  .footer-inner { padding: 0 20px; }
+  .footer-links { grid-template-columns: 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  .pagination-section { gap: 2px; }
+  .page-btn { width: 36px; height: 36px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════
+     NAVBAR
+════════════════════════ -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo">
+      <div class="navbar-logo-mark">W</div>
+      Windfield Real Estate
+    </a>
+    <div class="navbar-links">
+      <a href="properties-index.html" class="navbar-link active">Properties</a>
+      <a href="services.html" class="navbar-link">Services</a>
+      <a href="blog-home.html" class="navbar-link">Articles</a>
+      <a href="about.html" class="navbar-link">About</a>
+      <a href="contact-us.html" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="contact-us.html" class="btn btn-sm btn-primary">Get in Touch</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════
+     SECTION 1 — HERO
+════════════════════════ -->
+<div class="hero">
+  <div class="container">
+    <h1>Commercial Properties</h1>
+    <p class="hero-sub">78 listings across Kansas City metro. 58 for sale, 20 for lease.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 2 — FILTER CONTROLS
+════════════════════════ -->
+<div class="filters-section">
+  <div class="container">
+    <div class="filter-tabs">
+      <button class="filter-tab active">All Listings</button>
+      <button class="filter-tab">For Sale</button>
+      <button class="filter-tab">For Lease</button>
+      <button class="filter-tab">Sublease</button>
+    </div>
+    <div class="filter-dropdowns">
+      <select class="filter-select">
+        <option>Property Type</option>
+        <option>Industrial</option>
+        <option>Office</option>
+        <option>Retail</option>
+        <option>Land</option>
+        <option>Multi-Tenant Flex</option>
+      </select>
+      <select class="filter-select">
+        <option>City</option>
+        <option>Kansas City, MO</option>
+        <option>Kansas City, KS</option>
+        <option>Independence, MO</option>
+        <option>Overland Park, KS</option>
+        <option>Burlington, KS</option>
+        <option>North Kansas City, MO</option>
+      </select>
+      <select class="filter-select">
+        <option>County</option>
+        <option>Jackson County</option>
+        <option>Wyandotte County</option>
+        <option>Johnson County</option>
+        <option>Clay County</option>
+        <option>Coffey County</option>
+      </select>
+      <div class="filter-spacer"></div>
+      <select class="filter-select">
+        <option>Sort: Name</option>
+        <option>Sort: Price</option>
+        <option>Sort: Size</option>
+        <option>Sort: City</option>
+        <option>Sort: Date Added</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 3 — PROPERTY GRID
+════════════════════════ -->
+<div class="properties-section">
+  <div class="container">
+    <div class="property-grid">
+
+      <!-- 1 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">LAND</div>
+          <div class="property-badge for-sale">For Sale</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">1101 Northwest Barry Road</div>
+          <div class="property-address">Kansas City, MO</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Land, Residential</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">19.79 Acres</span>
+            </div>
+          </div>
+          <div class="property-price">Call For Pricing</div>
+        </div>
+      </a>
+
+      <!-- 2 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">IND</div>
+          <div class="property-badge for-sale">For Sale</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">1200 Burlington Main Building</div>
+          <div class="property-address">Burlington, KS</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Industrial, Manufacturing</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">45,000 SF</span>
+            </div>
+          </div>
+          <div class="property-price">$1,200,000</div>
+        </div>
+      </a>
+
+      <!-- 3 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">IND</div>
+          <div class="property-badge for-sale">For Sale</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">1245 State Ave</div>
+          <div class="property-address">Kansas City, KS</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Industrial Service</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">6,770 SF</span>
+            </div>
+          </div>
+          <div class="property-price">$950,000</div>
+        </div>
+      </a>
+
+      <!-- 4 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">IND</div>
+          <div class="property-badge for-sale">For Sale</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">1401 Minnesota Avenue</div>
+          <div class="property-address">Kansas City, KS</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Industrial Warehouse</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">12,915 SF</span>
+            </div>
+          </div>
+          <div class="property-price">$1,500,000</div>
+        </div>
+      </a>
+
+      <!-- 5 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">LAND</div>
+          <div class="property-badge for-sale">For Sale</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">16202 E Us 24 Hwy</div>
+          <div class="property-address">Independence, MO</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Land</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">5.2 Acres</span>
+            </div>
+          </div>
+          <div class="property-price">Call For Pricing</div>
+        </div>
+      </a>
+
+      <!-- 6 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">OFC</div>
+          <div class="property-badge for-lease">For Lease</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">2000 Main Street</div>
+          <div class="property-address">Kansas City, MO</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Office</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">8,500 SF</span>
+            </div>
+          </div>
+          <div class="property-price">$22/SF/YR</div>
+        </div>
+      </a>
+
+      <!-- 7 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">RTL</div>
+          <div class="property-badge for-lease">For Lease</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">3500 Broadway Blvd</div>
+          <div class="property-address">Kansas City, MO</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Retail</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">3,200 SF</span>
+            </div>
+          </div>
+          <div class="property-price">$18/SF/YR</div>
+        </div>
+      </a>
+
+      <!-- 8 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">OFC</div>
+          <div class="property-badge for-sale">For Sale</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">4100 N Oak Trafficway</div>
+          <div class="property-address">Kansas City, MO</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Office, Medical</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">12,000 SF</span>
+            </div>
+          </div>
+          <div class="property-price">$850,000</div>
+        </div>
+      </a>
+
+      <!-- 9 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">FLEX</div>
+          <div class="property-badge for-sale">For Sale</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">500 W 7th Street</div>
+          <div class="property-address">Kansas City, MO</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Multi-Tenant Flex</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">24,000 SF</span>
+            </div>
+          </div>
+          <div class="property-price">$2,100,000</div>
+        </div>
+      </a>
+
+      <!-- 10 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">IND</div>
+          <div class="property-badge for-sale">For Sale</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">6200 Prospect Ave</div>
+          <div class="property-address">Kansas City, MO</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Industrial</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">18,500 SF</span>
+            </div>
+          </div>
+          <div class="property-price">$1,350,000</div>
+        </div>
+      </a>
+
+      <!-- 11 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">RTL</div>
+          <div class="property-badge for-lease">For Lease</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">7800 State Line Rd</div>
+          <div class="property-address">Overland Park, KS</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Retail</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">5,400 SF</span>
+            </div>
+          </div>
+          <div class="property-price">$24/SF/YR</div>
+        </div>
+      </a>
+
+      <!-- 12 -->
+      <a href="#" class="property-card">
+        <div class="property-img">
+          <div class="property-img-ph">OFC</div>
+          <div class="property-badge for-sale">For Sale</div>
+        </div>
+        <div class="property-body">
+          <div class="property-name">9100 N Ambassador Dr</div>
+          <div class="property-address">Kansas City, MO</div>
+          <div class="property-details">
+            <div class="property-detail-row">
+              <span class="property-detail-label">Type</span>
+              <span class="property-detail-value">Office</span>
+            </div>
+            <div class="property-detail-row">
+              <span class="property-detail-label">Size</span>
+              <span class="property-detail-value">15,000 SF</span>
+            </div>
+          </div>
+          <div class="property-price">Call For Pricing</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 4 — PAGINATION
+════════════════════════ -->
+<div class="pagination-section">
+  <button class="page-btn page-arrow disabled">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="page-btn active">1</button>
+  <button class="page-btn">2</button>
+  <button class="page-btn">3</button>
+  <span class="page-ellipsis">...</span>
+  <button class="page-btn">7</button>
+  <button class="page-btn page-arrow">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
+
+<!-- ════════════════════════
+     SECTION 5 — STATS BAR
+════════════════════════ -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value"><em>78</em></div>
+        <div class="stat-label">Total Listings</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value"><em>58</em></div>
+        <div class="stat-label">For Sale</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value"><em>20</em></div>
+        <div class="stat-label">For Lease</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value"><em>$15M+</em></div>
+        <div class="stat-label">Total Value</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════
+     SECTION 6 — FOOTER
+════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-mark">W</div>
+          <div class="footer-name">Windfield <em>Real Estate</em></div>
+        </div>
+        <p class="footer-bio">Commercial real estate brokerage serving the Kansas City metro with data-driven market intelligence, property management, and development services.</p>
+        <p class="footer-address">1440 Erie Street, Suite A<br>North Kansas City, MO 64116</p>
+        <p class="footer-phone">(816) 945-7600</p>
+        <div class="footer-corfac">CORFAC INTERNATIONAL</div>
+      </div>
+      <div class="footer-links">
+        <div>
+          <div class="footer-col-title">Properties</div>
+          <a href="properties-index.html" class="footer-link">All Properties</a>
+          <a href="#" class="footer-link">For Sale</a>
+          <a href="#" class="footer-link">For Lease</a>
+          <a href="#" class="footer-link">Land</a>
+          <a href="#" class="footer-link">Retail</a>
+          <a href="#" class="footer-link">Office</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Services</div>
+          <a href="#" class="footer-link">Development</a>
+          <a href="#" class="footer-link">Sales &amp; Acquisitions</a>
+          <a href="#" class="footer-link">Leasing</a>
+          <a href="#" class="footer-link">Market Analysis</a>
+          <a href="#" class="footer-link">Property Management</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <a href="about.html" class="footer-link">About Us</a>
+          <a href="#" class="footer-link">Our Team</a>
+          <a href="blog-home.html" class="footer-link">Articles</a>
+          <a href="contact-us.html" class="footer-link">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">&copy; 2026 Windfield Real Estate, LLC</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Filter tab interaction
+document.querySelectorAll('.filter-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// Scroll reveal
+const reveal = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.properties-section, .stats-bar').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(12px)';
+  el.style.transition = 'opacity 0.6s cubic-bezier(0.2,0.8,0.2,1), transform 0.6s cubic-bezier(0.2,0.8,0.2,1)';
+  reveal.observe(el);
+});
+
+// Force hero visible immediately
+setTimeout(() => {
+  document.querySelectorAll('.hero, .filters-section').forEach(el => {
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  });
+}, 100);
+</script>
+</body>
+</html>
