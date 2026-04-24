@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Master Templates — Windfield Template System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Windfield IO Design Tokens ── */
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  --wf-brand: #1db954;
+  --wf-brand-hover: #17a34a;
+  --wf-brand-fg: #05150a;
+  --wf-brand-muted: rgba(29,185,84,0.10);
+  --wf-brand-ring: rgba(29,185,84,0.28);
+  --wf-violet: #7c3aed;
+  --wf-violet-muted: rgba(124,58,237,0.10);
+  --wf-bg: #09090b;
+  --wf-bg-elevated: #111113;
+  --wf-bg-sunken: #050507;
+  --wf-surface: #141417;
+  --wf-surface-hover: #1a1a1e;
+  --wf-surface-active: #1f1f24;
+  --wf-overlay: rgba(0,0,0,0.72);
+  --wf-fg: #fafafa;
+  --wf-fg-muted: #a1a1aa;
+  --wf-fg-subtle: #71717a;
+  --wf-fg-faint: #52525b;
+  --wf-border: #27272a;
+  --wf-border-strong: #3f3f46;
+  --wf-border-subtle: #1e1e22;
+  --wf-success: #22c55e;
+  --wf-warning: #f59e0b;
+  --wf-danger: #ef4444;
+  --wf-info: #3b82f6;
+  --wf-r-xs: 4px;
+  --wf-r-sm: 6px;
+  --wf-r-md: 8px;
+  --wf-r-lg: 12px;
+  --wf-r-xl: 16px;
+  --wf-r-pill: 9999px;
+  --wf-shadow-sm: 0 1px 2px rgba(0,0,0,0.25);
+  --wf-shadow-md: 0 4px 16px rgba(0,0,0,0.28);
+  --wf-shadow-lg: 0 16px 48px rgba(0,0,0,0.4);
+  --wf-ease: cubic-bezier(0.2,0.8,0.2,1);
+  --wf-dur: 160ms;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--wf-bg);
+  color: var(--wf-fg);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+
+/* ── Utilities ── */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.kicker {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-brand);
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: var(--wf-r-md);
+  transition: all var(--wf-dur) var(--wf-ease);
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.btn-md { height: 44px; padding: 0 24px; font-size: 14px; }
+.btn-sm { height: 36px; padding: 0 16px; font-size: 13px; }
+.btn-primary {
+  background: var(--wf-brand);
+  color: var(--wf-brand-fg);
+}
+.btn-primary:hover { background: var(--wf-brand-hover); }
+.btn-outline {
+  background: transparent;
+  color: var(--wf-fg);
+  border-color: var(--wf-border-strong);
+}
+.btn-outline:hover { border-color: var(--wf-fg-subtle); background: var(--wf-surface); }
+
+/* ── NAVBAR ── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--wf-bg);
+  border-bottom: 1px solid var(--wf-border);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: 32px;
+}
+.navbar-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wf-fg);
+  letter-spacing: -0.02em;
+}
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.navbar-links::-webkit-scrollbar { display: none; }
+.navbar-link {
+  font-size: 14px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.navbar-link:hover { color: var(--wf-fg); }
+.navbar-link.active { color: var(--wf-fg); }
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.navbar-phone {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-md);
+  padding: 8px 16px;
+  transition: all var(--wf-dur);
+  white-space: nowrap;
+}
+.navbar-phone:hover { border-color: var(--wf-border-strong); color: var(--wf-fg); }
+.mobile-toggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; color: var(--wf-fg); }
+.mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ── PAGE LAYOUT ── */
+.page-body {
+  display: flex;
+  min-height: calc(100vh - 64px);
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--wf-bg-elevated);
+  border-right: 1px solid var(--wf-border);
+  padding: 24px 0;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--wf-border-strong) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--wf-border-strong); border-radius: 4px; }
+
+.sb-section { margin-bottom: 4px; }
+.sb-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--wf-fg-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--wf-dur);
+}
+.sb-section-title:hover { color: var(--wf-fg-subtle); }
+.sb-section-title .sb-chevron {
+  width: 14px;
+  height: 14px;
+  transition: transform 200ms var(--wf-ease);
+}
+.sb-section.collapsed .sb-chevron { transform: rotate(-90deg); }
+.sb-section.collapsed .sb-items { display: none; }
+
+.sb-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--wf-fg-muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all var(--wf-dur);
+  text-align: left;
+  border-left: 2px solid transparent;
+}
+.sb-btn:hover {
+  color: var(--wf-fg);
+  background: var(--wf-surface-hover);
+}
+.sb-btn.active {
+  color: var(--wf-brand);
+  background: rgba(29,185,84,0.08);
+  border-left-color: var(--wf-brand);
+}
+.sb-btn .sb-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+.sb-btn.active .sb-icon { opacity: 1; }
+.sb-btn .sb-count {
+  margin-left: auto;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--wf-fg-faint);
+  background: var(--wf-surface);
+  padding: 1px 6px;
+  border-radius: var(--wf-r-xs);
+}
+
+.sb-divider {
+  height: 1px;
+  background: var(--wf-border);
+  margin: 12px 20px;
+}
+
+/* ── MAIN CONTENT ── */
+.main-content {
+  flex: 1;
+  padding: 32px 40px 80px;
+  min-width: 0;
+}
+.main-header {
+  margin-bottom: 32px;
+}
+.main-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--wf-fg);
+  margin-bottom: 8px;
+}
+.main-header p {
+  font-size: 15px;
+  color: var(--wf-fg-muted);
+  max-width: 600px;
+  line-height: 1.6;
+}
+.main-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--wf-border);
+}
+.tpl-count {
+  font-size: 13px;
+  color: var(--wf-fg-subtle);
+  font-family: var(--font-mono);
+}
+.tpl-count strong {
+  color: var(--wf-fg);
+  font-weight: 600;
+}
+
+/* ── MASONRY GRID ── */
+.masonry-grid {
+  column-count: 4;
+  column-gap: 20px;
+}
+.tpl-card {
+  break-inside: avoid;
+  margin-bottom: 20px;
+  background: var(--wf-bg-elevated);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-lg);
+  overflow: hidden;
+  transition: transform 260ms var(--wf-ease), border-color 260ms var(--wf-ease), box-shadow 260ms var(--wf-ease);
+  cursor: pointer;
+}
+.tpl-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--wf-border-strong);
+  box-shadow: var(--wf-shadow-md);
+}
+.tpl-card.hidden { display: none; }
+
+/* ── Aspect ratio presets ── */
+.tpl-preview { position: relative; overflow: hidden; }
+.ar-1x1 { aspect-ratio: 1/1; }
+.ar-4x5 { aspect-ratio: 4/5; }
+.ar-16x9 { aspect-ratio: 16/9; }
+.ar-9x16 { aspect-ratio: 9/16; }
+.ar-3x2 { aspect-ratio: 3/2; }
+.ar-2x3 { aspect-ratio: 2/3; }
+.ar-5x4 { aspect-ratio: 5/4; }
+.ar-us-letter { aspect-ratio: 8.5/11; }
+
+.t-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Template meta bar ── */
+.tpl-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-top: 1px solid var(--wf-border);
+}
+.tpl-type {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--wf-fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tpl-size {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--wf-fg-faint);
+  white-space: nowrap;
+}
+
+/* ── CSS TEMPLATE PREVIEW STYLES ── */
+
+/* Shared preview elements */
+.t-logo {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wf-brand);
+}
+.t-headline {
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.t-body-text {
+  font-size: 7px;
+  line-height: 1.5;
+  opacity: 0.7;
+}
+.t-tag {
+  display: inline-block;
+  font-size: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.t-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+.t-avatar {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.t-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.1);
+}
+.t-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--wf-brand);
+}
+.t-img-placeholder {
+  background: rgba(255,255,255,0.04);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.t-img-placeholder svg {
+  width: 16px;
+  height: 16px;
+  color: var(--wf-fg-faint);
+  opacity: 0.5;
+}
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--wf-border);
+  padding: 56px 0 0;
+  background: var(--wf-bg-elevated);
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+}
+.footer-brand .navbar-logo { margin-bottom: 16px; }
+.footer-subscribe-text {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  margin-bottom: 12px;
+}
+.footer-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.footer-input {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  background: var(--wf-bg);
+  border: 1px solid var(--wf-border);
+  border-radius: var(--wf-r-sm);
+  font-size: 13px;
+  color: var(--wf-fg);
+  font-family: var(--font-sans);
+}
+.footer-input::placeholder { color: var(--wf-fg-faint); }
+.footer-input:hover { border-color: var(--wf-border-strong); }
+.footer-input:focus { outline: none; border-color: var(--wf-brand); }
+.footer-disclaimer {
+  font-size: 11px;
+  color: var(--wf-fg-faint);
+  line-height: 1.5;
+}
+.footer-disclaimer a { text-decoration: underline; text-underline-offset: 2px; }
+.footer-col-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wf-fg);
+  margin-bottom: 16px;
+}
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-link {
+  font-size: 13px;
+  color: var(--wf-fg-muted);
+  transition: color var(--wf-dur);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-link:hover { color: var(--wf-fg); }
+.footer-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid var(--wf-border);
+  font-size: 12px;
+  color: var(--wf-fg-subtle);
+}
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+.footer-legal a {
+  color: var(--wf-fg-subtle);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--wf-dur);
+}
+.footer-legal a:hover { color: var(--wf-fg); }
+
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+  .masonry-grid { column-count: 3; }
+}
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .masonry-grid { column-count: 2; }
+  .sidebar { width: 220px; min-width: 220px; }
+  .main-content { padding: 24px 24px 60px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .navbar-links { display: none; }
+  .navbar-actions .navbar-phone { display: none; }
+  .mobile-toggle { display: flex; }
+  .page-body { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--wf-border);
+    padding: 16px 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  .masonry-grid { column-count: 2; }
+  .main-content { padding: 20px 20px 60px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+@media (max-width: 480px) {
+  .masonry-grid { column-count: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-logo">Logo</a>
+    <div class="navbar-links">
+      <a href="index.html" class="navbar-link">Home v3</a>
+      <a href="about.html" class="navbar-link">About</a>
+      <a href="services.html" class="navbar-link">Services</a>
+      <a href="property.html" class="navbar-link">Property</a>
+      <a href="portfolio.html" class="navbar-link">Portfolio</a>
+      <a href="blog-home.html" class="navbar-link">Blog</a>
+      <a href="templates-feed.html" class="navbar-link active">Templates</a>
+      <a href="docs.html" class="navbar-link">Docs</a>
+      <a href="contact.html" class="navbar-link">Contact</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="tel:1888123456" class="navbar-phone">Call us 1 888 123 456</a>
+      <a href="#" class="btn btn-sm btn-primary">Book a consultation</a>
+    </div>
+    <button class="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════ PAGE BODY ═══════════════ -->
+<div class="page-body">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+
+    <!-- All Templates -->
+    <button class="sb-btn active" data-filter="all">
+      <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      All Templates
+      <span class="sb-count" id="total-count">36</span>
+    </button>
+
+    <div class="sb-divider"></div>
+
+    <!-- Website Templates -->
+    <div class="sb-section">
+      <div class="sb-section-title" onclick="toggleSection(this)">
+        Website Templates
+        <svg class="sb-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="sb-items">
+        <button class="sb-btn" data-filter="homepage">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          Homepage
+        </button>
+        <button class="sb-btn" data-filter="property-listing">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+          Property Listing
+        </button>
+        <button class="sb-btn" data-filter="about-page">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0113 0"/></svg>
+          About Page
+        </button>
+        <button class="sb-btn" data-filter="services-page">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>
+          Services
+        </button>
+      </div>
+    </div>
+
+    <!-- Social Media -->
+    <div class="sb-section">
+      <div class="sb-section-title" onclick="toggleSection(this)">
+        Social Media
+        <svg class="sb-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="sb-items">
+        <button class="sb-btn" data-filter="linkedin">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </button>
+        <button class="sb-btn" data-filter="instagram">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+          Instagram
+        </button>
+        <button class="sb-btn" data-filter="youtube">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z"/></svg>
+          YouTube
+        </button>
+        <button class="sb-btn" data-filter="x-twitter">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg>
+          X / Twitter
+        </button>
+        <button class="sb-btn" data-filter="tiktok">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg>
+          TikTok
+        </button>
+      </div>
+    </div>
+
+    <!-- Advertising -->
+    <div class="sb-section">
+      <div class="sb-section-title" onclick="toggleSection(this)">
+        Advertising
+        <svg class="sb-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="sb-items">
+        <button class="sb-btn" data-filter="google-ads">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+          Google Ads
+        </button>
+        <button class="sb-btn" data-filter="display-ads">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          Display Ads
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="sb-section">
+      <div class="sb-section-title" onclick="toggleSection(this)">
+        Content
+        <svg class="sb-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="sb-items">
+        <button class="sb-btn" data-filter="email">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+          Email
+        </button>
+        <button class="sb-btn" data-filter="blog-graphic">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Blog Graphics
+        </button>
+        <button class="sb-btn" data-filter="data-viz">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          Data Viz
+        </button>
+      </div>
+    </div>
+
+    <!-- Other -->
+    <div class="sb-section">
+      <div class="sb-section-title" onclick="toggleSection(this)">
+        Other
+        <svg class="sb-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="sb-items">
+        <button class="sb-btn" data-filter="business">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          Business
+        </button>
+        <button class="sb-btn" data-filter="print">
+          <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print
+        </button>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <button class="sb-btn" data-filter="design-system">
+      <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Design System
+    </button>
+    <button class="sb-btn" data-filter="components">
+      <svg class="sb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
+      Components
+    </button>
+
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main-content">
+
+    <div class="main-header">
+      <p class="kicker">Template Library</p>
+      <h1>Master Templates</h1>
+      <p>Production-ready design templates for Windfield Real Estate. Social media, web pages, ads, email, print collateral, and data visualizations -- all built on the IO design system.</p>
+    </div>
+
+    <div class="main-toolbar">
+      <span class="tpl-count">Showing <strong id="visible-count">36</strong> of <strong>36</strong> templates</span>
+    </div>
+
+    <!-- ═══════════════ MASONRY GRID ═══════════════ -->
+    <div class="masonry-grid" id="tpl-grid">
+
+      <!-- ─── 1. LinkedIn — Market Report ─── -->
+      <div class="tpl-card" data-cat="linkedin">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:linear-gradient(145deg,#0a1a0e,#111113);padding:16px;">
+            <span class="t-logo" style="margin-bottom:auto;">WF</span>
+            <div style="margin-top:auto;">
+              <div class="t-tag" style="background:rgba(29,185,84,0.15);color:#1db954;margin-bottom:8px;">Market Report</div>
+              <div class="t-headline" style="font-size:14px;color:#fafafa;">Q1 2026 CRE<br>Market Outlook</div>
+              <div class="t-body-text" style="color:#a1a1aa;margin-top:6px;">Cap rates, vacancy trends, and investment signals across 12 metro markets.</div>
+              <div style="display:flex;gap:6px;margin-top:10px;">
+                <div class="t-btn" style="background:#1db954;color:#05150a;">Read Report</div>
+                <div class="t-btn" style="background:transparent;border:1px solid #3f3f46;color:#a1a1aa;">Share</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">LinkedIn — Market Report</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 2. Instagram — Property Showcase ─── -->
+      <div class="tpl-card" data-cat="instagram">
+        <div class="tpl-preview ar-4x5">
+          <div class="t-inner" style="background:linear-gradient(180deg,#141417 0%,#0d1a0f 100%);padding:14px;justify-content:space-between;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="t-logo">Windfield</span>
+              <span style="font-size:7px;color:#71717a;">FOR LEASE</span>
+            </div>
+            <div class="t-img-placeholder" style="flex:1;margin:10px 0;border-radius:6px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            </div>
+            <div>
+              <div class="t-headline" style="font-size:12px;color:#fafafa;">One Liberty Plaza</div>
+              <div style="font-size:7px;color:#71717a;margin-top:3px;">42,000 SF &bull; Class A Office &bull; Midtown Manhattan</div>
+              <div style="display:flex;gap:4px;margin-top:8px;">
+                <div class="t-btn" style="background:#1db954;color:#05150a;flex:1;">Schedule Tour</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Instagram — Property Card</span>
+          <span class="tpl-size">1080 &times; 1350</span>
+        </div>
+      </div>
+
+      <!-- ─── 3. Homepage Hero ─── -->
+      <div class="tpl-card" data-cat="homepage">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:linear-gradient(135deg,#09090b,#0d1a0f);padding:14px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:auto;">
+              <span class="t-logo">Windfield</span>
+              <div style="display:flex;gap:8px;margin-left:auto;">
+                <span style="font-size:6px;color:#71717a;">Properties</span>
+                <span style="font-size:6px;color:#71717a;">Services</span>
+                <span style="font-size:6px;color:#71717a;">About</span>
+                <span style="font-size:6px;color:#71717a;">Contact</span>
+              </div>
+            </div>
+            <div style="margin-top:auto;">
+              <div class="t-headline" style="font-size:16px;color:#fafafa;max-width:70%;">Commercial Real Estate,<br>Reimagined.</div>
+              <div class="t-body-text" style="color:#a1a1aa;max-width:60%;margin-top:4px;">Institutional-grade CRE advisory for acquisitions, dispositions, and portfolio strategy.</div>
+              <div class="t-btn" style="background:#1db954;color:#05150a;margin-top:8px;">View Properties</div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Web — Homepage Hero</span>
+          <span class="tpl-size">1440 &times; 810</span>
+        </div>
+      </div>
+
+      <!-- ─── 4. YouTube Thumbnail ─── -->
+      <div class="tpl-card" data-cat="youtube">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:linear-gradient(135deg,#111113,#1a0a2e);padding:12px;justify-content:center;align-items:center;text-align:center;">
+            <div class="t-tag" style="background:rgba(239,68,68,0.2);color:#ef4444;margin-bottom:6px;">LIVE</div>
+            <div class="t-headline" style="font-size:13px;color:#fafafa;">Is CRE Headed for<br>a Correction?</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:8px;justify-content:center;">
+              <div class="t-avatar" style="width:18px;height:18px;background:#1db954;"></div>
+              <span style="font-size:7px;color:#a1a1aa;">Windfield Real Estate</span>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">YouTube — Thumbnail</span>
+          <span class="tpl-size">1280 &times; 720</span>
+        </div>
+      </div>
+
+      <!-- ─── 5. Google Display Ad — Leaderboard ─── -->
+      <div class="tpl-card" data-cat="google-ads">
+        <div class="tpl-preview ar-3x2">
+          <div class="t-inner" style="background:#111113;padding:10px;flex-direction:row;align-items:center;gap:10px;">
+            <div style="flex:1;">
+              <span class="t-logo" style="font-size:7px;">WF</span>
+              <div class="t-headline" style="font-size:10px;color:#fafafa;margin-top:4px;">Premium Office Space</div>
+              <div style="font-size:6px;color:#71717a;margin-top:2px;">Class A &bull; Flexible Terms</div>
+            </div>
+            <div class="t-btn" style="background:#1db954;color:#05150a;">Learn More</div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Google Ads — Display</span>
+          <span class="tpl-size">728 &times; 90</span>
+        </div>
+      </div>
+
+      <!-- ─── 6. LinkedIn — Broker Profile ─── -->
+      <div class="tpl-card" data-cat="linkedin">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:linear-gradient(180deg,#141417,#111113);padding:16px;align-items:center;text-align:center;justify-content:center;">
+            <div class="t-avatar" style="width:40px;height:40px;background:linear-gradient(135deg,#1db954,#17a34a);margin-bottom:10px;"></div>
+            <div class="t-headline" style="font-size:12px;color:#fafafa;">Sarah Mitchell</div>
+            <div style="font-size:7px;color:#1db954;margin-top:2px;">Managing Director</div>
+            <div style="font-size:7px;color:#71717a;margin-top:6px;line-height:1.5;">15+ years in institutional CRE<br>$2.4B in closed transactions</div>
+            <div style="display:flex;gap:12px;margin-top:10px;">
+              <div style="text-align:center;">
+                <div style="font-size:11px;font-weight:700;color:#fafafa;">$2.4B</div>
+                <div style="font-size:6px;color:#52525b;">Volume</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:11px;font-weight:700;color:#fafafa;">127</div>
+                <div style="font-size:6px;color:#52525b;">Deals</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:11px;font-weight:700;color:#fafafa;">15yr</div>
+                <div style="font-size:6px;color:#52525b;">Experience</div>
+              </div>
+            </div>
+            <div class="t-btn" style="background:#1db954;color:#05150a;margin-top:12px;">Connect</div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">LinkedIn — Broker Profile</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 7. Email — Newsletter ─── -->
+      <div class="tpl-card" data-cat="email">
+        <div class="tpl-preview ar-us-letter">
+          <div class="t-inner" style="background:#111113;padding:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid #27272a;">
+              <span class="t-logo">Windfield</span>
+              <span style="font-size:6px;color:#52525b;">April 2026</span>
+            </div>
+            <div style="margin-top:10px;">
+              <div class="t-headline" style="font-size:11px;color:#fafafa;">Weekly Market Brief</div>
+              <div style="font-size:7px;color:#a1a1aa;margin-top:6px;line-height:1.6;">This week's highlights: Fed holds rates steady, office vacancy ticks down in Q1, and industrial demand hits new highs in the Sun Belt corridor.</div>
+            </div>
+            <div class="t-img-placeholder" style="height:50px;margin-top:10px;border-radius:4px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            </div>
+            <div style="margin-top:10px;padding-top:8px;border-top:1px solid #1e1e22;">
+              <div style="font-size:8px;font-weight:600;color:#fafafa;">Featured Listing</div>
+              <div style="font-size:7px;color:#71717a;margin-top:3px;">225 Park Ave S — 18,500 SF Office</div>
+              <div class="t-btn" style="background:#1db954;color:#05150a;margin-top:6px;">View Details</div>
+            </div>
+            <div style="margin-top:auto;padding-top:8px;border-top:1px solid #1e1e22;">
+              <div style="font-size:6px;color:#52525b;text-align:center;">Windfield Real Estate &bull; Unsubscribe</div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Email — Newsletter</span>
+          <span class="tpl-size">600 &times; 780</span>
+        </div>
+      </div>
+
+      <!-- ─── 8. Data Viz — Cap Rate Chart ─── -->
+      <div class="tpl-card" data-cat="data-viz">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#111113;padding:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-size:9px;font-weight:600;color:#fafafa;">Cap Rate Trends</div>
+              <span class="t-logo" style="font-size:7px;">WF</span>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:4px;">
+              <span style="font-size:6px;color:#1db954;">&#9679; Office</span>
+              <span style="font-size:6px;color:#3b82f6;">&#9679; Industrial</span>
+              <span style="font-size:6px;color:#f59e0b;">&#9679; Retail</span>
+            </div>
+            <div style="flex:1;display:flex;align-items:flex-end;gap:3px;margin-top:8px;padding-bottom:4px;border-bottom:1px solid #1e1e22;">
+              <div style="width:12%;height:65%;background:rgba(29,185,84,0.3);border-radius:2px 2px 0 0;"></div>
+              <div style="width:12%;height:50%;background:rgba(59,130,246,0.3);border-radius:2px 2px 0 0;"></div>
+              <div style="width:12%;height:40%;background:rgba(245,158,11,0.3);border-radius:2px 2px 0 0;"></div>
+              <div style="width:4%;"></div>
+              <div style="width:12%;height:70%;background:rgba(29,185,84,0.4);border-radius:2px 2px 0 0;"></div>
+              <div style="width:12%;height:55%;background:rgba(59,130,246,0.4);border-radius:2px 2px 0 0;"></div>
+              <div style="width:12%;height:35%;background:rgba(245,158,11,0.4);border-radius:2px 2px 0 0;"></div>
+              <div style="width:4%;"></div>
+              <div style="width:12%;height:80%;background:#1db954;border-radius:2px 2px 0 0;"></div>
+              <div style="width:12%;height:60%;background:#3b82f6;border-radius:2px 2px 0 0;"></div>
+              <div style="width:12%;height:45%;background:#f59e0b;border-radius:2px 2px 0 0;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-around;margin-top:3px;">
+              <span style="font-size:6px;color:#52525b;">2024</span>
+              <span style="font-size:6px;color:#52525b;">2025</span>
+              <span style="font-size:6px;color:#52525b;">2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Data Viz — Cap Rate Chart</span>
+          <span class="tpl-size">1200 &times; 675</span>
+        </div>
+      </div>
+
+      <!-- ─── 9. Business Card ─── -->
+      <div class="tpl-card" data-cat="business">
+        <div class="tpl-preview ar-3x2">
+          <div class="t-inner" style="background:linear-gradient(135deg,#09090b,#111113);padding:12px;justify-content:space-between;">
+            <span class="t-logo" style="font-size:8px;">Windfield</span>
+            <div style="margin-top:auto;">
+              <div style="font-size:10px;font-weight:700;color:#fafafa;">James Rodriguez</div>
+              <div style="font-size:7px;color:#1db954;margin-top:2px;">Senior Vice President</div>
+              <div style="font-size:6px;color:#71717a;margin-top:6px;line-height:1.6;">
+                j.rodriguez@windfield.com<br>
+                +1 (212) 555-0142<br>
+                New York, NY
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Business Card — Front</span>
+          <span class="tpl-size">1050 &times; 600</span>
+        </div>
+      </div>
+
+      <!-- ─── 10. Instagram — Carousel Slide ─── -->
+      <div class="tpl-card" data-cat="instagram">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:linear-gradient(180deg,#0d1a0f,#09090b);padding:16px;justify-content:center;">
+            <div class="t-tag" style="background:rgba(29,185,84,0.15);color:#1db954;margin-bottom:10px;">01 / 05</div>
+            <div class="t-headline" style="font-size:15px;color:#fafafa;">5 Signs Your<br>Office Lease Is<br>Underperforming</div>
+            <div style="font-size:7px;color:#71717a;margin-top:8px;">Swipe to learn what top tenants negotiate differently.</div>
+            <div style="display:flex;gap:3px;margin-top:12px;">
+              <div style="width:20%;height:2px;background:#1db954;border-radius:1px;"></div>
+              <div style="width:20%;height:2px;background:#27272a;border-radius:1px;"></div>
+              <div style="width:20%;height:2px;background:#27272a;border-radius:1px;"></div>
+              <div style="width:20%;height:2px;background:#27272a;border-radius:1px;"></div>
+              <div style="width:20%;height:2px;background:#27272a;border-radius:1px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Instagram — Carousel</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 11. Property Listing Page ─── -->
+      <div class="tpl-card" data-cat="property-listing">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#09090b;padding:10px;">
+            <div style="display:flex;gap:6px;margin-bottom:6px;">
+              <span style="font-size:6px;color:#71717a;">Properties</span>
+              <span style="font-size:6px;color:#52525b;">></span>
+              <span style="font-size:6px;color:#a1a1aa;">One Liberty Plaza</span>
+            </div>
+            <div style="display:flex;gap:6px;flex:1;">
+              <div class="t-img-placeholder" style="flex:2;border-radius:4px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px;color:#52525b;opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:3px;">
+                <div class="t-img-placeholder" style="flex:1;border-radius:3px;"></div>
+                <div class="t-img-placeholder" style="flex:1;border-radius:3px;"></div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;">
+              <div>
+                <div style="font-size:8px;font-weight:600;color:#fafafa;">One Liberty Plaza</div>
+                <div style="font-size:6px;color:#71717a;">165 Broadway, New York</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:8px;font-weight:700;color:#1db954;">$52 PSF</div>
+                <div style="font-size:6px;color:#52525b;">NNN</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Web — Property Listing</span>
+          <span class="tpl-size">1440 &times; 810</span>
+        </div>
+      </div>
+
+      <!-- ─── 12. LinkedIn — Thought Leadership ─── -->
+      <div class="tpl-card" data-cat="linkedin">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:#111113;padding:16px;justify-content:space-between;">
+            <div>
+              <span class="t-logo">WF</span>
+              <div style="font-size:6px;color:#52525b;margin-top:2px;">THOUGHT LEADERSHIP</div>
+            </div>
+            <div>
+              <div class="t-headline" style="font-size:14px;color:#fafafa;line-height:1.2;">The Office Isn't Dead.<br>Bad Offices Are.</div>
+              <div style="width:30px;height:2px;background:#1db954;margin-top:10px;border-radius:1px;"></div>
+              <div class="t-body-text" style="color:#a1a1aa;margin-top:8px;">Top-tier buildings with amenity packages are seeing record leasing velocity. Here's why flight to quality is accelerating.</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:auto;padding-top:10px;border-top:1px solid #1e1e22;">
+              <div class="t-avatar" style="width:20px;height:20px;background:#1db954;"></div>
+              <div>
+                <div style="font-size:7px;font-weight:600;color:#fafafa;">Windfield Real Estate</div>
+                <div style="font-size:6px;color:#52525b;">4,200 followers</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">LinkedIn — Thought Leadership</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 13. Display Ad — Rectangle ─── -->
+      <div class="tpl-card" data-cat="display-ads">
+        <div class="tpl-preview ar-5x4">
+          <div class="t-inner" style="background:linear-gradient(180deg,#0d1a0f,#09090b);padding:14px;text-align:center;align-items:center;justify-content:center;">
+            <span class="t-logo" style="margin-bottom:8px;">Windfield</span>
+            <div class="t-headline" style="font-size:12px;color:#fafafa;">Find Your Next<br>HQ Space</div>
+            <div style="font-size:7px;color:#a1a1aa;margin-top:6px;">50+ Class A listings in NYC metro</div>
+            <div class="t-btn" style="background:#1db954;color:#05150a;margin-top:10px;">Browse Listings</div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Display Ad — Medium Rectangle</span>
+          <span class="tpl-size">300 &times; 250</span>
+        </div>
+      </div>
+
+      <!-- ─── 14. Blog Graphic — Header ─── -->
+      <div class="tpl-card" data-cat="blog-graphic">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:linear-gradient(135deg,#09090b 0%,#0d1a0f 50%,#09090b 100%);padding:14px;justify-content:center;">
+            <div class="t-tag" style="background:rgba(29,185,84,0.15);color:#1db954;margin-bottom:8px;align-self:flex-start;">INSIGHTS</div>
+            <div class="t-headline" style="font-size:14px;color:#fafafa;">How AI Is Reshaping<br>Commercial Real Estate</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:10px;">
+              <div class="t-avatar" style="width:16px;height:16px;background:#1db954;"></div>
+              <span style="font-size:7px;color:#a1a1aa;">By Windfield Research &bull; 8 min read</span>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Blog — Header Image</span>
+          <span class="tpl-size">1200 &times; 675</span>
+        </div>
+      </div>
+
+      <!-- ─── 15. X/Twitter Post ─── -->
+      <div class="tpl-card" data-cat="x-twitter">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#111113;padding:12px;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <div class="t-avatar" style="width:18px;height:18px;background:#1db954;"></div>
+              <div>
+                <span style="font-size:7px;font-weight:600;color:#fafafa;">Windfield RE</span>
+                <span style="font-size:6px;color:#52525b;margin-left:3px;">@windfieldRE</span>
+              </div>
+            </div>
+            <div style="font-size:8px;color:#fafafa;line-height:1.5;">Office vacancy in NYC dropped to 14.2% in Q1 — the first meaningful decline in 8 quarters.</div>
+            <div style="font-size:8px;color:#fafafa;line-height:1.5;margin-top:4px;">Flight to quality is real. The top 20% of buildings are 94% occupied.</div>
+            <div style="display:flex;gap:16px;margin-top:10px;padding-top:8px;border-top:1px solid #1e1e22;">
+              <span style="font-size:6px;color:#52525b;">&#9825; 142</span>
+              <span style="font-size:6px;color:#52525b;">&#8635; 38</span>
+              <span style="font-size:6px;color:#52525b;">&#128172; 12</span>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">X — Post Card</span>
+          <span class="tpl-size">1200 &times; 675</span>
+        </div>
+      </div>
+
+      <!-- ─── 16. About Page ─── -->
+      <div class="tpl-card" data-cat="about-page">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#09090b;padding:10px;">
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #1e1e22;">
+              <span class="t-logo" style="font-size:7px;">Windfield</span>
+              <div style="display:flex;gap:6px;margin-left:auto;">
+                <span style="font-size:5px;color:#71717a;">Properties</span>
+                <span style="font-size:5px;color:#fafafa;">About</span>
+                <span style="font-size:5px;color:#71717a;">Contact</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <div style="flex:1;">
+                <div style="font-size:6px;color:#1db954;font-weight:600;">ABOUT</div>
+                <div class="t-headline" style="font-size:10px;color:#fafafa;margin-top:3px;">Built on Trust,<br>Driven by Data</div>
+                <div style="font-size:6px;color:#71717a;margin-top:4px;line-height:1.5;">Founded in 2018, Windfield advises institutional investors and corporate occupiers across 12 US markets.</div>
+              </div>
+              <div class="t-img-placeholder" style="flex:1;border-radius:4px;min-height:60px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:12px;height:12px;color:#52525b;opacity:0.5;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Web — About Page</span>
+          <span class="tpl-size">1440 &times; 810</span>
+        </div>
+      </div>
+
+      <!-- ─── 17. Instagram — Stats Infographic ─── -->
+      <div class="tpl-card" data-cat="instagram">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:#111113;padding:16px;justify-content:center;">
+            <div style="text-align:center;margin-bottom:12px;">
+              <span class="t-logo">WF</span>
+              <div style="font-size:7px;color:#52525b;margin-top:4px;">BY THE NUMBERS</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="background:#141417;border:1px solid #27272a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="font-size:16px;font-weight:800;color:#1db954;">$8.2B</div>
+                <div style="font-size:6px;color:#71717a;margin-top:2px;">Transaction Volume</div>
+              </div>
+              <div style="background:#141417;border:1px solid #27272a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="font-size:16px;font-weight:800;color:#fafafa;">340+</div>
+                <div style="font-size:6px;color:#71717a;margin-top:2px;">Deals Closed</div>
+              </div>
+              <div style="background:#141417;border:1px solid #27272a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="font-size:16px;font-weight:800;color:#fafafa;">12</div>
+                <div style="font-size:6px;color:#71717a;margin-top:2px;">Markets</div>
+              </div>
+              <div style="background:#141417;border:1px solid #27272a;border-radius:6px;padding:10px;text-align:center;">
+                <div style="font-size:16px;font-weight:800;color:#fafafa;">98%</div>
+                <div style="font-size:6px;color:#71717a;margin-top:2px;">Client Retention</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Instagram — Stats Infographic</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 18. Email — Drip Sequence ─── -->
+      <div class="tpl-card" data-cat="email">
+        <div class="tpl-preview ar-4x5">
+          <div class="t-inner" style="background:#111113;padding:12px;">
+            <div style="padding-bottom:8px;border-bottom:1px solid #27272a;display:flex;align-items:center;justify-content:space-between;">
+              <span class="t-logo">Windfield</span>
+              <span style="font-size:6px;color:#52525b;">DRIP 3 of 5</span>
+            </div>
+            <div style="margin-top:10px;">
+              <div style="font-size:10px;font-weight:700;color:#fafafa;">Ready to see these listings in person?</div>
+              <div style="font-size:7px;color:#a1a1aa;margin-top:6px;line-height:1.6;">Hi [First Name],</div>
+              <div style="font-size:7px;color:#a1a1aa;margin-top:4px;line-height:1.6;">You've been reviewing properties in Midtown. Our advisory team can arrange private tours this week.</div>
+            </div>
+            <div style="background:#141417;border:1px solid #27272a;border-radius:6px;padding:10px;margin-top:10px;">
+              <div style="display:flex;gap:6px;">
+                <div class="t-img-placeholder" style="width:40px;height:40px;border-radius:4px;flex-shrink:0;"></div>
+                <div>
+                  <div style="font-size:7px;font-weight:600;color:#fafafa;">250 Park Avenue</div>
+                  <div style="font-size:6px;color:#71717a;">22,000 SF &bull; $58 PSF</div>
+                  <div style="font-size:6px;color:#1db954;margin-top:2px;">Available Q2 2026</div>
+                </div>
+              </div>
+            </div>
+            <div style="background:#141417;border:1px solid #27272a;border-radius:6px;padding:10px;margin-top:6px;">
+              <div style="display:flex;gap:6px;">
+                <div class="t-img-placeholder" style="width:40px;height:40px;border-radius:4px;flex-shrink:0;"></div>
+                <div>
+                  <div style="font-size:7px;font-weight:600;color:#fafafa;">One Penn Plaza</div>
+                  <div style="font-size:6px;color:#71717a;">35,000 SF &bull; $48 PSF</div>
+                  <div style="font-size:6px;color:#1db954;margin-top:2px;">Available Now</div>
+                </div>
+              </div>
+            </div>
+            <div class="t-btn" style="background:#1db954;color:#05150a;margin-top:10px;width:100%;justify-content:center;">Schedule Tours</div>
+            <div style="margin-top:auto;padding-top:8px;border-top:1px solid #1e1e22;">
+              <div style="font-size:6px;color:#52525b;text-align:center;">Windfield Real Estate &bull; Unsubscribe</div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Email — Drip Sequence</span>
+          <span class="tpl-size">600 &times; 750</span>
+        </div>
+      </div>
+
+      <!-- ─── 19. LinkedIn — Event Promo ─── -->
+      <div class="tpl-card" data-cat="linkedin">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:linear-gradient(180deg,#141417 0%,#0a1a0e 100%);padding:16px;justify-content:space-between;">
+            <div style="display:flex;justify-content:space-between;">
+              <span class="t-logo">WF</span>
+              <div class="t-tag" style="background:rgba(29,185,84,0.15);color:#1db954;">EVENT</div>
+            </div>
+            <div>
+              <div style="font-size:7px;color:#1db954;font-weight:600;">MAY 15, 2026 &bull; 6:00 PM</div>
+              <div class="t-headline" style="font-size:14px;color:#fafafa;margin-top:4px;">CRE Investment<br>Forum NYC</div>
+              <div style="font-size:7px;color:#a1a1aa;margin-top:6px;line-height:1.5;">Panel discussion: AI-driven underwriting, cap rate forecasting, and the next cycle.</div>
+              <div style="display:flex;margin-top:10px;gap:4px;">
+                <div class="t-avatar" style="width:16px;height:16px;background:#3b82f6;margin-right:-4px;border:1px solid #111113;"></div>
+                <div class="t-avatar" style="width:16px;height:16px;background:#7c3aed;margin-right:-4px;border:1px solid #111113;"></div>
+                <div class="t-avatar" style="width:16px;height:16px;background:#f59e0b;border:1px solid #111113;"></div>
+                <span style="font-size:6px;color:#52525b;margin-left:6px;align-self:center;">3 Speakers</span>
+              </div>
+              <div class="t-btn" style="background:#1db954;color:#05150a;margin-top:10px;">Register Now</div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">LinkedIn — Event Promo</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 20. TikTok — Cover ─── -->
+      <div class="tpl-card" data-cat="tiktok">
+        <div class="tpl-preview ar-9x16">
+          <div class="t-inner" style="background:linear-gradient(180deg,transparent 0%,#09090b 100%);padding:12px;justify-content:flex-end;">
+            <div class="t-tag" style="background:rgba(29,185,84,0.2);color:#1db954;margin-bottom:6px;align-self:flex-start;">PROPERTY TOUR</div>
+            <div class="t-headline" style="font-size:13px;color:#fafafa;">Inside a $45M<br>Penthouse Office</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:8px;">
+              <div class="t-avatar" style="width:18px;height:18px;background:#1db954;"></div>
+              <div>
+                <span style="font-size:7px;font-weight:600;color:#fafafa;">@windfieldRE</span>
+                <span style="font-size:6px;color:#52525b;display:block;">12.4K views</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">TikTok — Cover</span>
+          <span class="tpl-size">1080 &times; 1920</span>
+        </div>
+      </div>
+
+      <!-- ─── 21. Data Viz — Market Heatmap ─── -->
+      <div class="tpl-card" data-cat="data-viz">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:#111113;padding:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:9px;font-weight:600;color:#fafafa;">Market Heatmap</div>
+              <span class="t-logo" style="font-size:7px;">WF</span>
+            </div>
+            <div style="font-size:6px;color:#52525b;margin-bottom:6px;">Rental Growth YoY by Submarket</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;">
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.7);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#fafafa;font-weight:600;">+8%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.4);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#fafafa;font-weight:600;">+5%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.2);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#a1a1aa;font-weight:600;">+2%</div>
+              <div style="aspect-ratio:1;background:rgba(239,68,68,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#ef4444;font-weight:600;">-1%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.5);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#fafafa;font-weight:600;">+6%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.8);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#fafafa;font-weight:600;">+9%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.3);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#a1a1aa;font-weight:600;">+3%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.6);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#fafafa;font-weight:600;">+7%</div>
+              <div style="aspect-ratio:1;background:rgba(239,68,68,0.2);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#ef4444;font-weight:600;">-2%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#a1a1aa;font-weight:600;">+1%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.45);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#fafafa;font-weight:600;">+4%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.9);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#fafafa;font-weight:600;">+12%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.35);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#a1a1aa;font-weight:600;">+3%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.55);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#fafafa;font-weight:600;">+6%</div>
+              <div style="aspect-ratio:1;background:rgba(245,158,11,0.2);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#f59e0b;font-weight:600;">0%</div>
+              <div style="aspect-ratio:1;background:rgba(29,185,84,0.25);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:6px;color:#a1a1aa;font-weight:600;">+2%</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;">
+              <span style="font-size:6px;color:#ef4444;">&#9632; Decline</span>
+              <span style="font-size:6px;color:#f59e0b;">&#9632; Flat</span>
+              <span style="font-size:6px;color:#1db954;">&#9632; Growth</span>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Data Viz — Market Heatmap</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 22. Services Page ─── -->
+      <div class="tpl-card" data-cat="services-page">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#09090b;padding:10px;">
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #1e1e22;">
+              <span class="t-logo" style="font-size:7px;">Windfield</span>
+            </div>
+            <div style="margin-bottom:8px;">
+              <div style="font-size:6px;color:#1db954;font-weight:600;">SERVICES</div>
+              <div class="t-headline" style="font-size:10px;color:#fafafa;margin-top:2px;">Full-Spectrum CRE Advisory</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+              <div style="background:#141417;border:1px solid #27272a;border-radius:4px;padding:6px;">
+                <div style="font-size:7px;font-weight:600;color:#fafafa;">Tenant Rep</div>
+                <div style="font-size:6px;color:#71717a;margin-top:2px;">Lease negotiation &amp; site selection</div>
+              </div>
+              <div style="background:#141417;border:1px solid #27272a;border-radius:4px;padding:6px;">
+                <div style="font-size:7px;font-weight:600;color:#fafafa;">Investment Sales</div>
+                <div style="font-size:6px;color:#71717a;margin-top:2px;">Acquisitions &amp; dispositions</div>
+              </div>
+              <div style="background:#141417;border:1px solid #27272a;border-radius:4px;padding:6px;">
+                <div style="font-size:7px;font-weight:600;color:#fafafa;">Capital Markets</div>
+                <div style="font-size:6px;color:#71717a;margin-top:2px;">Debt &amp; equity placement</div>
+              </div>
+              <div style="background:#141417;border:1px solid #27272a;border-radius:4px;padding:6px;">
+                <div style="font-size:7px;font-weight:600;color:#fafafa;">Valuation</div>
+                <div style="font-size:6px;color:#71717a;margin-top:2px;">Appraisals &amp; market analysis</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Web — Services Page</span>
+          <span class="tpl-size">1440 &times; 810</span>
+        </div>
+      </div>
+
+      <!-- ─── 23. Print — Letterhead ─── -->
+      <div class="tpl-card" data-cat="print">
+        <div class="tpl-preview ar-us-letter">
+          <div class="t-inner" style="background:#fafafa;padding:14px;color:#09090b;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:2px solid #1db954;">
+              <span style="font-size:10px;font-weight:800;color:#09090b;letter-spacing:-0.02em;">WINDFIELD</span>
+              <div style="text-align:right;">
+                <div style="font-size:6px;color:#71717a;">200 Park Avenue, 28th Floor</div>
+                <div style="font-size:6px;color:#71717a;">New York, NY 10166</div>
+              </div>
+            </div>
+            <div style="margin-top:14px;">
+              <div style="font-size:7px;color:#71717a;">April 23, 2026</div>
+              <div style="font-size:7px;color:#09090b;margin-top:10px;line-height:1.6;">Dear [Recipient],</div>
+              <div style="font-size:7px;color:#52525b;margin-top:6px;line-height:1.6;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.</div>
+              <div style="font-size:7px;color:#52525b;margin-top:6px;line-height:1.6;">Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</div>
+            </div>
+            <div style="margin-top:auto;padding-top:8px;border-top:1px solid #e4e4e7;">
+              <div style="font-size:6px;color:#a1a1aa;text-align:center;">windfield.com &bull; info@windfield.com &bull; +1 (212) 555-0100</div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Print — Letterhead</span>
+          <span class="tpl-size">2550 &times; 3300</span>
+        </div>
+      </div>
+
+      <!-- ─── 24. YouTube — Channel Banner ─── -->
+      <div class="tpl-card" data-cat="youtube">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:linear-gradient(135deg,#09090b,#0d1a0f);padding:12px;flex-direction:row;align-items:center;gap:10px;">
+            <div style="flex:1;">
+              <span class="t-logo" style="font-size:10px;letter-spacing:0.1em;">WINDFIELD</span>
+              <div style="font-size:7px;color:#a1a1aa;margin-top:4px;">Commercial Real Estate Intelligence</div>
+              <div style="width:30px;height:2px;background:#1db954;margin-top:6px;border-radius:1px;"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;">
+              <span style="font-size:6px;color:#52525b;">Market Analysis</span>
+              <span style="font-size:6px;color:#52525b;">Property Tours</span>
+              <span style="font-size:6px;color:#52525b;">Investor Insights</span>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">YouTube — Channel Banner</span>
+          <span class="tpl-size">2560 &times; 1440</span>
+        </div>
+      </div>
+
+      <!-- ─── 25. LinkedIn — Investor Deck Slide ─── -->
+      <div class="tpl-card" data-cat="linkedin">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#09090b;padding:14px;justify-content:space-between;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="t-logo">WF</span>
+              <span style="font-size:6px;color:#52525b;">INVESTOR PRESENTATION</span>
+            </div>
+            <div>
+              <div class="t-headline" style="font-size:12px;color:#fafafa;">Portfolio Performance</div>
+              <div style="display:flex;gap:12px;margin-top:10px;">
+                <div>
+                  <div style="font-size:18px;font-weight:800;color:#1db954;">18.4%</div>
+                  <div style="font-size:6px;color:#52525b;">IRR (Net)</div>
+                </div>
+                <div>
+                  <div style="font-size:18px;font-weight:800;color:#fafafa;">2.1x</div>
+                  <div style="font-size:6px;color:#52525b;">Equity Multiple</div>
+                </div>
+                <div>
+                  <div style="font-size:18px;font-weight:800;color:#fafafa;">$1.2B</div>
+                  <div style="font-size:6px;color:#52525b;">AUM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">LinkedIn — Investor Deck Slide</span>
+          <span class="tpl-size">1920 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 26. Display Ad — Skyscraper ─── -->
+      <div class="tpl-card" data-cat="display-ads">
+        <div class="tpl-preview ar-2x3">
+          <div class="t-inner" style="background:linear-gradient(180deg,#111113,#0d1a0f);padding:10px;justify-content:space-between;align-items:center;text-align:center;">
+            <span class="t-logo" style="font-size:7px;">WF</span>
+            <div>
+              <div class="t-headline" style="font-size:10px;color:#fafafa;">Class A<br>Office Space</div>
+              <div style="font-size:6px;color:#a1a1aa;margin-top:4px;">Starting at $42 PSF</div>
+            </div>
+            <div class="t-btn" style="background:#1db954;color:#05150a;">View Listings</div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Display Ad — Skyscraper</span>
+          <span class="tpl-size">160 &times; 600</span>
+        </div>
+      </div>
+
+      <!-- ─── 27. Blog Graphic — Quote Card ─── -->
+      <div class="tpl-card" data-cat="blog-graphic">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:#111113;padding:20px;justify-content:center;">
+            <div style="font-size:24px;color:#1db954;line-height:1;margin-bottom:8px;">&ldquo;</div>
+            <div style="font-size:10px;font-weight:500;color:#fafafa;line-height:1.5;font-style:italic;">The best time to invest in commercial real estate was yesterday. The second best time is today.</div>
+            <div style="width:24px;height:2px;background:#1db954;margin-top:12px;border-radius:1px;"></div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:10px;">
+              <div class="t-avatar" style="width:18px;height:18px;background:#1db954;"></div>
+              <div>
+                <div style="font-size:7px;font-weight:600;color:#fafafa;">Mark Thompson</div>
+                <div style="font-size:6px;color:#52525b;">CEO, Windfield Real Estate</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Blog — Quote Card</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 28. Google Ads — Search Ad Preview ─── -->
+      <div class="tpl-card" data-cat="google-ads">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#fafafa;padding:12px;color:#09090b;">
+            <div style="font-size:6px;color:#71717a;margin-bottom:4px;">Ad &bull; windfield.com</div>
+            <div style="font-size:10px;font-weight:600;color:#1a0dab;">Premium Commercial Real Estate | Windfield</div>
+            <div style="font-size:7px;color:#1db954;margin-top:2px;">windfield.com/properties</div>
+            <div style="font-size:7px;color:#52525b;margin-top:4px;line-height:1.5;">Class A office, industrial &amp; retail properties across 12 US metros. Institutional-grade advisory. $8.2B+ in transactions closed. Schedule a consultation.</div>
+            <div style="display:flex;gap:8px;margin-top:6px;">
+              <span style="font-size:6px;color:#1a0dab;text-decoration:underline;">View Listings</span>
+              <span style="font-size:6px;color:#1a0dab;text-decoration:underline;">About Us</span>
+              <span style="font-size:6px;color:#1a0dab;text-decoration:underline;">Contact</span>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Google Ads — Search Preview</span>
+          <span class="tpl-size">600 &times; 340</span>
+        </div>
+      </div>
+
+      <!-- ─── 29. Design System — Color Palette ─── -->
+      <div class="tpl-card" data-cat="design-system">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#111113;padding:10px;">
+            <div style="font-size:8px;font-weight:600;color:#fafafa;margin-bottom:6px;">Color System</div>
+            <div style="display:flex;gap:3px;flex:1;">
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px;">
+                <div style="flex:3;background:#1db954;border-radius:3px;padding:4px;"><span style="font-size:5px;color:#05150a;font-weight:600;">Brand</span></div>
+                <div style="flex:1;background:#17a34a;border-radius:3px;"></div>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px;">
+                <div style="flex:1;background:#09090b;border-radius:3px;border:1px solid #27272a;padding:4px;"><span style="font-size:5px;color:#fafafa;font-weight:600;">BG</span></div>
+                <div style="flex:1;background:#111113;border-radius:3px;border:1px solid #27272a;"></div>
+                <div style="flex:1;background:#141417;border-radius:3px;border:1px solid #27272a;"></div>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px;">
+                <div style="flex:1;background:#fafafa;border-radius:3px;padding:4px;"><span style="font-size:5px;color:#09090b;font-weight:600;">FG</span></div>
+                <div style="flex:1;background:#a1a1aa;border-radius:3px;"></div>
+                <div style="flex:1;background:#71717a;border-radius:3px;"></div>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px;">
+                <div style="flex:1;background:#22c55e;border-radius:3px;padding:4px;"><span style="font-size:5px;color:#05150a;font-weight:600;">Status</span></div>
+                <div style="flex:1;background:#f59e0b;border-radius:3px;"></div>
+                <div style="flex:1;background:#ef4444;border-radius:3px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Design System — Colors</span>
+          <span class="tpl-size">1920 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 30. Components — Button Set ─── -->
+      <div class="tpl-card" data-cat="components">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#111113;padding:12px;justify-content:center;gap:6px;">
+            <div style="font-size:8px;font-weight:600;color:#fafafa;margin-bottom:4px;">Button Components</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              <div class="t-btn" style="background:#1db954;color:#05150a;">Primary</div>
+              <div class="t-btn" style="background:transparent;border:1px solid #3f3f46;color:#fafafa;">Outline</div>
+              <div class="t-btn" style="background:#141417;color:#a1a1aa;">Ghost</div>
+              <div class="t-btn" style="background:#ef4444;color:#fafafa;">Danger</div>
+            </div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:2px;">
+              <div class="t-btn" style="background:#1db954;color:#05150a;font-size:6px;padding:3px 8px;">Small</div>
+              <div class="t-btn" style="background:#1db954;color:#05150a;">Medium</div>
+              <div class="t-btn" style="background:#1db954;color:#05150a;font-size:8px;padding:5px 14px;">Large</div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Components — Button Set</span>
+          <span class="tpl-size">1920 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 31. Instagram — Story ─── -->
+      <div class="tpl-card" data-cat="instagram">
+        <div class="tpl-preview ar-9x16">
+          <div class="t-inner" style="background:linear-gradient(180deg,#0d1a0f 0%,#09090b 60%,#111113 100%);padding:14px;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="t-avatar" style="width:20px;height:20px;background:#1db954;border:1.5px solid #1db954;"></div>
+              <span style="font-size:7px;font-weight:600;color:#fafafa;">windfieldRE</span>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:7px;color:#1db954;font-weight:600;margin-bottom:4px;">JUST LISTED</div>
+              <div class="t-headline" style="font-size:14px;color:#fafafa;">200 Park Avenue<br>28th Floor</div>
+              <div style="font-size:7px;color:#a1a1aa;margin-top:6px;">35,000 SF &bull; Class A &bull; Midtown</div>
+              <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+                <div style="text-align:center;">
+                  <div style="font-size:12px;font-weight:700;color:#fafafa;">$52</div>
+                  <div style="font-size:6px;color:#52525b;">PSF</div>
+                </div>
+                <div style="width:1px;background:#27272a;"></div>
+                <div style="text-align:center;">
+                  <div style="font-size:12px;font-weight:700;color:#fafafa;">35K</div>
+                  <div style="font-size:6px;color:#52525b;">SF</div>
+                </div>
+                <div style="width:1px;background:#27272a;"></div>
+                <div style="text-align:center;">
+                  <div style="font-size:12px;font-weight:700;color:#fafafa;">Q2</div>
+                  <div style="font-size:6px;color:#52525b;">Avail</div>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);border-radius:20px;padding:6px 16px;">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fafafa" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                <span style="font-size:7px;font-weight:600;color:#fafafa;">Swipe Up</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Instagram — Story</span>
+          <span class="tpl-size">1080 &times; 1920</span>
+        </div>
+      </div>
+
+      <!-- ─── 32. Data Viz — Portfolio Donut ─── -->
+      <div class="tpl-card" data-cat="data-viz">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:#111113;padding:14px;">
+            <div style="font-size:9px;font-weight:600;color:#fafafa;margin-bottom:4px;">Portfolio Allocation</div>
+            <div style="font-size:6px;color:#52525b;margin-bottom:8px;">By asset class — Q1 2026</div>
+            <div style="width:80px;height:80px;border-radius:50%;background:conic-gradient(#1db954 0% 40%,#3b82f6 40% 65%,#f59e0b 65% 80%,#7c3aed 80% 92%,#ef4444 92% 100%);margin:0 auto;position:relative;">
+              <div style="position:absolute;inset:18px;background:#111113;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+                <div style="font-size:11px;font-weight:800;color:#fafafa;">$1.2B</div>
+                <div style="font-size:5px;color:#52525b;">AUM</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;justify-content:center;">
+              <span style="font-size:6px;color:#a1a1aa;">&#9679; Office 40%</span>
+              <span style="font-size:6px;color:#a1a1aa;">&#9679; Industrial 25%</span>
+              <span style="font-size:6px;color:#a1a1aa;">&#9679; Retail 15%</span>
+              <span style="font-size:6px;color:#a1a1aa;">&#9679; Multi 12%</span>
+              <span style="font-size:6px;color:#a1a1aa;">&#9679; Other 8%</span>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Data Viz — Portfolio Donut</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 33. Business — Presentation Slide ─── -->
+      <div class="tpl-card" data-cat="business">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#09090b;padding:14px;justify-content:space-between;">
+            <div style="display:flex;justify-content:space-between;">
+              <span class="t-logo" style="font-size:8px;">WINDFIELD</span>
+              <span style="font-size:6px;color:#52525b;">CONFIDENTIAL</span>
+            </div>
+            <div>
+              <div style="font-size:6px;color:#1db954;font-weight:600;">INVESTMENT THESIS</div>
+              <div class="t-headline" style="font-size:14px;color:#fafafa;margin-top:4px;">Sun Belt Industrial:<br>The Secular Tailwind</div>
+              <div style="font-size:7px;color:#a1a1aa;margin-top:6px;line-height:1.5;">Nearshoring + e-commerce growth = sustained demand for last-mile logistics assets in DFW, Atlanta, and Phoenix.</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid #1e1e22;">
+              <span style="font-size:6px;color:#52525b;">Slide 4 of 18</span>
+              <span style="font-size:6px;color:#52525b;">April 2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Business — Pitch Deck Slide</span>
+          <span class="tpl-size">1920 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 34. X/Twitter — Thread Hook ─── -->
+      <div class="tpl-card" data-cat="x-twitter">
+        <div class="tpl-preview ar-1x1">
+          <div class="t-inner" style="background:#111113;padding:16px;justify-content:center;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
+              <div class="t-avatar" style="width:22px;height:22px;background:#1db954;"></div>
+              <div>
+                <span style="font-size:8px;font-weight:600;color:#fafafa;">Windfield RE</span>
+                <span style="font-size:7px;color:#52525b;display:block;">@windfieldRE</span>
+              </div>
+            </div>
+            <div style="font-size:9px;color:#fafafa;line-height:1.6;">I've analyzed 200+ CRE deals over the past 5 years.</div>
+            <div style="font-size:9px;color:#fafafa;line-height:1.6;margin-top:4px;">Here are the 7 mistakes that kill investor returns every time:</div>
+            <div style="font-size:9px;color:#fafafa;line-height:1.6;margin-top:6px;">&#129526; Thread &#9660;</div>
+            <div style="display:flex;gap:3px;margin-top:12px;">
+              <div style="flex:1;height:2px;background:#1db954;border-radius:1px;"></div>
+              <div style="flex:1;height:2px;background:#27272a;border-radius:1px;"></div>
+              <div style="flex:1;height:2px;background:#27272a;border-radius:1px;"></div>
+              <div style="flex:1;height:2px;background:#27272a;border-radius:1px;"></div>
+              <div style="flex:1;height:2px;background:#27272a;border-radius:1px;"></div>
+              <div style="flex:1;height:2px;background:#27272a;border-radius:1px;"></div>
+              <div style="flex:1;height:2px;background:#27272a;border-radius:1px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">X — Thread Hook Card</span>
+          <span class="tpl-size">1080 &times; 1080</span>
+        </div>
+      </div>
+
+      <!-- ─── 35. Design System — Typography ─── -->
+      <div class="tpl-card" data-cat="design-system">
+        <div class="tpl-preview ar-4x5">
+          <div class="t-inner" style="background:#111113;padding:14px;">
+            <div style="font-size:8px;font-weight:600;color:#fafafa;margin-bottom:10px;">Typography Scale</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div>
+                <span style="font-size:5px;font-family:'JetBrains Mono',monospace;color:#1db954;">heading-xl / 48px</span>
+                <div style="font-size:18px;font-weight:800;color:#fafafa;letter-spacing:-0.02em;margin-top:1px;">Headline XL</div>
+              </div>
+              <div>
+                <span style="font-size:5px;font-family:'JetBrains Mono',monospace;color:#1db954;">heading-lg / 40px</span>
+                <div style="font-size:15px;font-weight:700;color:#fafafa;letter-spacing:-0.02em;margin-top:1px;">Headline Large</div>
+              </div>
+              <div>
+                <span style="font-size:5px;font-family:'JetBrains Mono',monospace;color:#1db954;">heading-md / 32px</span>
+                <div style="font-size:12px;font-weight:700;color:#fafafa;letter-spacing:-0.015em;margin-top:1px;">Headline Medium</div>
+              </div>
+              <div>
+                <span style="font-size:5px;font-family:'JetBrains Mono',monospace;color:#1db954;">heading-sm / 20px</span>
+                <div style="font-size:9px;font-weight:600;color:#fafafa;letter-spacing:-0.01em;margin-top:1px;">Headline Small</div>
+              </div>
+              <div>
+                <span style="font-size:5px;font-family:'JetBrains Mono',monospace;color:#1db954;">body / 16px</span>
+                <div style="font-size:7px;color:#a1a1aa;margin-top:1px;">Body text for paragraphs and descriptions.</div>
+              </div>
+              <div>
+                <span style="font-size:5px;font-family:'JetBrains Mono',monospace;color:#1db954;">mono / 14px</span>
+                <div style="font-size:6px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;margin-top:1px;">const windfield = "IO";</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Design System — Typography</span>
+          <span class="tpl-size">1080 &times; 1350</span>
+        </div>
+      </div>
+
+      <!-- ─── 36. Components — Card Set ─── -->
+      <div class="tpl-card" data-cat="components">
+        <div class="tpl-preview ar-16x9">
+          <div class="t-inner" style="background:#09090b;padding:10px;">
+            <div style="font-size:8px;font-weight:600;color:#fafafa;margin-bottom:6px;">Card Components</div>
+            <div style="display:flex;gap:4px;">
+              <div style="flex:1;background:#111113;border:1px solid #27272a;border-radius:4px;padding:6px;">
+                <div class="t-img-placeholder" style="height:24px;border-radius:3px;margin-bottom:4px;"></div>
+                <div style="font-size:6px;font-weight:600;color:#fafafa;">Property Card</div>
+                <div style="font-size:5px;color:#71717a;margin-top:1px;">42,000 SF Office</div>
+                <div style="font-size:5px;font-weight:600;color:#1db954;margin-top:2px;">$52 PSF</div>
+              </div>
+              <div style="flex:1;background:#111113;border:1px solid #27272a;border-radius:4px;padding:6px;">
+                <div style="display:flex;gap:4px;margin-bottom:4px;">
+                  <div class="t-avatar" style="width:14px;height:14px;background:#1db954;"></div>
+                  <div>
+                    <div style="font-size:6px;font-weight:600;color:#fafafa;">Profile Card</div>
+                    <div style="font-size:5px;color:#71717a;">VP, Leasing</div>
+                  </div>
+                </div>
+                <div style="font-size:5px;color:#a1a1aa;line-height:1.4;">Specialist in Class A office across the NYC tri-state area.</div>
+              </div>
+              <div style="flex:1;background:#111113;border:1px solid #27272a;border-radius:4px;padding:6px;">
+                <div style="font-size:6px;font-weight:600;color:#fafafa;margin-bottom:2px;">Metric Card</div>
+                <div style="font-size:14px;font-weight:800;color:#1db954;">94%</div>
+                <div style="font-size:5px;color:#71717a;">Occupancy Rate</div>
+                <div class="t-bar" style="margin-top:4px;"><div class="t-bar-fill" style="width:94%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tpl-meta">
+          <span class="tpl-type">Components — Card Set</span>
+          <span class="tpl-size">1920 &times; 1080</span>
+        </div>
+      </div>
+
+    </div><!-- /masonry-grid -->
+  </main>
+</div><!-- /page-body -->
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="navbar-logo">Logo</div>
+        <p class="footer-subscribe-text">Join our newsletter to stay up to date on features and releases.</p>
+        <form class="footer-form" onsubmit="return false;">
+          <input type="email" class="footer-input" placeholder="Enter your email">
+          <button type="submit" class="btn btn-sm btn-outline">Subscribe</button>
+        </form>
+        <p class="footer-disclaimer">By subscribing you agree to with our <a href="#">Privacy Policy</a> and provide consent to receive updates from our company.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Templates</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Website Pages</a>
+          <a href="#" class="footer-link">Social Media</a>
+          <a href="#" class="footer-link">Advertising</a>
+          <a href="#" class="footer-link">Email</a>
+          <a href="#" class="footer-link">Print</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Design System</a>
+          <a href="#" class="footer-link">Components</a>
+          <a href="#" class="footer-link">Brand Guide</a>
+          <a href="#" class="footer-link">Documentation</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Follow Us</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5" fill="var(--wf-bg-elevated)"/><circle cx="17.5" cy="6.5" r="1.5"/></svg> Instagram</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg> X</a>
+          <a href="#" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.35z"/><path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="var(--wf-bg-elevated)"/></svg> YouTube</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Windfield Real Estate. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  const grid = document.getElementById('tpl-grid');
+  const cards = grid.querySelectorAll('.tpl-card');
+  const sidebarBtns = document.querySelectorAll('.sb-btn[data-filter]');
+  const visibleCount = document.getElementById('visible-count');
+  const totalCount = document.getElementById('total-count');
+  const total = cards.length;
+
+  // Set total count
+  totalCount.textContent = total;
+
+  // Update the second "of X" count too
+  document.querySelector('.tpl-count').innerHTML =
+    'Showing <strong id="visible-count">' + total + '</strong> of <strong>' + total + '</strong> templates';
+
+  function filterCards(cat) {
+    let count = 0;
+    cards.forEach(function(card) {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.classList.remove('hidden');
+        count++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    document.getElementById('visible-count').textContent = count;
+
+    // Update active sidebar button
+    sidebarBtns.forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.filter === cat);
+    });
+  }
+
+  // Sidebar click handlers
+  sidebarBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var cat = this.dataset.filter;
+      filterCards(cat);
+      // Update hash
+      if (cat === 'all') {
+        history.replaceState(null, '', window.location.pathname);
+      } else {
+        history.replaceState(null, '', '#' + cat);
+      }
+    });
+  });
+
+  // Hash deep linking on load
+  var hash = window.location.hash.replace('#', '');
+  if (hash && hash !== 'all') {
+    filterCards(hash);
+  }
+
+  // Listen for hash changes
+  window.addEventListener('hashchange', function() {
+    var h = window.location.hash.replace('#', '');
+    filterCards(h || 'all');
+  });
+
+  // Populate sidebar counts
+  var catCounts = {};
+  cards.forEach(function(card) {
+    var c = card.dataset.cat;
+    catCounts[c] = (catCounts[c] || 0) + 1;
+  });
+  sidebarBtns.forEach(function(btn) {
+    var f = btn.dataset.filter;
+    if (f === 'all') return;
+    var count = catCounts[f] || 0;
+    if (count > 0) {
+      var span = btn.querySelector('.sb-count');
+      if (!span) {
+        span = document.createElement('span');
+        span.className = 'sb-count';
+        btn.appendChild(span);
+      }
+      span.textContent = count;
+    }
+  });
+
+})();
+
+// Sidebar section toggle
+function toggleSection(el) {
+  el.parentElement.classList.toggle('collapsed');
+}
+</script>
+
+</body>
+</html>
